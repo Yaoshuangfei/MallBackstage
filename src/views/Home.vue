@@ -93,7 +93,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'蜜蜂聚财',
+				sysName:'商家后台管理',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',

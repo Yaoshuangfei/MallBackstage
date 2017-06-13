@@ -3,6 +3,20 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true" :model="filters">
+				<el-date-picker v-model="startTime" type="date" placeholder="选择日期时间">
+		        </el-date-picker>
+		        <span class="demonstration">至</span>
+		        <el-date-picker v-model="endTime" type="date" placeholder="选择日期时间">
+		        </el-date-picker>
+				<!-- <el-form-item>
+					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
+				</el-form-item> -->
+				<el-form-item label="支付方式">
+					<el-select v-model="filters.status" clearable>
+				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
+				      </el-option>
+				    </el-select>
+				</el-form-item>
 				<el-form-item label="搜索类型">
 				    <el-select v-model="filters.type" clearable>
 				      <el-option v-for="item in options" :label="item.label" :value="item.value">
@@ -13,39 +27,42 @@
 				    <el-input v-model="filters.name"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="getUsers">分析</el-button>
+					<el-button type="primary" v-on:click="getUsers">导出</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderEvaluate" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column prop="orderNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="commodityName" label="商品名称">
 			</el-table-column>
 			<el-table-column prop="userName" label="用户名">
 			</el-table-column>
 			<el-table-column prop="amountPaid" label="手机号">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="订单状态">
+			<el-table-column prop="orderTotal" label="充值金额">
 			</el-table-column>
-			<el-table-column prop="paymentMethod" label="是否发货">
+			<el-table-column prop="orderStatus" label="充值手机号">
 			</el-table-column>
-			<el-table-column prop="evaluateTime" label="是否签收">
+			<el-table-column prop="creationTime" label="支付方式">
 			</el-table-column>
-			<el-table-column prop="evaluate" label="退货理由">
+			<el-table-column prop="deliveryTime" label="成本">
 			</el-table-column>
-			<el-table-column label="操作">
+			<el-table-column prop="deliveryTime" label="手续费6%">
+			</el-table-column>
+			<el-table-column prop="deliveryTime" label="利润">
+			</el-table-column>
+			<el-table-column prop="deliveryTime" label="充值时间">
+			</el-table-column>
+			<!-- <el-table-column label="操作">
 				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
+					<el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button>
+					<el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button>
 					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">通过</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">不通过</el-button>
 					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 		</el-table>
 
 		<!--工具条-->
@@ -81,10 +98,10 @@
 					<div>{{orderDetails.paymentMethod }}</div>
 				</el-form-item>
 				<el-form-item label="创建时间">
-					<div>{{orderDetails.evaluateTime}}</div>
+					<div>{{orderDetails.creationTime}}</div>
 				</el-form-item>
 				<el-form-item label="发货时间">
-					<div>{{orderDetails.evaluate}}</div>
+					<div>{{orderDetails.deliveryTime}}</div>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -105,6 +122,8 @@
 		data() {
 			return {
 				radio: '0',
+				startTime:'',
+				endTime:'',
 				checked: true,
 				value:'',
 				value1:'',
@@ -115,19 +134,16 @@
 					label:'全部'
 				},{
 					value:'1',
-					label:'待付款'
+					label:'微信支付'
 				},{
 					value:'2',
-					label:'待发货'
+					label:'余额支付'
 				},{
 					value:'3',
-					label:'已发货'
+					label:'支付宝支付'
 				},{
 					value:'4',
-					label:'待评价'
-				},{
-					value:'5',
-					label:'退货'
+					label:'银行卡支付'
 				}],
 				options: [{
 		          value: '0',
@@ -138,6 +154,9 @@
 		        }, {
 		          value: '2',
 		          label: '用户名'
+		        }, {
+		          value: '3',
+		          label: '手机号'
 		        }],
 				filters: {
 					name: '',
@@ -172,7 +191,7 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderEvaluate:[{
+				orderInformation:[{
 					orderNumber :'145877458784524c',
 					courierNumber :'145877458784524c',
 					userName:'吸引力量',
@@ -180,8 +199,8 @@
 					orderTotal :'900',
 					orderStatus :'待付款',
 					paymentMethod :'微信支付',
-					evaluateTime:'2017-09-08 17:09',
-					evaluate:'差评',
+					creationTime:'2017-09-08 17:09',
+					deliveryTime:'2017-09-08 17:09',
 					commodityName:'雨花说'
 				}]
 			}

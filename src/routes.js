@@ -3,6 +3,7 @@ import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Home/indexMain.vue'
 import { state } from './vuex/state'
+
 /*系统管理 systemSettings*/
 import Jurisdiction from './views/systemSettings/Jurisdiction.vue'
 import SystemPush from './views/systemSettings/SystemPush.vue'
@@ -12,56 +13,47 @@ import releaseAdd from './views/systemSettings/releaseAdd.vue'
 import releaseReg from './views/systemSettings/releaseReg.vue'
 
 /*配置管理 configuration*/
-import banner from './views/configuration/banner.vue'
 import system from './views/configuration/system.vue'
-import BankCard from './views/configuration/BankCard.vue'
-import rule from './views/configuration/rule.vue'
-
-/*商品管理 commodity */
-import investorList from './views/commodity/investorList.vue'
-import scoreList from './views/commodity/scoreList.vue'
-import invitation from './views/commodity/invitation.vue'
 
 /*订单管理 order*/
 import OrderInformation from './views/order/OrderInformation.vue'
-import OrderEvaluation from './views/order/OrderEvaluation.vue'
-import ReturnGoods from './views/order/ReturnGoods.vue'
 
-/*店铺管理 shop */
-import packageList from './views/shop/packageList.vue'
-import sendPackage from './views/shop/sendPackage.vue'
-import exchangeRecord from './views/shop/exchangeRecord.vue'
+// 物流管理 logistics
+import DeliverGoods from './views/logistics/DeliverGoods.vue'
+import Freight from './views/logistics/Freight.vue'
+import Address from './views/logistics/Address.vue'
+
+/*商品管理 commodity */
+import GoodShipped from './views/commodity/GoodShipped.vue'
+import OnSale from './views/commodity/OnSale.vue'
+import OffTheShelf from './views/commodity/OffTheShelf.vue'
+import Illegal from './views/commodity/Illegal.vue'
+import ReturnGoods from './views/commodity/ReturnGoods.vue'
+
+// 身份管理 Identity
+import Identity from './views/Identity/Identitys.vue'
+
+/*店铺管理 shop */ // 
+import see from './views/shop/see.vue'
+import style from './views/shop/style.vue'
+import picture from './views/shop/picture.vue'
+
+// 分销管理 Distribution
+import Agent from './views/Distribution/Agent.vue'
+import MyDistribution from './views/Distribution/MyDistribution.vue'
+
+// 补货专区 Replenishment 
+import Replenishment from './views/Replenishment/Replenishment.vue'
 
 /*财务管理 Finance*/
-import WebPipelining from './views/Finance/WebPipelining.vue'
-import CellularPhoneReplenishing  from './views/Finance/CellularPhoneReplenishing.vue'
-import PersonalFlow from './views/Finance/PersonalFlow.vue'
-import ShopFlow from './views/Finance/ShopFlow.vue'
-import Donation from './views/Finance/Donation.vue'
-import Imazamox from './views/Finance/Imazamox.vue'
-import SweepCodeToPayWater from './views/Finance/SweepCodeToPayWater.vue'
-import PublicWelfareFundRaising from './views/Finance/PublicWelfareFundRaising.vue'
-import MerchantCommission from './views/Finance/MerchantCommission.vue'
+import FlowingWater from './views/Finance/FlowingWater.vue'
 
 
-// 用户管理 user 
-// 扫码付管理 scanCodePayment 
-//千人千面
-import page from './views/page/page.vue'
-import addpage from './views/page/addpage.vue'
-// 慈善公益管理 Charity
-// 充值管理 Recharge 
+// 增值管理   Increment
+import video from './views/Increment/video.vue'
+import PublicWelfare from './views/Increment/PublicWelfare.vue'
+import Marketing from './views/Increment/Marketing.vue'
 
-// 网络电话管理 VoIP
-import department from './views/VoIP/department.vue'
-import menu from './views/VoIP/menu.vue'
-import role from './views/VoIP/role.vue'
-import account from './views/VoIP/account.vue'
-import editPassword from './views/VoIP/editPassword.vue'
-import operationLog from './views/VoIP/operationLog.vue'
-
-/*统计管理 Statistics*/
-// import statistics from './views/Statistics/statistics.vue'
 
 
 
@@ -82,7 +74,6 @@ let routes = [
         name: '',
         hidden: true
     },
-    // { path: '/main', component: Main },
     {
         path: '/Subject',
         component: Home,
@@ -91,34 +82,17 @@ let routes = [
         children: [
             { path: '/main', component: Main, name: '主页', hidden: true },
             { path: '/Jurisdiction', component: Jurisdiction, name: '权限管理' },
-            { path: '/ChangePasswords', component: ChangePasswords, name: '更改密码' },
-            { path: '/SystemPush', component: SystemPush, name: '系统推送' },
-            { path: '/releaseLook', component: releaseLook, name: '系统权限查看', hidden:true },
-            { path: '/releaseAdd', component: releaseAdd, name: '系统权限添加', hidden:true },
-            { path: '/releaseReg', component: releaseReg, name: '系统权限添加', hidden:true }
+            { path: '/ChangePasswords', component: ChangePasswords, name: '更改密码' }
         ]
     },
-    {
+     {
         path: '/',
         component: Home,
-        name: '配置管理',
-        iconCls: 'fa fa-bar-chart',
+        name: '',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
         children: [
-            { path: '/banner', component: banner, name: 'banner管理了' },
-            { path: '/system', component: system, name: '系统配置' },
-            { path: '/BankCard', component: BankCard, name: '银行卡管理' },
-            { path: '/rule', component: rule, name: '规则管理' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '商品管理',
-        iconCls: 'fa fa-id-card-o',
-        children: [
-            { path: '/investorList', component: investorList, name: '投资人管理列表' },
-            { path: '/scoreList', component: scoreList, name: '积分管理' },
-            { path: '/invitation', component: invitation, name: '投资人邀请记录' }
+            { path: '/system', component: system, name: '配置管理' }
         ]
     },
     {
@@ -127,9 +101,41 @@ let routes = [
         name: '订单管理',
         iconCls: 'fa el-icon-picture',
         children: [
-            { path: '/OrderInformation', component: OrderInformation, name: '订单信息管理' },
-            { path: '/OrderEvaluation', component: OrderEvaluation, name: '订单评价管理' },
-            { path: '/ReturnGoods', component: ReturnGoods, name: '退货管理' }
+            { path: '/OrderInformation', component: OrderInformation, name: '订单信息管理' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '物流管理',
+        iconCls: 'fa el-icon-picture',
+        children: [
+            { path: '/DeliverGoods', component: DeliverGoods, name: '发货' },
+            { path: '/Freight', component: Freight, name: '运费模板' },
+            { path: '/Address', component: Address, name: '地址管理' }
+        ]
+    },
+     {
+        path: '/',
+        component: Home,
+        name: '商品管理',
+        iconCls: 'fa fa-id-card-o',
+        children: [
+            { path: '/GoodShipped', component: GoodShipped, name: '发布商品' },
+            { path: '/OnSale', component: OnSale, name: '出售中的商品' },
+            { path: '/OffTheShelf', component: OffTheShelf, name: '下架商品' },
+            { path: '/Illegal', component: Illegal, name: '违规商品' },
+            { path: '/ReturnGoods', component: ReturnGoods, name: '退货的商品' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/Identity', component: Identity, name: '身份管理' }
         ]
     },
     {
@@ -138,9 +144,29 @@ let routes = [
         name: '店铺管理',
         iconCls: 'fa el-icon-menu',
         children: [
-            { path: '/packageList', component: packageList, name: '店铺信息管理' },
-            { path: '/sendPackage', component: sendPackage, name: '视频管理' },
-            { path: '/exchangeRecord', component: exchangeRecord, name: '违规处理' },
+            { path: '/see', component: see, name: '查看店铺' },
+            { path: '/style', component: style, name: '店铺样式管理' },
+            { path: '/picture', component: picture, name: '图片存储' },
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '分销管理',
+        iconCls: 'fa el-icon-picture',
+        children: [
+            { path: '/Agent', component: Agent, name: '代理商' },
+            { path: '/MyDistribution', component: MyDistribution, name: '我的分销' }
+        ]
+    },
+   {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/Replenishment', component: Replenishment, name: '补货专区' }
         ]
     },
     {
@@ -149,109 +175,18 @@ let routes = [
         name: '财务管理',
         iconCls: 'fa el-icon-date',
         children: [
-            { path: '/WebPipelining', component: WebPipelining, name: '网站流水报表' },
-            { path: '/CellularPhoneReplenishing ', component: CellularPhoneReplenishing , name: '手机充值记录' },
-            { path: '/PersonalFlow', component: PersonalFlow, name: '个人流水记录' },
-            { path: '/ShopFlow', component: ShopFlow, name: '店铺流水记录' },
-            { path: '/Donation', component: Donation, name: '转赠记录' },
-            { path: '/Imazamox', component: Imazamox, name: '金豆记录' },
-            { path: '/SweepCodeToPayWater', component: SweepCodeToPayWater, name: '扫码付流水记录' },
-            { path: '/PublicWelfareFundRaising', component: PublicWelfareFundRaising, name: '公益筹款记录' },
-            { path: '/MerchantCommission', component: MerchantCommission, name: '商户手续费记录' }
-        ]
-    },
-    // {
-    //     path: '/',
-    //     component: Home,
-    //     name: '',
-    //     iconCls: 'fa fa-address-card',
-    //     leaf: true,//只有一个节点
-    //     children: [
-    //         { path: '/statistics', component: statistics, name: '统计管理' }
-    //     ]
-    // },
-    {
-        path: '/',
-        component: Home,
-        name: '用户管理',
-        iconCls: 'el-icon-message',
-        children: [
-            // { path: '/department', component: department, name: '员工管理' },
-            // { path: '/menu', component: menu, name: '菜单管理' },
-            // { path: '/role', component: role, name: '组织管理' },
-            // { path: '/account', component: account, name: '账号管理' },
-            // { path: '/editPassword', component: editPassword, name: '修改密码' },
-            // { path: '/operationLog', component: operationLog, name: '操作日志' }
+            { path: '/FlowingWater', component: FlowingWater, name: '流水记录' }
         ]
     },
     {
         path: '/',
         component: Home,
-        name: '扫码付管理',
+        name: '增值管理',
         iconCls: 'el-icon-message',
         children: [
-            // { path: '/department', component: department, name: '员工管理' },
-            // { path: '/menu', component: menu, name: '菜单管理' },
-            // { path: '/role', component: role, name: '组织管理' },
-            // { path: '/account', component: account, name: '账号管理' },
-            // { path: '/editPassword', component: editPassword, name: '修改密码' },
-            // { path: '/operationLog', component: operationLog, name: '操作日志' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '千人千面管理',
-        iconCls: 'el-icon-message',
-        children: [
-            { path: '/page', component: page, name: '千人千面' },
-            { path: '/addpage/:id', component: addpage, name: '添加千人千面', hidden: true  }
-            // { path: '/role', component: role, name: '组织管理' },
-            // { path: '/account', component: account, name: '账号管理' },
-            // { path: '/editPassword', component: editPassword, name: '修改密码' },
-            // { path: '/operationLog', component: operationLog, name: '操作日志' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '慈善公益管理',
-        iconCls: 'el-icon-message',
-        children: [
-            // { path: '/department', component: department, name: '员工管理' },
-            // { path: '/menu', component: menu, name: '菜单管理' },
-            // { path: '/role', component: role, name: '组织管理' },
-            // { path: '/account', component: account, name: '账号管理' },
-            // { path: '/editPassword', component: editPassword, name: '修改密码' },
-            // { path: '/operationLog', component: operationLog, name: '操作日志' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '充值管理',
-        iconCls: 'el-icon-message',
-        children: [
-            // { path: '/department', component: department, name: '员工管理' },
-            // { path: '/menu', component: menu, name: '菜单管理' },
-            // { path: '/role', component: role, name: '组织管理' },
-            // { path: '/account', component: account, name: '账号管理' },
-            // { path: '/editPassword', component: editPassword, name: '修改密码' },
-            // { path: '/operationLog', component: operationLog, name: '操作日志' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '网络电话管理',
-        iconCls: 'el-icon-message',
-        children: [
-            // { path: '/department', component: department, name: '员工管理' },
-            // { path: '/menu', component: menu, name: '菜单管理' },
-            // { path: '/role', component: role, name: '组织管理' },
-            // // { path: '/account', component: account, name: '账号管理' },
-            // { path: '/editPassword', component: editPassword, name: '修改密码' },
-            // { path: '/operationLog', component: operationLog, name: '操作日志' }
+            { path: '/video', component: video, name: '视频管理' },
+            { path: '/PublicWelfare', component: PublicWelfare, name: '公益广告' },
+            { path: '/Marketing', component: Marketing, name: '营销管理' }
         ]
     },
     {

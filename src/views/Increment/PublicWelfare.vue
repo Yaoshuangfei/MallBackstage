@@ -41,24 +41,28 @@
 			</el-table-column>
 			<el-table-column prop="amountPaid" label="手机号">
 			</el-table-column>
-			<el-table-column prop="orderTotal" label="金额">
+			<el-table-column prop="orderTotal" label="充值金额">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="收款人">
+			<el-table-column prop="orderStatus" label="充值手机号">
 			</el-table-column>
-			<el-table-column prop="creationTime" label="收款人类型">
+			<el-table-column prop="creationTime" label="支付方式">
+			</el-table-column>
+			<el-table-column prop="deliveryTime" label="成本">
+			</el-table-column>
+			<el-table-column prop="deliveryTime" label="手续费6%">
+			</el-table-column>
+			<el-table-column prop="deliveryTime" label="利润">
 			</el-table-column>
 			<el-table-column prop="deliveryTime" label="充值时间">
 			</el-table-column>
-			<el-table-column prop="deliveryTime" label="备注%">
-			</el-table-column>
-			<!-- <el-table-column label="操作"> -->
-				<!-- <template scope="scope"> -->
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button>
-					<el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button> -->
-					<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button> -->
-				<!-- </template> -->
-			<!-- </el-table-column> -->
+			<!-- <el-table-column label="操作">
+				<template scope="scope">
+					<el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button>
+					<el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button>
+					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
+					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column> -->
 		</el-table>
 
 		<!--工具条-->
