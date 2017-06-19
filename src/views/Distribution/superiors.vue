@@ -1,100 +1,10 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
-				<router-link :to="{ name: '补货', params: { id: 0 }}">
-					<el-button  type="primary">增加</el-button>
-				</router-link>
-			</el-form>
+		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
+			<h3>我的分销商（210）- 上级 张三</h3>
 		</el-col>
-
-		<el-row style="margin-left: 40px">
-		    <el-col :xs="10" :sm="10" :md="10" :lg="10">
-		    	<div class="replenishment">
-		    		<el-row style="margin-left: 10px">
-					    <el-col :xs="10" :sm="10" :md="10" :lg="10">
-					    	<div style="border: 1px solid #ddd;width: 150px;height: 150px;margin-left: 40px;margin-top: 20px"></div>
-					    </el-col>
-					    <el-col :xs="12" :sm="12" :md="12" :lg="12">
-					    	<el-col :xs="12" :sm="12" :md="12" :lg="24" style="height: 60px;margin-top: 20px">
-					    		联创不补货区
-					    	</el-col>
-					    	<el-col :xs="12" :sm="12" :md="12" :lg="24" style="height: 50px">
-					    		联创补货每次不低于200盒
-					    	</el-col>
-					    	<el-col :xs="12" :sm="12" :md="12" :lg="24">
-					    		<el-button type="text" v-on:click="getUsers">查看</el-button>
-					    		<el-button type="text" v-on:click="getUsers">修改</el-button>
-					    		<el-button type="text" v-on:click="getUsers">删除</el-button>
-					    	</el-col>
-					    </el-col>
-					</el-row>
-		    	</div>
-		    </el-col>
-		    <el-col :xs="12" :sm="12" :md="12" :lg="12">
-		    	<div class="replenishment">
-		    		<el-row style="margin-left: 10px">
-					    <el-col :xs="10" :sm="10" :md="10" :lg="10">
-					    	<div style="border: 1px solid #ddd;width: 150px;height: 150px;margin-left: 40px;margin-top: 20px"></div>
-					    </el-col>
-					    <el-col :xs="12" :sm="12" :md="12" :lg="12">
-					    	<el-col :xs="12" :sm="12" :md="12" :lg="24" style="height: 60px;margin-top: 20px">
-					    		联创不补货区
-					    	</el-col>
-					    	<el-col :xs="12" :sm="12" :md="12" :lg="24" style="height: 50px">
-					    		联创补货每次不低于200盒
-					    	</el-col>
-					    	<el-col :xs="12" :sm="12" :md="12" :lg="24">
-					    		<el-button type="text" v-on:click="getUsers">查看</el-button>
-					    		<el-button type="text" v-on:click="getUsers">修改</el-button>
-					    		<el-button type="text" v-on:click="getUsers">删除</el-button>
-					    	</el-col>
-					    </el-col>
-					</el-row>
-		    	</div>
-		    </el-col>
-		</el-row>
 		
-
-		<!--编辑界面-->
-		<el-dialog title="店铺详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="店铺名称">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> 13588335090 -->
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="手机号">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="店铺销量">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="店铺营业额">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="账户余额">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="已提现金额">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="违规记录">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-form-item label="手续费">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
@@ -362,9 +272,33 @@
 </script>
 
 <style>
-.replenishment{
-	border: 1px solid #ddd;
-	width: 600px;
-	height:200px;
-}
+	.agen_div{
+		border: 1px solid #aaa;
+		width:200px;
+		height: 300px;
+
+	}
+	.agen_div div:nth-child(1){
+		border: 1px solid #aaa;
+		width:100px;
+		height: 100px;
+		border-radius: 50px;
+		margin-left: 45px;
+		margin-top: 20px;
+	}
+	.agen_div div:nth-child(2){
+		width: 200px;
+		text-align: center;
+		margin-top: 20px;
+	}
+	.agen_div div:nth-child(3){
+		width: 200px;
+		text-align: center;
+		margin-top: 20px;
+	}
+	.agen_div div:nth-child(4){
+		width: 200px;
+		text-align: center;
+		margin-top: 20px;
+	}
 </style>

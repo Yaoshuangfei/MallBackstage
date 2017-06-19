@@ -1,9 +1,9 @@
 <template>
   <section>
     <!--工具条-->
-   <!--  <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
+    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
       <el-form :inline="true" :model="filters">
-        <el-form-item>
+       <!--  <el-form-item>
           <el-input v-model="filters.name" placeholder="支付银行"></el-input>
         </el-form-item>
         <el-form-item label="状态">
@@ -20,24 +20,28 @@
         </el-form-item>
         <el-form-item>
             <el-input v-model="filters.name"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" v-on:click="getUsers">查询</el-button>
+          <el-button type="primary" v-on:click="addBtn">新增</el-button>
         </el-form-item>
       </el-form>
-    </el-col> -->
+    </el-col>
 
     <!--列表-->
-    <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-      <el-table-column type="index">
+    <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+      <el-table-column prop="courierNumber" label="位置">
       </el-table-column>
-      <el-table-column prop="courierNumber" label="配置">
+      <el-table-column prop="courierNumber" label="商品名称">
+      </el-table-column>
+      <el-table-column prop="courierNumber" label="顺序">
+      </el-table-column>
+      <el-table-column prop="courierNumber" label="状态">
       </el-table-column>
       <el-table-column label="操作">
         <template scope="scope">
-           <el-switch v-model="value1" on-text="" on-color="#13ce66" off-text=""></el-switch>
-          <!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button> -->
-          <!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button> -->
+           <!-- <el-switch v-model="value1" on-text="" on-color="#13ce66" off-text=""></el-switch> -->
+          <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">禁用</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -51,40 +55,21 @@
 
     <!--编辑界面-->
     <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-      <el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="订单号">
-          <div>{{orderDetails.orderNumber }}</div>
-          <!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
+      <el-form :model="orderDetails" label-width="80px" :rules="editFormRules" ref="editForm">
+        <el-form-item label="位置">
+          <el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="商品名称">
-          <div>{{orderDetails.commodityName}}</div>
+        <el-form-item label="顺序">
+          <el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="用户名">
-          <div>{{orderDetails.userName }}</div>
-        </el-form-item>
-        <el-form-item label="实付金额">
-          <div>{{orderDetails.amountPaid }}</div>
-        </el-form-item>
-        <el-form-item label="订单总价">
-          <div>{{orderDetails.orderTotal }}</div>
-        </el-form-item>
-        <el-form-item label="订单状态">
-          <div>{{orderDetails.orderStatus }}</div>
-        </el-form-item>
-        <el-form-item label="支付方式">
-          <div>{{orderDetails.paymentMethod }}</div>
-        </el-form-item>
-        <el-form-item label="创建时间">
-          <div>{{orderDetails.creationTime}}</div>
-        </el-form-item>
-        <el-form-item label="发货时间">
-          <div>{{orderDetails.deliveryTime}}</div>
+        <el-form-item label="选择商品">
+          <el-input v-model="orderDetails.userName" type="text" auto-complete="off"></el-input>
         </el-form-item>
         <el-col :span='24'></el-col>
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-        <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
+        <el-button type="primary" @click.native="editFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
   </section>
@@ -257,7 +242,7 @@
         });
       },
       //显示编辑界面
-      seeBtn: function (index, row) {
+      addBtn: function (index, row) {
         this.editFormVisible = true;
         this.orderDetails = Object.assign({}, row);
       },
@@ -354,8 +339,5 @@
 </script>
 
 <style>
-  .el-dialog--small {
-      width: 25%;
-      border-radius: 10px
-  } 
+  
 </style>

@@ -1,74 +1,55 @@
 <template>
 	<section>
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
-				</el-form-item> -->
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" clearable>
-				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item label="搜索类型">
-				    <el-select v-model="filters.type" clearable>
-				      <el-option v-for="item in options" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item>
-				    <el-input v-model="filters.name"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
+		<el-button type="primary" v-on:click="getUsers" style="margin-top: 20px">新增</el-button>
+		<el-row :gutter="10" style="margin-top: 40px">
+		  <el-col :xs="2" :sm="2" :md="2" :lg="2">店铺身份</el-col>
+		  <el-col :xs="15" :sm="15" :md="15" :lg="15">
+		  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
+		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+		  				图片
+		 			</el-col>
+		 			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+		  				联创
+		 			</el-col>
+		 		</el-col>
+		 		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 40px">
+		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+		  				图片
+		 			</el-col>
+		 			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+		  				总代
+		 			</el-col>
+		 		</el-col>
+		  </el-col>
+		</el-row>
 
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">购买身份价格</el-col>
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
 			<el-table-column type="index">
 			</el-table-column>
-			<el-table-column prop="courierNumber" label="店铺名">
+			<el-table-column prop="courierNumber" label="身份">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="手机号">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="销量">
-			</el-table-column>
-			<el-table-column prop="orderStatus" label="交易额">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="账户余额">
-			</el-table-column>
-			<el-table-column prop="creationTime" label="已提现金额">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="状态">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费1/%">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费总额">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">通过</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-				</template>
+			<el-table-column prop="userName" label="价格">
 			</el-table-column>
 		</el-table>
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-			</el-pagination>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">商品照片</el-col>
+		<el-col :xs="24" :md="24">
+				<!-- 上传图片 -->
+				<form style="position:relative;">
+				    <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+				    <button type="button" class="el-button el-button--primary el-button--small">
+				    	<span>点击上传</span>
+				    </button>
+				    <button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button>
+				    <span style="display: block;font-size: 12px">{{ imageChange }}</span>
+				</form>
 		</el-col>
-
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">身份介绍</el-col>
+		<el-input type="textarea" v-model="desc"></el-input>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">
+		<el-button type="primary" v-on:click="getUsers">发布</el-button>
+		</el-col>
 		<!--编辑界面-->
 		<el-dialog title="店铺详情" v-model="editFormVisible" :close-on-click-modal="false" >
 			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
@@ -118,6 +99,7 @@
 	export default {
 		data() {
 			return {
+				desc:'',
 				radio: '0',
 				checked: true,
 				value:'',
@@ -200,10 +182,50 @@
 					creationTime:'2017-09-08 17:09',
 					deliveryTime:'2017-09-08 17:09',
 					commodityName:'雨花说'
-				}]
+				}],
+				formData: new FormData(),
+				fileImg: ''
 			}
 		},
+		computed: {
+		    // 实时更新上传图片的名字，仅读取，值只须为函数
+		    imageChange: function () {
+		      return this.fileImg
+		    }
+	    },
 		methods: {
+			clear(){
+				let btn = document.getElementById("btnClear");
+     			let files = document.getElementById("fileInput");
+     			this.fileImg = '';
+				// for IE, Opera, Safari, Chrome
+		        if (files !== null && files.value) {
+		        //     files.outerHTML = files.outerHTML;
+		        // } else { // FF(包括3.5)
+	            	files.value = "";
+	            	this.formData = new FormData()
+		        }
+			},
+			// 添加或编辑上传图片
+			upload (event) {
+				this.formData = new FormData()
+                let file = event.target.files[0]
+                console.log(this.formData)
+                console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                	console.log('存在file', file)
+                	this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file)
+                    console.log(this.formData)
+                } else {
+                	this.fileImg = ''
+                	console.log('不存在file', file)
+                	this.formData = new FormData()
+                }
+            },
 			//性别显示转换
 			formatSex: function (row, column) {
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
@@ -374,8 +396,5 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}	
+		
 </style>

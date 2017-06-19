@@ -383,10 +383,6 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}
 	.permissions {
 		background: #eee;
 		height:60px;

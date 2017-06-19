@@ -13,10 +13,19 @@ import releaseAdd from './views/systemSettings/releaseAdd.vue'
 import releaseReg from './views/systemSettings/releaseReg.vue'
 
 /*配置管理 configuration*/
-import system from './views/configuration/system.vue'
+import banner from './views/configuration/banner.vue' 
+import system from './views/configuration/system.vue' 
+import Authentication from './views/configuration/Authentication.vue'
+
+// 分销管理 Distribution
+import Identity from './views/Distribution/Identity.vue'
+import Agent from './views/Distribution/Agent.vue'
+import MyDistribution from './views/Distribution/MyDistribution.vue'
+import superiors from './views/Distribution/superiors.vue'
 
 /*订单管理 order*/
 import OrderInformation from './views/order/OrderInformation.vue'
+import details from './views/order/details.vue'
 
 // 物流管理 logistics
 import DeliverGoods from './views/logistics/DeliverGoods.vue'
@@ -31,22 +40,20 @@ import Illegal from './views/commodity/Illegal.vue'
 import ReturnGoods from './views/commodity/ReturnGoods.vue'
 
 // 身份管理 Identity
-import Identity from './views/Identity/Identitys.vue'
+// import Identity from './views/Identity/Identitys.vue'
 
 /*店铺管理 shop */ // 
 import see from './views/shop/see.vue'
 import style from './views/shop/style.vue'
 import picture from './views/shop/picture.vue'
 
-// 分销管理 Distribution
-import Agent from './views/Distribution/Agent.vue'
-import MyDistribution from './views/Distribution/MyDistribution.vue'
+/*财务管理 Finance*/
+import FlowingWater from './views/Finance/FlowingWater.vue'
 
 // 补货专区 Replenishment 
 import Replenishment from './views/Replenishment/Replenishment.vue'
+import add from './views/Replenishment/add.vue'
 
-/*财务管理 Finance*/
-import FlowingWater from './views/Finance/FlowingWater.vue'
 
 
 // 增值管理   Increment
@@ -85,14 +92,28 @@ let routes = [
             { path: '/ChangePasswords', component: ChangePasswords, name: '更改密码' }
         ]
     },
-     {
+    {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
+        name: '配置管理',
+        iconCls: 'fa el-icon-picture',
         children: [
-            { path: '/system', component: system, name: '配置管理' }
+            { path: '/banner', component: banner, name: '首页banner管理' },
+            { path: '/system', component: system, name: '首页商品配置' },
+            { path: '/Authentication', component: Authentication, name: '身份认证' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '分销管理',
+        iconCls: 'fa el-icon-picture',
+        children: [
+            { path: '/Identity', component: Identity, name: '身份管理' },
+            { path: '/MyDistribution', component: MyDistribution, name: '我的分销' },
+            { path: '/Agent', component: Agent, name: '代理商' },
+             { path: '/superiors', component: superiors, name: '查看上级' ,hidden: true }
+            
         ]
     },
     {
@@ -101,7 +122,8 @@ let routes = [
         name: '订单管理',
         iconCls: 'fa el-icon-picture',
         children: [
-            { path: '/OrderInformation', component: OrderInformation, name: '订单信息管理' }
+            { path: '/OrderInformation', component: OrderInformation, name: '订单信息管理' },
+             { path: '/details', component: details, name: '订单详情' ,hidden: true }
         ]
     },
     {
@@ -131,16 +153,6 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/Identity', component: Identity, name: '身份管理' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
         name: '店铺管理',
         iconCls: 'fa el-icon-menu',
         children: [
@@ -152,11 +164,10 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '分销管理',
-        iconCls: 'fa el-icon-picture',
+        name: '财务管理',
+        iconCls: 'fa el-icon-date',
         children: [
-            { path: '/Agent', component: Agent, name: '代理商' },
-            { path: '/MyDistribution', component: MyDistribution, name: '我的分销' }
+            { path: '/FlowingWater', component: FlowingWater, name: '流水记录' }
         ]
     },
    {
@@ -166,16 +177,8 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/Replenishment', component: Replenishment, name: '补货专区' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '财务管理',
-        iconCls: 'fa el-icon-date',
-        children: [
-            { path: '/FlowingWater', component: FlowingWater, name: '流水记录' }
+            { path: '/Replenishment', component: Replenishment, name: '补货专区' },
+            { path: '/add/:id', component: add, name: '补货' , hidden: true }
         ]
     },
     {

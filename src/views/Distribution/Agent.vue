@@ -1,112 +1,59 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
-				</el-form-item> -->
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" clearable>
-				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item label="搜索类型">
-				    <el-select v-model="filters.type" clearable>
-				      <el-option v-for="item in options" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item>
-				    <el-input v-model="filters.name"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
+			<h3>我的分销商（210）</h3>
 		</el-col>
-
-		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column type="index">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="店铺名">
-			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="手机号">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="销量">
-			</el-table-column>
-			<el-table-column prop="orderStatus" label="交易额">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="账户余额">
-			</el-table-column>
-			<el-table-column prop="creationTime" label="已提现金额">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="状态">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费1/%">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费总额">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">通过</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-			</el-pagination>
+		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
+			<el-col :xs="6" :sm="6" :md="6" :lg="6">
+				<div class="agen_div">
+					<div></div>
+					<div>张三</div>
+					<div>一级分销商</div>
+					<div>
+						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
+							<el-button  type="text">查看下级</el-button>
+						</router-link>
+					</div>
+				</div>
+			</el-col>
+			<el-col :xs="6" :sm="6" :md="6" :lg="6">
+					<div class="agen_div">
+					<div></div>
+					<div>张三</div>
+					<div>一级分销商</div>
+					<div>
+						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
+							<el-button  type="text">查看下级</el-button>
+						</router-link>
+					</div>
+				</div>
+			</el-col>
+			<el-col :xs="6" :sm="6" :md="6" :lg="6">
+					<div class="agen_div">
+					<div></div>
+					<div>张三</div>
+					<div>一级分销商</div>
+					<div>
+						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
+							<el-button  type="text">查看下级</el-button>
+						</router-link>
+					</div>
+				</div>
+			</el-col>
+			<el-col :xs="6" :sm="6" :md="6" :lg="6">
+					<div class="agen_div">
+					<div></div>
+					<div>张三</div>
+					<div>一级分销商</div>
+					<div>
+						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
+							<el-button  type="text">查看下级</el-button>
+						</router-link>
+					</div>
+				</div>
+			</el-col>
 		</el-col>
-
-		<!--编辑界面-->
-		<el-dialog title="店铺详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="店铺名称">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="手机号">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="店铺销量">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="店铺营业额">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="账户余额">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="已提现金额">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="违规记录">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-form-item label="手续费">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
@@ -374,8 +321,33 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}	
+	.agen_div{
+		border: 1px solid #aaa;
+		width:200px;
+		height: 300px;
+
+	}
+	.agen_div div:nth-child(1){
+		border: 1px solid #aaa;
+		width:100px;
+		height: 100px;
+		border-radius: 50px;
+		margin-left: 45px;
+		margin-top: 20px;
+	}
+	.agen_div div:nth-child(2){
+		width: 200px;
+		text-align: center;
+		margin-top: 20px;
+	}
+	.agen_div div:nth-child(3){
+		width: 200px;
+		text-align: center;
+		margin-top: 20px;
+	}
+	.agen_div div:nth-child(4){
+		width: 200px;
+		text-align: center;
+		margin-top: 20px;
+	}
 </style>

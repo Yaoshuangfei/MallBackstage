@@ -1,104 +1,135 @@
 <template>
 	<section>
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
-				</el-form-item> -->
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" clearable>
-				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item label="搜索类型">
-				    <el-select v-model="filters.type" clearable>
-				      <el-option v-for="item in options" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item>
-				    <el-input v-model="filters.name"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
+			<el-button type="primary" v-on:click="getUsers">添加</el-button>
 		</el-col>
-
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">
+			<ul class="Grade">
+				<li>联创</li>
+				<li>联创</li>
+				<li>联创</li>
+			</ul>
+		</el-col>
+		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px;margin-left: 50px">填写可购买的最高级身份，最多填写5个</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">规则</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">
+			<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px;margin-left: 60px">身份是否升级</el-col>
+			<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">
+				<el-select v-model="value" placeholder="请选择">
+				    <el-option
+				      v-for="item in options"
+				      :key="item.value"
+				      :label="item.label"
+				      :value="item.value">
+				    </el-option>
+			  </el-select>
+			</el-col>
+		</el-col>
+		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px">
+			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px">邀请人身份</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px">
+				<el-select v-model="value1" placeholder="请选择">
+				    <el-option
+				      v-for="item in options1"
+				      :key="item.value"
+				      :label="item.label"
+				      :value="item.value">
+				    </el-option>
+			  </el-select>
+			</el-col>
+		</el-col>
+		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px">
+			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px">被邀请人身份</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px">
+				<el-select v-model="value1" placeholder="请选择">
+				    <el-option
+				      v-for="item in options2"
+				      :key="item.value"
+				      :label="item.label"
+				      :value="item.value">
+				    </el-option>
+			  </el-select>
+			</el-col>
+		</el-col>
+		<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px;border: 1px solid #ddd;width:1000px;height: 400px;">
+			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="">
+				<ul class="headerfx">
+					<li>联创</li>
+					<li>总代</li>
+					<li>普通</li>
+					<li>普通1</li>
+					<li>普通2</li>
+				</ul>
+			</el-col>	
+			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="">
+				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="">
+					<ul class="leftul">
+						<li>自己拿</li>
+						<li>一级</li>
+						<li>二级</li>
+						<li>三级</li>
+						<li>四级</li>
+						<li>五级</li>
+					</ul>
+				</el-col>
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="">
+					
+				</el-col>
+			</el-col>
+		</el-col> -->
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column type="index">
+		
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+			<el-table-column prop="courierNumber" label="">
 			</el-table-column>
-			<el-table-column prop="courierNumber" label="店铺名">
+			<el-table-column prop="userName" v-if="biaoti[0] " :label="biaoti[0]">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
+			<el-table-column prop="amountPaid" v-if="biaoti[1] " :label="biaoti[1]">
 			</el-table-column>
-			<el-table-column prop="amountPaid" label="手机号">
+			<el-table-column prop="orderTotal" v-if="biaoti[2] " :label="biaoti[2]">
 			</el-table-column>
-			<el-table-column prop="orderTotal" label="销量">
+			<el-table-column prop="orderStatus" v-if="biaoti[3] " :label="biaoti[3]">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="交易额">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="账户余额">
-			</el-table-column>
-			<el-table-column prop="creationTime" label="已提现金额">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="状态">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费1/%">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费总额">
+			<el-table-column prop="paymentMethod" v-if="biaoti[4] " :label="biaoti[4]">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">通过</el-button>
+					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">修改</el-button>
 					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-			</el-pagination>
+		<el-col :xs="1" :sm="1" :md="1" :lg="1" :offset="23" style="">
+			<el-button type="primary" @click="seeBtn(scope.$index, scope.row)">增加</el-button>
 		</el-col>
-
+		
+		<!--工具条-->
+		<!-- <el-col :span="24" class="toolbar" style="background:#fff;"> -->
+			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
+			<!-- <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;"> -->
+			<!-- </el-pagination> -->
+		<!-- </el-col> -->
 		<!--编辑界面-->
-		<el-dialog title="店铺详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="店铺名称">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
+		<el-dialog title="修改" v-model="editFormVisible" :close-on-click-modal="false" >
+			<el-form :model="orderDetails" label-width="60px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="">
+					<div>{{orderDetails.courierNumber}}</div>
 				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
+				<el-form-item label="联创">
+					<el-input v-model="orderDetails.userName" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="手机号">
-					<div>{{orderDetails.amountPaid }}</div>
+				<el-form-item label="总代">
+					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="店铺销量">
-					<div>{{orderDetails.orderTotal }}</div>
+				<el-form-item label="普通">
+					<el-input v-model="orderDetails.orderTotal" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="店铺营业额">
-					<div>{{orderDetails.orderStatus }}</div>
+				<el-form-item label="普通1">
+					<el-input v-model="orderDetails.orderStatus" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="账户余额">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="已提现金额">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="违规记录">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-form-item label="手续费">
-					<div>{{orderDetails.commodityName}}</div>
+				<el-form-item label="普通2">
+					<el-input v-model="orderDetails.paymentMethod" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -118,6 +149,44 @@
 	export default {
 		data() {
 			return {
+				biaoti:['联创','总代'],
+				options1: [{
+		          value: '0',
+		          label: '经理'
+		        }, {
+		          value: '1',
+		          label: '总监'
+		        },{
+		          value: '2',
+		          label: '联创'
+		        },{
+		          value: '3',
+		          label: '总代'
+		        },{
+		          value: '4',
+		          label: '普通'
+		        }],
+		        options2: [{
+		          value: '0',
+		          label: '联创'
+		        }, {
+		          value: '1',
+		          label: '总代'
+		        },{
+		          value: '2',
+		          label: '普通'
+		        },{
+		          value: '3',
+		          label: '普通1'
+		        },{
+		          value: '4',
+		          label: '普通2'
+		        }],
+				filters: {
+					name: '',
+					status:'',
+					type:''
+				},
 				radio: '0',
 				checked: true,
 				value:'',
@@ -145,22 +214,11 @@
 				}],
 				options: [{
 		          value: '0',
-		          label: '全部'
+		          label: '否'
 		        }, {
 		          value: '1',
-		          label: '订单编号'
-		        }, {
-		          value: '2',
-		          label: '快递单号'
-		        }, {
-		          value: '3',
-		          label: '用户名'
-		        }],
-				filters: {
-					name: '',
-					status:'',
-					type:''
-				},
+		          label: '是'
+		        },],
 				users: [],
 				total: 100,
 				page: 1,
@@ -190,16 +248,33 @@
 				orderDetails: {
 				},
 				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
+					courierNumber :'自己拿',
+					userName:'200/5%',
+					amountPaid :'200/5%',
+					orderTotal :'',
+					orderStatus :'',
+					paymentMethod :''
+				},{
+					courierNumber :'一级',
+					userName:'200/5%',
+					amountPaid :'200/5%',
+					orderTotal :'',
+					orderStatus :'',
+					paymentMethod :''
+				},{
+					courierNumber :'二级',
+					userName:'200/5%',
+					amountPaid :'200/5%',
+					orderTotal :'',
+					orderStatus :'',
+					paymentMethod :''
+				},{
+					courierNumber :'三级',
+					userName:'200/5%',
+					amountPaid :'200/5%',
+					orderTotal :'',
+					orderStatus :'',
+					paymentMethod :''
 				}]
 			}
 		},
@@ -294,27 +369,7 @@
 			},
 			//编辑
 			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
+				
 			},
 			//新增
 			addSubmit: function () {
@@ -374,8 +429,30 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}	
+	
+	.Grade {
+		list-style: none;
+	}
+	.Grade li{
+		float: left;
+		margin-right: 20px;
+		width:200px;
+		height: 50px;
+		border: 1px solid #ddd;
+		text-align: center;
+		line-height: 50px;
+	}
+	.headerfx{
+		list-style:none;
+	}
+	.headerfx li{
+		float: left;
+		margin-left: 150px
+	}
+	.leftul{
+		list-style:none;
+	}
+	.leftul li{
+		margin-bottom: 40px
+	}
 </style>

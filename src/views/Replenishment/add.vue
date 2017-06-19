@@ -1,92 +1,48 @@
 <template>
   <section>
-    <!--工具条-->
-   <!--  <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-      <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model="filters.name" placeholder="支付银行"></el-input>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="filters.status" clearable>
-              <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="搜索类型">
-            <el-select v-model="filters.type" clearable>
-              <el-option v-for="item in options" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item>
-            <el-input v-model="filters.name"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" v-on:click="getUsers">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col> -->
-
-    <!--列表-->
-    <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-      <el-table-column type="index">
-      </el-table-column>
-      <el-table-column prop="courierNumber" label="配置">
-      </el-table-column>
-      <el-table-column label="操作">
-        <template scope="scope">
-           <el-switch v-model="value1" on-text="" on-color="#13ce66" off-text=""></el-switch>
-          <!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button> -->
-          <!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button> -->
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <!--工具条-->
-    <el-col :span="24" class="toolbar" style="background:#fff;">
-      <!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-      </el-pagination>
-    </el-col>
-
-    <!--编辑界面-->
-    <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-      <el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="订单号">
-          <div>{{orderDetails.orderNumber }}</div>
-          <!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-        </el-form-item>
-        <el-form-item label="商品名称">
-          <div>{{orderDetails.commodityName}}</div>
-        </el-form-item>
-        <el-form-item label="用户名">
-          <div>{{orderDetails.userName }}</div>
-        </el-form-item>
-        <el-form-item label="实付金额">
-          <div>{{orderDetails.amountPaid }}</div>
-        </el-form-item>
-        <el-form-item label="订单总价">
-          <div>{{orderDetails.orderTotal }}</div>
-        </el-form-item>
-        <el-form-item label="订单状态">
-          <div>{{orderDetails.orderStatus }}</div>
-        </el-form-item>
-        <el-form-item label="支付方式">
-          <div>{{orderDetails.paymentMethod }}</div>
-        </el-form-item>
-        <el-form-item label="创建时间">
-          <div>{{orderDetails.creationTime}}</div>
-        </el-form-item>
-        <el-form-item label="发货时间">
-          <div>{{orderDetails.deliveryTime}}</div>
-        </el-form-item>
-        <el-col :span='24'></el-col>
-      </el-form>
-      <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-        <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-      </div>
-    </el-dialog>
+  	<el-col :span="24" style="padding-bottom: 20px;">基本信息</el-col>
+    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
+      <el-form-item label="店铺名称">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="大区经理价格">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="总监价格">
+        <el-input v-model="filters.name"  style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="联创价格">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="总代价格">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-col :span="24" style="padding-bottom: 20px;">商品图片</el-col>
+      <el-col :span="24" style="padding-bottom: 20px;">
+        <el-col :span="3" style="padding-bottom: 20px;">
+            <div style="height:100px;width:100px;border: 1px solid #ddd">
+              
+            </div>
+        </el-col>
+        <el-col :span="3" style="padding-bottom: 20px;">
+            <div style="height:100px;width:100px;border: 1px solid #ddd">
+              
+            </div>
+        </el-col>
+        <el-col :span="3" style="padding-bottom: 20px;">
+              <div style="height:100px;width:100px;border: 1px solid #ddd">
+              
+            </div>
+        </el-col>
+      </el-col>
+      <el-form-item label="商品描述">
+        <el-input v-model="filters.name" type="textarea" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">保存</el-button>
+        <el-button>取消</el-button>
+      </el-form-item>
+  </el-form>
   </section>
 </template>
 
@@ -221,7 +177,7 @@
         this.getUsers();
       },
       //获取用户列表
-      getUsers() {
+      onSubmit() {
         let para = {
           page: this.page,
           name: this.filters.name
@@ -355,4 +311,7 @@
 
 <style>
   
+  .el-form-item__label{
+    text-align: left;
+  }
 </style>

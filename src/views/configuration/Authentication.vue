@@ -1,7 +1,7 @@
 <template>
   <section>
     <!--工具条-->
-   <!--  <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
+    <!-- <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.name" placeholder="支付银行"></el-input>
@@ -26,29 +26,39 @@
         </el-form-item>
       </el-form>
     </el-col> -->
-
-    <!--列表-->
-    <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-      <el-table-column type="index">
-      </el-table-column>
-      <el-table-column prop="courierNumber" label="配置">
-      </el-table-column>
-      <el-table-column label="操作">
-        <template scope="scope">
-           <el-switch v-model="value1" on-text="" on-color="#13ce66" off-text=""></el-switch>
-          <!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button> -->
-          <!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button> -->
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <!--工具条-->
-    <el-col :span="24" class="toolbar" style="background:#fff;">
-      <!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-      </el-pagination>
-    </el-col>
-
+    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
+      <el-form-item label="法人姓名">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="法人身份">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="手机号">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="对公账户账号">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="运营地址">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="上传法人身份证">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="上传法人手持身份证">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="上传营业执照">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item label="上传银行开户许可证">
+        <el-input v-model="filters.name" style="width:400px"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">保存</el-button>
+        <el-button>取消</el-button>
+      </el-form-item>
+  </el-form>
     <!--编辑界面-->
     <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
       <el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
@@ -355,4 +365,7 @@
 
 <style>
   
+  .el-form-item__label{
+    text-align: left;
+  }
 </style>

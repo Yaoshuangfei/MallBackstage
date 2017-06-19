@@ -6,7 +6,7 @@
 				<!-- <el-form-item>
 					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
 				</el-form-item> -->
-				<el-form-item label="状态">
+				<!-- <el-form-item label="状态">
 					<el-select v-model="filters.status" clearable>
 				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
 				      </el-option>
@@ -20,38 +20,35 @@
 				</el-form-item>
 				<el-form-item>
 				    <el-input v-model="filters.name"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="add">新增地址</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="订单编号">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+			<el-table-column prop="orderNumber" label="发货地址">
+				<template scope="scope">
+					<el-radio class="radio" v-model="radio" label="1">备选项</el-radio>
+				</template>
 			</el-table-column>
-			<el-table-column prop="courierNumber" label="快递单号">
+			<el-table-column prop="courierNumber" label="联系人">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
+			<el-table-column prop="userName" label="所在地区">
 			</el-table-column>
-			<el-table-column prop="amountPaid" label="实付金额">
+			<el-table-column prop="amountPaid" label="街道地址">
 			</el-table-column>
-			<el-table-column prop="orderTotal" label="订单总价">
+			<el-table-column prop="orderTotal" label="邮编">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="订单状态">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="支付方式">
-			</el-table-column>
-			<el-table-column prop="creationTime" label="创建时间">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="发货时间">
+			<el-table-column prop="orderStatus" label="电话／手机">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
 					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
 					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
+					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">编辑地址</el-button>
 					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -63,43 +60,78 @@
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
-
-		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
+		<!--新增界面-->
+		<el-dialog title="新增地址" v-model="addFormVisible" :close-on-click-modal="false" >
+			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm" style="margin-left: 140px">
+				<el-form-item label="联系人">
+					<el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
+					<el-input v-model="orderDetails.commodityName" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
+				<el-form-item label="所在地区">
+					<el-input v-model="orderDetails.userName" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
+				<el-form-item label="街道地址">
+					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off" style="width: 500px"></el-input>
 				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
+				<el-form-item label="邮编">
+					<el-input v-model="orderDetails.orderTotal" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
+				<el-form-item label="电话号码">
+					<el-input v-model="orderDetails.orderStatus" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
+				<el-form-item label="手机号码">
+					<el-input v-model="orderDetails.paymentMethod" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
+				<el-form-item label="公司">
+					<el-input v-model="orderDetails.creationTime" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
+				<el-form-item label="备注">
+					<el-input v-model="orderDetails.deliveryTime" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
+				<el-button type="primary" @click.native="addFormVisible = false">取消</el-button>
+			</div>
+		</el-dialog>
+		<!--编辑界面-->
+		<el-dialog title="修改地址" v-model="editFormVisible" :close-on-click-modal="false" >
+			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm" style="margin-left: 140px">
+				<el-form-item label="联系人">
+					<el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="商品名称">
+					<el-input v-model="orderDetails.commodityName" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="所在地区">
+					<el-input v-model="orderDetails.userName" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="街道地址">
+					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off" style="width: 500px"></el-input>
+				</el-form-item>
+				<el-form-item label="邮编">
+					<el-input v-model="orderDetails.orderTotal" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="电话号码">
+					<el-input v-model="orderDetails.orderStatus" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="手机号码">
+					<el-input v-model="orderDetails.paymentMethod" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="公司">
+					<el-input v-model="orderDetails.creationTime" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-form-item label="备注">
+					<el-input v-model="orderDetails.deliveryTime" type="text" auto-complete="off" style="width: 300px"></el-input>
+				</el-form-item>
+				<el-col :span='24'></el-col>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
+				<el-button type="primary" @click.native="editFormVisible = false">取消</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -113,7 +145,7 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
+				radio: '1',
 				checked: true,
 				value:'',
 				value1:'',
@@ -271,21 +303,14 @@
 
 				});
 			},
-			//显示编辑界面
+			//显示编辑界面 
 			seeBtn: function (index, row) {
 				this.editFormVisible = true;
 				this.orderDetails = Object.assign({}, row);
 			},
 			//显示新增界面
-			handleAdd: function () {
+			add: function () {
 				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
 			},
 			//编辑
 			editSubmit: function () {
@@ -369,8 +394,4 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}	
 </style>

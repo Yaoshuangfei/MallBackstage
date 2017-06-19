@@ -23,42 +23,68 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="getUsers">导出订单</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
-
+		<el-col :span="24">
+			<el-col :span="4" :offset="4">商品详情</el-col>
+			<el-col :span="2">单价</el-col>
+			<el-col :span="2">数量</el-col>
+			<el-col :span="2">买家</el-col>
+			<el-col :span="2" style="margin-left: 20px">订单总价</el-col>
+			<el-col :span="2">状态</el-col>
+		</el-col> <!-- v-for="item in selectSubjectStatus" -->
+		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
+			<el-col :span="24"  class="table_div_head">
+				<el-col :span="6">订单编号：111111111111111111</el-col>
+				<el-col :span="4">下单时间：2017-08-09 12:20</el-col>
+				<el-col :span="4" :offset="10">
+					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
+						<el-button style="margin-top:-5px"  type="text">查看下级</el-button>
+					</router-link>
+				</el-col>
+			</el-col>
+			<el-col :span="24">
+				<el-col :span="6" class="img_shangp">
+				</el-col>
+				<el-col :span="6" :offset="1" class="describe_fiast">
+				你说神农级手机爱好的撒等哈收到哦啊是的哈是的哈
+				</el-col>
+				<el-col :offset="1" :span="3" class="describe">321</el-col>
+				<el-col :span="2" class="describe">321</el-col>
+				<el-col :span="3" class="describe">18767478564</el-col>
+				<el-col :span="2" :offset="1"  class="describe">321</el-col>
+				<el-col :span="1" class="describe">321</el-col>
+			</el-col>
+		</el-col>
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<!-- <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column prop="orderNumber" label="订单编号">
 			</el-table-column>
-			<el-table-column prop="courierNumber" label="快递单号">
+			<el-table-column prop="courierNumber" label="下单时间">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
+			<el-table-column prop="userName" label="单价">
 			</el-table-column>
-			<el-table-column prop="amountPaid" label="实付金额">
+			<el-table-column prop="amountPaid" label="数量">
 			</el-table-column>
-			<el-table-column prop="orderTotal" label="订单总价">
+			<el-table-column prop="orderTotal" label="买家">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="订单状态">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="支付方式">
-			</el-table-column>
-			<el-table-column prop="creationTime" label="创建时间">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="发货时间">
+			<el-table-column prop="orderStatus" label="订单总价">
 			</el-table-column>
 			<el-table-column label="操作">
-				<template scope="scope">
+				<template scope="scope"> -->
 					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
 					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+					<!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
+					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">查看物流</el-button>
+					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">查看评价</el-button>
 				</template>
 			</el-table-column>
-		</el-table>
+		</el-table> -->
 
 		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
+		<el-col :span="18" class="toolbar" style="background:#fff;">
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
@@ -120,22 +146,16 @@
 				value2:'',
 				selectSubjectStatus: [
 				{
-					value:'0',
-					label:'全部'
-				},{
 					value:'1',
 					label:'待付款'
 				},{
 					value:'2',
-					label:'待发货'
-				},{
-					value:'3',
 					label:'已发货'
 				},{
-					value:'4',
-					label:'待评价'
+					value:'3',
+					label:'交易完成'
 				},{
-					value:'5',
+					value:'4',
 					label:'退货'
 				}],
 				options: [{
@@ -369,8 +389,5 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}	
+
 </style>

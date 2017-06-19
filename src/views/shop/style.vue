@@ -1,112 +1,60 @@
 <template>
 	<section>
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
-				</el-form-item> -->
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" clearable>
-				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item label="搜索类型">
-				    <el-select v-model="filters.type" clearable>
-				      <el-option v-for="item in options" :label="item.label" :value="item.value">
-				      </el-option>
-				    </el-select>
-				</el-form-item>
-				<el-form-item>
-				    <el-input v-model="filters.name"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column type="index">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="店铺名">
-			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="手机号">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="销量">
-			</el-table-column>
-			<el-table-column prop="orderStatus" label="交易额">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="账户余额">
-			</el-table-column>
-			<el-table-column prop="creationTime" label="已提现金额">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="状态">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费1/%">
-			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费总额">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">通过</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-			</el-pagination>
-		</el-col>
-
-		<!--编辑界面-->
-		<el-dialog title="店铺详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="店铺名称">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="手机号">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="店铺销量">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="店铺营业额">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="账户余额">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="已提现金额">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="违规记录">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-form-item label="手续费">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
+		<el-row :gutter="10" style="margin-top: 40px">
+			<el-col :xs="15" :sm="15" :md="15" :lg="15">
+				<el-col :xs="24" :sm="24" :md="24" :lg="24">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块一</el-col>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8">
+						<div class="shopstyle"></div>
+						<div style="margin-left: 60px">
+							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+						</div>
+					</el-col>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8">
+						<div class="shopstyle"></div>
+						<div style="margin-left: 60px">
+							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+						</div>
+					</el-col>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8">
+						<div class="shopstyle"></div>
+						<div style="margin-left: 60px">
+							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+						</div>
+					</el-col>
+				</el-col>
+				<el-col :xs="24" :sm="24" :md="24" :lg="24">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块二</el-col>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8">
+						<div class="shopstyle"></div>
+						<div style="margin-left: 60px">
+							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+						</div>
+					</el-col>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8">
+						<div class="shopstyle"></div>
+						<div style="margin-left: 60px">
+							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+						</div>
+					</el-col>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8">
+						<div class="shopstyle"></div>
+						<div style="margin-left: 60px">
+							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+						</div>
+					</el-col>
+				</el-col>
+			</el-col>
+		    <el-col :xs="9" :sm="9" :md="9" :lg="9">
+		    	预览
+		    </el-col>
+		</el-row>
 	</section>
 </template>
 
@@ -374,8 +322,12 @@
 </script>
 
 <style>
-	.el-dialog--small {
-    	width: 25%;
-    	border-radius: 10px
-	}	
+.shopstyle{
+	width: 200px;
+	height: 200px;
+	border: 1px solid #ddd;
+	margin-left: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px
+}
 </style>

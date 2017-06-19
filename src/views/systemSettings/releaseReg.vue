@@ -35,8 +35,5 @@
 </script>
 
 <style>
-    .el-dialog--small {
-        width: 25%;
-        border-radius: 10px
-    }
+ 
 </style>

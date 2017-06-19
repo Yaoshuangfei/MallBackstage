@@ -10,7 +10,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column prop="orderNumber" label="序号">
 			</el-table-column>
 			<el-table-column prop="userName" label="用户名">
@@ -346,8 +346,5 @@
 </script>
 
 <style>
-	.el-dialog--small {
-		width: 25%;
-		border-radius: 10px
-	}
+
 </style>
