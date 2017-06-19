@@ -13,9 +13,12 @@
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column type="index">
 			</el-table-column>
-			<el-table-column prop="courierNumber" label="图片">
+			<el-table-column prop="picture" label="图片">
+				<template scope="scope">
+					<img class="img" :src="scope.row.picture" alt="">
+				</template>
 			</el-table-column>
-			<el-table-column prop="userName" label="创建时间">
+			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
@@ -33,57 +36,61 @@
 			</el-pagination>
 		</el-col>
 		<!--新增banner-->
-		<el-dialog title="添加banner" v-model="addbannerdiv" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
+		<el-dialog title="添加banner" v-model="addbannerdiv" :close-on-click-modal="false">
+			<el-form :model="uploadDetails" label-width="60px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="链接">
-					<el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off"></el-input>
+					<el-input v-model="uploadDetails.uploadImgs" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="banner">
-					<el-input v-model="orderDetails.commodityName" type="text" auto-complete="off"></el-input>
+					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+					<button type="button" class="el-button el-button--primary el-button--small">
+						<span>点击上传</span>
+					</button>
+					<button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button>
+					<span style="display: block;font-size: 12px">{{ imageChange }}</span>
+					<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
+					<!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
 				</el-form-item>
-				<el-form-item label="序号">
-					<el-input v-model="orderDetails.userName" type="text" auto-complete="off"></el-input>
+				<el-form-item label="序号" >
+					<el-input v-model="uploadDetails.List" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="描述">
-					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off"></el-input>
+					<el-input v-model="uploadDetails.information" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">添加</el-button>
+				<el-button type="primary" @click.native="submitUpload" :loading="editLoading">添加</el-button>
 				<el-button type="primary" @click.native="addbannerdiv = false">取消</el-button>
 			</div>
 		</el-dialog>
 		<!--编辑界面-->
 		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
+			<el-form :model="uploadDetails" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
+					<div>{{uploadDetails.uploadImgs }}</div>
 					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
 				</el-form-item>
-				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
 				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
+					<div>{{uploadDetails.List }}</div>
 				</el-form-item>
 				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
+					<div>{{uploadDetails.amountPaid }}</div>
 				</el-form-item>
 				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
+					<div>{{uploadDetails.orderTotal }}</div>
 				</el-form-item>
 				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
+					<div>{{uploadDetails.orderStatus }}</div>
 				</el-form-item>
 				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
+					<div>{{uploadDetails.paymentMethod }}</div>
 				</el-form-item>
 				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
+					<div>{{uploadDetails.creationTime}}</div>
 				</el-form-item>
 				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
+					<div>{{uploadDetails.deliveryTime}}</div>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -108,6 +115,7 @@
 				value:'',
 				value1:'',
 				value2:'',
+				url:'',
 				selectSubjectStatus: [
 				{
 					value:'0',
@@ -172,11 +180,11 @@
 				addbannerdiv: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
-				orderDetails: {
+				uploadDetails: {
 				},
 				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
+					uploadImg :'145877458784524c',
+					courierNumber :'145877458784524c22',
 					userName:'吸引力量',
 					amountPaid :'300',
 					orderTotal :'900',
@@ -185,78 +193,175 @@
 					creationTime:'2017-09-08 17:09',
 					deliveryTime:'2017-09-08 17:09',
 					commodityName:'雨花说'
-				}]
+				}],
+                formData: new FormData(),
+                fileImg: ''
 			}
 		},
+        computed: {
+            // 实时更新上传图片的名字，仅读取，值只须为函数
+            imageChange: function () {
+                return this.fileImg
+            }
+        },
 		methods: {
+//		    清空上传
+            clear(){
+                let btn = document.getElementById("btnClear");
+                let files = document.getElementById("fileInput");
+                this.fileImg = '';
+                // for IE, Opera, Safari, Chrome
+                if (files !== null && files.value) {
+                    //     files.outerHTML = files.outerHTML;
+                    // } else { // FF(包括3.5)
+                    files.value = "";
+                    this.formData = new FormData()
+                }
+            },
+		    //图片上传
+            upload (event) {
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                // console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                    console.log('存在file', file)
+                    this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file);
+                    console.log(this.formData);
+                } else {
+                    this.fileImg = ''
+                    console.log('不存在file', file)
+                    this.formData = new FormData()
+                }
+            },
+            //添加
+            submitUpload(){
+                this.$confirm('确认修改吗？', '提示', {}).then(() => {
+                    const _this= this;
+                    _this.$http.post('http://121.43.178.109:8080/ser/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            // const info = response.body
+							_this.url = info.data[0].baseUri+info.data[0].uri;
+                            _this.UploadImg();
+                        }, error => _this.$emit('complete', 500, error.message))
+                });
+            },
+//			图片上传ajax
+			UploadImg(){
+                const _this= this;
+                const params = {
+                    link:this.uploadDetails.uploadImgs,
+                    picture:this.url,
+                    orderSort:this.uploadDetails.List,
+                    poType:'1',
+                    desc:'',
+                };
+                var url = baseUrl+"/api/indexAdvert/add";
+                var data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                        if(!data.success){
+                            alert(data.msg)
+						}else{
+                            _this.addbannerdiv = false;
+                            _this.getlist();
+						}
+                    }
+                });
+
+
+			},
 			//性别显示转换
 			formatSex: function (row, column) {
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
 			},
 			getlist(){
-				const _this = this
-				_this.table = []
+				const _this = this;
+                _this.orderInformation = [];
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
-				}
-				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+                    poType:'1'
+				};
+                var url = baseUrl+"/api/indexAdvert/find/page?pageNum=1&pageSize=10";
+                var data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            var _length = data.data.list;
+                            for (var i = 0; i < _length.length; i++) {
+                                _this.orderInformation.push(_length[i]);
+                            }
+                        }
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
 				this.getUsers();
 			},
 			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
-			},
 			//删除
-			handleDel: function (index, row) {
+            handleEdit: function (index, row) {
 				this.$confirm('确认删除该记录吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.listLoading = true;
+                    const _this= this;
+                    const params = {
+                        id:row.id
+                    };
+                    var url = baseUrl+"/api/indexAdvert/delete/one";
+                    var data =JSON.stringify(params);
+                    $.ajax({
+                        type:'POST',
+                        dataType:'json',
+                        url:url,
+                        data:data,
+                        contentType:'application/json;charset=utf-8',
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                        success:function(data){
+                            if(!data.success){
+                                alert(data.msg)
+                            }else{
+                                _this.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                });
+                                _this.getlist();
+                            }
+                        }
+                    });
+//					this.listLoading = true;
 					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
+//					let para = { id: row.id };
+//					removeUser(para).then((res) => {
+//						this.listLoading = false;
+//						//NProgress.done();
+//						this.$message({
+//							message: '删除成功',
+//							type: 'success'
+//						});
+//						this.getUsers();
+//					});
 				}).catch(() => {
 
 				});
@@ -264,61 +369,15 @@
 			//显示编辑界面
 			seeBtn: function (index, row) {
 				this.editFormVisible = true;
-				this.orderDetails = Object.assign({}, row);
+				this.uploadDetails = Object.assign({}, row);
 			},
 			//显示添加banner页面
 			addbanner: function (index, row) {
 				this.addbannerdiv = true;
-				// this.orderDetails = Object.assign({}, row);
+				// this.uploadDetails = Object.assign({}, row);
 			},
 			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
+
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
@@ -343,24 +402,32 @@
 				}).catch(() => {
 
 				});
-			}
+			},
+            formatterTime(row,column){
+                let curTime = row.createTime;
+                curTime = new Date(curTime).toLocaleString()
+                return curTime
+            },
 		},
 		mounted() {
-			// this.getlist();
+			 this.getlist();
 		}
 	}
-
 </script>
 
 <style>
 	.el-dialog--small {
     	width: 25%;
     	border-radius: 10px
-	}	
+	}
 	.el-form-item__label{
 		text-align: left;
 	}
 	.el-dialog__body{
-		margin-left: 40px ! important ;
+		margin-left: 0 ! important ;
+	}
+	.img {
+		width:100px;
+		height:100px;
 	}
 </style>
