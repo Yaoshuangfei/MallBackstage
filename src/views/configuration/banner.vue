@@ -41,6 +41,7 @@
 				<el-form-item label="链接">
 					<el-input v-model="uploadDetails.uploadImgs" type="text" auto-complete="off"></el-input>
 				</el-form-item>
+<<<<<<< HEAD
 				<el-form-item label="banner">
 					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
 					<button type="button" class="el-button el-button--primary el-button--small">
@@ -53,6 +54,21 @@
 				</el-form-item>
 				<el-form-item label="序号" >
 					<el-input v-model="uploadDetails.List" type="text" auto-complete="off"></el-input>
+=======
+					<el-form-item label="图片:">
+						<!-- 上传图片 -->
+						<form style="position:relative;">
+						    <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+						    <button type="button" class="el-button el-button--primary el-button--small">
+						    	<span>点击上传</span>
+						    </button>
+						    <button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button>
+						    <span style="display: block;font-size: 12px">{{ imageChange }}</span>
+						</form>
+		    		</el-form-item>
+				<el-form-item label="序号">
+					<el-input v-model="orderDetails.userName" type="text" auto-complete="off"></el-input>
+>>>>>>> dbe75d11feaa3ba875c80fe451c92bae6057403f
 				</el-form-item>
 				<el-form-item label="描述">
 					<el-input v-model="uploadDetails.information" type="text" auto-complete="off"></el-input>
@@ -60,7 +76,11 @@
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
+<<<<<<< HEAD
 				<el-button type="primary" @click.native="submitUpload" :loading="editLoading">添加</el-button>
+=======
+				<el-button type="primary" @click='addSubmit' :loading="editLoading">添加</el-button>
+>>>>>>> dbe75d11feaa3ba875c80fe451c92bae6057403f
 				<el-button type="primary" @click.native="addbannerdiv = false">取消</el-button>
 			</div>
 		</el-dialog>
@@ -194,6 +214,7 @@
 					deliveryTime:'2017-09-08 17:09',
 					commodityName:'雨花说'
 				}],
+<<<<<<< HEAD
                 formData: new FormData(),
                 fileImg: ''
 			}
@@ -287,6 +308,104 @@
 			//性别显示转换
 			formatSex: function (row, column) {
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+=======
+				formData: new FormData(),
+				fileImg: ''
+			}
+		},
+		computed: {
+		    // 实时更新上传图片的名字，仅读取，值只须为函数
+		    imageChange: function () {
+		      return this.fileImg
+		    }
+	    },
+		methods: {
+			clear(){
+				let btn = document.getElementById("btnClear");
+     			let files = document.getElementById("fileInput");
+     			this.fileImg = '';
+				// for IE, Opera, Safari, Chrome
+		        if (files !== null && files.value) {
+		        //     files.outerHTML = files.outerHTML;
+		        // } else { // FF(包括3.5)
+	            	files.value = "";
+	            	this.formData = new FormData()
+		        }
+			},
+			// 添加或编辑上传图片
+			upload (event) {
+				this.formData = new FormData()
+                let file = event.target.files[0]
+                console.log(this.formData)
+                console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                	console.log('存在file', file)
+                	this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file)
+                    console.log(this.formData)
+                } else {
+                	this.fileImg = ''
+                	console.log('不存在file', file)
+                	this.formData = new FormData()
+                }
+            },
+            addSubmit: function () {
+						this.$confirm('确认提交吗？', '提示', {}).then(() => {
+							const _this= this
+							// let stime = this.startTime.getTime()
+							// let etime = this.expiredTime.getTime()
+							// const params={
+							// 	accountId:'1',
+							// 	accessToken:'1',
+							// 	resourceType:'',
+							// 	// bannerEntity:{
+							// 	title:this.title,
+							// 	startTime:stime.toString(),
+							// 	expiredTime:etime.toString(),
+							// 	index:this.index,
+							// 	bannerType:this.bannerTypeid,
+							// 	enterType:_this.enterType,//_this.enterType
+							// 	value:this.value
+							// 	// }
+							// }
+							// this.formData.append('param', JSON.stringify(params))
+							console.log(this.formData)
+			                _this.$http.post("http://121.43.178.109:8080/ser/api/attachment/upload", _this.formData, {
+	                        	progress(event) {
+		                            //传递给父组件的progress方法
+		                            // _this.$emit('progress', parseFloat(event.loaded / event.total * 100), flag)
+		                        }
+                            })
+                            .then(response => {
+                            	console.log(response)
+                            	const info = JSON.parse(eval('(' + response.bodyText + ')'));
+                                // const info = response.body
+                                console.log(info.res)
+                                _this.addLoading = false;
+                                if(info.res === state.HTTPCODE.SUCCEED){
+        		                	_this.$message({
+        		                		message: info.resMsg,
+        		                		type: 'success'
+        		                	});
+        		                	_this.addFormVisible = false;
+        		                	_this.getlist();
+        		              	}else if(info.res === state.HTTPCODE.LOGINFAIL){
+        		                	_this.$message({
+        		                		message: info.resMsg,
+        		                		type: 'error'
+        		                	});
+        		              	}else if(info.res === state.HTTPCODE.FAIL){
+        		              		_this.$message({
+        		              			message: info.resMsg,
+        		              			type: 'error'
+        		              		});
+        		              	}
+                            }, error => _this.$emit('complete', 500, error.message))
+						});
+>>>>>>> dbe75d11feaa3ba875c80fe451c92bae6057403f
 			},
 			getlist(){
 				const _this = this;
@@ -377,7 +496,33 @@
 				// this.uploadDetails = Object.assign({}, row);
 			},
 			//编辑
+<<<<<<< HEAD
 
+=======
+			editSubmit: function () {
+				this.$refs.editForm.validate((valid) => {
+					if (valid) {
+						this.$confirm('确认提交吗？', '提示', {}).then(() => {
+							this.editLoading = true;
+							//NProgress.start();
+							let para = Object.assign({}, this.editForm);
+							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+							editUser(para).then((res) => {
+								this.editLoading = false;
+								//NProgress.done();
+								this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								this.$refs['editForm'].resetFields();
+								this.editFormVisible = false;
+								this.getUsers();
+							});
+						});
+					}
+				});
+			},
+>>>>>>> dbe75d11feaa3ba875c80fe451c92bae6057403f
 			selsChange: function (sels) {
 				this.sels = sels;
 			},

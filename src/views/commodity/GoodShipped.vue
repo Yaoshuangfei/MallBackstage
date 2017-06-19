@@ -1,86 +1,110 @@
 <template>
 	<section>
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
-				<el-form-item label="商品名称">
-				     <el-input v-model="filters.name"></el-input>     
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-					<el-button type="primary" v-on:click="getUsers">发布新品</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :span="24" v-show="next">
+			<el-col :span="24" class="Choice_div">
+				<el-col :span="6" class="Choice">
+					<el-tree :data="data" @node-click="handleNodeClick" :highlight-current="true"></el-tree>
+				</el-col>
+				<el-col :span="6" class="Choice">
+				
+				</el-col>
+				<el-col :span="6" class="Choice">
+				
+				</el-col>
+				<el-col :span="6" class="Choice">
+				
+				</el-col>
+			</el-col>
+			<el-col :span="24" class="footer_choice">
+				您当前选择的商品是：{{commodity}}
+			</el-col>
+			<el-col :span="4" :offset="10">
+				<el-button type="primary" style="width: 250px;margin-top: 20px" v-on:click="NextStep">下一步</el-button>
+			</el-col>
 		</el-col>
-
-		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="商品名称">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="userName" label="下单时间">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="价格">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="库存">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">下架</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
-			</el-pagination>
+		<!--商品基本信息-->
+		<el-col :span="24">
+			<el-col :span="24" class="Commodity_information">
+				<el-col :span="24" class="head_text">商品基本信息</el-col>
+				<el-col :span="24" class="head_text">
+					<el-col :span="2" class="leftg_text">商品类目：</el-col>当前分类{{commodity}}
+				</el-col>
+				<el-col :span="24" class="head_text">
+					<el-col :span="2" class="leftg_text">商品品牌：</el-col>
+				</el-col>
+				<el-col :span="24" :offset="2" style="margin-top: 10px">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>
+				<el-col :span="18" :offset="3" class="body_text">
+					<el-col :span="14" :offset="4" style="margin-top: 10px">
+						<el-form :model="orderDetails" label-width="120px" :rules="editFormRules" :inline="true" ref="editForm">
+							<el-form-item label="货号">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="是否配包">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="品牌">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="质地">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="是否有扩展层">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="性别">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="适用对象">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="图案">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="重量">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="成色">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="锁的类型">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="闭合方式">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="有无拉杆">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="内部结构">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="是否带锁">
+								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+						<el-col :span='24'></el-col>
+					</el-form>
+					</el-col>
+					
+				</el-col>
+				<el-col :span="24" class="shangp">
+					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+						<el-col :span="2" style="border-right: 1px solid #ddd;height: 60px;text-align: right;line-height: 60px;">商品名称：</el-col>
+						<el-col :span="12" style="margin-left: 10px">
+							<el-col :span="12" style="margin-top: 10px"><input type="" name=""></el-col>
+							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>
+						</el-col>
+					</el-col>
+					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+						<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: right;line-height: 80px;">商品货号：</el-col>
+						<el-col :span="12" style="margin-left: 10px">
+							<el-col :span="12" style="margin-top: 10px"><input type="" name=""></el-col>
+							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>
+							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">做多可输入20个字符，支持输入中文、字母、数字、_、/、和小数点</el-col>
+						</el-col>
+					</el-col>
+				</el-col>
+			</el-col>
 		</el-col>
-
-		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-				</el-form-item>
-				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
@@ -93,32 +117,54 @@
 		data() {
 			return {
 				radio: '0',
-				checked: true,
+				commodity:'',
+				next: false,
 				value:'',
 				value1:'',
 				value2:'',
-				selectSubjectStatus: [
+				data: [
 				{
-					value:'0',
-					label:'所有订单'
+					id:'0',
+					label:'家居日用'
 				},{
-					value:'1',
-					label:'待付款'
+					id:'1',
+					label:'食品酒类'
 				},{
-					value:'2',
-					label:'待发货'
+					id:'2',
+					label:'时尚穿戴'
 				},{
-					value:'3',
-					label:'已发货'
+					id:'3',
+					label:'美妆个护'
 				},{
-					value:'4',
-					label:'待评价'
+					id:'4',
+					label:'黑科技'
 				},{
-					value:'5',
-					label:'交易完成'
+					id:'5',
+					label:'营养保健'
 				},{
-					value:'6',
-					label:'退货'
+					id:'6',
+					label:'家居建材'
+				},{
+					id:'6',
+					label:'数码通讯'
+				},{
+					id:'6',
+					label:'家用电器'
+				},{
+					id:'6',
+					label:'汽车'
+				},{
+					id:'6',
+					label:'水果节'
+				},{
+					id:'6',
+					label:'生鲜'
+				},{
+					id:'6',
+					label:'百货'
+				},{
+					id:'6',
+					label:'零食'
 				}],
 				options: [{
 		          value: '1',
@@ -154,7 +200,9 @@
 					birth: '',
 					addr: ''
 				},
-
+				addForm:{
+					name:''
+				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
@@ -175,6 +223,41 @@
 			}
 		},
 		methods: {
+			handleNodeClick(data) {
+	        	// console.log(data);
+	        	this.commodity =  data.label
+	        	console.log(this.commodity);
+	     	},
+	     	NextStep() {
+	     		this.$confirm('类目一旦选定，编辑商品的时候类目无法更改，请确认清楚再进入编辑?', '提示', {
+					type: 'warning'
+				}).then(() => {
+					this.next = false
+					// $.post(sysUrl+"/backstage/resources/update",
+		   //           { param: JSON.stringify(params) },
+		   //           function(data){
+		   //           	const info = eval('(' + data + ')');
+		   //              const response = JSON.parse(info);
+		   //              console.log(response)
+		   //           	if(response.res === 1000000){
+					// 		_this.$message({
+					// 			message: '修改成功',
+					// 			type: 'success'
+					// 		});
+		   //           	}else{
+					// 		_this.$message({
+					// 			message: '修改失败',
+					// 			type: 'error'
+					// 		});
+		   //           	}
+		   //           	_this.getChildrenList(_this.pID)
+					// 	_this.editFormVisible1 = false;
+		   //            }
+		   //       	)
+				}).catch(() => {
+
+				});
+	     	},
 			//性别显示转换
 			formatSex: function (row, column) {
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
@@ -345,5 +428,55 @@
 </script>
 
 <style>
-	
+	.Choice_div{
+		width: 1600px;
+		height: 500px;
+		border: 1px solid #ddd;
+		margin-top: 20px;
+		margin-left: 20px;
+	}
+	.Choice{
+		width: 350px;
+		height: 400px;
+		border: 1px solid #ddd;
+		margin-left: 40px;
+		margin-top: 40px;
+		overflow: auto;
+	}
+	.footer_choice{
+		width: 1600px;
+		height: 40px;
+		border: 1px solid #ddd;
+		margin-top: 20px;
+		margin-left: 20px;
+		line-height: 40px;
+		padding-left: 20px;
+	}
+	.Commodity_information{
+		width: 1600px;
+		height: 1000px;
+		border: 1px solid #ddd;
+		margin-top: 20px;
+		margin-left: 20px;
+	}
+	.head_text{
+		height: 40px;
+		border-bottom: 1px solid #ddd;
+		line-height: 40px;
+	}
+	.leftg_text{
+		height:40px;
+		border-right: 1px solid #ddd;
+		text-align: right;
+	}
+	.body_text{
+		border: 1px solid #ddd;
+		height: 600px;
+		margin-top: 20px;
+	}
+	.shangp{
+		height:140px;
+		border-top: 1px solid #ddd;
+		margin-top: 10px;
+	}
 </style>
