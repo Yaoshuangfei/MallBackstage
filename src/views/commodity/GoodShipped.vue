@@ -23,7 +23,7 @@
 			</el-col>
 		</el-col>
 		<!--商品基本信息-->
-		<el-col :span="24">
+		<el-col :span="24" v-show="details">
 			<el-col :span="24" class="Commodity_information">
 				<el-col :span="24" class="head_text">商品基本信息</el-col>
 				<el-col :span="24" class="head_text">
@@ -90,16 +90,132 @@
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 60px;text-align: right;line-height: 60px;">商品名称：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><input type="" name=""></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>
 						</el-col>
 					</el-col>
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: right;line-height: 80px;">商品货号：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><input type="" name=""></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">做多可输入20个字符，支持输入中文、字母、数字、_、/、和小数点</el-col>
+						</el-col>
+					</el-col>
+					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+						<el-col :span="2" style="border-right: 1px solid #ddd;height: 280px;text-align: right;line-height: 80px;">商品图片：</el-col>
+						<el-col :span="12" style="margin-left: 10px">
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
+							<el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col>
+						</el-col>
+					</el-col>
+					<el-col :span="24">
+						<el-col :span="24" style="height: 40px;line-height: 30px;">商品交易信息</el-col>
+						<el-col :span="24" style="height: 40px;line-height: 30px;border: 1px solid #ddd;">
+							<el-col :span="2"  style="height: 30px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">计量单位：</el-col>
+							<el-col :span="2"  style=""><el-input type="text""></el-input></el-col>
+						</el-col>
+						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;">
+							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">尺码：</el-col>
+							<el-col :span="20"  style="">
+								<el-checkbox-group v-model="checkList">
+								    <el-col :span="5" :offset="1">
+								    	<el-checkbox label="L"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5">
+								    	<el-checkbox label="M"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5">
+								    	<el-checkbox label="S"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5">
+								    	<el-checkbox label="35"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5"  :offset="1">
+								    	<el-checkbox label="36"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5">
+								    	<el-checkbox label="37"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5">
+								    	<el-checkbox label="38"></el-checkbox>
+								    </el-col>
+								    <el-col :span="5">
+								    	<el-checkbox label="39"></el-checkbox>
+								    </el-col>
+								</el-checkbox-group>
+									<el-col :span="4">
+								    	<el-input type="text""></el-input>
+								    </el-col>
+								    <el-col :span="5" :offset="1">
+								    	<el-button type="primary" v-on:click="getUsers">添加规格值</el-button>
+								    </el-col>
+							</el-col>
+						</el-col>
+						<el-col :span="24" style="height: 150px;line-height: 30px;border: 1px solid #ddd;">
+							<el-col :span="2"  style="height: 150px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">规格报价：</el-col>
+							<el-col :span="14"  style="">
+								 <el-table :data="tableData" style="width: 100%">
+							      <el-table-column prop="name" label="规格" width="180">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.name" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="name" label="单价(元)" width="180">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.name" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="address" label="建议零售价(元)" width="180">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.name" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="date" label="单品货号" width="190">
+								      <template scope="scope">
+								      		<el-input v-model="scope.row.name" type="text"></el-input>
+										</template>
+							      </el-table-column>
+							      <el-table-column prop="date" label="金豆抵扣" width="200">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.name" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							    </el-table>
+							</el-col>
+						</el-col>
+						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;">
+							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: center">定价模式 </el-col>
+							<el-col :span="20">
+								<el-col :span="20">
+									 <el-radio class="radio" v-model="radio" label="1">模式一</el-radio>
+ 									 <el-radio class="radio" v-model="radio" label="2">模式二</el-radio>
+								</el-col>
+								<el-col :span="20">
+									 模式一：分销金额 = （定价-成本（人民币））*吸引力平台分佣方式
+								</el-col>
+								<el-col :span="20">
+									 模式二：分销金额 = （定价-成本（金豆））
+								</el-col>
+							</el-col>
+						</el-col>
+						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+							<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">建议零售价(原价)：</el-col>
+							<el-col :span="12" style="margin-left: 10px">
+								<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
+								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
+							</el-col>
+						</el-col>
+						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述</el-col>
+						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+							<el-col :span="2" style="border-right: 1px solid #ddd;height: 400px;text-align: right;line-height: 80px;">商品描述：</el-col>
+							<el-col :span="12" style="margin-left: 10px">
+								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
+							</el-col>
+						</el-col>
+						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>
+						<el-col :span="24">
+							物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。
 						</el-col>
 					</el-col>
 				</el-col>
@@ -116,9 +232,19 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
+				tableData: [{
+		            date: '2016-05-02',
+		            name: '王小虎',
+		            address: '上海市普陀区金沙江路 1518 弄'
+		          }, {
+		            date: '2016-05-04',
+		            name: '王小虎',
+		            address: '上海市普陀区金沙江路 1517 弄'
+		          }],
+				radio: '1',
 				commodity:'',
-				next: false,
+				next: true,
+				details: false,
 				value:'',
 				value1:'',
 				value2:'',
@@ -233,6 +359,7 @@
 					type: 'warning'
 				}).then(() => {
 					this.next = false
+					this.details = true
 					// $.post(sysUrl+"/backstage/resources/update",
 		   //           { param: JSON.stringify(params) },
 		   //           function(data){
@@ -454,7 +581,7 @@
 	}
 	.Commodity_information{
 		width: 1600px;
-		height: 1000px;
+		height: 2400px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
 		margin-left: 20px;
