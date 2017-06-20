@@ -83,9 +83,10 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
-
+                            document.cookie="token="+data.data.token;
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
+
                         }
                     }
                 });
