@@ -83,7 +83,6 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
-
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
                         }
