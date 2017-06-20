@@ -308,6 +308,7 @@
                             alert(data.msg)
                         }else{
                             var _length = data.data.list;
+                            console.log(_length)
                             for (var i = 0; i < _length.length; i++) {
                                 _this.orderInformation.push(_length[i]);
                             }
