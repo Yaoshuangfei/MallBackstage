@@ -71,7 +71,11 @@
             logi() {
                 const _this = this
                 var url  = 'http://121.43.178.109:8080/ser/api/core/partnersLogin';
+<<<<<<< HEAD
                 var data = {userName: '15355475213', password: '123456'};
+=======
+                var data = {userName: this.ruleForm2.username, password: this.ruleForm2.password};
+>>>>>>> 5bb2160c77071aa46fba7c9b63f3ee713aae900a
                 $.ajax({
                     type:'POST',
                     dataType:'json',
@@ -83,6 +87,8 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
+                            state.id = data.data.id
+                            console.log(state.id)
                             document.cookie="token="+data.data.token;
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });

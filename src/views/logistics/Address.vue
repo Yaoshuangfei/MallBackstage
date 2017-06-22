@@ -31,7 +31,7 @@
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column prop="orderNumber" label="发货地址">
 				<template scope="scope">
-					<el-radio class="radio" v-model="radio" label="1">备选项</el-radio>
+					<el-radio class="radio" v-model="radio" label="1">默认</el-radio>
 				</template>
 			</el-table-column>
 			<el-table-column prop="courierNumber" label="联系人">
@@ -62,24 +62,21 @@
 		</el-col>
 		<!--新增界面-->
 		<el-dialog title="新增地址" v-model="addFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm" style="margin-left: 140px">
+			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm" >
 				<el-form-item label="联系人">
-					<el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off" style="width: 300px"></el-input>
-				</el-form-item>
-				<el-form-item label="商品名称">
-					<el-input v-model="orderDetails.commodityName" type="text" auto-complete="off" style="width: 300px"></el-input>
+					<el-input v-model="orderDetails.realName" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="所在地区">
 					<el-input v-model="orderDetails.userName" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="街道地址">
-					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off" style="width: 500px"></el-input>
+					<el-input v-model="orderDetails.address" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="邮编">
-					<el-input v-model="orderDetails.orderTotal" type="text" auto-complete="off" style="width: 300px"></el-input>
+					<el-input v-model="orderDetails.zipCode" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="电话号码">
-					<el-input v-model="orderDetails.orderStatus" type="text" auto-complete="off" style="width: 300px"></el-input>
+					<el-input v-model="orderDetails.contact" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="手机号码">
 					<el-input v-model="orderDetails.paymentMethod" type="text" auto-complete="off" style="width: 300px"></el-input>
@@ -99,7 +96,7 @@
 		</el-dialog>
 		<!--编辑界面-->
 		<el-dialog title="修改地址" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm" style="margin-left: 140px">
+			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="联系人">
 					<el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
@@ -110,7 +107,7 @@
 					<el-input v-model="orderDetails.userName" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="街道地址">
-					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off" style="width: 500px"></el-input>
+					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off" style="width: 300px"></el-input>
 				</el-form-item>
 				<el-form-item label="邮编">
 					<el-input v-model="orderDetails.orderTotal" type="text" auto-complete="off" style="width: 300px"></el-input>
@@ -215,6 +212,17 @@
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
+					realName:'',
+					contact:'',
+					zipCode:'',
+					address:'',
+					type:'',
+					status:'',
+					realName:'',
+					realName:'',
+					realName:'',
+					realName:'',
+					realName:''
 				},
 				orderInformation:[{
 					orderNumber :'145877458784524c',

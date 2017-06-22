@@ -10,6 +10,7 @@ export const state = {
 	    SUCCEED: 1000000, //返回值 成功(1)
 	    FAIL: 1000100 //返回值 失败(0)
 	},
+    id:''
 }
    $.ajaxSetup({ 
         xhrFields: {
