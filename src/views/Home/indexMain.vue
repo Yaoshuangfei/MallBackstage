@@ -488,7 +488,7 @@
 	}
 </style>
 <style>
-	.el-radio-button:first-child .el-radio-button__inner {border: none;}
+	/*.el-radio-button:first-child .el-radio-button__inner {border: none;}
 	.el-radio-button:first-child .el-radio-button__inner {border-radius: 10px;}
 	.el-radio-button:last-child .el-radio-button__inner {border-radius: 10px;}
 	.el-radio-button__orig-radio:checked+.el-radio-button__inner {background-color:#22ac38;}
@@ -498,5 +498,5 @@
 		border: transparent;
 		border-radius: 10px;
 		margin: 0 10px;
-	}
+	}*/
 </style>
