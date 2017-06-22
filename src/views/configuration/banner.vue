@@ -22,9 +22,9 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">启用</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">修改</el-button>
+					<el-button type="text" size="small" @click="handEnabled(scope.$index, scope.row)">启用</el-button>
+					<el-button type="text" size="small" @click="handDisabled(scope.$index, scope.row)">禁用</el-button>
+					<el-button type="text" size="small" @click="handmodify(scope.$index, scope.row)">修改</el-button>
 					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -62,6 +62,37 @@
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
 				<el-button type="primary" @click.native="submitUpload" :loading="editLoading">添加</el-button>
 				<el-button type="primary" @click.native="addbannerdiv = false">取消</el-button>
+			</div>
+		</el-dialog>
+
+		<!--修改banner-->
+		<el-dialog title="修改banner" v-model="modifybannerdiv" :close-on-click-modal="false">
+			<el-form :model="editForm" label-width="60px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="链接">
+					<el-input v-model="editForm.link" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="banner">
+					<el-input v-model="editForm.picture" type="text" auto-complete="off"></el-input>
+					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="modifyload" id="fileInputs">
+					<button type="button" class="el-button el-button--primary el-button--small">
+						<span>点击上传</span>
+					</button>
+					<button type="button" class="el-button el-button--primary el-button--small" id="btnClears" @click="modifyclear">清空上传</button>
+					<span style="display: block;font-size: 12px">{{ imageChange }}</span>
+					<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
+					<!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
+				</el-form-item>
+				<el-form-item label="序号" >
+					<el-input v-model="editForm.orderSort" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="描述">
+					<el-input v-model="editForm.desc" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-col :span='24'></el-col>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="modifyUpload" :loading="editLoading">修改</el-button>
+				<el-button type="primary" @click.native="modifybannerdiv = false">取消</el-button>
 			</div>
 		</el-dialog>
 		<!--编辑界面-->
@@ -116,6 +147,7 @@
 				value1:'',
 				value2:'',
 				url:'',
+				urls:'',
 				selectSubjectStatus: [
 				{
 					value:'0',
@@ -168,19 +200,16 @@
 					]
 				},
 				//编辑界面数据
-				editForm: {
-					id: 0,
-					username: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				},
+				editForm:{},
 
 				addbannerdiv: false,//新增界面是否显示
+                modifybannerdiv: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
 				uploadDetails: {
+				},
+				//新增界面数据
+                modifyDetails: {
 				},
 				orderInformation:[{
 					uploadImg :'145877458784524c',
@@ -261,7 +290,7 @@
                     picture:this.url,
                     orderSort:this.uploadDetails.List,
                     poType:'1',
-                    desc:'',
+                    desc:this.uploadDetails.information,
                 };
                 var url = baseUrl+"/api/indexAdvert/add";
                 var data =JSON.stringify(params);
@@ -294,7 +323,7 @@
 				const params = {
                     poType:'1'
 				};
-                var url = baseUrl+"/api/indexAdvert/find/page?pageNum=1&pageSize=10";
+                var url = baseUrl+"/api/indexAdvert/find/page?pageNum="+_this.page+"&pageSize=10";
                 var data =JSON.stringify(params);
                 $.ajax({
                     type:'POST',
@@ -307,8 +336,8 @@
                         if(!data.success){
                             alert(data.msg)
                         }else{
-                            var _length = data.data.list;
-                            console.log(_length)
+                            var _length 	= data.data.list;
+                            _this.total 	= data.data.total;
                             for (var i = 0; i < _length.length; i++) {
                                 _this.orderInformation.push(_length[i]);
                             }
@@ -318,9 +347,8 @@
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
+				this.getlist();
 			},
-			//获取用户列表
 			//删除
             handleEdit: function (index, row) {
 				this.$confirm('确认删除该记录吗?', '提示', {
@@ -367,6 +395,188 @@
 
 				});
 			},
+            //启用
+            handEnabled: function (index, row) {
+                this.$confirm('确认启用该广告位吗?', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    const _this= this;
+                    const params = {
+                        id:row.id
+                    };
+                    var url = baseUrl+"/api/indexAdvert/enable";
+                    var data =JSON.stringify(params);
+                    $.ajax({
+                        type:'POST',
+                        dataType:'json',
+                        url:url,
+                        data:data,
+                        contentType:'application/json;charset=utf-8',
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                        success:function(data){
+                            if(!data.success){
+                                alert(data.msg)
+                            }else{
+                                _this.$message({
+                                    message: '启用成功',
+                                    type: 'success'
+                                });
+                                _this.getlist();
+                            }
+                        }
+                    });
+//					this.listLoading = true;
+                    //NProgress.start();
+//					let para = { id: row.id };
+//					removeUser(para).then((res) => {
+//						this.listLoading = false;
+//						//NProgress.done();
+//						this.$message({
+//							message: '删除成功',
+//							type: 'success'
+//						});
+//						this.getUsers();
+//					});
+                }).catch(() => {
+
+                });
+            },
+            //禁用
+            handDisabled: function (index, row) {
+                this.$confirm('确认禁用该广告位吗?', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    const _this= this;
+                    const params = {
+                        id:row.id
+                    };
+                    var url = baseUrl+"/api/indexAdvert/disable";
+                    var data =JSON.stringify(params);
+                    $.ajax({
+                        type:'POST',
+                        dataType:'json',
+                        url:url,
+                        data:data,
+                        contentType:'application/json;charset=utf-8',
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                        success:function(data){
+                            if(!data.success){
+                                alert(data.msg)
+                            }else{
+                                _this.$message({
+                                    message: '禁用成功',
+                                    type: 'success'
+                                });
+                                _this.getlist();
+                            }
+                        }
+                    });
+//					this.listLoading = true;
+                    //NProgress.start();
+//					let para = { id: row.id };
+//					removeUser(para).then((res) => {
+//						this.listLoading = false;
+//						//NProgress.done();
+//						this.$message({
+//							message: '删除成功',
+//							type: 'success'
+//						});
+//						this.getUsers();
+//					});
+                }).catch(() => {
+
+                });
+            },
+
+//			修改
+            handmodify: function (index, row) {
+			    this.modifybannerdiv = true;
+			    this.editForm = row;
+            },
+
+
+//            清空上传
+            modifyclear(){
+        let btn = document.getElementById("btnClears");
+        let files = document.getElementById("fileInputs");
+        this.fileImg = '';
+        // for IE, Opera, Safari, Chrome
+        if (files !== null && files.value) {
+            //     files.outerHTML = files.outerHTML;
+            // } else { // FF(包括3.5)
+            files.value = "";
+            this.formData = new FormData()
+        }
+    },
+    //图片上传后修改
+            modifyload (event) {
+        this.formData = new FormData()
+        let file = event.target.files[0]
+        // console.log(file)
+        const self = this
+        // const flag = this.flag
+        if (file) {
+            console.log('存在file', file)
+            this.fileImg = file.name
+            // console.log(this.formData)
+            this.formData.append('file', file);
+            console.log(this.formData);
+        } else {
+            this.fileImg = ''
+            console.log('不存在file', file)
+            this.formData = new FormData()
+        }
+    },
+    //修改
+            modifyUpload(){
+        this.$confirm('确认修改吗？', '提示', {}).then(() => {
+            const _this= this;
+            _this.$http.post('http://121.43.178.109:8080/ser/api/attachment/upload', _this.formData, {
+                progress(event) {
+                }
+            })
+                .then(response => {
+                    const info = JSON.parse(response.bodyText);
+                    _this.urls = info.data[0].baseUri+info.data[0].uri;
+                    _this.modifyUploads();
+                }, error => _this.$emit('complete', 500, error.message))
+        });
+    },
+    //			图片上传ajax
+            modifyUploads(){
+        const _this= this;
+        const params = {
+            id:this.editForm.id,
+            link:this.editForm.link,
+            picture:this.urls,
+            orderSort:this.editForm.orderSort,
+            desc:this.editForm.desc,
+        };
+        var url = baseUrl+"/api/indexAdvert/update";
+        var data =JSON.stringify(params);
+        $.ajax({
+            type:'POST',
+            dataType:'json',
+            url:url,
+            data:data,
+            contentType:'application/json;charset=utf-8',
+            error: function (XMLHttpRequest, textStatus, errorThrown) {},
+            success:function(data){
+                if(!data.success){
+                    alert(data.msg)
+                }else{
+                    _this.modifybannerdiv = false;
+                    _this.getlist();
+                }
+            }
+        });
+
+
+    },
+
+
+
+
 			//显示编辑界面
 			seeBtn: function (index, row) {
 				this.editFormVisible = true;

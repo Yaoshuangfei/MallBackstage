@@ -3,24 +3,6 @@
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
       <el-form :inline="true" :model="filters">
-       <!--  <el-form-item>
-          <el-input v-model="filters.name" placeholder="支付银行"></el-input>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="filters.status" clearable>
-              <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="搜索类型">
-            <el-select v-model="filters.type" clearable>
-              <el-option v-for="item in options" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item>
-            <el-input v-model="filters.name"></el-input>
-        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" v-on:click="addBtn">新增</el-button>
         </el-form-item>
@@ -29,27 +11,27 @@
 
     <!--列表-->
     <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-      <el-table-column prop="courierNumber" label="位置">
+      <el-table-column prop="indexStyleId" label="位置">
       </el-table-column>
-      <el-table-column prop="courierNumber" label="商品名称">
+      <el-table-column prop="productId" label="商品名称">
       </el-table-column>
-      <el-table-column prop="courierNumber" label="顺序">
+      <el-table-column prop="orderSort" label="顺序">
       </el-table-column>
-      <el-table-column prop="courierNumber" label="状态">
+      <el-table-column prop="status" :formatter='formatterStatus' label="状态">
       </el-table-column>
       <el-table-column label="操作">
         <template scope="scope">
            <!-- <el-switch v-model="value1" on-text="" on-color="#13ce66" off-text=""></el-switch> -->
-          <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">删除</el-button>
-          <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">禁用</el-button>
+          <el-button type="text" size="small" @click="DelBtn(scope.$index, scope.row)">删除</el-button>
+          <el-button type="text" size="small" v-if="scope.row.status===1" @click="handleEnale(scope.$index, scope.row)">禁用</el-button>
+          <el-button type="text" size="small" v-else @click="handleDisable(scope.$index, scope.row)">启用</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="background:#fff;">
-      <!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
       </el-pagination>
     </el-col>
 
@@ -57,13 +39,19 @@
     <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
       <el-form :model="orderDetails" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="位置">
-          <el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off"></el-input>
+            <el-select v-model="filters.type" clearable>
+              <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="顺序">
           <el-input v-model="orderDetails.orderNumber" type="text" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="选择商品">
-          <el-input v-model="orderDetails.userName" type="text" auto-complete="off"></el-input>
+          <el-select v-model="product.type" clearable>
+            <el-option v-for="item in options" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-col :span='24'></el-col>
       </el-form>
@@ -88,44 +76,18 @@
         value:'',
         value1:true,
         value2:'',
-        selectSubjectStatus: [
-        {
-          value:'0',
-          label:'全部'
-        },{
-          value:'1',
-          label:'待付款'
-        },{
-          value:'2',
-          label:'待发货'
-        },{
-          value:'3',
-          label:'已发货'
-        },{
-          value:'4',
-          label:'待评价'
-        },{
-          value:'5',
-          label:'退货'
-        }],
-        options: [{
-              value: '0',
-              label: '全部'
-            }, {
-              value: '1',
-              label: '订单编号'
-            }, {
-              value: '2',
-              label: '快递单号'
-            }, {
-              value: '3',
-              label: '用户名'
-            }],
+        selectSubjectStatus: [],
+        options: [],
         filters: {
           name: '',
           status:'',
           type:''
         },
+          product: {
+              name: '',
+              status:'',
+              type:''
+          },
         users: [],
         total: 100,
         page: 1,
@@ -173,166 +135,268 @@
       formatSex: function (row, column) {
         return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
       },
-      getlist(){
-        const _this = this
-        _this.table = []
-        const params = {
-          accountId:'1',
-          accessToken:'',
-          resourceType:'',
-          page:{
-            pageNum:_this.page,
-            pageSize:'10'
-          }
-        }
-        console.log(params)
-        $.post(baseUrl+"/admin/banner/getBannerByPage",
-               { param: JSON.stringify(params) },
-               function(data){
-                const info = eval('(' + data + ')');
-                  const response = JSON.parse(info);
-                  const list = response.obj.results
-                  console.log(response)
-                  // _this.page = response.obj.total
-                  _this.total = response.obj.totalRecord
-                  for(var i = 0;i<list.length;i++){
-                    _this.table.push(list[i])
+        getlist(){
+        const _this = this;
+        _this.orderInformation = [];
+        const url   = baseUrl+"/api/indexProductConf/page/product?pageNum="+_this.page+"&pageSize=20";
+          $.ajax({
+              type:'POST',
+              dataType:'json',
+              url:url,
+              data:{},
+              contentType:'application/json;charset=utf-8',
+              error: function (XMLHttpRequest, textStatus, errorThrown) {},
+              success:function(data){
+                  if(!data.success){
+                      alert(data.msg)
+                  }else{
+                      var _length 	= data.data.list;
+                      _this.total 	= data.data.total;
+                      for (var i = 0; i < _length.length; i++) {
+                          _this.orderInformation.push(_length[i]);
+                      }
                   }
-                }
-            )
+              }
+          });
       },
+        //判断状态
+        formatterStatus(row,column){
+            let curTime = row.status;
+            if(curTime === 1){
+                curTime = '启用'
+            }else{
+                curTime = '禁用'
+            }
+            return curTime
+        },
+        // 获取店铺模块
+        box(){
+          const _this = this;
+          const url   = baseUrl+"/api/indexShop/dropDown/box";
+            $.ajax({
+                type:'POST',
+                dataType:'json',
+                url:url,
+                data:{},
+                contentType:'application/json;charset=utf-8',
+                error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                success:function(data){
+                    if(!data.success){
+                        alert(data.msg)
+                    }else{
+                        var _lengthOne = data.data.styleOneId;
+                        var _lengthTwo = data.data.styleTwoId;
+                        _this.selectSubjectStatus=([
+                            {value:_lengthOne,label:'模块一'},
+                            {value:_lengthTwo,label:'模块二'}
+                        ])
+                    }
+                }
+            });
+        },
+        //获取商品下拉列表
+        product_box(){
+            const _this = this;
+            const url   = baseUrl+"/api/indexProductConf/product/box";
+            $.ajax({
+                type:'POST',
+                dataType:'json',
+                url:url,
+                data:{},
+                contentType:'application/json;charset=utf-8',
+                error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                success:function(data){
+                    if(!data.success){
+                        alert(data.msg)
+                    }else{
+                        var _length = data.data;
+                        for (var i in _length){
+                             var obj = {value:i,label:_length[i].name};
+                            _this.options.push(obj);
+                        }
+                    }
+                }
+            });
+        },
+        //添加商品配置
+        editSubmit: function () {
+            this.$refs.editForm.validate((valid) => {
+                if (valid) {
+                    this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        const _this  = this;
+                        const params = {
+                            productId:parseInt(this.product.type)+1,
+                            indexStyleId:this.filters.type,
+                            orderSort:this.orderDetails.orderNumber,
+                        };
+                        const url    = baseUrl+"/api/indexProductConf/add";
+                        const data   =JSON.stringify(params);
+                        $.ajax({
+                            type:'POST',
+                            dataType:'json',
+                            url:url,
+                            data:data,
+                            contentType:'application/json;charset=utf-8',
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                            success:function(data){
+                                if(!data.success){
+                                    alert(data.msg)
+                                }else{
+                                    _this.$message({
+                                        message: '添加成功',
+                                        type: 'success'
+                                    });
+                                    _this.editFormVisible = false;
+                                    _this.getlist();
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        },
+        //删除商品配置
+        DelBtn: function (index, row) {
+            this.$confirm('确认删除该记录吗?', '提示', {
+                type: 'warning'
+            }).then(() => {
+                const _this= this;
+                const params = {
+                    id:row.id
+                };
+                var url = baseUrl+"/api/indexProductConf/delete/one";
+                var data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.getlist();
+                        }
+                    }
+                });
+            }).catch(() => {
+
+            });
+        },
+//        禁用
+        handleEnale: function (index, row) {
+            this.$confirm('确认禁用该商品吗?', '提示', {
+                type: 'warning'
+            }).then(() => {
+                const _this= this;
+                const params = {
+                    id:row.id
+                };
+                var url = baseUrl+"/api/indexProductConf/disable";
+                var data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            _this.$message({
+                                message: '禁用成功',
+                                type: 'success'
+                            });
+                            _this.getlist();
+                        }
+                    }
+                });
+//					this.listLoading = true;
+                //NProgress.start();
+//					let para = { id: row.id };
+//					removeUser(para).then((res) => {
+//						this.listLoading = false;
+//						//NProgress.done();
+//						this.$message({
+//							message: '删除成功',
+//							type: 'success'
+//						});
+//						this.getUsers();
+//					});
+            }).catch(() => {
+
+            });
+        },
+//        启用
+        handleDisable: function (index, row) {
+      this.$confirm('确认启用该商品吗?', '提示', {
+          type: 'warning'
+      }).then(() => {
+          const _this= this;
+          const params = {
+              id:row.id
+          };
+          var url = baseUrl+"/api/indexProductConf/enable";
+          var data =JSON.stringify(params);
+          $.ajax({
+              type:'POST',
+              dataType:'json',
+              url:url,
+              data:data,
+              contentType:'application/json;charset=utf-8',
+              error: function (XMLHttpRequest, textStatus, errorThrown) {},
+              success:function(data){
+                  if(!data.success){
+                      alert(data.msg)
+                  }else{
+                      _this.$message({
+                          message: '启用成功',
+                          type: 'success'
+                      });
+                      _this.getlist();
+                  }
+              }
+          });
+//					this.listLoading = true;
+          //NProgress.start();
+//					let para = { id: row.id };
+//					removeUser(para).then((res) => {
+//						this.listLoading = false;
+//						//NProgress.done();
+//						this.$message({
+//							message: '删除成功',
+//							type: 'success'
+//						});
+//						this.getUsers();
+//					});
+      }).catch(() => {
+
+      });
+  },
+
       handleCurrentChange(val) {
         this.page = val;
-        this.getUsers();
-      },
-      //获取用户列表
-      getUsers() {
-        let para = {
-          page: this.page,
-          name: this.filters.name
-        };
-        this.listLoading = true;
-        //NProgress.start();
-        getUserListPage(para).then((res) => {
-          this.total = res.data.total;
-          this.users = res.data.users;
-          this.listLoading = false;
-          //NProgress.done();
-        });
-      },
-      //删除
-      handleDel: function (index, row) {
-        this.$confirm('确认删除该记录吗?', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { id: row.id };
-          removeUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
-
-        });
+        this.getlist();
       },
       //显示编辑界面
       addBtn: function (index, row) {
         this.editFormVisible = true;
         this.orderDetails = Object.assign({}, row);
       },
-      //显示新增界面
-      handleAdd: function () {
-        this.addFormVisible = true;
-        this.addForm = {
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        };
-      },
-      //编辑
-      editSubmit: function () {
-        this.$refs.editForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.editLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.editForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              editUser(para).then((res) => {
-                this.editLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
-                });
-                this.$refs['editForm'].resetFields();
-                this.editFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      //新增
-      addSubmit: function () {
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.addLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.addForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              addUser(para).then((res) => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
-                });
-                this.$refs['addForm'].resetFields();
-                this.addFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      selsChange: function (sels) {
-        this.sels = sels;
-      },
-      //批量删除
-      batchRemove: function () {
-        var ids = this.sels.map(item => item.id).toString();
-        this.$confirm('确认删除选中记录吗？', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { ids: ids };
-          batchRemoveUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
 
-        });
-      }
     },
     mounted() {
-      // this.getlist();
+       this.getlist();
+       this.box();
+       this.product_box();
     }
   }
 

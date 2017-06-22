@@ -17,9 +17,10 @@
 			</el-col>
 			<el-col :span="24" class="footer_choice">
 				您当前选择的商品是：{{commodity}}
+				<span  style="display: none;">{{id}}</span>
 			</el-col>
 			<el-col :span="4" :offset="10">
-				<el-button type="primary" style="width: 250px;margin-top: 20px" v-on:click="NextStep">下一步</el-button>
+				<el-button type="primary" style="width: 250px;margin-top: 20px" :disabled="this.sels.length===0" v-on:click="NextStep">下一步</el-button>
 			</el-col>
 		</el-col>
 		<!--商品基本信息-->
@@ -27,59 +28,14 @@
 			<el-col :span="24" class="Commodity_information">
 				<el-col :span="24" class="head_text">商品基本信息</el-col>
 				<el-col :span="24" class="head_text">
-					<el-col :span="2" class="leftg_text">商品类目：</el-col>当前分类{{commodity}}
-				</el-col>
-				<el-col :span="24" class="head_text">
-					<el-col :span="2" class="leftg_text">商品品牌：</el-col>
+					<el-col :span="2" class="leftg_text">商品类目：</el-col>当前分类:     {{commodity}}
 				</el-col>
 				<el-col :span="24" :offset="2" style="margin-top: 10px">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>
 				<el-col :span="18" :offset="3" class="body_text">
 					<el-col :span="14" :offset="4" style="margin-top: 10px">
 						<el-form :model="orderDetails" label-width="120px" :rules="editFormRules" :inline="true" ref="editForm">
-							<el-form-item label="货号">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="是否配包">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="品牌">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="质地">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="是否有扩展层">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="性别">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="适用对象">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="图案">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="重量">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="成色">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="锁的类型">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="闭合方式">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="有无拉杆">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="内部结构">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="是否带锁">
-								<el-input v-model="addForm.name" type="text" auto-complete="off"></el-input>
+							<el-form-item :label="item.name" v-for="item in arry">
+								<el-input v-model="addForm.name" type="text"></el-input>
 							</el-form-item>
 						<el-col :span='24'></el-col>
 					</el-form>
@@ -90,14 +46,14 @@
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 60px;text-align: right;line-height: 60px;">商品名称：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>
 						</el-col>
 					</el-col>
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: right;line-height: 80px;">商品货号：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">做多可输入20个字符，支持输入中文、字母、数字、_、/、和小数点</el-col>
 						</el-col>
@@ -105,7 +61,7 @@
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 280px;text-align: right;line-height: 80px;">商品图片：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 							<el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col>
 						</el-col>
 					</el-col>
@@ -113,7 +69,7 @@
 						<el-col :span="24" style="height: 40px;line-height: 30px;">商品交易信息</el-col>
 						<el-col :span="24" style="height: 40px;line-height: 30px;border: 1px solid #ddd;">
 							<el-col :span="2"  style="height: 30px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">计量单位：</el-col>
-							<el-col :span="2"  style=""><el-input type="text""></el-input></el-col>
+							<el-col :span="2"  style=""><el-input type="text"></el-input></el-col>
 						</el-col>
 						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;">
 							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">尺码：</el-col>
@@ -144,12 +100,6 @@
 								    	<el-checkbox label="39"></el-checkbox>
 								    </el-col>
 								</el-checkbox-group>
-									<el-col :span="4">
-								    	<el-input type="text""></el-input>
-								    </el-col>
-								    <el-col :span="5" :offset="1">
-								    	<el-button type="primary" v-on:click="getUsers">添加规格值</el-button>
-								    </el-col>
 							</el-col>
 						</el-col>
 						<el-col :span="24" style="height: 150px;line-height: 30px;border: 1px solid #ddd;">
@@ -202,7 +152,7 @@
 						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 							<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">建议零售价(原价)：</el-col>
 							<el-col :span="12" style="margin-left: 10px">
-								<el-col :span="12" style="margin-top: 10px"><el-input type="text""></el-input></el-col>
+								<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
 							</el-col>
 						</el-col>
@@ -219,7 +169,9 @@
 						</el-col>
 					</el-col>
 				</el-col>
+
 			</el-col>
+			<el-button type="primary" style="margin: 20px;">发布</el-button>
 		</el-col>
 	</section>
 </template>
@@ -232,6 +184,8 @@
 	export default {
 		data() {
 			return {
+                sels:[],
+                arry:[],
 				tableData: [{
 		            date: '2016-05-02',
 		            name: '王小虎',
@@ -242,56 +196,15 @@
 		            address: '上海市普陀区金沙江路 1517 弄'
 		          }],
 				radio: '1',
+                checkList:false,
 				commodity:'',
+				id:'',
 				next: true,
 				details: false,
 				value:'',
 				value1:'',
 				value2:'',
-				data: [
-				{
-					id:'0',
-					label:'家居日用'
-				},{
-					id:'1',
-					label:'食品酒类'
-				},{
-					id:'2',
-					label:'时尚穿戴'
-				},{
-					id:'3',
-					label:'美妆个护'
-				},{
-					id:'4',
-					label:'黑科技'
-				},{
-					id:'5',
-					label:'营养保健'
-				},{
-					id:'6',
-					label:'家居建材'
-				},{
-					id:'6',
-					label:'数码通讯'
-				},{
-					id:'6',
-					label:'家用电器'
-				},{
-					id:'6',
-					label:'汽车'
-				},{
-					id:'6',
-					label:'水果节'
-				},{
-					id:'6',
-					label:'生鲜'
-				},{
-					id:'6',
-					label:'百货'
-				},{
-					id:'6',
-					label:'零食'
-				}],
+				data: [],
 				options: [{
 		          value: '1',
 		          label: '订单编号'
@@ -350,41 +263,80 @@
 		},
 		methods: {
 			handleNodeClick(data) {
-	        	// console.log(data);
-	        	this.commodity =  data.label
-	        	console.log(this.commodity);
+                this.sels=[];
+	        	this.commodity =  data.label;
+	        	this.id =  data.id;
+	        	this.sels.push(this.commodity);
+	        	this.sels.push(this.id);
 	     	},
 	     	NextStep() {
 	     		this.$confirm('类目一旦选定，编辑商品的时候类目无法更改，请确认清楚再进入编辑?', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.next = false
-					this.details = true
-					// $.post(sysUrl+"/backstage/resources/update",
-		   //           { param: JSON.stringify(params) },
-		   //           function(data){
-		   //           	const info = eval('(' + data + ')');
-		   //              const response = JSON.parse(info);
-		   //              console.log(response)
-		   //           	if(response.res === 1000000){
-					// 		_this.$message({
-					// 			message: '修改成功',
-					// 			type: 'success'
-					// 		});
-		   //           	}else{
-					// 		_this.$message({
-					// 			message: '修改失败',
-					// 			type: 'error'
-					// 		});
-		   //           	}
-		   //           	_this.getChildrenList(_this.pID)
-					// 	_this.editFormVisible1 = false;
-		   //            }
-		   //       	)
+//					this.next = false;
+//					this.details = true;
+                    const _this = this;
+                    const url   = baseUrl+"/api/goodsClass/selectOne";
+                    const params = {
+                        id:this.id
+                    };
+                    const data =JSON.stringify(params);
+                    $.ajax({
+                        type:'POST',
+                        dataType:'json',
+                        url:url,
+                        data:data,
+                        contentType:'application/json;charset=utf-8',
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                        success:function(data){
+                            if(!data.success){
+                                alert(data.msg)
+                            }else{
+                                var _length =data.data.paramData;
+                                var _name =eval('(' + _length + ')');
+                                console.log(_name);
+                            }
+                        }
+                    });
 				}).catch(() => {
 
 				});
 	     	},
+
+
+			//获取商品分类
+            selectListName(){
+                const _this = this;
+                const url   = baseUrl+"/api/goodsClass/selectListName";
+                const params = {
+                    pid:''
+                };
+                const data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            const _length = data.data;
+                            for (const i in _length){
+                                const obj = {value:i,label:_length[i].name,id:_length[i].id};
+                                _this.data.push(obj);
+                            }
+                        }
+                    }
+                });
+			},
+
+
+
+
+
 			//性别显示转换
 			formatSex: function (row, column) {
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
@@ -548,7 +500,7 @@
 			}
 		},
 		mounted() {
-			// this.getlist();
+			 this.selectListName();
 		}
 	}
 
@@ -598,7 +550,7 @@
 	}
 	.body_text{
 		border: 1px solid #ddd;
-		height: 600px;
+		min-height: 200px;
 		margin-top: 20px;
 	}
 	.shangp{

@@ -71,7 +71,7 @@
             logi() {
                 const _this = this
                 var url  = 'http://121.43.178.109:8080/ser/api/core/partnersLogin';
-                var data = {userName: 'shengbin_dh@163.com', password: '123456'};
+                var data = {userName: '15355475213', password: '123456'};
                 $.ajax({
                     type:'POST',
                     dataType:'json',
