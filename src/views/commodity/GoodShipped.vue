@@ -20,7 +20,7 @@
 				<span  style="display: none;">{{id}}</span>
 			</el-col>
 			<el-col :span="4" :offset="10">
-				<el-button type="primary" style="width: 250px;margin-top: 20px" :disabled="this.sels.length===0" v-on:click="NextStep">下一步</el-button>
+				<el-button type="primary" style="width: 250px;margin-top: 20px" :disabled="this.sels.length===0"  v-on:click="NextStep">下一步</el-button>
 			</el-col>
 		</el-col>
 		<!--商品基本信息-->
@@ -30,12 +30,14 @@
 				<el-col :span="24" class="head_text">
 					<el-col :span="2" class="leftg_text">商品类目：</el-col>当前分类:     {{commodity}}
 				</el-col>
+				<el-col :span="24" class="head_text">
+					<el-col :span="2" class="leftg_text">商品品牌：</el-col></el-col>
 				<el-col :span="24" :offset="2" style="margin-top: 10px">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>
 				<el-col :span="18" :offset="3" class="body_text">
-					<el-col :span="14" :offset="4" style="margin-top: 10px">
-						<el-form :model="orderDetails" label-width="120px" :rules="editFormRules" :inline="true" ref="editForm">
-							<el-form-item :label="item.name" v-for="item in arry">
-								<el-input v-model="addForm.name" type="text"></el-input>
+					<el-col :span="19" :offset="2" style="margin-top: 10px">
+						<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
+							<el-form-item :label="item.name" v-for="item in paramsData" style="margin-right:  200px;">
+								<el-input type="text"></el-input>
 							</el-form-item>
 						<el-col :span='24'></el-col>
 					</el-form>
@@ -44,14 +46,14 @@
 				</el-col>
 				<el-col :span="24" class="shangp">
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="border-right: 1px solid #ddd;height: 60px;text-align: right;line-height: 60px;">商品名称：</el-col>
+						<el-col :span="2" style="border-right: 1px solid #ddd;height: 70px;text-align: right;line-height: 60px;">商品名称：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
 							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>
 						</el-col>
 					</el-col>
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: right;line-height: 80px;">商品货号：</el-col>
+						<el-col :span="2" style="border-right: 1px solid #ddd;height: 95px;text-align: right;line-height: 80px;">商品货号：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
 							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>
@@ -59,8 +61,8 @@
 						</el-col>
 					</el-col>
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="border-right: 1px solid #ddd;height: 280px;text-align: right;line-height: 80px;">商品图片：</el-col>
-						<el-col :span="12" style="margin-left: 10px">
+						<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>
+						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd">
 							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
 							<el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col>
 						</el-col>
@@ -171,7 +173,7 @@
 				</el-col>
 
 			</el-col>
-			<el-button type="primary" style="margin: 20px;">发布</el-button>
+			<el-button type="primary" @click="release" style="margin: 20px;">发布</el-button>
 		</el-col>
 	</section>
 </template>
@@ -185,7 +187,8 @@
 		data() {
 			return {
                 sels:[],
-                arry:[],
+                paramsData:[],
+                itemData:[],
 				tableData: [{
 		            date: '2016-05-02',
 		            name: '王小虎',
@@ -221,8 +224,6 @@
 				total: 100,
 				page: 1,
 				listLoading: false,
-				sels: [],//列表选中列
-
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
@@ -266,19 +267,20 @@
                 this.sels=[];
 	        	this.commodity =  data.label;
 	        	this.id =  data.id;
-	        	this.sels.push(this.commodity);
-	        	this.sels.push(this.id);
+	        	this.sels.push(data);
+	        	// this.sels.push(this.id);
+	        	console.log(this.sels)
 	     	},
 	     	NextStep() {
 	     		this.$confirm('类目一旦选定，编辑商品的时候类目无法更改，请确认清楚再进入编辑?', '提示', {
 					type: 'warning'
 				}).then(() => {
-//					this.next = false;
-//					this.details = true;
+
                     const _this = this;
                     const url   = baseUrl+"/api/goodsClass/selectOne";
                     const params = {
-                        id:this.id
+                        id:this.sels[0].id
+                        // id:this.id
                     };
                     const data =JSON.stringify(params);
                     $.ajax({
@@ -289,21 +291,26 @@
                         contentType:'application/json;charset=utf-8',
                         error: function (XMLHttpRequest, textStatus, errorThrown) {},
                         success:function(data){
-                            if(!data.success){
-                                alert(data.msg)
-                            }else{
-                                var _length =data.data.paramData;
-                                var _name =eval('(' + _length + ')');
-                                console.log(_name);
-                            }
+                        	const info = data.data
+                        	_this.paramsData = eval('(' + info.paramData + ')')
+                        	_this.itemData = eval('(' + info.itemData + ')')
+                        	console.log(_this.paramsData)
+                        	console.log(_this.itemData)
+                            // if(!data.success){
+                            //     alert(data.msg)
+                            // }else{
+                            //     var _length =data.data.paramData;
+                            //     var _name =eval('(' + _length + ')');
+                            //     console.log(_name);
+                            // }
+        					_this.next = false;
+							_this.details = true;
                         }
                     });
 				}).catch(() => {
 
 				});
 	     	},
-
-
 			//获取商品分类
             selectListName(){
                 const _this = this;
@@ -320,6 +327,7 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
                         if(!data.success){
                             alert(data.msg)
                         }else{
@@ -332,7 +340,47 @@
                     }
                 });
 			},
-
+			// 发布商品
+			release() {
+				const _this = this
+                const params = {
+                    name:'iPhone8',
+                    goodsDesc:'iPhone8支持无线充电，内置900G内存',
+                    veiw:'',
+                    price:'8588',
+                    isVirtual:'0',
+                    carouselPicture:'icon.png,icon1.png',
+                    saleState:'1',
+                    goodsData:"[{'key':'品牌','value':'苹果'},{'key':'型号','value':'iPhone7，iPhone7plus'}]",
+                    catId:'100',
+                    storeId:'10',
+                    ftId:'0',
+                    pricingModel:'1',
+                    unit:'件',
+                    weight:'0.5',
+                    goodsNo:'88888',
+                    goodsSpecs:[{
+                    	specPrice:'8888',
+	                    costPrice:'7888',
+	                    storage:'1000',
+	                    specPicture:'icon3.png',
+	                    deductibleImazamox:'10',
+	                    specData:"[{'key':'颜色','value':'黑色'},{'key':'内存','value':'32g'}]",
+	                    specNo:'8888-1'
+                    }]
+                };
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goods/add",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    }
+                });
+			},
 
 
 

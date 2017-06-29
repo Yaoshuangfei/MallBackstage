@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.identity.length===5">新增</el-button>
+		<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
 		  <el-col :xs="2" :sm="2" :md="2" :lg="2">店铺身份</el-col>
 		  <el-col :xs="15" :sm="15" :md="15" :lg="15">
@@ -221,7 +221,7 @@
 			getlist(){
 				const _this = this
 				const params = {
-					storeId:2,
+					storeId:state.id,
 					introType:1
 				}
 				console.log(params)
@@ -256,6 +256,7 @@
 			addSubmit: function () {
 				const _this = this
 				const params = {
+					storeId:state.id,
 					level:this.identity.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
@@ -275,11 +276,12 @@
 	                    	console.log(data)
 	                    	// _this.identity= info
 
-	                    	this.$message({
+	                    	_this.$message({
 								message: '提交成功',
 								type: 'success'
 							});
 							_this.addFormVisible = false
+							_this.getlist()
 	                    }
 	                });
 						
@@ -310,7 +312,7 @@
 	                    success:function(data){
 	                    	// const info = data.data.shopRoles
 	                    	console.log(data)
-	                    	this.$message({
+	                    	_this.$message({
 								message: '提交成功',
 								type: 'success'
 							});
@@ -345,7 +347,7 @@
 	                    success:function(data){
 	                    	// const info = data.data.shopRoles
 	                    	console.log(data)
-	                    	this.$message({
+	                    	_this.$message({
 								message: '提交成功',
 								type: 'success'
 							});

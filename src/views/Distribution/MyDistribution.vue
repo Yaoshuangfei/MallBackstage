@@ -1,10 +1,10 @@
 <template>
 	<section>
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
-			<el-button type="primary" v-on:click="getUsers">添加</el-button>
+			<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length===5">新增店铺身份</el-button>
 		</el-col>
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">
+		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
 			<ul class="Grade">
 				<li v-for="item in ruleAll">{{item.name}}</li>
 			</ul>
@@ -13,10 +13,10 @@
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">规则</el-col>
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">
 			<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px;margin-left: 60px">身份是否升级</el-col>
-			<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">
+			<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">
 				<el-switch
 					@change='clickrule'
-					:disabled='ruleIsUpgrade'
+					:disabled='upgradebtn'
 				  	v-model="ruleIsUpgrade"
 				  	on-color="#13ce66"
 				  	off-color="#ff4949">
@@ -30,6 +30,7 @@
 				    </el-option>
 			  </el-select> -->
 			</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px" v-show="ruleIsUpgrade">邀请人数：{{upgrade.invitedMinNum}}</el-col>
 		</el-col>
 		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px">
 			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px">邀请人身份</el-col>
@@ -42,63 +43,11 @@
 		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px">
 			<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px">被邀请人身份</el-col>
 			<el-col :xs="21" :sm="21" :md="21" :lg="21" style="margin-bottom: 20px">
-				<el-radio-group v-model="invitedRoleId" @change ="click">
+				<el-radio-group v-model="invitedRoleId" @change ="clickB">
 				    <el-radio-button  v-for="item in ruleAll" :label="item.id">{{item.name}}</el-radio-button>
 				</el-radio-group>
 			</el-col>
 		</el-col>
-		<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-bottom: 20px;border: 1px solid #ddd;width:1000px;height: 400px;">
-			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="">
-				<ul class="headerfx">
-					<li>联创</li>
-					<li>总代</li>
-					<li>普通</li>
-					<li>普通1</li>
-					<li>普通2</li>
-				</ul>
-			</el-col>	
-			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="">
-				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="">
-					<ul class="leftul">
-						<li>自己拿</li>
-						<li>一级</li>
-						<li>二级</li>
-						<li>三级</li>
-						<li>四级</li>
-						<li>五级</li>
-					</ul>
-				</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="">
-					
-				</el-col>
-			</el-col>
-		</el-col> -->
-		<!--列表-->
-		
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="courierNumber" label="">
-			</el-table-column>
-			<el-table-column prop="userName" v-if="ruleAll[0] " :label="ruleAll[0].name">
-			</el-table-column>
-			<el-table-column prop="amountPaid" v-if="ruleAll[1] " :label="ruleAll[1].name">
-			</el-table-column>
-			<el-table-column prop="orderTotal" v-if="ruleAll[2] " :label="ruleAll[2].name">
-			</el-table-column>
-			<el-table-column prop="orderStatus" v-if="ruleAll[3] " :label="ruleAll[3].name">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" v-if="ruleAll[4] " :label="ruleAll[4].name">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">修改</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<el-col :xs="1" :sm="1" :md="1" :lg="1" :offset="23" style="">
-			<el-button type="primary" @click="seeBtn(scope.$index, scope.row)">增加</el-button>
-		</el-col>
-		
 		<!--工具条-->
 		<!-- <el-col :span="24" class="toolbar" style="background:#fff;"> -->
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
@@ -106,8 +55,8 @@
 			<!-- </el-pagination> -->
 		<!-- </el-col> -->
 		<!--身份升级-->
-		<el-dialog title="身份升级" v-model="ruleIsUpgradeVisible" :close-on-click-modal="false" >
-			<el-form :model="upgrade" label-width="100px" :rules="editFormRules" ref="editForm">
+		<el-dialog title="身份升级" v-model="ruleIsUpgradeVisible" :close-on-click-modal="false" :show-close='false'>
+			<el-form :model="upgrade" label-width="100px">
 				<el-form-item label="邀请人数">
 					<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
 				</el-form-item>
@@ -115,34 +64,116 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
 				<el-button type="primary" @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
-				<el-button type="primary" @click.native="ruleIsUpgradeVisible = false">关闭</el-button>
+				<el-button type="primary" @click.native="clerbtn">关闭</el-button>
 			</div>
 		</el-dialog>
+		<!--新增界面-->
+		<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false">
+			<el-form :model="orderDetails" label-width="160px">
+				<el-form-item label="角色名称：">
+					<el-input v-model="orderDetails.name" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="价格：">
+					<el-input v-model="orderDetails.price" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="角色图标：">
+					<el-input v-model="orderDetails.icon" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-col :span='24'></el-col>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="addSubmit" :loading="editLoading">确定</el-button>
+				<el-button type="primary" @click.native="addFormVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
+		<!-- //修改分佣表 -->
+		<el-col :xs="24" :sm="24" :md="24" :lg="24" class="marginleft">
+			<el-col :xs="3" :sm="3" :md="3" :lg="3"></el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3"  v-for="item in ruleAll">{{item.name}}</el-col>
+		</el-col>
+		<el-col :span='24' style="border:1px solid #ddd">
+			<el-col :xs="3" :sm="3" :md="3" :lg="3">
+				<ul class="roul_ul">
+					<li v-for="item in arryuser">{{item.name}}
+					</li>
+				</ul>
+			</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3">
+				<ul class="roul_ul">
+					<li v-for="item in arry1" @click="seeBtn(item.id,arry1,0)">{{item.value}}
+					</li>
+				</ul>
+			</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3">
+				<ul class="roul_ul">
+					<li v-for="item in arry2" @click="seeBtn(item.id,arry2,1)">{{item.value}}
+					</li>		
+				</ul>
+			</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3">
+				<ul class="roul_ul">
+					<li v-for="item in arry3" @click="seeBtn(item.id,arry3,2)">{{item.value}}
+					</li>					
+				</ul>
+			</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3">
+				<ul class="roul_ul">
+					<li v-for="item in arry4" @click="seeBtn(item.id,arry4,3)">{{item.value}}
+					</li>					
+				</ul>
+			</el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3">
+				<ul class="roul_ul">
+					<li v-for="item in arry5" @click="seeBtn(item.id,arry5,4)">{{item.value}}
+					</li>					
+				</ul>
+			</el-col>
+		</el-col>
+		<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" class="marginleft">
+			<el-col :xs="3" :sm="3" :md="3" :lg="3"></el-col>
+			<el-col :xs="3" :sm="3" :md="3" :lg="3"><el-button type="text" size="small" @click="seeBtn">修改</el-button></el-col>
+		</el-col> -->
+		<el-col :xs="1" :sm="1" :md="1" :lg="1" :offset="23" style="">
+			<el-button type="primary" @click="addruleTable">增加</el-button>
+		</el-col>
 		<el-dialog title="修改" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="">
-					<div>{{orderDetails.courierNumber}}</div>
-				</el-form-item>
-				<el-form-item label="联创">
-					<el-input v-model="orderDetails.userName" type="text" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="总代">
-					<el-input v-model="orderDetails.amountPaid" type="text" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="普通">
-					<el-input v-model="orderDetails.orderTotal" type="text" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="普通1">
-					<el-input v-model="orderDetails.orderStatus" type="text" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="普通2">
-					<el-input v-model="orderDetails.paymentMethod" type="text" auto-complete="off"></el-input>
+			<el-form label-width="100px">
+				<el-form-item :label="initname">
+					<el-input v-model="editValue" type="text"></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
 				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
 				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
+		<!-- //新增分佣明细 -->
+		<el-dialog title="添加分佣" v-model="ruleIdVisible" :close-on-click-modal="false" >
+			<el-form :model="ruleIdFrom" label-width="100px" :rules="editFormRules" ref="editForm">
+			<!-- 	<el-form-item v-for="item in ruleAll" :label="item.name">
+					<el-input :v-model="ruleIdFrom.Name" type="text" auto-complete="off"></el-input>
+				</el-form-item> -->
+				<el-form-item :label="arryname[0]">
+					<el-input v-if="ruleAll[0]" v-model="ruleIdFrom.name0" type="text" style="width: 50px"></el-input>%
+				</el-form-item>
+				<el-form-item :label="arryname[1]">
+					<el-input v-if="arryname[1]" v-model="ruleIdFrom.name1" type="text" style="width: 50px"></el-input>%
+				</el-form-item>
+				<el-form-item :label="arryname[2]">
+					<el-input v-if="arryname[2]" v-model="ruleIdFrom.name2" type="text" style="width: 50px"></el-input>%
+				</el-form-item>
+				<el-form-item :label="arryname[3]">
+					<el-input v-if="arryname[3]" v-model="ruleIdFrom.name3" type="text" style="width: 50px"></el-input>%
+				</el-form-item>
+				<el-form-item :label="arryname[4]">
+					<el-input v-if="arryname[4]" v-model="ruleIdFrom.name4" type="text" style="width: 50px"></el-input>%
+				</el-form-item>
+				<el-col :span='24'></el-col>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="upruleId" :loading="editLoading">确定</el-button>
+				<el-button type="primary" @click.native="ruleIdVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -156,88 +187,47 @@
 	export default {
 		data() {
 			return {
+				isindex:'',
+				eidt_size:'',
+				edit_arryinit:[],
+				initname:'',
+				editValue:'',
+				arry1:[],
+				arry2:[],
+				arry3:[],
+				arry4:[],
+				arry5:[],
+				arryuser:[],
+				model_name:[],
+				initArry:[],
 				ruleAll:[],
+				distId:'',
+				totalArray:[],
+				arryname:[],
 				ruleIsUpgrade:false,
 				ruleIsUpgradeVisible:false,
+				upgradebtn:false,
 				upgrade:{},
 				roleId:'',
 				invitedRoleId:'',
-				biaoti:['联创','总代'],
-				options1: [{
-		          value: '0',
-		          label: '经理'
-		        }, {
-		          value: '1',
-		          label: '总监'
-		        },{
-		          value: '2',
-		          label: '联创'
-		        },{
-		          value: '3',
-		          label: '总代'
-		        },{
-		          value: '4',
-		          label: '普通'
-		        }],
-		        options2: [{
-		          value: '0',
-		          label: '联创'
-		        }, {
-		          value: '1',
-		          label: '总代'
-		        },{
-		          value: '2',
-		          label: '普通'
-		        },{
-		          value: '3',
-		          label: '普通1'
-		        },{
-		          value: '4',
-		          label: '普通2'
-		        }],
-				filters: {
-					name: '',
-					status:'',
-					type:''
+				ruleIdFrom:{
+					name0:'',
+					name1:'',
+					name2:'',
+					name3:'',
+					name4:''
 				},
-				radio: '0',
-				checked: true,
-				value:'',
-				value1:'',
-				value2:'',
-				selectSubjectStatus: [
-				{
-					value:'0',
-					label:'全部'
-				},{
-					value:'1',
-					label:'待付款'
-				},{
-					value:'2',
-					label:'待发货'
-				},{
-					value:'3',
-					label:'已发货'
-				},{
-					value:'4',
-					label:'待评价'
-				},{
-					value:'5',
-					label:'退货'
-				}],
 				options: [{
 		          value: '0',
 		          label: '否'
 		        }, {
 		          value: '1',
 		          label: '是'
-		        },],
-				users: [],
+		        }],
 				total: 100,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
-
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
@@ -247,60 +237,93 @@
 				},
 				//编辑界面数据
 				editForm: {
-					id: 0,
-					username: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
 				},
-
+				ruleIdVisible:false,//显示佣金新增页面
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					courierNumber :'自己拿',
-					userName:'200/5%',
-					amountPaid :'200/5%',
-					orderTotal :'',
-					orderStatus :'',
-					paymentMethod :''
-				},{
-					courierNumber :'一级',
-					userName:'200/5%',
-					amountPaid :'200/5%',
-					orderTotal :'',
-					orderStatus :'',
-					paymentMethod :''
-				},{
-					courierNumber :'二级',
-					userName:'200/5%',
-					amountPaid :'200/5%',
-					orderTotal :'',
-					orderStatus :'',
-					paymentMethod :''
-				},{
-					courierNumber :'三级',
-					userName:'200/5%',
-					amountPaid :'200/5%',
-					orderTotal :'',
-					orderStatus :'',
-					paymentMethod :''
-				}]
+				orderInformation:[]
 			}
 		},
 		methods: {
+			//获取邀请人身份
 			click(val) {
-				console.log(val)
+				this.getSubCommission() 
+			},
+			//获取被邀请人身份
+			clickB(val) {
+				this.getSubCommission()
+			},
+			//获取身份分佣表
+			getSubCommission() {
+				const _this = this
+				_this.arry1 = []
+				_this.arry2 = []
+				_this.arry3 = []
+				_this.arry4 = []
+				_this.arry5 = []
+				// console.log(this.roleId)
+				// console.log(this.invitedRoleId)
+				for(var i = 0;i<this.totalArray.length;i++){
+					if(parseInt(this.roleId) === this.totalArray[i].roleId && parseInt(this.invitedRoleId) === this.totalArray[i].invitedRoleId) {
+						// console.log()
+						this.distId =  this.totalArray[i].distId
+					}
+				}
+				const params = {
+					roleId:this.roleId,
+					invitedRoleId:this.invitedRoleId
+				}
+				// console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/selectByTwoRuleId",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data                    	
+                    	const arrys = info
+                    	// console.log(data)
+                    	for(var i = 0;i<arrys.length;i++){
+                			const arrynew = JSON.parse(arrys[i].priceData)
+                    		if(_this.ruleAll[0].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry1 = arrynew
+                    		}else if(_this.ruleAll[1].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry2 = arrynew
+                    		}else if(_this.ruleAll[2].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry3 = arrynew
+                    		}else if(_this.ruleAll[3].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry4 = arrynew
+                    		}else if(_this.ruleAll[4].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry5 = arrynew
+                    		}	
+                    	}
+                    	_this.arryuser = []
+                    	for(var i = 0;i<_this.arry1.length;i++){
+                    		const obj = {}
+                    		if(i === 0){
+                    			obj.name = '自己拿'
+                    			// obj.model_name = 'my_model'
+                    			_this.arryuser.push(obj)
+                    		}else{
+                    			obj.name = i+'级'
+                    			// obj.model_name = i+'level'
+                    			_this.arryuser.push(obj)
+                    		}
+                    	}
+                    }
+                });
 			},
 			getlist(){
 				const _this = this
 				const params = {
 					id:state.id
 				}
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -309,9 +332,12 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data.data)
+                    	// console.log(data.data)
                     	const info = data.data.shopRoles
                     	_this.ruleAll = info
+                    	for(var i = 0;i<info.length;i++){
+                    		_this.arryname.push(info[i].name)
+                    	}
                     	_this.upgrade.invitedMinNum = data.data.invitedMinNum
                     	if(data.data.ruleIsUpgrade === null){
                     		_this.ruleIsUpgrade = false
@@ -319,167 +345,354 @@
                     		_this.ruleIsUpgrade = false
                     	}else{
                     		_this.ruleIsUpgrade = true
+                    		_this.upgradebtn = true
                     	}
                     }
                 });
-				// $.post(baseUrl+"/admin/banner/getBannerByPage",
-	   //           { param: JSON.stringify(params) },
-	   //           function(data){
-	   //           	const info = eval('(' + data + ')');
-	   //              const response = JSON.parse(info);
-	   //              const list = response.obj.results
-	   //              console.log(response)
-	   //              // _this.page = response.obj.total
-	   //              _this.total = response.obj.totalRecord
-	   //              for(var i = 0;i<list.length;i++){
-	   //              	_this.table.push(list[i])
-	   //              }
-	   //            }
-	   //       	)
 			},
 			getselectRuleDist(){
                 const _this = this
 				const params = {
-					storeId:state.id
+					// storeId:state.id
+					roleId:this.roleId,
+					invitedRoleId:this.invitedRoleId
 				}
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"/api/shopRole/selectRuleDist",
+                    url:baseUrl+"/api/shopRole/selectByTwoRuleId",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data.data)
-                    	// const info = data.data.shopRoles
+                    	// console.log(data)
                     }
                 });
             },
 			clickrule(val) {
-				console.log(val)
-				this.ruleIsUpgradeVisible = true
+				// console.log(val)
+				if(val){
+					this.ruleIsUpgradeVisible = true
+				}
 			},
 			upgradetSubmit(){
 				const _this = this
 				const params = {
-					invitedMinNum:_this.upgrade.invitedMinNum
+					id:state.id,
+					ruleIsUpgrade:1,
+					invitedMinNum:parseInt(_this.upgrade.invitedMinNum)
 				}
 				console.log(params)
-			},
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getUsers();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
+				if(this.ruleIsUpgrade){
+						console.log(1)
+				}
+				this.$confirm('确认提交吗？', '提示', {}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/shopRole/updateRuleAll",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	console.log(data)
+	                    	_this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
+	                    }
+	                });
 				});
+				this.ruleIsUpgradeVisible = false
+				this.upgradebtn = true
 			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
+			clerbtn(){	
+				this.ruleIsUpgradeVisible = false
+				this.ruleIsUpgrade = false
 			},
-			//显示编辑界面
-			seeBtn: function (index, row) {
-				this.editFormVisible = true;
-				this.orderDetails = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				
+			// 显示新增店铺身份页面
+			addIDCard() {
+				this.addFormVisible = true
 			},
 			//新增
 			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
+				const _this = this
+				const params = {
+					storeId:state.id,
+					level:this.ruleAll.length+1,
+					name:this.orderDetails.name,
+					price:this.orderDetails.price,
+					icon:this.orderDetails.icon
+				}
+				// console.log(params)
+				this.$confirm('确认提交吗？', '提示', {}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/shopRole/addOne",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	// const info = data.data.shopRoles
+	                    	// console.log(data)
+	                    	// _this.identity= info
 
+	                    	_this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
+							_this.addFormVisible = false
+							_this.getlist()
+	                    }
+	                });
 				});
-			}
+			},
+			//新增分佣数据
+			addruleTable() {
+				this.ruleIdVisible = true 
+			},
+			upruleId() {
+				console.log(this.ruleAll)
+				console.log(this.ruleIdFrom)
+				const _this = this
+				const _arry1 = this.arry1
+				const _arry2 = this.arry2
+				const _arry3 = this.arry3
+				const _arry4 = this.arry4
+				const _arry5 = this.arry5
+				let params = {
+					distId:this.distId,
+					priceProps:[]
+				}
+				for(var i = 0;i<this.ruleAll.length;i++){
+					let objs = {
+						enjoyRoleId:this.ruleAll[i].id,
+						priceData:[]
+					}
+					const obj = {}
+					if(i === 0){
+						obj.value = this.ruleIdFrom.name0
+						obj.id = this.arry1.length+1
+						_arry1.push(obj)
+						objs.priceData = JSON.stringify(this.arry1)
+					}else if(i === 1){
+						obj.value = this.ruleIdFrom.name1
+						obj.id = this.arry2.length+1
+						_arry2.push(obj)
+						objs.priceData = JSON.stringify(this.arry2)
+					}else if(i === 2){
+						obj.value = this.ruleIdFrom.name2
+						obj.id = this.arry3.length+1
+						_arry3.push(obj)
+						objs.priceData = JSON.stringify(this.arry3)
+					}else if(i === 3){
+						obj.value = this.ruleIdFrom.name3
+						obj.id = this.arry4.length+1
+						_arry4.push(obj)
+						objs.priceData = JSON.stringify(this.arry4)
+					}else if(i === 4){
+						obj.value = this.ruleIdFrom.name4
+						obj.id = this.arry5.length+1
+						_arry5.push(obj)
+						objs.priceData = JSON.stringify(this.arry5)
+					}
+					params.priceProps.push(objs)
+				}
+				// params.priceProps[0].priceData = JSON.stringify(params.priceProps[0].priceData) 192.168.0.106
+				console.log(params)
+				this.$confirm('确认提交吗？', '提示', {}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/priceProp/insertOrUpdateProp",
+	                    // url:"http://192.168.0.106:8080/api/priceProp/insertOrUpdateProp",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	// const info = data.data.shopRoles
+	                    	console.log(data)
+	                    	// _this.identity= info
+
+	                    	_this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
+							_this.ruleIdVisible = false
+							_this.click()
+	                    }
+	                });
+				});
+			},
+			//显示编辑界面
+			seeBtn: function (val,row,index) {
+				this.eidt_size = val-1
+				console.log(val)
+				console.log(row)
+				this.isindex = index
+				console.log(this.isindex)
+				this.edit_arryinit = row
+				this.initname = this.arryuser[val-1].name
+				console.log(this.initname)
+				this.editFormVisible = true;
+				this.editValue = row[val-1].value
+			},
+			//修改
+			editSubmit: function () {
+				console.log(this.editValue)
+				console.log(this.eidt_size)
+				console.log(this.edit_arryinit)
+				const _this = this
+				let params = {
+					distId:this.distId,
+					priceProps:[{
+						// enjoyRoleId:24,
+						enjoyRoleId:this.ruleAll[this.isindex].id,
+						priceData:[]
+					}]
+				}
+				this.edit_arryinit[this.eidt_size].value = this.editValue
+				params.priceProps[0].priceData = JSON.stringify(this.edit_arryinit)
+				console.log(params)
+				this.$confirm('确认修改吗？', '提示', {}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/priceProp/insertOrUpdateProp",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	console.log(data)
+	                    	_this.$message({
+								message: '修改成功',
+								type: 'success'
+							});
+							_this.editFormVisible = false
+							_this.click()
+	                    }
+	                });
+				});
+			},
+			getselectByTwoRuleId(){
+				const _this = this
+				const params = {
+					roleId:this.roleId,
+					invitedRoleId:this.invitedRoleId,
+				}
+				// console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/selectByTwoRuleId",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	// console.log(data)
+                    }
+                });
+			},
+			//分页
+			handleCurrentChange(val) {
+				this.page = val;
+			},
+			selectRuleDist() {
+				const _this = this
+				const params = {
+					storeId:state.id
+				}
+				// console.log(params)  this.initArry 判断当前值 可以做存储  orderInformation 页面展示数据
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/selectRuleDist",
+                    // url:"http://192.168.0.106:8080/api/shopRole/selectRuleDist",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	_this.totalArray = info
+                    	console.log(info)
+                    	console.log(_this.ruleAll)
+                    	_this.roleId = info[0].roleId.toString()
+                    	_this.invitedRoleId = info[0].invitedRoleId.toString()
+                    	_this.distId = info[0].distId
+                    	const arrys = info[0].priceProps
+                    	console.log(arrys)
+                    	for(var i = 0;i<arrys.length;i++){
+                			const arrynew = JSON.parse(arrys[i].priceData)
+                    		if(_this.ruleAll[0].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry1 = arrynew
+                    		}else if(_this.ruleAll[1].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry2 = arrynew
+                    		}else if(_this.ruleAll[2].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry3 = arrynew
+                    		}else if(_this.ruleAll[3].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry4 = arrynew
+                    		}else if(_this.ruleAll[4].id ===arrys[i].enjoyRoleId) {
+                    			_this.arry5 = arrynew
+                    		}	
+                    	}
+                    	for(var i = 0;i<_this.arry1.length;i++){
+                    		const obj = {}
+                    		if(i === 0){
+                    			obj.name = '自己拿'
+                    			_this.arryuser.push(obj)
+                    		}else{
+                    			obj.name = i+'级'
+                    			_this.arryuser.push(obj)
+                    		}
+                    	}
+                    	// _this.arryuser
+                    	// for(var i =0;i<arrys.length;i++){
+                    	// 	pricePropsArry.push(JSON.parse(arrys[i].priceData))
+                    	// }
+
+
+                    	// for(var i =0;i<pricePropsArry.length;i++){
+                    	// 	const obj = {}
+	                    // 	for(var x = 0;x<pricePropsArry[i].length;x++){
+	                    // 		if(x === 0){
+	                    // 			obj.userName = pricePropsArry[i][x].value+'%'
+	                    // 		}else if(x === 1){
+	                    // 			obj.amountPaid = pricePropsArry[i][x].value+'%'
+	                    // 		}else if(x === 2){
+	                    // 			obj.orderTotal = pricePropsArry[i][x].value+'%'
+	                    // 		}else if(x === 3){
+	                    // 			obj.orderStatus = pricePropsArry[i][x].value+'%'
+	                    // 		}else if(x === 4){
+	                    // 			obj.paymentMethod = pricePropsArry[i][x].value+'%'
+	                    // 		}
+	                    // 	}
+	                    // 	_this.orderInformation.push(obj)
+                    	// }
+
+
+                    	// console.log(_this.orderInformation)
+                    	// 倒序输出
+                    	// _this.orderInformation = _this.orderInformation.reverse()
+
+                    	// for(var i = 0;i<_this.orderInformation.length;i++){
+                    	// 		if(i === 0){
+                    	// 			_this.orderInformation[i].name = '自己拿'
+                    	// 		}else{
+                    	// 			_this.orderInformation[i].name = i+'级'
+                    	// 		}
+                    	// }
+                    	
+                    }
+                });
+			},
 		},
 		mounted() {
 			this.getlist();
 			this.getselectRuleDist();
+			this.selectRuleDist();
+			this.getselectByTwoRuleId();
 		}
 	}
 
@@ -510,6 +723,24 @@
 		list-style:none;
 	}
 	.leftul li{
-		margin-bottom: 40px
+		margin-bottom: 40px;
+	}
+	.roul_ul {
+		list-style: none
+	}
+	.roul_ul li{
+		height: 40px;
+		line-height: 40px;
+		cursor: pointer;
+	}
+	.marginleft {
+		background-color: #eee;
+		height: 40px;
+		line-height: 40px;
+
+	}
+	.marginleft div:nth-child(1){
+		width: 235px;
+		height: 10px;
 	}
 </style>
