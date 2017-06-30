@@ -37,25 +37,24 @@
 					<el-col :span="19" :offset="2" style="margin-top: 10px">
 						<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
 							<el-form-item :label="item.name" v-for="item in paramsData" style="margin-right:  200px;">
-								<el-input type="text"></el-input>
+								<el-input type="text" v-model="item.value"></el-input>
 							</el-form-item>
 						<el-col :span='24'></el-col>
 					</el-form>
 					</el-col>
-					
 				</el-col>
 				<el-col :span="24" class="shangp">
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 70px;text-align: right;line-height: 60px;">商品名称：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="CommodityName"></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>
 						</el-col>
 					</el-col>
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="border-right: 1px solid #ddd;height: 95px;text-align: right;line-height: 80px;">商品货号：</el-col>
 						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="productCode"></el-input></el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>
 							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">做多可输入20个字符，支持输入中文、字母、数字、_、/、和小数点</el-col>
 						</el-col>
@@ -63,7 +62,7 @@
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>
 						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
+							<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="CommodityPictures"></el-input></el-col>
 							<el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col>
 						</el-col>
 					</el-col>
@@ -71,35 +70,14 @@
 						<el-col :span="24" style="height: 40px;line-height: 30px;">商品交易信息</el-col>
 						<el-col :span="24" style="height: 40px;line-height: 30px;border: 1px solid #ddd;">
 							<el-col :span="2"  style="height: 30px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">计量单位：</el-col>
-							<el-col :span="2"  style=""><el-input type="text"></el-input></el-col>
+							<el-col :span="2"  style=""><el-input type="text" v-model="MeasurementUnit"></el-input></el-col>
 						</el-col>
-						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;">
-							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">尺码：</el-col>
-							<el-col :span="20"  style="">
-								<el-checkbox-group v-model="checkList">
-								    <el-col :span="5" :offset="1">
-								    	<el-checkbox label="L"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5">
-								    	<el-checkbox label="M"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5">
-								    	<el-checkbox label="S"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5">
-								    	<el-checkbox label="35"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5"  :offset="1">
-								    	<el-checkbox label="36"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5">
-								    	<el-checkbox label="37"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5">
-								    	<el-checkbox label="38"></el-checkbox>
-								    </el-col>
-								    <el-col :span="5">
-								    	<el-checkbox label="39"></el-checkbox>
+						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;" v-for="item in Specifications">
+							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">{{item.name}}</el-col>
+							<el-col :span="20"  style="margin-left: 50px">
+								<el-checkbox-group v-model="item.checrArry">
+								    <el-col :span="5" v-for="city in item.values">
+								    	<el-checkbox  :label="city" :key="city">{{city}}</el-checkbox>
 								    </el-col>
 								</el-checkbox-group>
 							</el-col>
@@ -154,15 +132,17 @@
 						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 							<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">建议零售价(原价)：</el-col>
 							<el-col :span="12" style="margin-left: 10px">
-								<el-col :span="12" style="margin-top: 10px"><el-input type="text"></el-input></el-col>
+								<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="SuggestedRetailRrice"></el-input></el-col>
 								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
 							</el-col>
 						</el-col>
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述</el-col>
 						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-							<el-col :span="2" style="border-right: 1px solid #ddd;height: 400px;text-align: right;line-height: 80px;">商品描述：</el-col>
-							<el-col :span="12" style="margin-left: 10px">
-								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
+							<el-col :span="2" style="text-align: right;line-height: 80px;">商品描述：</el-col>
+							<el-col :span="12" style="margin-left: 0px;border-left: 1px solid #ddd;padding-left: 10px">
+								<el-col :span="23"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字
+								<el-input type="textarea" v-model="DescriptionGoods" :rows="10"></el-input>
+								</el-col>
 							</el-col>
 						</el-col>
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>
@@ -189,6 +169,15 @@
                 sels:[],
                 paramsData:[],
                 itemData:[],
+                Specifications:[],
+                CommodityName:'',// 商品名称
+                CommodityPictures:'',// 商品图片
+                productCode:'',//商品货号
+                MeasurementUnit:'',// 计量单位
+                PricingModel:'',// 定价模式
+                SuggestedRetailRrice:'',// 建议零售价
+                DescriptionGoods:'',// 商品描述
+                weight:'',// 重量
 				tableData: [{
 		            date: '2016-05-02',
 		            name: '王小虎',
@@ -199,14 +188,11 @@
 		            address: '上海市普陀区金沙江路 1517 弄'
 		          }],
 				radio: '1',
-                checkList:false,
+                checkList:[],
 				commodity:'',
 				id:'',
 				next: true,
 				details: false,
-				value:'',
-				value1:'',
-				value2:'',
 				data: [],
 				options: [{
 		          value: '1',
@@ -296,6 +282,20 @@
                         	_this.itemData = eval('(' + info.itemData + ')')
                         	console.log(_this.paramsData)
                         	console.log(_this.itemData)
+                        	_this.Specifications = []
+                        	for(var i = 0; i<_this.itemData.length;i++){
+                        		const obj = {}
+                        		obj.name = _this.itemData[i].name
+                        		obj.checrArry = []
+                        		let jsontry = _this.itemData[i].values
+                        		obj.values = []
+                        		jsontry=jsontry.split(',');
+                        		for (var x = 0; x < jsontry.length; x++) {
+                        			obj.values.push(jsontry[x])
+                        		}
+                        		_this.Specifications.push(obj)
+                        		console.log(_this.Specifications)
+                        	}
                             // if(!data.success){
                             //     alert(data.msg)
                             // }else{
@@ -369,6 +369,8 @@
 	                    specNo:'8888-1'
                     }]
                 };
+                console.log(this.paramsData)
+                console.log(this.Specifications)
                 $.ajax({
                     type:'POST',
                     dataType:'json',

@@ -132,7 +132,7 @@
 					      </el-table-column>
 					      <el-table-column label="操作">
 							<template scope="scope">
-								<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+								<el-button type="text" size="small" @click="handldeldet(scope.$index, scope.row)">删除</el-button>
 							</template>
 						</el-table-column>
 					    </el-table>
@@ -178,7 +178,7 @@
 					      </el-table-column>
 					      <el-table-column label="操作">
 							<template scope="scope">
-								<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+								<el-button type="text" size="small" @click="handldel(scope.$index, scope.row)">删除</el-button>
 							</template>
 						</el-table-column>
 					    </el-table>
@@ -343,6 +343,9 @@
 			}
 		},
 		methods: {
+			handldeldet(index ,row){
+				console.log(row)
+			},
 			//新增模板
 			addTemplate() {
 				this.template = false
@@ -359,6 +362,13 @@
 			},
 			preservation() {
 				const _this = this
+				let specifyMailStatu = 0
+				let check = ''
+				if(_this.addfrom.specifyMailStatus === false){
+					specifyMailStatu = 0
+				}else{
+					specifyMailStatu = 1
+				}
 				// const _length =  _this.addfrom.areaId.length
 				// const isareaId = _this.addfrom.areaId[_length]
 				const params = {
@@ -371,15 +381,9 @@
 					storeId:_this.addfrom.storeId,
 					fareCarries:[]
 				}
-				let specifyMailStatu = 0
-				let check
-				if(_this.addfrom.specifyMailStatus === false){
-					specifyMailStatu
-				}else{
-					specifyMailStatu = 1
-				}
+				
 				if(this.checked === false){
-					check
+					check = ''
 				}else{
 					check = 0
 					const fareCarrie = {
@@ -391,9 +395,9 @@
 						mode:check,
 						isDefault:0
 					}
+					console.log(fareCarrie)
 					params.fareCarries.push(fareCarrie)
 				}
-				
 				console.log(params)
 				this.addtemplate = false
 				this.template = true
