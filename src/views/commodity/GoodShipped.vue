@@ -62,7 +62,16 @@
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>
 						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="CommodityPictures"></el-input></el-col>
+							<el-col :span="24" style="margin-top: 10px">
+							<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">
+							<button type="button" class="el-button el-button--primary el-button--small" style="margin-left: -83px">
+								<span>点击上传</span>
+							</button>
+							<button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button>
+							<span style="display: block;font-size: 12px;margin-bottom: 10px">{{ imageChange }}</span>
+
+							<!-- <img style="width:100px" v-for="item in CommodityPictures" :src="item"> -->
+							</el-col>
 							<el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col>
 						</el-col>
 					</el-col>
@@ -75,40 +84,40 @@
 						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;" v-for="item in Specifications">
 							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">{{item.name}}</el-col>
 							<el-col :span="20"  style="margin-left: 50px">
-								<el-checkbox-group v-model="item.checrArry">
+								<el-checkbox-group v-model="item.checrArry" @change="handleCheckedCitiesChange">
 								    <el-col :span="5" v-for="city in item.values">
-								    	<el-checkbox  :label="city" :key="city">{{city}}</el-checkbox>
+								    	<el-checkbox :label="city" :key="city">{{city}}</el-checkbox>
 								    </el-col>
 								</el-checkbox-group>
 							</el-col>
 						</el-col>
-						<el-col :span="24" style="height: 150px;line-height: 30px;border: 1px solid #ddd;">
+						<el-col :span="24" style="line-height: 30px;border: 1px solid #ddd;">
 							<el-col :span="2"  style="height: 150px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">规格报价：</el-col>
 							<el-col :span="14"  style="">
 								 <el-table :data="tableData" style="width: 100%">
 							      <el-table-column prop="name" label="规格" width="180">
 							      	<template scope="scope">
-							      		<el-input v-model="scope.row.name" type="text"></el-input>
+							      		{{scope.row.name}}
 									</template>
 							      </el-table-column>
-							      <el-table-column prop="name" label="单价(元)" width="180">
+							      <el-table-column prop="UnitPrice" label="单价(元)" width="180">
 							      	<template scope="scope">
-							      		<el-input v-model="scope.row.name" type="text"></el-input>
+							      		<el-input v-model="scope.row.UnitPrice" type="text"></el-input>
 									</template>
 							      </el-table-column>
-							      <el-table-column prop="address" label="建议零售价(元)" width="180">
+							      <el-table-column prop="jyUnitPrice" label="建议零售价(元)" width="180">
 							      	<template scope="scope">
-							      		<el-input v-model="scope.row.name" type="text"></el-input>
+							      		<el-input v-model="scope.row.jyUnitPrice" type="text"></el-input>
 									</template>
 							      </el-table-column>
-							      <el-table-column prop="date" label="单品货号" width="190">
+							      <el-table-column prop="on" label="单品货号" width="190">
 								      <template scope="scope">
-								      		<el-input v-model="scope.row.name" type="text"></el-input>
+								      		<el-input v-model="scope.row.on" type="text"></el-input>
 										</template>
 							      </el-table-column>
-							      <el-table-column prop="date" label="金豆抵扣" width="200">
+							      <el-table-column prop="imazamox" label="金豆抵扣" width="200">
 							      	<template scope="scope">
-							      		<el-input v-model="scope.row.name" type="text"></el-input>
+							      		<el-input v-model="scope.row.imazamox" type="text"></el-input>
 									</template>
 							      </el-table-column>
 							    </el-table>
@@ -118,8 +127,8 @@
 							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: center">定价模式 </el-col>
 							<el-col :span="20">
 								<el-col :span="20">
-									 <el-radio class="radio" v-model="radio" label="1">模式一</el-radio>
- 									 <el-radio class="radio" v-model="radio" label="2">模式二</el-radio>
+									 <el-radio class="radio" v-model="PricingModel" label="1">模式一</el-radio>
+ 									 <el-radio class="radio" v-model="PricingModel" label="2">模式二</el-radio>
 								</el-col>
 								<el-col :span="20">
 									 模式一：分销金额 = （定价-成本（人民币））*吸引力平台分佣方式
@@ -148,6 +157,14 @@
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>
 						<el-col :span="24">
 							物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。
+							<el-col :span="24">
+								<el-col :span="1">重量</el-col>
+								<el-col :span="3">
+									<el-input  v-model="weight" ></el-input>
+								</el-col>
+								<el-col style="margin-top:10px" :span="3">公斤</el-col>
+								<!-- <span style="margin-top: 20px">公斤</span> -->
+							</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -166,28 +183,21 @@
 	export default {
 		data() {
 			return {
+				url:'',
                 sels:[],
                 paramsData:[],
                 itemData:[],
                 Specifications:[],
                 CommodityName:'',// 商品名称
-                CommodityPictures:'',// 商品图片
+                CommodityPictures:[],// 商品图片
                 productCode:'',//商品货号
                 MeasurementUnit:'',// 计量单位
                 PricingModel:'',// 定价模式
                 SuggestedRetailRrice:'',// 建议零售价
                 DescriptionGoods:'',// 商品描述
                 weight:'',// 重量
-				tableData: [{
-		            date: '2016-05-02',
-		            name: '王小虎',
-		            address: '上海市普陀区金沙江路 1518 弄'
-		          }, {
-		            date: '2016-05-04',
-		            name: '王小虎',
-		            address: '上海市普陀区金沙江路 1517 弄'
-		          }],
-				radio: '1',
+				tableData: [],
+				PricingModel: '1',
                 checkList:[],
 				commodity:'',
 				id:'',
@@ -234,21 +244,76 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				formData: new FormData(),
+                fileImg: ''
 			}
 		},
+		computed: {
+            // 实时更新上传图片的名字，仅读取，值只须为函数
+            imageChange: function () {
+                return this.fileImg
+            }
+        },
 		methods: {
+			handleCheckedCitiesChange(value) {
+				this.tableData = []
+				for(var i = 0;i<value.length;i++){
+					const obj = {}
+					obj.name = value[i]
+					obj.UnitPrice = ''
+					obj.jyUnitPrice = ''
+					obj.on = ''
+					obj.imazamox = ''
+					this.tableData.push(obj)
+				}
+			},
+			//		    清空上传
+            clear(){
+                let btn = document.getElementById("btnClear");
+                let files = document.getElementById("fileInput");
+                this.fileImg = '';
+                // for IE, Opera, Safari, Chrome
+                if (files !== null && files.value) {
+                    files.value = "";
+                    this.formData = new FormData()
+                }
+            },
+		    //图片上传
+            upload (event) {
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                // console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                    console.log('存在file', file)
+                    this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file);
+                    console.log(this.formData);
+                    this.submitUpload()
+                } else {
+                    this.fileImg = ''
+                    console.log('不存在file', file)
+                    this.formData = new FormData()
+                }
+            },
+            submitUpload(){
+                // this.$confirm('确认修改吗？', '提示', {}).then(() => {
+                    const _this= this;
+                    _this.$http.post('http://121.43.178.109:8080/ser/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            console.log(info)
+                            // const info = response.body
+							_this.url = info.data[0].baseUri+info.data[0].uri;
+							_this.CommodityPictures.push(_this.url)
+                        }, error => _this.$emit('complete', 500, error.message))
+                // });
+            },
 			handleNodeClick(data) {
                 this.sels=[];
 	        	this.commodity =  data.label;
@@ -344,21 +409,21 @@
 			release() {
 				const _this = this
                 const params = {
-                    name:'iPhone8',
-                    goodsDesc:'iPhone8支持无线充电，内置900G内存',
+                    name:this.CommodityName,
+                    goodsDesc:this.DescriptionGoods,
                     veiw:'',
-                    price:'8588',
+                    price:this.SuggestedRetailRrice,
                     isVirtual:'0',
                     carouselPicture:'icon.png,icon1.png',
                     saleState:'1',
-                    goodsData:"[{'key':'品牌','value':'苹果'},{'key':'型号','value':'iPhone7，iPhone7plus'}]",
+                    goodsData:[],
                     catId:'100',
                     storeId:'10',
-                    ftId:'0',
-                    pricingModel:'1',
-                    unit:'件',
-                    weight:'0.5',
-                    goodsNo:'88888',
+                    ftId:'16',
+                    pricingModel:this.PricingModel,
+                    unit:this.MeasurementUnit,
+                    weight:this.weight,
+                    goodsNo:this.productCode,
                     goodsSpecs:[{
                     	specPrice:'8888',
 	                    costPrice:'7888',
@@ -369,8 +434,25 @@
 	                    specNo:'8888-1'
                     }]
                 };
+                //商品图片
+                this.CommodityPictures = this.CommodityPictures.toString()
+                params.carouselPicture = this.CommodityPictures
                 console.log(this.paramsData)
-                console.log(this.Specifications)
+                //宝贝属性
+                const arrysp = []
+                for(var i = 0;i<this.paramsData.length;i++){
+                	const obj = {}
+                	obj.key = this.paramsData[i].name
+                	obj.value = this.paramsData[i].value
+                	arrysp.push(obj)
+                }
+                params.goodsData = arrysp
+                params.goodsData = JSON.stringify(params.goodsData)
+
+
+                console.log(this.tableData)
+                 console.log(params)
+                // console.log(this.Specifications)
                 $.ajax({
                     type:'POST',
                     dataType:'json',

@@ -32,7 +32,7 @@
                 imgsrc: '',
                 logining: false,
                 ruleForm2: {
-                    username: '',
+                    username: '18329199211',
                     password: '',
                     code:''
                 },
@@ -83,8 +83,8 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
+                            state.storeId = data.data.storeId
                             state.id = data.data.id
-                            console.log(state.id)
                             document.cookie="token="+data.data.token;
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });

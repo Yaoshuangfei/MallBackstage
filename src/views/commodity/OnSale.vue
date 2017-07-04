@@ -45,27 +45,6 @@
 				<el-col :span="1" class="describe">321</el-col>
 			</el-col>
 		</el-col>
-		<!-- <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="商品名称">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="userName" label="下单时间">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="价格">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="库存">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button>
-					<el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">下架</el-button>
-				</template>
-			</el-table-column>
-		</el-table> -->
 
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">
@@ -135,21 +114,6 @@
 				},{
 					value:'1',
 					label:'待付款'
-				},{
-					value:'2',
-					label:'待发货'
-				},{
-					value:'3',
-					label:'已发货'
-				},{
-					value:'4',
-					label:'待评价'
-				},{
-					value:'5',
-					label:'交易完成'
-				},{
-					value:'6',
-					label:'退货'
 				}],
 				options: [{
 		          value: '1',
@@ -164,7 +128,7 @@
 					type:''
 				},
 				users: [],
-				total: 100,
+				total: 0,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -206,37 +170,29 @@
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
 			getlist(){
 				const _this = this
-				_this.table = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:this.page,
+					size:10,
+					name:'',
+					saleStatus:1,
+					storeId:state.storeId
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goods/selectListOfSeller",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(info)
+                    	_this.total = info.total
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -369,7 +325,7 @@
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

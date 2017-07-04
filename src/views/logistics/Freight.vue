@@ -11,28 +11,30 @@
 			</el-col>
 			<el-col :span="24" style="margin-bottom: 20px">件数模板</el-col>
 			<!--列表-->
-			<el-col :span="24" style="border: 1px solid #ddd;height: 40px;line-height: 40px">
-				<el-col :span="1" :offset="1" style="">
-					1
+			<el-col v-for="item in ceshiarry" style="margin-bottom: 40px">
+				<el-col :span="24" style="border: 1px solid #ddd;height: 40px;line-height: 40px">
+					<el-col :span="1" :offset="1" style="">
+						{{item.name}}
+					</el-col>
+					<el-col :span="7" :offset="15" style="">
+						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor">设为默认的运费模板 | </span> <span class="btncolor">修改 | </span> <span class="btncolor">删除</span>
+					</el-col>
 				</el-col>
-				<el-col :span="7" :offset="15" style="">
-					最后编辑时间：2017-09-09 09:09:09 <span class="btncolor">设为默认的运费模板 | </span> <span class="btncolor">修改 | </span> <span class="btncolor">删除</span>
-				</el-col>
+				<el-table :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+					<el-table-column prop="mode" :formatter='formatter' label="运送方式">
+					</el-table-column>
+					<el-table-column prop="data1" label="运送到">
+					</el-table-column>
+					<el-table-column prop="firstHeavy" label="首件（个）">
+					</el-table-column>
+					<el-table-column prop="firstPrice" label="运费（元）">
+					</el-table-column>
+					<el-table-column prop="addHeavy" label="续件（个）">
+					</el-table-column>
+					<el-table-column prop="addPrice" label="运费（元）">
+					</el-table-column>
+				</el-table>
 			</el-col>
-			<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-				<el-table-column prop="orderNumber" label="运送方式">
-				</el-table-column>
-				<el-table-column prop="courierNumber" label="运送到">
-				</el-table-column>
-				<el-table-column prop="userName" label="首件（个）">
-				</el-table-column>
-				<el-table-column prop="amountPaid" label="运费（元）">
-				</el-table-column>
-				<el-table-column prop="orderTotal" label="续件（个）">
-				</el-table-column>
-				<el-table-column prop="orderStatus" label="运费（元）">
-				</el-table-column>
-			</el-table>
 		</el-col>
 		
 
@@ -91,15 +93,15 @@
 				<el-col :span="20" :offset="2" style="border:1px solid #ddd">
 					<el-col :span="24" class="top_margin">
 						<el-col :span="2" class="left_temp">默认运费：</el-col>
-						<el-col :span="3"><el-input type="text"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.freight"></el-input></el-col>
 						<el-col :span="1" class="left_temp">kg内，</el-col>
-						<el-col :span="3"><el-input type="text"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.element"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">元，</el-col>
 						<el-col :span="1" class="left_temp">每增加</el-col>
-						<el-col :span="3"><el-input type="text"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.zfreight"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">kg，</el-col>
 						<el-col :span="1" class="left_temp">增加运费</el-col>
-						<el-col :span="3"><el-input type="text"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.zelement"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">元</el-col>
 					</el-col>
 					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
@@ -152,7 +154,7 @@
 			<el-col :span="24" class="top_margin">
 				<el-col :span="2" :offset="1"> <el-checkbox v-model="addfrom.specifyMailStatus">按指定条件包邮可选</el-checkbox></el-col>
 			</el-col>
-			<el-col :span="24" class="top_margin">
+			<el-col :span="24" class="top_margin" v-show="false">
 				<el-col :span="16" :offset="1">
 					<el-table :data="tableData" >
 					      <el-table-column prop="name" label="选择地区" width="280">
@@ -188,11 +190,11 @@
 		</el-col>
 
 		<!--工具条-->
-		<!-- <el-col :span="24" class="toolbar" style="background:#fff;"> -->
+		<el-col :span="24" class="toolbar" style="background:#fff;">
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<!-- <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
-		</el-col> -->
+		</el-col>
 	</section>
 </template>
 
@@ -204,23 +206,35 @@
 	export default {
 		data() {
 			return {
+				ceshiarry:[
+					{name:1},
+					{name:2}
+				],
+				defaultValue:{
+					freight:'',
+					element:'',
+					zfreight:'',
+					zelement:'',
+					data:[],
+					mode:0,
+					isDefault:0
+				},
 				addfrom:{
 					name:'',
 					areaId:[],
 					deliverTime:'',
 					isFree:'0',
 					valuationType:'0',
-					specifyMailStatus:false,
-					storeId:'5'
+					specifyMailStatus:false
 				},
 				fareCarries:[{
-					data:'',
+					data:[],
 					firstHeavy:'',
 					firstPrice:'',
 					addHeavy:'',
 					addPrice:'',
-					mode:'0',
-					isDefault:'0'
+					mode:0,
+					isDefault:1
 				}],
 				isareaId:'',
 				fareIpps:[{
@@ -265,7 +279,7 @@
 				}],
 				options: cityData3,
 				users: [],
-				total: 100,
+				total: 0,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -291,18 +305,7 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}],
+				orderInformation:[],
 				times:[{
 		          value: '4',
 		          label: '4小时内'
@@ -355,11 +358,7 @@
 		        console.log(value);
 		        this.isareaId = value[value.length-1]
 		        console.log(this.addfrom.areaId)
-		      },
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
+		    },
 			preservation() {
 				const _this = this
 				let specifyMailStatu = 0
@@ -369,8 +368,6 @@
 				}else{
 					specifyMailStatu = 1
 				}
-				// const _length =  _this.addfrom.areaId.length
-				// const isareaId = _this.addfrom.areaId[_length]
 				const params = {
 					name:_this.addfrom.name,
 					areaId:this.isareaId,
@@ -378,10 +375,20 @@
 					isFree:_this.addfrom.isFree,
 					valuationType:_this.addfrom.valuationType,
 					specifyMailStatus:specifyMailStatu,
-					storeId:_this.addfrom.storeId,
+					storeId:state.storeId,
 					fareCarries:[]
 				}
-				
+				const zobj = {
+					data:this.defaultValue.data,
+					firstHeavy:this.defaultValue.freight,
+					firstPrice:this.defaultValue.element,
+					addHeavy:this.defaultValue.zfreight,
+					addPrice:this.defaultValue.zelement,
+					mode:0,
+					isDefault:0
+				}
+				zobj.data = JSON.stringify(zobj.data)
+				params.fareCarries.push(zobj)
 				if(this.checked === false){
 					check = ''
 				}else{
@@ -395,30 +402,28 @@
 						mode:check,
 						isDefault:0
 					}
-					console.log(fareCarrie)
+					fareCarrie.data = JSON.stringify(fareCarrie.data)
 					params.fareCarries.push(fareCarrie)
+					console.log(fareCarrie)
 				}
+				console.log(this.defaultValue)
 				console.log(params)
 				this.addtemplate = false
 				this.template = true
-				// $.post(baseUrl+"/admin/banner/getBannerByPage",
-	   //           { param: JSON.stringify(params) },
-	   //           function(data){
-	   //           	const info = eval('(' + data + ')');
-	   //              const response = JSON.parse(info);
-	   //              const list = response.obj.results
-	   //              console.log(response)
-	   //              // _this.page = response.obj.total
-	   //              _this.total = response.obj.totalRecord
-	   //              for(var i = 0;i<list.length;i++){
-	   //              	_this.table.push(list[i])
-	   //              }
-	   //            }
-	   //       	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/fareTemplate/add",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
 			},
 			//删除
 			handleDel: function (index, row) {
@@ -508,31 +513,52 @@
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
+			gettemplet() {
+				const _this = this
+				_this.ceshiarry = []
+				const params = {
+					storeId:state.storeId,
+					pageNum:this.page,
+					size:10,
+					name:''
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/fareTemplate/selectListByStoreId",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    	_this.total = data.data.total
+                    	const info = data.data.list
+                    	const arry = []
+                    	for (var i = 0; i < info.length; i++) {
+                    		console.log(info[i])
+                    		_this.ceshiarry.push(info[i])
+                    		// for (var x = 0; x < info[i].fareCarries.length; x++) {
+                    		// 	arry.push(info[i].fareCarries[x])
+                    		// }
+                    	}
+                    	console.log(_this.ceshiarry)
+                    	// _this.orderInformation = arry
+                    }
+                });
+			},
+			formatter(row,column) {
+				if(row.mode === 0){
+					return '快递'
+				}else if(row.mode === 1) {
+					return 'EMS'
+				}else if(row.mode === 2) {
+					return '平邮'
+				}
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.gettemplet();
 		}
 	}
 

@@ -303,7 +303,7 @@
                     		}	
                     	}
                     	_this.arryuser = []
-                    	for(var i = 0;i<_this.arry1.length;i++){
+                    	for(var i = 0;i<_this.arry4.length;i++){
                     		const obj = {}
                     		if(i === 0){
                     			obj.name = '自己拿'
@@ -647,6 +647,8 @@
                     			_this.arryuser.push(obj)
                     		}
                     	}
+                    	console.log(_this.arry4)
+                    	console.log(_this.arryuser)
                     	// _this.arryuser
                     	// for(var i =0;i<arrys.length;i++){
                     	// 	pricePropsArry.push(JSON.parse(arrys[i].priceData))
