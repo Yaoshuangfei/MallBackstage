@@ -396,7 +396,7 @@
             submitUpload(){
                 // this.$confirm('确认修改吗？', '提示', {}).then(() => {
                     const _this= this;
-                    _this.$http.post('http://121.43.178.109:8080/ser/api/attachment/upload', _this.formData, {
+                    _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
                         progress(event) {
                         }
                     })

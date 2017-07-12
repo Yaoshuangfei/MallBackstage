@@ -4,10 +4,10 @@
 		<el-row :gutter="20" class="main_top">
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
-					<p>用户总数</p>
-					<p>0</p>
+					<p>店铺会员人数</p>
+					<p>{{memberCount}}</p>
 					<p>
-						<span>5%</span>
+						<span>{{memberPercentage}}%</span>
 						<span>来自上周</span>
 					</p>
 				</div>
@@ -15,49 +15,29 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>总营业额</p>
-					<p>0</p>
+					<p>{{sumTotalMoney}}</p>
 					<p>
-						<span>5%</span>
-						<span>来自上周</span>
+						<span>{{moneyPercentage}}%</span>
+						<span>来自上月</span>
 					</p>
 				</div>
 			</el-col>
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
-					<p>商户入驻</p>
-					<p>0</p>
+					<p>店铺访问量</p>
+					<p>{{visitCount}}</p>
 					<p>
-						<span>5%</span>
-						<span>来自上周</span>
+						<span>{{visitPercentage}}%</span>
+						<span>来自上月</span>
 					</p>
 				</div>
 			</el-col>
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
-					<p>充值金额</p>
-					<p>0</p>
+					<p>成交量</p>
+					<p>{{sumTotalQuantity}}</p>
 					<p>
-						<span>5%</span>
-						<span>来自上周</span>
-					</p>
-				</div>
-			</el-col>
-			<el-col :span="4">
-				<div class="grid-content bg-purple Finance">
-					<p>公益收益</p>
-					<p>0</p>
-					<p>
-						<span>5%</span>
-						<span>来自上周</span>
-					</p>
-				</div>
-			</el-col>
-			<el-col :span="4">
-				<div class="grid-content bg-purple Finance">
-					<p>历史提现</p>
-					<p>0</p>
-					<p>
-						<span>5%</span>
+						<span>{{quantityPercentage}}%</span>
 						<span>来自上周</span>
 					</p>
 				</div>
@@ -73,11 +53,8 @@
 					</div>
 					<div style="float:right;margin-right: 2%;" class="statistics_title_right">
 						<span class="wrapper">
-							  <el-radio-group v-model="radio3" class="wrapper_btn" style="position: relative;top:-5px;">
-								<el-radio-button label="周报表" class="wrapper_btn_01"></el-radio-button>
-								<el-radio-button label="月报表"></el-radio-button>
-								<el-radio-button label="季度报表"></el-radio-button>
-								<el-radio-button label="年报表"></el-radio-button>
+							  <el-radio-group v-model="radio3" class="wrapper_btn" @change = "click" style="position: relative;top:-5px;">
+							  	<el-radio-button  v-for="item in ruleAll" :label="item.id">{{item.name}}</el-radio-button>
 							  </el-radio-group>
   						</span>
 					</div>
@@ -117,7 +94,7 @@
 			</el-col>
 			<el-col :span="16" style="float:right;margin-top: 0;">
 				<div class="grid-content bg-purple">
-					<div class="statistics_bottom_left_top">用户位置</div>
+					<div class="statistics_bottom_left_top">订单物流</div>
 					<div id="chartmap" style="width:100%; height:650px;"></div>
 				</div>
 			</el-col>
@@ -142,19 +119,179 @@
 <!--</script>-->
 <script>
     import echarts from 'echarts'
-//    import 'echarts/map/js/china.js';
+    import { state } from '../../vuex/state'
+	import {baseUrl} from '../../api/api';
     export default {
         data() {
             return {
                 radio3: '报表',
+                ruleAll:[{
+                	name:'周报表',
+                	id:1
+                },{
+                	name:'月报表',
+                	id:2
+                },{
+                	name:'季报表',
+                	id:3
+                },{
+                	name:'年报表',
+                	id:4
+                }],
                 chartColumn: null,
                 chartBar: null,
                 chartLine: null,
                 chartPie: null,
-                chartmap: null
+                chartmap: null,
+                visitPercentage:'',
+                visitCount:'',
+                sumTotalMoney:'',
+                moneyPercentage:'',
+                memberCount:'',
+                memberPercentage:'',
+                sumTotalQuantity:'',
+                quantityPercentage:'',
+                type:3,
+                moneyAll:{},
+                countAll:{},
+                avgPrice:{},
+                listAll:[],
+                parobj:[],
+                nameAll:[]
             }
         },
         methods: {
+        	click(val) {
+        		this.type = val
+        		this.getline()
+				console.log(val)
+			},
+        	getlist(){
+        		const _this = this
+				$.ajax({
+	              type:'POST',
+	              dataType:'json',
+	              url:baseUrl+"/api/admin/userCashFlow/data/analysis",
+	              // url:'http://192.168.0.107:8080/api/admin/userCashFlow/data/analysis',
+	              data:{},
+	              contentType:'application/json;charset=utf-8',
+	              success:function(data){
+	                const info = data.data
+	                _this.visitPercentage = info.visitPercentage*100
+	                _this.visitCount = info.visitCount
+	                _this.sumTotalMoney = info.sumTotalMoney
+	                _this.moneyPercentage = info.moneyPercentage*100
+	                _this.memberCount = info.memberCount
+	                _this.memberPercentage = info.memberPercentage*100
+	                _this.sumTotalQuantity = info.sumTotalQuantity
+	                _this.quantityPercentage = info.quantityPercentage*100
+	              }
+	          });
+        	},
+        	getline(){
+        		const _this = this
+        		const params = {
+        			type:this.type,
+        			storeId:state.storeId
+        		}
+        		console.log(params)
+        		_this.listAll = []
+        		$.ajax({
+	              type:'POST',
+	              dataType:'json',
+	              url:baseUrl+"/api/orderMall/selectByPayTimeGroup",
+	              // url:'http://192.168.0.107:8080/api/orderMall/selectByPayTimeGroup',
+	              data:JSON.stringify(params),
+	              contentType:'application/json;charset=utf-8',
+	              success:function(data){
+	                const info = data.data
+	                console.log(info)
+	                for(var i = 0;i<info.length;i++){
+	                	if(info[i].moneyAll){
+	                		const obj = {}
+	                		const arry = []
+		                	obj.name = '成交额总数'
+		                	obj.type = 'line'
+		                	obj.smooth = true
+		                	obj.data = arry
+		                	arry.push(info[i].moneyAll)
+	                		_this.moneyAll = obj
+	                		_this.listAll.push(_this.moneyAll)
+	                	}
+	                	if(info[i].countAll){
+	                		const obj = {}
+	                		const arry = []
+		                	obj.name = '成交商品总数'
+		                	obj.type = 'line'
+		                	obj.smooth = true
+		                	obj.data = arry
+		                	arry.push(info[i].countAll)
+	                		_this.countAll = obj
+	                		_this.listAll.push(_this.countAll)
+	                	}
+	                	if(info[i].avgPrice){
+	                		const obj = {}
+	                		const arry = []
+		                	obj.name = '成交额平均值'
+		                	obj.type = 'line'
+		                	obj.smooth = true
+		                	obj.data = arry
+		                	arry.push(info[i].avgPrice)
+	                		_this.avgPrice = obj
+	                		_this.listAll.push(_this.avgPrice)
+	                	}
+	                }
+	                // console.log(_this.moneyAll)
+	                // console.log(_this.countAll)
+	                console.log(_this.listAll)
+	                // _this.listAll.push()
+	              }
+	          });
+        	},
+        	getper(){
+        		const _this = this
+        		this.parobj = []
+				$.ajax({
+	              type:'GET',
+	              dataType:'json',
+	              url:baseUrl+"/api/orderMall/selectGroupByUserId",
+	              // url:'http://192.168.0.107:8080/api/orderMall/selectGroupByUserId',
+	              contentType:'application/json;charset=utf-8',
+	              success:function(data){
+	                const info = data.data
+	                console.log(info.orderMalls)
+	                for(var i = 0;i<info.orderMalls.length;i++){
+	                	var obj = {}
+	                	if(info.orderMalls[i].orderType === 3){
+	                		obj.name = '业务充值'
+	                	}else if(info.orderMalls[i].orderType === 4){
+	                		obj.name = '余额充值'
+	                	}else if(info.orderMalls[i].orderType === 5){
+	                		obj.name = '商品购买'
+	                	}else if(info.orderMalls[i].orderType === 6){
+	                		obj.name = '店铺身份购买'
+	                	}else if(info.orderMalls[i].orderType === 7){
+	                		obj.name = '平台身份购买 '
+	                	}else if(info.orderMalls[i].orderType === 8){
+	                		obj.name = '补货'
+	                	}else if(info.orderMalls[i].orderType === 9){
+	                		obj.name = '金豆充值'
+	                	}else if(info.orderMalls[i].orderType === 13){
+	                		obj.name = '便付劵充值'
+	                	}else{
+	                		obj.name = '业务充值'
+	                	}
+	                	obj.value = info.orderMalls[i].totalMoney
+	                	_this.parobj.push(obj)
+	                }
+	                for(var i = 0;i<_this.parobj.length;i++){
+	                	_this.nameAll.push(_this.parobj[i].name)
+	                }
+	                console.log(_this.nameAll)
+	                console.log(_this.parobj)
+	              }
+	          });
+        	},
             drawColumnChart() {
                 this.chartColumn = echarts.init(document.getElementById('chartColumn'));
                 this.chartColumn.setOption({
@@ -168,30 +305,30 @@
                     yAxis: {
                         type : 'value'
 					},
-                    series: [{
-                        name: '销量1',
-                        type: 'line',
-                        smooth:true,
-                        data: [0, 50, 36, 10, 10, 20]
-                    },{
-                        name: '销量2',
-                        type: 'line',
-                        smooth:true,
-                        data: [0, 20, 66, 30, 60, 10]
-                    },{
-                        name: '销量3',
-                        type: 'line',
-                        smooth:true,
-                        data: [0, 40, 40, 40, 20, 7]
-                    }]
+                    series:this.listAll
+                    // [{
+                    //     name: '销量1',
+                    //     type: 'line',
+                    //     smooth:true,
+                    //     data: [0, 50, 36, 10, 10, 20]
+                    // },{
+                    //     name: '销量2',
+                    //     type: 'line',
+                    //     smooth:true,
+                    //     data: [0, 20, 66, 30, 60, 10]
+                    // },{
+                    //     name: '销量3',
+                    //     type: 'line',
+                    //     smooth:true,
+                    //     data: [0, 40, 40, 40, 20, 7]
+                    // }]
                 });
             },
             drawPieChart() {
                 this.chartPie = echarts.init(document.getElementById('chartPie'));
                 this.chartPie.setOption({
                     title: {
-                        text: '收入分析图',
-                        subtext: '纯属虚构',
+                        text: '店铺收入支出分析图',
                         x: 'center'
                     },
                     tooltip: {
@@ -201,7 +338,8 @@
                     legend: {
                         orient: 'vertical',
                         left: 'left',
-                        data: ['商城', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                        data: this.nameAll
+                         // data: [ '邮件营销', '联盟广告', '视频广告', '搜索引擎']
                     },
                     series: [
                         {
@@ -209,13 +347,12 @@
                             type: 'pie',
                             radius: '55%',
                             center: ['50%', '60%'],
-                            data: [
-                                { value: 335, name: '商城' },
-                                { value: 310, name: '邮件营销' },
-                                { value: 234, name: '联盟广告' },
-                                { value: 135, name: '视频广告' },
-                                { value: 1548, name: '搜索引擎' }
-                            ],
+                            data:this.parobj,
+                             // this.parobj,
+                            // [
+                            //     { name: '商城', value: 335},
+                            //     { name: '邮件营销', value: 310}
+                            // ],
                             itemStyle: {
                                 emphasis: {
                                     shadowBlur: 10,
@@ -227,148 +364,18 @@
                     ]
                 });
             },
-//            drawMapChart() {
-//                this.chartPie = echarts.init(document.getElementById('chartmap'));
-//                this.chartPie.setOption({
-//                    title : {
-//                        text: '各微商销量',
-//                        subtext: '纯属虚构',
-//                        x:'center'
-//                    },
-//                    tooltip : {
-//                        trigger: 'item'
-//                    },
-//                    legend: {
-//                        orient: 'vertical',
-//                        x:'left',
-//                        data:['蜂蜜','巧克力','水果']
-//                    },
-//                    dataRange: {
-//                        min: 0,
-//                        max: 2500,
-//                        x: 'left',
-//                        y: 'bottom',
-//                        text:['高','低'],           // 文本，默认为数值文本
-//                        calculable : true
-//                    },
-//                    toolbox: {
-//                        show: true,
-//                        orient : 'vertical',
-//                        x: 'right',
-//                        y: 'center',
-//                        feature : {
-//                            mark : {show: true},
-//                            dataView : {show: true, readOnly: false},
-//                            restore : {show: true},
-//                            saveAsImage : {show: true}
-//                        }
-//                    },
-//                    series : [
-//                        {
-//                            name: '蜂蜜',
-//                            type: 'map',
-//                            mapType: 'china',
-//                            roam: false,
-//                            itemStyle:{
-//                                normal:{label:{show:true}},
-//                                emphasis:{label:{show:true}}
-//                            },
-//                            data:[
-//                                {name: '北京',value: Math.round(Math.random()*1000)},
-//                                {name: '天津',value: Math.round(Math.random()*1000)},
-//                                {name: '上海',value: Math.round(Math.random()*1000)},
-//                                {name: '重庆',value: Math.round(Math.random()*1000)},
-//                                {name: '河北',value: Math.round(Math.random()*1000)},
-//                                {name: '河南',value: Math.round(Math.random()*1000)},
-//                                {name: '云南',value: Math.round(Math.random()*1000)},
-//                                {name: '辽宁',value: Math.round(Math.random()*1000)},
-//                                {name: '黑龙江',value: Math.round(Math.random()*1000)},
-//                                {name: '湖南',value: Math.round(Math.random()*1000)},
-//                                {name: '安徽',value: Math.round(Math.random()*1000)},
-//                                {name: '山东',value: Math.round(Math.random()*1000)},
-//                                {name: '新疆',value: Math.round(Math.random()*1000)},
-//                                {name: '江苏',value: Math.round(Math.random()*1000)},
-//                                {name: '浙江',value: Math.round(Math.random()*1000)},
-//                                {name: '江西',value: Math.round(Math.random()*1000)},
-//                                {name: '湖北',value: Math.round(Math.random()*1000)},
-//                                {name: '广西',value: Math.round(Math.random()*1000)},
-//                                {name: '甘肃',value: Math.round(Math.random()*1000)},
-//                                {name: '山西',value: Math.round(Math.random()*1000)},
-//                                {name: '内蒙古',value: Math.round(Math.random()*1000)},
-//                                {name: '陕西',value: Math.round(Math.random()*1000)},
-//                                {name: '吉林',value: Math.round(Math.random()*1000)},
-//                                {name: '福建',value: Math.round(Math.random()*1000)},
-//                                {name: '贵州',value: Math.round(Math.random()*1000)},
-//                                {name: '广东',value: Math.round(Math.random()*1000)},
-//                                {name: '青海',value: Math.round(Math.random()*1000)},
-//                                {name: '西藏',value: Math.round(Math.random()*1000)},
-//                                {name: '四川',value: Math.round(Math.random()*1000)},
-//                                {name: '宁夏',value: Math.round(Math.random()*1000)},
-//                                {name: '海南',value: Math.round(Math.random()*1000)},
-//                                {name: '台湾',value: Math.round(Math.random()*1000)},
-//                                {name: '香港',value: Math.round(Math.random()*1000)},
-//                                {name: '澳门',value: Math.round(Math.random()*1000)}
-//                            ]
-//                        },
-//                        {
-//                            name: '巧克力',
-//                            type: 'map',
-//                            mapType: 'china',
-//                            itemStyle:{
-//                                normal:{label:{show:true}},
-//                                emphasis:{label:{show:true}}
-//                            },
-//                            data:[
-//                                {name: '北京',value: Math.round(Math.random()*1000)},
-//                                {name: '天津',value: Math.round(Math.random()*1000)},
-//                                {name: '上海',value: Math.round(Math.random()*1000)},
-//                                {name: '重庆',value: Math.round(Math.random()*1000)},
-//                                {name: '河北',value: Math.round(Math.random()*1000)},
-//                                {name: '安徽',value: Math.round(Math.random()*1000)},
-//                                {name: '新疆',value: Math.round(Math.random()*1000)},
-//                                {name: '浙江',value: Math.round(Math.random()*1000)},
-//                                {name: '江西',value: Math.round(Math.random()*1000)},
-//                                {name: '山西',value: Math.round(Math.random()*1000)},
-//                                {name: '内蒙古',value: Math.round(Math.random()*1000)},
-//                                {name: '吉林',value: Math.round(Math.random()*1000)},
-//                                {name: '福建',value: Math.round(Math.random()*1000)},
-//                                {name: '广东',value: Math.round(Math.random()*1000)},
-//                                {name: '西藏',value: Math.round(Math.random()*1000)},
-//                                {name: '四川',value: Math.round(Math.random()*1000)},
-//                                {name: '宁夏',value: Math.round(Math.random()*1000)},
-//                                {name: '香港',value: Math.round(Math.random()*1000)},
-//                                {name: '澳门',value: Math.round(Math.random()*1000)}
-//                            ]
-//                        },
-//                        {
-//                            name: '水果',
-//                            type: 'map',
-//                            mapType: 'china',
-//                            itemStyle:{
-//                                normal:{label:{show:true}},
-//                                emphasis:{label:{show:true}}
-//                            },
-//                            data:[
-//                                {name: '北京',value: Math.round(Math.random()*1000)},
-//                                {name: '天津',value: Math.round(Math.random()*1000)},
-//                                {name: '上海',value: Math.round(Math.random()*1000)},
-//                                {name: '广东',value: Math.round(Math.random()*1000)},
-//                                {name: '台湾',value: Math.round(Math.random()*1000)},
-//                                {name: '香港',value: Math.round(Math.random()*1000)},
-//                                {name: '澳门',value: Math.round(Math.random()*1000)}
-//                            ]
-//                        }
-//                    ]
-//                });
-//            },
             drawCharts() {
                 this.drawColumnChart()
                 this.drawPieChart()
-                this.drawMapChart()
+                // this.drawMapChart()
             },
         },
         mounted: function () {
+        	this.getlist()
+        	this.getline()
+        	this.getper()
             this.drawCharts()
+            this.drawPieChart()
         },
         updated: function () {
             this.drawCharts()

@@ -2,7 +2,9 @@
 	<el-row class="container">
 		<el-col :span="24" class="header">
 			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{sysName}}
+				<router-link :to="{ name: '主页'}">
+						<el-button style="font-size: 20px" type="primary">{{sysName}}</el-button>
+				</router-link>
 			</el-col>
 			<el-col :span="10">
 				<div class="tools" @click.prevent="collapse">
@@ -12,7 +14,6 @@
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner">
-					<!-- <img :src="this.sysUserAvatar" />  -->
 					你好:
 					{{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">

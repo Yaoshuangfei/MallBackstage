@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import { requestLogin ,loginID } from '../api/api';
+    import { requestLogin ,loginID ,baseUrl } from '../api/api';
     import { state } from '../vuex/state'
     //import NProgress from 'nprogress'
     export default {
@@ -31,7 +31,7 @@
                 imgsrc: '',
                 logining: false,
                 ruleForm2: {
-                    username: '18329199211',
+                    username: '',
                     password: '',
                     code:''
                 },
@@ -63,8 +63,8 @@
             },
             logi() {
                 const _this = this
-                // var url  = 'http://192.168.0.115:8080/api/core/partnersLogin';
-                var url  = 'http://121.43.178.109:8080/ser/api/core/partnersLogin';
+                var url  = 'http://192.168.0.107:8080/api/core/partnersLogin';
+                // var url  = baseUrl+'/api/core/partnersLogin';
                 var data = {userName: this.ruleForm2.username, password: this.ruleForm2.password};
                 $.ajax({
                     type:'POST',

@@ -177,8 +177,8 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/Replenishment', component: Replenishment, name: '补货专区' },
-            { path: '/add/:id', component: add, name: '补货' , hidden: true }
+            // { path: '/Replenishment', component: Replenishment, name: '补货专区' ,hidden: true},
+            { path: '/add', component: add, name: '补货专区' ,  }
         ]
     },
     {
