@@ -2,113 +2,125 @@
 	<section>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
+			<el-form :inline="true">
 				<el-form-item label="商品名称">
-				     <el-input v-model="filters.name"></el-input>     
+				     <el-input v-model="name"></el-input>     
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-					<el-button type="primary" v-on:click="getUsers">发布新品</el-button>
+					<el-button type="primary" v-on:click="getlist">查询</el-button>
+					<!-- <el-button type="primary" v-on:click="getUsers">发布新品</el-button> -->
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-col :span="24">
-			<el-col :span="4" :offset="4">商品详情</el-col>
-			<el-col :span="2">单价</el-col>
-			<el-col :span="2">数量</el-col>
-			<el-col :span="2">买家</el-col>
-			<el-col :span="2" style="margin-left: 20px">订单总价</el-col>
-			<el-col :span="2">状态</el-col>
+			<el-col :span="4" :offset="4">商品名称</el-col>
+			<el-col :span="2">价格</el-col>
+			<el-col :span="2" style="margin-left: 20px">库存</el-col>
+			<el-col :span="2" style="margin-left: 40px">操作</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
-				<el-col :span="6">订单编号：111111111111111111</el-col>
-				<el-col :span="4">下单时间：2017-08-09 12:20</el-col>
-				<el-col :span="4" :offset="10">
+				<el-col :span="6">订单编号：{{item.goodsNo}}</el-col>
+				<el-col :span="5">下单时间：{{item.createTime}}</el-col>
+				<!-- <el-col :span="3" :offset="10">
 					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
 						<el-button style="margin-top:-5px"  type="text">查看下级</el-button>
 					</router-link>
-				</el-col>
+				</el-col> -->
 			</el-col>
 			<el-col :span="24">
-				<el-col :span="6" class="img_shangp">
+				<el-col :span="3" >
+					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture">
 				</el-col>
-				<el-col :span="6" :offset="1" class="describe_fiast">
-				你说神农级手机爱好的撒等哈收到哦啊是的哈是的哈
+				<el-col :span="4" :offset="3" class="describe">
+				{{item.name}}
 				</el-col>
-				<el-col :offset="1" :span="3" class="describe">321</el-col>
-				<el-col :span="2" class="describe">321</el-col>
-				<el-col :span="3" class="describe">18767478564</el-col>
-				<el-col :span="2" :offset="1"  class="describe">321</el-col>
-				<el-col :span="1" class="describe">321</el-col>
+				<el-col :offset="1" :span="3" class="describe">{{item.price}}</el-col>
+				<el-col :span="2" class="describe">{{item.storage}}</el-col>
+				<el-col :span="7" class="describe" :offset="1">
+					<el-button type="text" @click="seeBtn(item.id)">查看</el-button>
+					<el-button type="text" @click="editBtn(item.id)">编辑</el-button>
+					<el-button type="text" @click="topBtn(item.id)">上架</el-button>
+					<el-button type="text" @click="deleteBtn(item.id)">删除</el-button>
+				</el-col>
 			</el-col>
 		</el-col>
-		<!-- <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="商品名称">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="userName" label="下单时间">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="价格">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="库存">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope"> -->
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">下架</el-button>
-				</template>
-			</el-table-column>
-		</el-table> -->
 
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 
-		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
+		<!--查看界面-->
+		<el-dialog title="查看" v-model="seeFormVisible" :close-on-click-modal="false" >
+			<el-form :model="orderDetails" label-width="160px">
 				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
+					<div>{{orderDetails.goodsNo }}</div>
 					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
 				</el-form-item>
 				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
+					<div>{{orderDetails.name}}</div>
 				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
+				<el-form-item label="宝贝属性">
+					<div v-for="item in orderDetails.goodsData"><span>{{item.key}}</span> <span style="margin-left: 50px">{{item.value}}</span></div>
 				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
+				<el-form-item label="计量单位">
+					<div>{{orderDetails.unit }}</div>
 				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
+				<el-form-item label="规格报价">
+					<div>{{orderDetails.price }}</div>
 				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
+				<el-form-item label="重量">
+					<div>{{orderDetails.weight }}</div>
 				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
+				<el-form-item label="商品描述">
+					<div>{{orderDetails.goodsDesc }}</div>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
+				<el-button type="primary" @click.native="seeFormVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
+		<!--编辑 界面-->
+		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" >
+			<el-form :model="seeForm" label-width="160px">
+				<el-form-item label="订单号">
+					<el-input v-model="seeForm.goodsNo" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="商品名称">
+					<!-- <div>{{seeForm.name}}</div> -->
+					<el-input v-model="seeForm.name" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="宝贝属性">
+					<el-col :span="24" v-for="item in seeForm.goodsData">
+						<el-col :span="6"><span>{{item.key}}</span></el-col>
+						<el-col :span="14"><el-input v-model="item.value" type="text" auto-complete="off"></el-input> </el-col>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="计量单位">
+					<!-- <div>{{seeForm.unit }}</div> -->
+					<el-input v-model="seeForm.unit" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="规格报价">
+					<!-- <div>{{seeForm.price }}</div> -->
+					<el-input v-model="seeForm.price" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="重量">
+					<!-- <div>{{seeForm.weight }}</div> -->
+					<el-input v-model="seeForm.weight" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="商品描述">
+					<!-- <div>{{seeForm.goodsDesc }}</div> -->
+					<el-input v-model="seeForm.goodsDesc" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-col :span='24'></el-col>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click="editSubmit">保存</el-button>
 				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
@@ -118,258 +130,190 @@
 <script>
 	import { state } from '../../vuex/state'
 	import util from '../../common/js/util'
-	import {baseUrl , editUser, addUser } from '../../api/api';
+	import {baseUrl} from '../../api/api';
 
 	export default {
 		data() {
 			return {
-				radio: '0',
-				checked: true,
-				value:'',
-				value1:'',
-				value2:'',
-				selectSubjectStatus: [
-				{
-					value:'0',
-					label:'所有订单'
-				},{
-					value:'1',
-					label:'待付款'
-				},{
-					value:'2',
-					label:'待发货'
-				},{
-					value:'3',
-					label:'已发货'
-				},{
-					value:'4',
-					label:'待评价'
-				},{
-					value:'5',
-					label:'交易完成'
-				},{
-					value:'6',
-					label:'退货'
-				}],
-				options: [{
-		          value: '1',
-		          label: '订单编号'
-		        }, {
-		          value: '2',
-		          label: '快递单号'
-		        }],
-				filters: {
-					name: '',
-					status:'',
-					type:''
-				},
-				users: [],
-				total: 100,
+				seeForm:{},
+				selectSubjectStatus: [],
+				name:'',
+				total: 0,
 				page: 1,
-				listLoading: false,
-				sels: [],//列表选中列
-
-				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//编辑界面数据
-				editForm: {
-					id: 0,
-					username: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				},
-
-				addFormVisible: false,//新增界面是否显示
-				addLoading: false,
-				//新增界面数据
-				orderDetails: {
-				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				seeFormVisible: false,//编辑界面是否显示
+				editFormVisible: false,
+				orderDetails: {}
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
 			getlist(){
 				const _this = this
-				_this.table = []
+				_this.selectSubjectStatus = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:this.page,
+					size:10,
+					name:this.name,
+					saleStatus:2,//状态
+					storeId:state.storeId
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goods/selectListOfSeller",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(info)
+                    	_this.total = info.total
+                    	_this.selectSubjectStatus = info.list
+                    	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+		                	_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
+		                	if(_this.selectSubjectStatus[i].saleStatus === 1) {
+		                		_this.selectSubjectStatus[i].saleStatus = '销售中'
+		                	}else if(_this.selectSubjectStatus[i].saleStatus === 2) {
+		                		_this.selectSubjectStatus[i].saleStatus = '已下架'
+		                	}else{
+		                		_this.selectSubjectStatus[i].saleStatus = '已删除'
+		                	}
+		                }
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
+				this.getlist();
 			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
+			// 查看
+			seeBtn(id) {
+				const _this = this
+				this.seeFormVisible = true;
+				const params = {
+					id:id,
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goods/selectPC",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(data)
+                    	_this.orderDetails = info
+                    	_this.orderDetails.goodsData = JSON.parse(_this.orderDetails.goodsData)
+                    	console.log(_this.orderDetails.goodsData)
+                    }
+                });
 			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
+			//编辑
+			editBtn(id) {
+				this.editFormVisible = true
+				const _this = this
+				const params = {
+					id:id,
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goods/selectPC",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(data)
+                    	_this.seeForm = info
+                    	_this.seeForm.goodsData = JSON.parse(_this.seeForm.goodsData)
+                    	console.log(_this.seeForm.goodsData)
+                    }
+                });
+			},
+			editSubmit() {
+				const _this = this
+				_this.seeForm.goodsData = JSON.stringify(_this.seeForm.goodsData)
+				console.log(_this.seeForm.goodsData)
+				// $.ajax({
+    //                 type:'POST',
+    //                 dataType:'json',
+    //                 url:baseUrl+"/api/goods/update",
+    //                 data:JSON.stringify(_this.seeForm),
+    //                 contentType:'application/json;charset=utf-8',
+    //                 error: function (XMLHttpRequest, textStatus, errorThrown) {},
+    //                 success:function(data){
+    //                 	const info = data.data
+    //                 	console.log(data)
+    //                 }
+    //             });
+			},
+			// 下架
+			topBtn(id) {
+				const _this = this
+				const params = {
+					id:id,
+					saleStatus:1
+				}
+				console.log(params)
+				this.$confirm('确认上架该商品吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/goods/updateStatus",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	const info = data.data
+	                    	_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+							_this.getlist()
+	                    }
+	                });
 				}).catch(() => {
 
 				});
 			},
-			//显示编辑界面
-			seeBtn: function (index, row) {
-				this.editFormVisible = true;
-				this.orderDetails = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
+			deleteBtn(id) {
+				const _this = this
+				const params = {
+					id:id,
+				}
+				console.log(params)
+				this.$confirm('确认删除该商品吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/goods/delete",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	console.log(data)
+	                    	_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+							_this.getlist()
+	                    }
+	                	});
 				}).catch(() => {
 
 				});
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

@@ -2,19 +2,10 @@
   <section>
   	<el-col :span="24" style="padding-bottom: 20px;">基本信息</el-col>
     <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
-      <el-form-item label="店铺名称">
+      <el-form-item label="商品名称">
         <el-input v-model="filters.name" style="width:400px"></el-input>
       </el-form-item>
-      <el-form-item label="大区经理价格">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="总监价格">
-        <el-input v-model="filters.name"  style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="联创价格">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="总代价格">
+      <el-form-item label="价格">
         <el-input v-model="filters.name" style="width:400px"></el-input>
       </el-form-item>
       <el-col :span="24" style="padding-bottom: 20px;">商品图片</el-col>

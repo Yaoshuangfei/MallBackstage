@@ -154,20 +154,20 @@
 			<!-- 	<el-form-item v-for="item in ruleAll" :label="item.name">
 					<el-input :v-model="ruleIdFrom.Name" type="text" auto-complete="off"></el-input>
 				</el-form-item> -->
-				<el-form-item :label="arryname[0]">
-					<el-input v-if="ruleAll[0]" v-model="ruleIdFrom.name0" type="text" style="width: 50px"></el-input>%
+				<el-form-item :label="arryname[0]"  v-if="ruleAll[0]">
+					<el-input v-model="ruleIdFrom.name0" type="text" style="width: 150px"></el-input>%
 				</el-form-item>
-				<el-form-item :label="arryname[1]">
-					<el-input v-if="arryname[1]" v-model="ruleIdFrom.name1" type="text" style="width: 50px"></el-input>%
+				<el-form-item :label="arryname[1]" v-if="ruleAll[1]">
+					<el-input  v-model="ruleIdFrom.name1" type="text" style="width: 150px"></el-input>%
 				</el-form-item>
-				<el-form-item :label="arryname[2]">
-					<el-input v-if="arryname[2]" v-model="ruleIdFrom.name2" type="text" style="width: 50px"></el-input>%
+				<el-form-item :label="arryname[2]" v-if="ruleAll[2]" >
+					<el-input v-model="ruleIdFrom.name2" type="text" style="width: 150px"></el-input>%
 				</el-form-item>
-				<el-form-item :label="arryname[3]">
-					<el-input v-if="arryname[3]" v-model="ruleIdFrom.name3" type="text" style="width: 50px"></el-input>%
+				<el-form-item :label="arryname[3]" v-if="ruleAll[3]">
+					<el-input  v-model="ruleIdFrom.name3" type="text" style="width: 150px"></el-input>%
 				</el-form-item>
-				<el-form-item :label="arryname[4]">
-					<el-input v-if="arryname[4]" v-model="ruleIdFrom.name4" type="text" style="width: 50px"></el-input>%
+				<el-form-item :label="arryname[4]" v-if="ruleAll[4]">
+					<el-input  v-model="ruleIdFrom.name4" type="text" style="width: 150px"></el-input>%
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -211,11 +211,11 @@
 				roleId:'',
 				invitedRoleId:'',
 				ruleIdFrom:{
-					name0:'',
-					name1:'',
-					name2:'',
-					name3:'',
-					name4:''
+					name0:'0',
+					name1:'0',
+					name2:'0',
+					name3:'0',
+					name4:'0'
 				},
 				options: [{
 		          value: '0',
@@ -250,10 +250,12 @@
 		methods: {
 			//获取邀请人身份
 			click(val) {
+				console.log(val)
 				this.getSubCommission() 
 			},
 			//获取被邀请人身份
 			clickB(val) {
+				console.log(val)
 				this.getSubCommission()
 			},
 			//获取身份分佣表
@@ -276,7 +278,7 @@
 					roleId:this.roleId,
 					invitedRoleId:this.invitedRoleId
 				}
-				// console.log(params)
+				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -285,25 +287,29 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	const info = data.data                    	
-                    	const arrys = info
-                    	// console.log(data)
-                    	for(var i = 0;i<arrys.length;i++){
-                			const arrynew = JSON.parse(arrys[i].priceData)
-                    		if(_this.ruleAll[0].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry1 = arrynew
-                    		}else if(_this.ruleAll[1].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry2 = arrynew
-                    		}else if(_this.ruleAll[2].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry3 = arrynew
-                    		}else if(_this.ruleAll[3].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry4 = arrynew
-                    		}else if(_this.ruleAll[4].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry5 = arrynew
-                    		}	
+                    	const info = data.data
+                    	console.log(info)
+                    	for(var i = 0;i<info.length;i++){
+                    		if(info[i].priceData !== ''){
+                    			const arrynew = JSON.parse(info[i].priceData)
+	                			console.log(arrynew)
+	                    		if(_this.ruleAll[0].id ===info[i].enjoyRoleId) {
+	                    			_this.arry1 = arrynew
+	                    		}else if(_this.ruleAll[1].id ===info[i].enjoyRoleId) {
+	                    			_this.arry2 = arrynew
+	                    		}else if(_this.ruleAll[2].id ===info[i].enjoyRoleId) {
+	                    			_this.arry3 = arrynew
+	                    		}else if(_this.ruleAll[3].id ===info[i].enjoyRoleId) {
+	                    			_this.arry4 = arrynew
+	                    		}else if(_this.ruleAll[4].id ===info[i].enjoyRoleId) {
+	                    			_this.arry5 = arrynew
+	                    		}
+                    		}
+                				
                     	}
                     	_this.arryuser = []
-                    	for(var i = 0;i<_this.arry4.length;i++){
+                    	console.log(_this.arry1)
+                    	for(var i = 0;i<_this.arry1.length;i++){
                     		const obj = {}
                     		if(i === 0){
                     			obj.name = '自己拿'
@@ -315,13 +321,14 @@
                     			_this.arryuser.push(obj)
                     		}
                     	}
+                    	console.log(_this.arryuser)
                     }
                 });
 			},
 			getlist(){
 				const _this = this
 				const params = {
-					id:state.id
+					id:state.storeId
 				}
 				// console.log(params)
 				$.ajax({
@@ -379,7 +386,7 @@
 			upgradetSubmit(){
 				const _this = this
 				const params = {
-					id:state.id,
+					id:state.storeId,
 					ruleIsUpgrade:1,
 					invitedMinNum:parseInt(_this.upgrade.invitedMinNum)
 				}
@@ -531,6 +538,7 @@
 				this.eidt_size = val-1
 				console.log(val)
 				console.log(row)
+				console.log(this.arryuser)
 				this.isindex = index
 				console.log(this.isindex)
 				this.edit_arryinit = row
@@ -602,7 +610,7 @@
 			selectRuleDist() {
 				const _this = this
 				const params = {
-					storeId:state.id
+					storeId:state.storeId
 				}
 				// console.log(params)  this.initArry 判断当前值 可以做存储  orderInformation 页面展示数据
 				$.ajax({
@@ -615,8 +623,9 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	_this.totalArray = info
                     	console.log(info)
+                    	_this.totalArray = info
+                    	console.log(data)
                     	console.log(_this.ruleAll)
                     	_this.roleId = info[0].roleId.toString()
                     	_this.invitedRoleId = info[0].invitedRoleId.toString()
@@ -624,19 +633,11 @@
                     	const arrys = info[0].priceProps
                     	console.log(arrys)
                     	for(var i = 0;i<arrys.length;i++){
-                			const arrynew = JSON.parse(arrys[i].priceData)
-                    		if(_this.ruleAll[0].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry1 = arrynew
-                    		}else if(_this.ruleAll[1].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry2 = arrynew
-                    		}else if(_this.ruleAll[2].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry3 = arrynew
-                    		}else if(_this.ruleAll[3].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry4 = arrynew
-                    		}else if(_this.ruleAll[4].id ===arrys[i].enjoyRoleId) {
-                    			_this.arry5 = arrynew
-                    		}	
+                    		console.log(arrys[i].priceData)
                     	}
+                		const arrynew = JSON.parse(arrys[0].priceData)
+                		console.log(arrynew)
+                    	_this.arry1 = arrynew
                     	for(var i = 0;i<_this.arry1.length;i++){
                     		const obj = {}
                     		if(i === 0){
@@ -647,45 +648,6 @@
                     			_this.arryuser.push(obj)
                     		}
                     	}
-                    	console.log(_this.arry4)
-                    	console.log(_this.arryuser)
-                    	// _this.arryuser
-                    	// for(var i =0;i<arrys.length;i++){
-                    	// 	pricePropsArry.push(JSON.parse(arrys[i].priceData))
-                    	// }
-
-
-                    	// for(var i =0;i<pricePropsArry.length;i++){
-                    	// 	const obj = {}
-	                    // 	for(var x = 0;x<pricePropsArry[i].length;x++){
-	                    // 		if(x === 0){
-	                    // 			obj.userName = pricePropsArry[i][x].value+'%'
-	                    // 		}else if(x === 1){
-	                    // 			obj.amountPaid = pricePropsArry[i][x].value+'%'
-	                    // 		}else if(x === 2){
-	                    // 			obj.orderTotal = pricePropsArry[i][x].value+'%'
-	                    // 		}else if(x === 3){
-	                    // 			obj.orderStatus = pricePropsArry[i][x].value+'%'
-	                    // 		}else if(x === 4){
-	                    // 			obj.paymentMethod = pricePropsArry[i][x].value+'%'
-	                    // 		}
-	                    // 	}
-	                    // 	_this.orderInformation.push(obj)
-                    	// }
-
-
-                    	// console.log(_this.orderInformation)
-                    	// 倒序输出
-                    	// _this.orderInformation = _this.orderInformation.reverse()
-
-                    	// for(var i = 0;i<_this.orderInformation.length;i++){
-                    	// 		if(i === 0){
-                    	// 			_this.orderInformation[i].name = '自己拿'
-                    	// 		}else{
-                    	// 			_this.orderInformation[i].name = i+'级'
-                    	// 		}
-                    	// }
-                    	
                     }
                 });
 			},

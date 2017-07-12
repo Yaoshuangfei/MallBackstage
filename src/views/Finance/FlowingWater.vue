@@ -3,9 +3,6 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
-				</el-form-item> -->
 				<el-form-item label="状态">
 					<el-select v-model="filters.status" clearable>
 				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
@@ -22,37 +19,34 @@
 				    <el-input v-model="filters.name"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-					<el-button type="primary" v-on:click="getUsers">导出</el-button>
-					<el-button type="primary" v-on:click="getUsers">分析</el-button>
+					<el-button type="primary" @click="getlist">查询</el-button>
+					<el-button type="primary">导出</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="订单号">
+			<el-table-column prop="tradeNo" label="订单号">
 			</el-table-column>
-			<el-table-column prop="courierNumber" label="用户名">
+			<el-table-column prop="userName" label="用户名">
 			</el-table-column>
-			<el-table-column prop="userName" label="实付金额">
+			<el-table-column prop="mobile" label="手机号">
 			</el-table-column>
-			<el-table-column prop="amountPaid" label="订单总价">
+			<el-table-column prop="quota" label="金额">
 			</el-table-column>
-			<el-table-column prop="orderTotal" label="订单状态">
+			<el-table-column prop="payType" :formatter='formatterType' label="收入方式">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="支付方式">
+			<el-table-column prop="centType" :formatter='formatter' label="来源">
 			</el-table-column>
-			<el-table-column prop="paymentMethod" label="创建订单时间">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="手续费">
+			<el-table-column prop="createTime" :formatter='formatterTime' label="交易时间">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
 					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
 					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
 					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+					<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button> -->
 				</template>
 			</el-table-column>
 		</el-table>
@@ -95,6 +89,9 @@
 				<el-form-item label="发货时间">
 					<div>{{orderDetails.deliveryTime}}</div>
 				</el-form-item>
+				<el-form-item label="分佣详情">
+					<div>{{orderDetails.deliveryTime}}</div>
+				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
@@ -121,29 +118,32 @@
 				selectSubjectStatus: [
 				{
 					value:'0',
-					label:'全部'
+					label:'微信支付'
 				},{
 					value:'1',
-					label:'待付款'
+					label:'支付宝支付'
 				},{
 					value:'2',
-					label:'待发货'
+					label:'银联支付'
 				},{
 					value:'3',
-					label:'已发货'
+					label:'余额支付'
 				},{
 					value:'4',
-					label:'待评价'
+					label:'余额金豆混合支付'
 				},{
 					value:'5',
-					label:'退货'
+					label:'金豆支付'
 				}],
 				options: [{
 		          value: '1',
 		          label: '订单编号'
 		        }, {
 		          value: '2',
-		          label: '快递单号'
+		          label: '用户名'
+		        }, {
+		          value: '3',
+		          label: '电话'
 		        }],
 				filters: {
 					name: '',
@@ -151,7 +151,7 @@
 					type:''
 				},
 				users: [],
-				total: 100,
+				total: 1,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -178,18 +178,7 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				orderInformation:[]
 			}
 		},
 		methods: {
@@ -201,162 +190,84 @@
 				const _this = this
 				_this.table = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:_this.page,
+					pageSize:10,
+					payType:this.filters.status,
+					tradeNo:'',
+					userName:'',
+					mobile:'',
+					sort:4
+				}
+				if(this.filters.type === '1'){
+					params.tradeNo = this.filters.name
+				}else if(this.filters.type === '2'){
+					params.userName = this.filters.name
+				}else if(this.filters.type === '3'){
+					params.mobile = this.filters.name
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    // url:"http://192.168.0.115:8080/api/store/userCashFlow/selectFlowList",
+                    url:baseUrl+"/api/store/userCashFlow/selectFlowList",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	_this.orderInformation = info.list
+                    	_this.total = info.total
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
+				this.getlist();
 			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
+			formatterTime(row, column){
+				let curTime = row.createTime;
+                curTime = new Date(curTime).toLocaleString()
+                return curTime
 			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
+			//支付方式
+			formatterType(row, column) {
+				let type = ''
+				if(row.payType === '0'){
+					type = '微信支付'
+				}else if(row.payType === '1'){
+					type = '支付宝支付'
+				}else if(row.payType === '2'){
+					type = '银联支付'
+				}else if(row.payType === '3'){
+					type = '余额支付'
+				}else if(row.payType === '4'){
+					type = '余额金豆混合支付'
+				}else if(row.payType === '5'){
+					type = '金豆支付'
+				}
+				return type
 			},
-			//显示编辑界面
-			seeBtn: function (index, row) {
-				this.editFormVisible = true;
-				this.orderDetails = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
+			formatter(row, column){
+				let type = ''
+				if(row.centType === 1){
+					type = '购买平台身份'
+				}else if(row.centType === 2){
+					type = '购买店铺身份'
+				}else if(row.centType === 3){
+					type = '购买产品'
+				}else if(row.centType === 4){
+					type = '补货 '
+				}else if(row.centType === 5){
+					type = '业务充值'
+				}else if(row.centType === 6){
+					type = '扫码支付'
+				}
+				return type
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

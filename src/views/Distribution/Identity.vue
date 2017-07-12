@@ -221,7 +221,7 @@
 			getlist(){
 				const _this = this
 				const params = {
-					storeId:state.id,
+					storeId:state.storeId,
 					introType:1
 				}
 				console.log(params)
@@ -256,7 +256,7 @@
 			addSubmit: function () {
 				const _this = this
 				const params = {
-					storeId:state.id,
+					storeId:state.storeId,
 					level:this.identity.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,

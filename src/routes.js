@@ -30,7 +30,7 @@ import details from './views/order/details.vue'
 // 物流管理 logistics
 import DeliverGoods from './views/logistics/DeliverGoods.vue'
 import Freight from './views/logistics/Freight.vue'
-import Address from './views/logistics/Address.vue'
+// import Address from './views/logistics/Address.vue'
 
 /*商品管理 commodity */
 import GoodShipped from './views/commodity/GoodShipped.vue'
@@ -133,8 +133,8 @@ let routes = [
         iconCls: 'fa el-icon-picture',
         children: [
             { path: '/DeliverGoods', component: DeliverGoods, name: '发货' },
-            { path: '/Freight', component: Freight, name: '运费模板' },
-            { path: '/Address', component: Address, name: '地址管理' }
+            { path: '/Freight', component: Freight, name: '运费模板' }
+            // { path: '/Address', component: Address, name: '地址管理' }
         ]
     },
      {

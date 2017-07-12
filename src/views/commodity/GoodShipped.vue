@@ -6,21 +6,21 @@
 					<el-tree :data="data" @node-click="handleNodeClick" :highlight-current="true"></el-tree>
 				</el-col>
 				<el-col :span="6" class="Choice">
-				
+					<el-tree :data="data1" @node-click="handleNodeClick1" :highlight-current="true"></el-tree>
 				</el-col>
 				<el-col :span="6" class="Choice">
-				
+					<el-tree :data="data2" @node-click="handleNodeClick2" :highlight-current="true"></el-tree>
 				</el-col>
 				<el-col :span="6" class="Choice">
-				
+					<el-tree :data="data3"  :highlight-current="true"></el-tree>
 				</el-col>
 			</el-col>
 			<el-col :span="24" class="footer_choice">
-				您当前选择的商品是：{{commodity}}
+				您当前选择的商品类别是：{{commodity}}
 				<span  style="display: none;">{{id}}</span>
 			</el-col>
 			<el-col :span="4" :offset="10">
-				<el-button type="primary" style="width: 250px;margin-top: 20px" :disabled="this.sels.length===0"  v-on:click="NextStep">下一步</el-button>
+				<el-button type="primary" style="width: 250px;margin-top: 20px" :disabled="keynext"  v-on:click="NextStep">下一步</el-button>
 			</el-col>
 		</el-col>
 		<!--商品基本信息-->
@@ -82,9 +82,9 @@
 							<el-col :span="2"  style=""><el-input type="text" v-model="MeasurementUnit"></el-input></el-col>
 						</el-col>
 						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;" v-for="item in Specifications">
-							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">{{item.name}}</el-col>
+							<el-col :span="2" style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">{{item.name}}</el-col>
 							<el-col :span="20"  style="margin-left: 50px">
-								<el-checkbox-group v-model="item.checrArry" @change="handleCheckedCitiesChange">
+								<el-checkbox-group v-model="item.checrArry" @change="handleCheckedCitiesChange(item)">
 								    <el-col :span="5" v-for="city in item.values">
 								    	<el-checkbox :label="city" :key="city">{{city}}</el-checkbox>
 								    </el-col>
@@ -93,31 +93,41 @@
 						</el-col>
 						<el-col :span="24" style="line-height: 30px;border: 1px solid #ddd;">
 							<el-col :span="2"  style="height: 150px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">规格报价：</el-col>
-							<el-col :span="14"  style="">
+							<el-col :span="20"  style="">
 								 <el-table :data="tableData" style="width: 100%">
-							      <el-table-column prop="name" label="规格" width="180">
+							      <el-table-column prop="specData" label="规格" width="180">
 							      	<template scope="scope">
-							      		{{scope.row.name}}
+							      		{{scope.row.specData}}
 									</template>
 							      </el-table-column>
-							      <el-table-column prop="UnitPrice" label="单价(元)" width="180">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.UnitPrice" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							      <el-table-column prop="jyUnitPrice" label="建议零售价(元)" width="180">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.jyUnitPrice" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							      <el-table-column prop="on" label="单品货号" width="190">
+							      <el-table-column prop="goodsId" label="商品id" width="190">
 								      <template scope="scope">
-								      		<el-input v-model="scope.row.on" type="text"></el-input>
+								      		<el-input v-model="scope.row.goodsId" type="text"></el-input>
 										</template>
 							      </el-table-column>
-							      <el-table-column prop="imazamox" label="金豆抵扣" width="200">
+							      <el-table-column prop="costPrice" label="成本价(元)" width="180">
 							      	<template scope="scope">
-							      		<el-input v-model="scope.row.imazamox" type="text"></el-input>
+							      		<el-input v-model="scope.row.costPrice" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="specPrice" label="建议零售价(元)" width="180">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.specPrice" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="storage" label="商品库存" width="180">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.storage" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="deductibleImazamox" label="金豆抵扣" width="200">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.deductibleImazamox" type="text"></el-input>
+									</template>
+							      </el-table-column>
+							      <el-table-column prop="specNo" label="规格商家编码" width="200">
+							      	<template scope="scope">
+							      		<el-input v-model="scope.row.specNo" type="text"></el-input>
 									</template>
 							      </el-table-column>
 							    </el-table>
@@ -183,6 +193,8 @@
 	export default {
 		data() {
 			return {
+				keynext:true,
+				selectListNameId:'',
 				url:'',
                 sels:[],
                 paramsData:[],
@@ -204,6 +216,9 @@
 				next: true,
 				details: false,
 				data: [],
+				data1:[],
+				data2:[],
+				data3:[],
 				options: [{
 		          value: '1',
 		          label: '订单编号'
@@ -245,7 +260,13 @@
 				orderDetails: {
 				},
 				formData: new FormData(),
-                fileImg: ''
+                fileImg: '',
+                Specifications1:[],
+                Specifications2:[],
+                Specifications3:[],
+
+                specificatwo:[],
+                specificatwo1:[]
 			}
 		},
 		computed: {
@@ -255,17 +276,91 @@
             }
         },
 		methods: {
-			handleCheckedCitiesChange(value) {
-				this.tableData = []
-				for(var i = 0;i<value.length;i++){
-					const obj = {}
-					obj.name = value[i]
-					obj.UnitPrice = ''
-					obj.jyUnitPrice = ''
-					obj.on = ''
-					obj.imazamox = ''
-					this.tableData.push(obj)
+			handleCheckedCitiesChange(row) {
+				const arry = []
+				// console.log(row.name)
+				// console.log(row.checrArry)
+				// console.log(this.Specifications)
+				for(var i = 0;i<this.Specifications.length;i++){
+					if(this.Specifications[i].name === row.name){
+						if(i === 0){
+							this.Specifications1 = []
+							for(var x = 0;x<row.checrArry.length;x++){
+								const objs = {}
+								objs.key = row.name
+								objs.value = row.checrArry[x]
+								this.Specifications1.push(objs)
+							}
+							
+						}else if(i ===1){
+							this.Specifications2 = []
+							for(var x = 0;x<row.checrArry.length;x++){
+								const objs = {}
+								objs.key = row.name
+								objs.value = row.checrArry[x]
+								this.Specifications2.push(objs)
+							}
+							
+						}else if(i === 2){
+							this.Specifications3 = row.checrArry
+						}
+						
+					}
+					
 				}
+				if(this.Specifications.length === 1){
+					console.log(this.Specifications1)
+					this.tableData = []
+					for(var i = 0;i<this.Specifications1.length;i++){
+						const obj = {}
+						obj.specData = this.Specifications1[i].value
+						obj.goodsId = ''
+						obj.specPrice = ''
+						obj.costPrice = ''
+						obj.storage = '',
+						obj.deductibleImazamox = '',
+						obj.specNo = '',
+						obj.specPicture = '',
+						obj.id = ''
+						this.tableData.push(obj)
+					}
+				}else if(this.Specifications.length === 2){//specificatwo specificatwo1
+					this.specificatwo1 = []
+					this.specificatwo = []
+					for(var i = 0;i<this.Specifications1.length;i++){
+						for(var x = 0;x<this.Specifications2.length;x++){
+							this.specificatwo.push(this.Specifications1[i].value+'/'+this.Specifications2[x].value)
+							
+							const arry = []
+							arry.push(this.Specifications1[i],this.Specifications2[x])
+							this.specificatwo1.push(arry)
+							
+						}
+					}
+					this.tableData = []
+					for(var i = 0;i<this.specificatwo.length;i++){
+						const obj = {}
+						obj.specData = this.specificatwo[i]
+						obj.goodsId = ''
+						obj.specPrice = ''
+						obj.costPrice = ''
+						obj.storage = '',
+						obj.deductibleImazamox = '',
+						obj.specNo = '',
+						obj.specPicture = '',
+						obj.id = ''
+						this.tableData.push(obj)
+					}
+						console.log(this.specificatwo)
+						console.log(this.specificatwo1)
+					// console.log(this.Specifications1)
+					// console.log(this.Specifications2)
+				}
+				
+			},
+			clickIndex(index){
+				console.log(index)
+				console.log(index)
 			},
 			//		    清空上传
             clear(){
@@ -314,24 +409,14 @@
                         }, error => _this.$emit('complete', 500, error.message))
                 // });
             },
-			handleNodeClick(data) {
-                this.sels=[];
-	        	this.commodity =  data.label;
-	        	this.id =  data.id;
-	        	this.sels.push(data);
-	        	// this.sels.push(this.id);
-	        	console.log(this.sels)
-	     	},
 	     	NextStep() {
 	     		this.$confirm('类目一旦选定，编辑商品的时候类目无法更改，请确认清楚再进入编辑?', '提示', {
 					type: 'warning'
 				}).then(() => {
-
                     const _this = this;
                     const url   = baseUrl+"/api/goodsClass/selectOne";
                     const params = {
                         id:this.sels[0].id
-                        // id:this.id
                     };
                     const data =JSON.stringify(params);
                     $.ajax({
@@ -342,10 +427,15 @@
                         contentType:'application/json;charset=utf-8',
                         error: function (XMLHttpRequest, textStatus, errorThrown) {},
                         success:function(data){
+                        	console.log(data)
                         	const info = data.data
-                        	_this.paramsData = eval('(' + info.paramData + ')')
+                        	console.log(info.itemData)
+                        	if(info.paramData !== ''){
+                        		_this.paramsData = eval('(' + info.paramData + ')')
+                        	}else if(info.itemData !== ''){
+                        		_this.itemData = eval('(' + info.itemData + ')')
+                        	}
                         	_this.itemData = eval('(' + info.itemData + ')')
-                        	console.log(_this.paramsData)
                         	console.log(_this.itemData)
                         	_this.Specifications = []
                         	for(var i = 0; i<_this.itemData.length;i++){
@@ -361,13 +451,6 @@
                         		_this.Specifications.push(obj)
                         		console.log(_this.Specifications)
                         	}
-                            // if(!data.success){
-                            //     alert(data.msg)
-                            // }else{
-                            //     var _length =data.data.paramData;
-                            //     var _name =eval('(' + _length + ')');
-                            //     console.log(_name);
-                            // }
         					_this.next = false;
 							_this.details = true;
                         }
@@ -376,6 +459,36 @@
 
 				});
 	     	},
+	     	handleNodeClick(data) {
+                this.sels=[];
+	        	this.commodity =  data.label;
+	        	this.id =  data.id;
+	        	this.selectListNameId = data.id
+	        	this.sels.push(data);
+	        	// this.sels.push(this.id);
+	        	console.log(this.sels)
+	        	this.selectListName1()
+	     	},
+	     	handleNodeClick1(data) {
+                this.sels=[];
+	        	this.commodity =  data.label;
+	        	this.id =  data.id;
+	        	this.selectListNameId = data.id
+	        	this.sels.push(data);
+	        	// this.sels.push(this.id);
+	        	console.log(this.sels)
+	        	this.selectListName2()
+	     	},
+	     	handleNodeClick2(data) {
+                this.sels=[];
+	        	this.commodity =  data.label;
+	        	this.id =  data.id;
+	        	this.selectListNameId = data.id
+	        	this.sels.push(data);
+	        	// this.sels.push(this.id);
+	        	console.log(this.sels)
+	        	this.selectListName3()
+	     	},
 			//获取商品分类
             selectListName(){
                 const _this = this;
@@ -383,6 +496,7 @@
                 const params = {
                     pid:''
                 };
+                console.log(params)
                 const data =JSON.stringify(params);
                 $.ajax({
                     type:'POST',
@@ -393,6 +507,7 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	console.log(data)
+                    	
                         if(!data.success){
                             alert(data.msg)
                         }else{
@@ -400,6 +515,112 @@
                             for (const i in _length){
                                 const obj = {value:i,label:_length[i].name,id:_length[i].id};
                                 _this.data.push(obj);
+                            }
+                        }
+                    }
+                });
+			},
+			//获取商品分类2
+            selectListName1(){
+                const _this = this;
+                _this.data1 = []
+                const url   = baseUrl+"/api/goodsClass/selectListName";
+                const params = {
+                    pid:this.selectListNameId
+                };
+                console.log(params)
+                const data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.data.length === 0){
+                    		_this.keynext = false
+                    	}else{
+                    		_this.keynext = true
+                    	}
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            const _length = data.data;
+                            for (const i in _length){
+                                const obj = {value:i,label:_length[i].name,id:_length[i].id};
+                                _this.data1.push(obj);
+                            }
+                        }
+                    }
+                });
+			},
+			selectListName2(){
+                const _this = this;
+                _this.data2 = []
+                const url   = baseUrl+"/api/goodsClass/selectListName";
+                const params = {
+                    pid:this.selectListNameId
+                };
+                console.log(params)
+                const data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.data.length === 0){
+                    		_this.keynext = false
+                    	}else{
+                    		_this.keynext = true
+                    	}
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            const _length = data.data;
+                            for (const i in _length){
+                                const obj = {value:i,label:_length[i].name,id:_length[i].id};
+                                _this.data2.push(obj);
+                            }
+                        }
+                    }
+                });
+			},
+			selectListName3(){
+                const _this = this;
+                _this.data3 = []
+                const url   = baseUrl+"/api/goodsClass/selectListName";
+                const params = {
+                    pid:this.selectListNameId
+                };
+                console.log(params)
+                const data =JSON.stringify(params);
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:url,
+                    data:data,
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.data.length === 0){
+                    		_this.keynext = false
+                    	}else{
+                    		_this.keynext = true
+                    	}
+                        if(!data.success){
+                            alert(data.msg)
+                        }else{
+                            const _length = data.data;
+                            for (const i in _length){
+                                const obj = {value:i,label:_length[i].name,id:_length[i].id};
+                                _this.data3.push(obj);
                             }
                         }
                     }
@@ -417,22 +638,14 @@
                     carouselPicture:'icon.png,icon1.png',
                     saleState:'1',
                     goodsData:[],
-                    catId:'100',
-                    storeId:'10',
+                    catId:this.sels[0].id,
+                    storeId:state.storeId,
                     ftId:'16',
                     pricingModel:this.PricingModel,
                     unit:this.MeasurementUnit,
                     weight:this.weight,
                     goodsNo:this.productCode,
-                    goodsSpecs:[{
-                    	specPrice:'8888',
-	                    costPrice:'7888',
-	                    storage:'1000',
-	                    specPicture:'icon3.png',
-	                    deductibleImazamox:'10',
-	                    specData:"[{'key':'颜色','value':'黑色'},{'key':'内存','value':'32g'}]",
-	                    specNo:'8888-1'
-                    }]
+                    goodsSpecs:[]
                 };
                 //商品图片
                 this.CommodityPictures = this.CommodityPictures.toString()
@@ -448,11 +661,29 @@
                 }
                 params.goodsData = arrysp
                 params.goodsData = JSON.stringify(params.goodsData)
-
-
+                
+                 // console.log(params)
+                // 商品规格
+                
+                if(this.Specifications.length === 1){
+                	 params.goodsSpecs = this.tableData
+	                for(var i = 0;i<params.goodsSpecs.length;i++){
+	                	params.goodsSpecs[i].specData = this.Specifications1[i]
+	                	params.goodsSpecs[i].specData = JSON.stringify(params.goodsSpecs[i].specData)
+	                }
+	                console.log(1)
+                }
                 console.log(this.tableData)
+                console.log(this.specificatwo1)
+                if(this.Specifications.length === 2){
+                	 params.goodsSpecs = this.tableData
+	                for(var i = 0;i<params.goodsSpecs.length;i++){
+	                	params.goodsSpecs[i].specData = this.specificatwo1[i]
+	                	params.goodsSpecs[i].specData = JSON.stringify(params.goodsSpecs[i].specData)
+
+	                }
+                }
                  console.log(params)
-                // console.log(this.Specifications)
                 $.ajax({
                     type:'POST',
                     dataType:'json',
@@ -462,6 +693,8 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	console.log(data)
+                    	_this.details = false
+                    	_this.next = true
                     }
                 });
 			},

@@ -11,9 +11,9 @@
 
     <!--列表-->
     <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-      <el-table-column prop="indexStyleId" label="位置">
+      <el-table-column prop="indexStyleId" :formatter='formatter' label="位置">
       </el-table-column>
-      <el-table-column prop="productId" label="商品名称">
+      <el-table-column prop="goodsName" label="商品名称">
       </el-table-column>
       <el-table-column prop="orderSort" label="顺序">
       </el-table-column>
@@ -36,7 +36,7 @@
     </el-col>
 
     <!--编辑界面-->
-    <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
+    <el-dialog title="新增" v-model="editFormVisible" :close-on-click-modal="false" >
       <el-form :model="orderDetails" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="位置">
             <el-select v-model="filters.type" clearable>
@@ -89,7 +89,7 @@
               type:''
           },
         users: [],
-        total: 100,
+        total: 0,
         page: 1,
         listLoading: false,
         sels: [],//列表选中列
@@ -116,49 +116,46 @@
         //新增界面数据
         orderDetails: {
         },
-        orderInformation:[{
-          orderNumber :'145877458784524c',
-          courierNumber :'145877458784524c',
-          userName:'吸引力量',
-          amountPaid :'300',
-          orderTotal :'900',
-          orderStatus :'待付款',
-          paymentMethod :'微信支付',
-          creationTime:'2017-09-08 17:09',
-          deliveryTime:'2017-09-08 17:09',
-          commodityName:'雨花说'
-        }]
+        orderInformation:[]
       }
     },
     methods: {
-      //性别显示转换
-      formatSex: function (row, column) {
-        return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-      },
-        getlist(){
-        const _this = this;
-        _this.orderInformation = [];
-        const url   = baseUrl+"/api/indexProductConf/page/product?pageNum="+_this.page+"&pageSize=20";
-          $.ajax({
-              type:'POST',
-              dataType:'json',
-              url:url,
-              data:{},
-              contentType:'application/json;charset=utf-8',
-              error: function (XMLHttpRequest, textStatus, errorThrown) {},
-              success:function(data){
-                  if(!data.success){
-                      alert(data.msg)
-                  }else{
-                      var _length 	= data.data.list;
-                      _this.total 	= data.data.total;
-                      for (var i = 0; i < _length.length; i++) {
-                          _this.orderInformation.push(_length[i]);
-                      }
-                  }
+            formatter(row,column){
+              let curTime = row.indexStyleId;
+              if(curTime === 8){
+                  curTime = '模块一'
+              }else{
+                  curTime = '模块二'
               }
-          });
-      },
+              return curTime
+           },
+          getlist(){
+            const _this = this;
+            _this.orderInformation = [];
+            const url   = baseUrl+"/api/indexProductConf/page/product?pageNum="+_this.page+"&pageSize=20";
+              $.ajax({
+                  type:'POST',
+                  dataType:'json',
+                  url:url,
+                  data:{},
+                  contentType:'application/json;charset=utf-8',
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                  success:function(data){
+                    console.log(data)
+                    _this.total = data.data.total
+                      if(!data.success){
+                          // alert(data.msg)
+                      }else{
+                          var _length 	= data.data.list;
+                          _this.total 	= data.data.total;
+                          for (var i = 0; i < _length.length; i++) {
+                              _this.orderInformation.push(_length[i]);
+                          }
+                      }
+
+                  }
+              });
+          },
         //判断状态
         formatterStatus(row,column){
             let curTime = row.status;
@@ -181,6 +178,7 @@
                 contentType:'application/json;charset=utf-8',
                 error: function (XMLHttpRequest, textStatus, errorThrown) {},
                 success:function(data){
+                    console.log(data)
                     if(!data.success){
                         alert(data.msg)
                     }else{
@@ -211,7 +209,7 @@
                     }else{
                         var _length = data.data;
                         for (var i in _length){
-                             var obj = {value:i,label:_length[i].name};
+                             var obj = {value:_length[i].id,label:_length[i].name};
                             _this.options.push(obj);
                         }
                     }
@@ -229,6 +227,7 @@
                             indexStyleId:this.filters.type,
                             orderSort:this.orderDetails.orderNumber,
                         };
+                        console.log(params)
                         const url    = baseUrl+"/api/indexProductConf/add";
                         const data   =JSON.stringify(params);
                         $.ajax({

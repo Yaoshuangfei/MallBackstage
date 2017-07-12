@@ -2,10 +2,10 @@
   <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3 class="title">系统登录</h3>
     <el-form-item prop="account">
-      <el-input type="text" v-model="ruleForm2.username" auto-complete="off" placeholder="账号"></el-input>
+      <el-input type="text" v-model="ruleForm2.username" auto-complete="off" @keyup.enter.native="keyLogin" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="checkPass">
-      <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="密码"></el-input>
+      <el-input type="password" v-model="ruleForm2.password" auto-complete="off" @keyup.enter.native="keyLogin" placeholder="密码"></el-input>
     </el-form-item>
     <!--<el-form-item >-->
       <!--<el-col :span='8' prop="yanzm">-->
@@ -15,8 +15,7 @@
     <!--</el-form-item>-->
     <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
-      <el-button @click.native.prevent="logi">测试</el-button>
+      <el-button type="primary" style="width:100%;" @click.native.prevent="logi"  :loading="logining">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -53,23 +52,18 @@
                 checked: true
             };
         },
+        computed: {
+            
+        },
         methods: {
-//            getuid() {
-//                const _this = this
-//                $.get("http://192.168.10.18:8080/shangfu-admin-web/verifyCode/loginCode  ",
-//                    function(data){
-//                        const info = eval('(' + data + ')');
-//                        console.log(info)
-//                        _this.uuid = info
-//                        _this.cli(info)
-//                    }
-//                );
-//            },
-//            cli(uid){
-//                this.imgsrc='http://192.168.10.10:8080/shangfu-admin-web/verifyCode/getImage?uuid='+uid+'&random='+Math.random()
-//            },
+            keyLogin(ev){
+             if (ev.keyCode==13){
+                 this.logi()
+             }
+            },
             logi() {
                 const _this = this
+                // var url  = 'http://192.168.0.115:8080/api/core/partnersLogin';
                 var url  = 'http://121.43.178.109:8080/ser/api/core/partnersLogin';
                 var data = {userName: this.ruleForm2.username, password: this.ruleForm2.password};
                 $.ajax({
@@ -83,9 +77,11 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
+                            console.log(data)
                             state.storeId = data.data.storeId
                             state.id = data.data.id
                             document.cookie="token="+data.data.token;
+
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
 
@@ -111,8 +107,6 @@
                                 });
                             } else {
                                 sessionStorage.setItem('user', JSON.stringify(user));
-                                console.log()
-//                                this.$router.push({ path: '/main' });
                             }
                         });
                     } else {

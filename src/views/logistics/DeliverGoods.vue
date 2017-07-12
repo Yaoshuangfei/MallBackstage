@@ -33,56 +33,35 @@
 			<el-col :span="2">数量</el-col>
 			<el-col :span="2">买家</el-col>
 			<el-col :span="2" style="margin-left: 20px">订单总价</el-col>
-			<el-col :span="2">状态</el-col>
-		</el-col> <!-- v-for="item in selectSubjectStatus" -->
+			<el-col :span="2">操作</el-col>
+		</el-col>
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
-				<el-col :span="6">订单编号：111111111111111111</el-col>
-				<el-col :span="4">下单时间：2017-08-09 12:20</el-col>
-				<el-col :span="4" :offset="10">
+				<el-col :span="6">订单编号：{{item.id}}</el-col>
+				<el-col :span="6">下单时间：{{item.createTime}}</el-col>
+				<el-col :span="3" :offset="4" v-if="item.coreUser === null">/</el-col>
+				<el-col :span="3" :offset="4" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
+				<el-col :span="1" style="margin-left: 20px">{{item.totalMoney}}</el-col>
+				<el-col :span="2" style="margin-left:60px">
 					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
-						<el-button style="margin-top:-5px"  type="text">查看下级</el-button>
+						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
 			</el-col>
-			<el-col :span="24">
-				<el-col :span="6" class="img_shangp">
+			<el-col :span="24" v-for="items in item.orderGoods">
+				<el-col :span="3" >
+					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="items.picture">
 				</el-col>
-				<el-col :span="6" :offset="1" class="describe_fiast">
-				你说神农级手机爱好的撒等哈收到哦啊是的哈是的哈
+				<el-col :span="6" :offset="1" class="describe">
+				{{items.productName}}
 				</el-col>
-				<el-col :offset="1" :span="3" class="describe">321</el-col>
-				<el-col :span="2" class="describe">321</el-col>
-				<el-col :span="3" class="describe">18767478564</el-col>
-				<el-col :span="2" :offset="1"  class="describe">321</el-col>
-				<el-col :span="1" class="describe">321</el-col>
+				<el-col :offset="1" :span="3" class="describe">{{items.productPrice}}</el-col>
+				<el-col :span="2" :offset="1"  class="describe">{{items.payTime}}</el-col>
+				<el-col :span="1" :offset="5" class="describe">
+					<el-button type="text" v-on:click="fahuoBtn(items)">发货</el-button>
+				</el-col>
 			</el-col>
 		</el-col>
-		<!--列表-->
-		<!-- <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="下单时间">
-			</el-table-column>
-			<el-table-column prop="userName" label="单价">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="数量">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="买家">
-			</el-table-column>
-			<el-table-column prop="orderStatus" label="订单总价">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope"> -->
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<!-- <el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">查看物流</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">查看评价</el-button>
-				</template>
-			</el-table-column>
-		</el-table> -->
-
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
@@ -91,41 +70,20 @@
 		</el-col>
 
 		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-				</el-form-item>
-				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
+		<el-dialog title="发货" v-model="editFormVisible" :close-on-click-modal="false" >
+			<el-col :span="24">
+				<el-col :span="24" style="margin-bottom: 20px">
+					<el-select v-model="keyvalue" clearable>
+				      <el-option v-for="item in optionKey" :label="item.label" :value="item.value">
+				      </el-option>
+				    </el-select>
+				</el-col>
+				<el-col :span="24" style="margin-bottom: 20px">
+					<el-input v-model='expno' @change="keyup"></el-input>
+				</el-col>
+			</el-col>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+				<el-button type="primary" @click.native="upSubmit" :loading="editLoading">确认</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -139,25 +97,15 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
+				keyvalue: '',
+				expno:'',
+				ddId:'',
+				dpId:'',
 				checked: true,
 				value:'',
 				value1:'',
 				value2:'',
-				selectSubjectStatus: [
-				{
-					value:'1',
-					label:'待付款'
-				},{
-					value:'2',
-					label:'已发货'
-				},{
-					value:'3',
-					label:'交易完成'
-				},{
-					value:'4',
-					label:'退货'
-				}],
+				selectSubjectStatus: [],
 				options: [{
 		          value: '0',
 		          label: '全部'
@@ -171,13 +119,14 @@
 		          value: '3',
 		          label: '用户名'
 		        }],
+		        optionKey:[],
 				filters: {
 					name: '',
 					status:'',
 					type:''
 				},
 				users: [],
-				total: 100,
+				total: 0,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -219,41 +168,143 @@
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+			fahuoBtn(row){
+				this.optionKey = []
+				this.keyvalue =''
+				this.expno = ''
+				console.log(row)
+				this.editFormVisible = true
+				this.ddId = row.id
+				this.dpId = row.storeId
+			},
+			keyup(){
+				const _this = this
+				const params = {
+					expno:this.expno
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/orderTracesByJson",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data.data)
+                    	_this.optionKey = []
+                    	if(data.data !== null && data.data !== []){
+                    		for(var i = 0;i<data.data.length;i++){
+                    			const obj = {}
+                    			obj.value = data.data[i].ShipperCode
+                    			obj.label = data.data[i].ShipperName
+                    			_this.optionKey.push(obj)
+                    			_this.keyvalue = obj.value
+                    		}
+                    	}
+                    	console.log(_this.optionKey)
+                    }
+                });
+			},
+			upSubmit() {
+				console.log(this.keyvalue)
+				console.log(this.expno)
+				let express = ''
+				for(var i = 0;i<this.optionKey.length;i++){
+					if(this.keyvalue === this.optionKey[i].value){
+						express = this.optionKey[i].label
+					}
+				}
+				const _this = this
+				const params = {
+					id:this.ddId,
+					storeId:this.dpId,
+					expno:this.expno,
+					expressName:express,
+					expressCode:this.keyvalue,
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/delivery",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    	_this.editFormVisible = false
+                    	_this.getlist()
+                    }
+                });
 			},
 			getlist(){
 				const _this = this
-				_this.table = []
+				this.selectSubjectStatus = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:this.page,
+					size:10,
+					storeId:state.storeId,
+					order_status:2,
+					refund_status:'',
+					orderId:'',
+					expno:''
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/selectListAll",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	_this.total = info.total
+                    	_this.selectSubjectStatus = info.list
+                    	console.log(_this.selectSubjectStatus)
+                    	/*for(var i in _this.selectSubjectStatus){
+							console.log(_this.selectSubjectStatus[i].coreUser.nickName+"sssssssssssss");
+                    	}*/
+
+                  //   	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+		                // 	_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
+		                // 	if(_this.selectSubjectStatus[i].saleStatus === 1) {
+		                // 		_this.selectSubjectStatus[i].saleStatus = '销售中'
+		                // 	}else if(_this.selectSubjectStatus[i].saleStatus === 2) {
+		                // 		_this.selectSubjectStatus[i].saleStatus = '已下架'
+		                // 	}else{
+		                // 		_this.selectSubjectStatus[i].saleStatus = '已删除'
+		                // 	}
+		                // }
+                    }
+                });
+			},
+
+			delivery(value,expno,expressName,expressCode){
+				const _this = this
+				const params = {
+					id:value,
+					storeId:state.storeId,
+					expno:expno,
+					expressName:expressName,
+					expressCode:expressCode
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/delivery",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
+				this.getlist();
 			},
 			//获取用户列表
 			getUsers() {
@@ -382,7 +433,7 @@
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

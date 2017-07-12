@@ -8,7 +8,7 @@
 				</el-form-item> -->
 				<el-form-item label="状态">
 					<el-select v-model="filters.status" clearable>
-				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
+				      <el-option v-for="item in states" :label="item.label" :value="item.value">
 				      </el-option>
 				    </el-select>
 				</el-form-item>
@@ -37,25 +37,26 @@
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
-				<el-col :span="6">订单编号：111111111111111111</el-col>
-				<el-col :span="4">下单时间：2017-08-09 12:20</el-col>
-				<el-col :span="4" :offset="10">
+				<el-col :span="6">订单编号：{{item.id}}</el-col>
+				<el-col :span="4">下单时间：{{item.payTime}}</el-col>
+				<el-col :span="2" :offset="9">{{item.totalMoney}}</el-col>
+				<el-col :span="2" :offset="1">
 					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
-						<el-button style="margin-top:-5px"  type="text">查看下级</el-button>
+						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
 			</el-col>
-			<el-col :span="24">
-				<el-col :span="6" class="img_shangp">
+			<el-col :span="24" v-for="items in item.orderGoods">
+				<el-col :span="6">
+					<img style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
 				</el-col>
 				<el-col :span="6" :offset="1" class="describe_fiast">
-				你说神农级手机爱好的撒等哈收到哦啊是的哈是的哈
+				{{items.productName}}
 				</el-col>
-				<el-col :offset="1" :span="3" class="describe">321</el-col>
-				<el-col :span="2" class="describe">321</el-col>
-				<el-col :span="3" class="describe">18767478564</el-col>
-				<el-col :span="2" :offset="1"  class="describe">321</el-col>
-				<el-col :span="1" class="describe">321</el-col>
+				<el-col :offset="1" :span="3" class="describe">{{items.productPrice}}</el-col>
+				<el-col :span="2" class="describe">{{items.quantity}}</el-col>
+				<el-col :span="3" class="describe">{{item.consignee}}</el-col>
+				<el-col :span="1" :offset="3" class="describe">{{items.orderStatus}}</el-col>
 			</el-col>
 		</el-col>
 		<!--列表-->
@@ -83,10 +84,10 @@
 		</el-table> -->
 
 		<!--工具条-->
-	<!-- 	<el-col :span="24" class="toolbar" style="background:#fff;">
+		<el-col :span="24" class="toolbar" style="background:#fff;">
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
-		</el-col> -->
+		</el-col>
 
 		<!--编辑界面-->
 		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
@@ -142,29 +143,14 @@
 				value:'',
 				value1:'',
 				value2:'',
-				selectSubjectStatus: [
-				{
+				states:[{
 					value:'0',
 					label:'所有订单'
 				},{
 					value:'1',
 					label:'待付款'
-				},{
-					value:'2',
-					label:'待发货'
-				},{
-					value:'3',
-					label:'已发货'
-				},{
-					value:'4',
-					label:'待评价'
-				},{
-					value:'5',
-					label:'交易完成'
-				},{
-					value:'6',
-					label:'退货'
 				}],
+				selectSubjectStatus: [1],
 				options: [{
 		          value: '1',
 		          label: '订单编号'
@@ -220,37 +206,47 @@
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
 			getlist(){
 				const _this = this
-				_this.table = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:this.page,
+					size:10,
+					/*orderType:'',*/
+					storeId:state.storeId,/*
+					order_status:'',
+					refund_status:'',*/
+					orderId:'',
+					expno:''
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/selectListAll",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(info)
+                    	_this.total = info.total
+                    	_this.selectSubjectStatus = info.list
+                    	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+		                	_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
+		                	if(_this.selectSubjectStatus[i].status === 1) {
+		                		_this.selectSubjectStatus[i].status = '待支付'
+		                	}else if(_this.selectSubjectStatus[i].status === 2) {
+		                		_this.selectSubjectStatus[i].status = '支付成功'
+		                	}else if(_this.selectSubjectStatus[i].status === 3) {
+		                		_this.selectSubjectStatus[i].status = '支付失败'
+		                	}else if(_this.selectSubjectStatus[i].status === 4) {
+		                		_this.selectSubjectStatus[i].status = '已完成'
+		                	}else{
+		                		_this.selectSubjectStatus[i].status = '已删除'
+		                	}
+		                }
+                    }
+                });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -383,7 +379,7 @@
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 
@@ -393,8 +389,8 @@
 	.table_div{
 		margin-top: 20px;
 		width: 1200px;
-		height:200px;
 		border: 1px solid #aaa;
+		padding-bottom: 20px;
 	}
 	.table_div_head{
 		padding-top:15px;

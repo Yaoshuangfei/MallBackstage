@@ -5,7 +5,7 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>用户总数</p>
-					<p>1234</p>
+					<p>0</p>
 					<p>
 						<span>5%</span>
 						<span>来自上周</span>
@@ -15,7 +15,7 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>总营业额</p>
-					<p>1234</p>
+					<p>0</p>
 					<p>
 						<span>5%</span>
 						<span>来自上周</span>
@@ -25,7 +25,7 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>商户入驻</p>
-					<p>1234</p>
+					<p>0</p>
 					<p>
 						<span>5%</span>
 						<span>来自上周</span>
@@ -35,7 +35,7 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>充值金额</p>
-					<p>1234</p>
+					<p>0</p>
 					<p>
 						<span>5%</span>
 						<span>来自上周</span>
@@ -45,7 +45,7 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>公益收益</p>
-					<p>1234</p>
+					<p>0</p>
 					<p>
 						<span>5%</span>
 						<span>来自上周</span>
@@ -55,7 +55,7 @@
 			<el-col :span="4">
 				<div class="grid-content bg-purple Finance">
 					<p>历史提现</p>
-					<p>1234</p>
+					<p>0</p>
 					<p>
 						<span>5%</span>
 						<span>来自上周</span>
@@ -169,11 +169,20 @@
                         type : 'value'
 					},
                     series: [{
-                        name: '销量',
+                        name: '销量1',
                         type: 'line',
                         smooth:true,
-                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                        data: [0, 100, 36, 10, 10, 20]
+                        data: [0, 50, 36, 10, 10, 20]
+                    },{
+                        name: '销量2',
+                        type: 'line',
+                        smooth:true,
+                        data: [0, 20, 66, 30, 60, 10]
+                    },{
+                        name: '销量3',
+                        type: 'line',
+                        smooth:true,
+                        data: [0, 40, 40, 40, 20, 7]
                     }]
                 });
             },
