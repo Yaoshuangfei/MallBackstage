@@ -49,6 +49,7 @@ import picture from './views/shop/picture.vue'
 
 /*财务管理 Finance*/
 import FlowingWater from './views/Finance/FlowingWater.vue'
+import txgl from './views/Finance/txgl.vue'
 
 // 补货专区 Replenishment 
 import Replenishment from './views/Replenishment/Replenishment.vue'
@@ -167,7 +168,8 @@ let routes = [
         name: '财务管理',
         iconCls: 'fa el-icon-date',
         children: [
-            { path: '/FlowingWater', component: FlowingWater, name: '流水记录' }
+            { path: '/FlowingWater', component: FlowingWater, name: '流水记录' },
+            { path: '/txgl', component: txgl, name: '提现管理' }
         ]
     },
    {
