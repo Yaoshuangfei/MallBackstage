@@ -63,8 +63,8 @@
             },
             logi() {
                 const _this = this
-                // var url  = 'http://192.168.0.107:8080/api/core/partnersLogin';
-                var url  = baseUrl+'/api/core/partnersLogin';
+                var url  = 'http://192.168.0.107:8080/api/core/partnersLogin';
+                // var url  = baseUrl+'/api/core/partnersLogin';
                 var data = {userName: this.ruleForm2.username, password: this.ruleForm2.password};
                 $.ajax({
                     type:'POST',
@@ -81,10 +81,8 @@
                             state.storeId = data.data.storeId
                             state.id = data.data.id
                             document.cookie="token="+data.data.token;
-
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
-
                         }
                     }
                 });

@@ -126,6 +126,9 @@
             return {
                 radio3: '报表',
                 ruleAll:[{
+                	name:'日报表',
+                	id:0
+                },{
                 	name:'周报表',
                 	id:1
                 },{
@@ -164,19 +167,19 @@
         	click(val) {
         		this.type = val
         		this.getline()
-				console.log(val)
 			},
         	getlist(){
         		const _this = this
 				$.ajax({
 	              type:'POST',
 	              dataType:'json',
-	              url:baseUrl+"/api/admin/userCashFlow/data/analysis",
-	              // url:'http://192.168.0.107:8080/api/admin/userCashFlow/data/analysis',
+	              // url:baseUrl+"/api/admin/userCashFlow/data/analysis",
+	              url:'http://192.168.0.107:8080/api/admin/userCashFlow/data/analysis',
 	              data:{},
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
+	                console.log(data)
 	                _this.visitPercentage = info.visitPercentage*100
 	                _this.visitCount = info.visitCount
 	                _this.sumTotalMoney = info.sumTotalMoney
@@ -190,6 +193,8 @@
         	},
         	getline(){
         		const _this = this
+        		// _this.parobj = []
+        		// _this.nameAll = []
         		const params = {
         			type:this.type,
         			storeId:state.storeId
@@ -199,51 +204,85 @@
         		$.ajax({
 	              type:'POST',
 	              dataType:'json',
-	              url:baseUrl+"/api/orderMall/selectByPayTimeGroup",
-	              // url:'http://192.168.0.107:8080/api/orderMall/selectByPayTimeGroup',
+	              // url:baseUrl+"/api/orderMall/selectByPayTimeGroup",
+	              url:'http://192.168.0.107:8080/api/orderMall/selectByPayTimeGroup',
 	              data:JSON.stringify(params),
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
-	                console.log(info)
-	                for(var i = 0;i<info.length;i++){
-	                	if(info[i].moneyAll){
+	                console.log(data)
+	                // 线形图
+	                const linelist = info.analysisVOList
+	                for(var i = 0;i<linelist.length;i++){
+	                	if(linelist[i].moneyAll){
 	                		const obj = {}
 	                		const arry = []
 		                	obj.name = '成交额总数'
 		                	obj.type = 'line'
 		                	obj.smooth = true
 		                	obj.data = arry
-		                	arry.push(info[i].moneyAll)
+		                	arry.push(linelist[i].moneyAll)
 	                		_this.moneyAll = obj
 	                		_this.listAll.push(_this.moneyAll)
 	                	}
-	                	if(info[i].countAll){
+	                	if(linelist[i].countAll){
 	                		const obj = {}
 	                		const arry = []
 		                	obj.name = '成交商品总数'
 		                	obj.type = 'line'
 		                	obj.smooth = true
 		                	obj.data = arry
-		                	arry.push(info[i].countAll)
+		                	arry.push(linelist[i].countAll)
 	                		_this.countAll = obj
 	                		_this.listAll.push(_this.countAll)
 	                	}
-	                	if(info[i].avgPrice){
+	                	if(linelist[i].avgPrice){
 	                		const obj = {}
 	                		const arry = []
 		                	obj.name = '成交额平均值'
 		                	obj.type = 'line'
 		                	obj.smooth = true
 		                	obj.data = arry
-		                	arry.push(info[i].avgPrice)
+		                	arry.push(linelist[i].avgPrice)
 	                		_this.avgPrice = obj
 	                		_this.listAll.push(_this.avgPrice)
 	                	}
 	                }
+	                // console.log(linelist)
+					//饼图数据
+	                const ordlist= info.orderMalls
+	                // console.log(ordlist)
+	                for(var i = 0;i<ordlist.length;i++){
+	                	var obj = {}
+	                	if(ordlist[i].orderType === 3){
+	                		obj.name = '业务充值'
+	                	}else if(ordlist[i].orderType === 4){
+	                		obj.name = '余额充值'
+	                	}else if(ordlist[i].orderType === 5){
+	                		obj.name = '商品购买'
+	                	}else if(ordlist[i].orderType === 6){
+	                		obj.name = '店铺身份购买'
+	                	}else if(ordlist[i].orderType === 7){
+	                		obj.name = '平台身份购买 '
+	                	}else if(ordlist[i].orderType === 8){
+	                		obj.name = '补货'
+	                	}else if(ordlist[i].orderType === 9){
+	                		obj.name = '金豆充值'
+	                	}else if(ordlist[i].orderType === 13){
+	                		obj.name = '便付劵充值'
+	                	}else{
+	                		obj.name = '业务充值'
+	                	}
+	                	obj.value = ordlist[i].totalMoney
+	                	_this.parobj.push(obj)
+	                }
+	                for(var i = 0;i<_this.parobj.length;i++){
+	                	_this.nameAll.push(_this.parobj[i].name)
+	                }
+	                
 	                // console.log(_this.moneyAll)
 	                // console.log(_this.countAll)
-	                console.log(_this.listAll)
+	                // console.log(_this.listAll)
 	                // _this.listAll.push()
 	              }
 	          });
@@ -254,8 +293,8 @@
 				$.ajax({
 	              type:'GET',
 	              dataType:'json',
-	              url:baseUrl+"/api/orderMall/selectGroupByUserId",
-	              // url:'http://192.168.0.107:8080/api/orderMall/selectGroupByUserId',
+	              // url:baseUrl+"/api/orderMall/selectGroupByUserId",
+	              url:'http://192.168.0.107:8080/api/orderMall/selectGroupByUserId',
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
@@ -373,7 +412,7 @@
         mounted: function () {
         	this.getlist()
         	this.getline()
-        	this.getper()
+        	// this.getper()
             this.drawCharts()
             this.drawPieChart()
         },

@@ -4,7 +4,10 @@ import Home from './views/Home.vue'
 import Main from './views/Home/indexMain.vue'
 import { state } from './vuex/state'
 
-/*系统管理 systemSettings*/
+// 店铺信息
+import StoreInformation from './views/Home/StoreInformation.vue'
+
+/*系统管理 systemSettings*/  
 import Jurisdiction from './views/systemSettings/Jurisdiction.vue'
 import SystemPush from './views/systemSettings/SystemPush.vue'
 import ChangePasswords from './views/systemSettings/ChangePasswords.vue'
@@ -61,6 +64,7 @@ import add from './views/Replenishment/add.vue'
 import video from './views/Increment/video.vue'
 import PublicWelfare from './views/Increment/PublicWelfare.vue'
 import Marketing from './views/Increment/Marketing.vue'
+import pjadmin from './views/Increment/pjadmin.vue'
 
 
 
@@ -81,6 +85,16 @@ let routes = [
         component: Main,
         name: '',
         hidden: true
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/StoreInformation', component: StoreInformation, name: '店铺信息' ,  }
+        ]
     },
     {
         path: '/Subject',
@@ -190,6 +204,7 @@ let routes = [
         iconCls: 'el-icon-message',
         children: [
             { path: '/video', component: video, name: '视频管理' },
+            { path: '/pjadmin', component: pjadmin, name: '评价管理' },
             { path: '/PublicWelfare', component: PublicWelfare, name: '公益广告' },
             { path: '/Marketing', component: Marketing, name: '营销管理' }
         ]

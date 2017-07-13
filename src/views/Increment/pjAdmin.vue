@@ -20,32 +20,26 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getlist">查询</el-button>
-					<el-button type="primary">导出</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="tradeNo" label="订单号">
+			<el-table-column prop="tradeNo" label="商品编号">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
+			<el-table-column prop="userName" label="买家">
 			</el-table-column>
-			<el-table-column prop="mobile" label="手机号">
+			<el-table-column prop="mobile" label="电话">
 			</el-table-column>
-			<el-table-column prop="quota" label="提现金额">
+			<el-table-column prop="quota" label="商品名称">
 			</el-table-column>
-			<el-table-column prop="payType" :formatter='formatterType' label="订单状态">
-			</el-table-column>
-			<el-table-column prop="centType" :formatter='formatterTime' label="提现时间">
+			<el-table-column prop="payType" :formatter='formatterType' label="评价">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
 					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">打款</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">不通过 </el-button>
+					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">回复</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -120,23 +114,23 @@
 					label:'全部'
 				},{
 					value:'1',
-					label:'交易成功'
+					label:'好评'
 				},{
 					value:'2',
-					label:'交易失败'
+					label:'中评'
 				},{
 					value:'3',
-					label:'审核中付'
+					label:'差评'
 				}],
 				options: [{
 		          value: '1',
-		          label: '订单编号'
+		          label: '商家编号'
 		        }, {
 		          value: '2',
 		          label: '手机号'
 		        }, {
 		          value: '3',
-		          label: '姓名'
+		          label: '买家昵称'
 		        }],
 				filters: {
 					name: '',
@@ -260,7 +254,7 @@
 			}
 		},
 		mounted() {
-			this.getlist();
+			// this.getlist();
 		}
 	}
 

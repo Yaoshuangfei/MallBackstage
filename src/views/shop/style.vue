@@ -11,37 +11,9 @@
 							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
 						</div>
 					</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8">
-						<div class="shopstyle"></div>
-						<div style="margin-left: 60px">
-							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
-						</div>
-					</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8">
-						<div class="shopstyle"></div>
-						<div style="margin-left: 60px">
-							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
-						</div>
-					</el-col>
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="24">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块二</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8">
-						<div class="shopstyle"></div>
-						<div style="margin-left: 60px">
-							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
-						</div>
-					</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8">
-						<div class="shopstyle"></div>
-						<div style="margin-left: 60px">
-							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
-						</div>
-					</el-col>
 					<el-col :xs="8" :sm="8" :md="8" :lg="8">
 						<div class="shopstyle"></div>
 						<div style="margin-left: 60px">
