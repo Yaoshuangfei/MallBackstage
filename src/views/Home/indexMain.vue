@@ -173,8 +173,8 @@
 				$.ajax({
 	              type:'POST',
 	              dataType:'json',
-	              // url:baseUrl+"/api/admin/userCashFlow/data/analysis",
-	              url:'http://192.168.0.107:8080/api/admin/userCashFlow/data/analysis',
+	              url:baseUrl+"/api/admin/userCashFlow/data/analysis",
+	              // url:'http://192.168.0.107:8080/api/admin/userCashFlow/data/analysis',
 	              data:{},
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
@@ -204,8 +204,8 @@
         		$.ajax({
 	              type:'POST',
 	              dataType:'json',
-	              // url:baseUrl+"/api/orderMall/selectByPayTimeGroup",
-	              url:'http://192.168.0.107:8080/api/orderMall/selectByPayTimeGroup',
+	              url:baseUrl+"/api/orderMall/selectByPayTimeGroup",
+	              // url:'http://192.168.0.107:8080/api/orderMall/selectByPayTimeGroup',
 	              data:JSON.stringify(params),
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
@@ -293,8 +293,8 @@
 				$.ajax({
 	              type:'GET',
 	              dataType:'json',
-	              // url:baseUrl+"/api/orderMall/selectGroupByUserId",
-	              url:'http://192.168.0.107:8080/api/orderMall/selectGroupByUserId',
+	              url:baseUrl+"/api/orderMall/selectGroupByUserId",
+	              // url:'http://192.168.0.107:8080/api/orderMall/selectGroupByUserId',
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data

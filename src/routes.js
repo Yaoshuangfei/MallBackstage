@@ -183,7 +183,7 @@ let routes = [
         iconCls: 'fa el-icon-date',
         children: [
             { path: '/FlowingWater', component: FlowingWater, name: '流水记录' },
-            { path: '/txgl', component: txgl, name: '提现管理' }
+            // { path: '/txgl', component: txgl, name: '提现管理' }
         ]
     },
    {

@@ -4,8 +4,8 @@
 			<el-col :xs="15" :sm="15" :md="15" :lg="15">
 				<el-col :xs="24" :sm="24" :md="24" :lg="24">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块一</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8">
-						<div class="shopstyle"></div>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8" v-for="item in selectOne">
+							<img class="shopstyle" :src="item.picture">
 						<div style="margin-left: 60px">
 							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
 							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
@@ -14,8 +14,8 @@
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="24">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块二</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8">
-						<div class="shopstyle"></div>
+					<el-col :xs="8" :sm="8" :md="8" :lg="8" v-for="item in selectTwo">
+						<img class="shopstyle" :src="item.picture">
 						<div style="margin-left: 60px">
 							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
 							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
@@ -38,8 +38,8 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
-				checked: true,
+				selectOne:[],
+				selectTwo:[],
 				value:'',
 				value1:'',
 				value2:'',
@@ -124,37 +124,30 @@
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
 			getlist(){
 				const _this = this
-				_this.table = []
-				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
-				}
-				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
+				$.ajax({
+	                type:'POST',
+	                dataType:'json',
+	                url:baseUrl+'/api/indexStyle/styleOne/list',
+	                data:{},
+	                contentType:'application/json;charset=utf-8',
+	                success:function(data){
+	                  	_this.selectOne = data.data
+	                  	console.log(_this.selectOne)
 	                }
-	              }
-	         	)
+	            })
+	            $.ajax({
+	                type:'POST',
+	                dataType:'json',
+	                url:baseUrl+'/api/indexStyle/styleTwo/list',
+	                data:{},
+	                contentType:'application/json;charset=utf-8',
+	                success:function(data){
+	                  	_this.selectTwo = data.data
+	                  	console.log(_this.selectTwo)
+	                }
+	            })
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -287,7 +280,7 @@
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

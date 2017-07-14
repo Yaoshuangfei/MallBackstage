@@ -63,8 +63,8 @@
             },
             logi() {
                 const _this = this
-                var url  = 'http://192.168.0.107:8080/api/core/partnersLogin';
-                // var url  = baseUrl+'/api/core/partnersLogin';
+                // var url  = 'http://192.168.0.106:8080/api/core/partnersLogin';
+                var url  = baseUrl+'/api/core/partnersLogin';
                 var data = {userName: this.ruleForm2.username, password: this.ruleForm2.password};
                 $.ajax({
                     type:'POST',
