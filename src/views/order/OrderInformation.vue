@@ -22,8 +22,8 @@
 				    <el-input v-model="filters.name"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-					<el-button type="primary" v-on:click="getUsers">导出订单</el-button>
+					<el-button type="primary" v-on:click="getlist">查询</el-button>
+					<el-button type="primary">导出订单</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -47,7 +47,7 @@
 				</el-col>
 			</el-col>
 			<el-col :span="24" v-for="items in item.orderGoods">
-				<el-col :span="6">
+				<el-col :span="3">
 					<img style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
 				</el-col>
 				<el-col :span="6" :offset="1" class="describe_fiast">
@@ -56,77 +56,14 @@
 				<el-col :offset="1" :span="3" class="describe">{{items.productPrice}}</el-col>
 				<el-col :span="2" class="describe">{{items.quantity}}</el-col>
 				<el-col :span="3" class="describe">{{item.consignee}}</el-col>
-				<el-col :span="1" :offset="3" class="describe">{{items.orderStatus}}</el-col>
+				<el-col :span="2" :offset="3" class="describe">{{items.orderStatus}}</el-col>
 			</el-col>
 		</el-col>
-		<!--列表-->
-		<!-- <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="下单时间">
-			</el-table-column>
-			<el-table-column prop="userName" label="单价">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="数量">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="买家">
-			</el-table-column>
-			<el-table-column prop="orderStatus" label="订单总价">
-			</el-table-column>
-			<el-table-column prop="paymentMethod" label="状态"> details
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看订单</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table> -->
-
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="background:#fff;">
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
-
-		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-				</el-form-item>
-				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
@@ -150,7 +87,7 @@
 					value:'1',
 					label:'待付款'
 				}],
-				selectSubjectStatus: [1],
+				selectSubjectStatus: [],
 				options: [{
 		          value: '1',
 		          label: '订单编号'
@@ -231,20 +168,34 @@
                     	console.log(info)
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
+                    	console.log(_this.selectSubjectStatus)
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
 		                	_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
-		                	if(_this.selectSubjectStatus[i].status === 1) {
-		                		_this.selectSubjectStatus[i].status = '待支付'
-		                	}else if(_this.selectSubjectStatus[i].status === 2) {
-		                		_this.selectSubjectStatus[i].status = '支付成功'
-		                	}else if(_this.selectSubjectStatus[i].status === 3) {
-		                		_this.selectSubjectStatus[i].status = '支付失败'
-		                	}else if(_this.selectSubjectStatus[i].status === 4) {
-		                		_this.selectSubjectStatus[i].status = '已完成'
-		                	}else{
-		                		_this.selectSubjectStatus[i].status = '已删除'
+		                	for(var x = 0;x<_this.selectSubjectStatus[i].orderGoods.length;x++){
+		                		if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 1) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '支付中'
+			                	}else if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 2) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '支付成功'
+			                	}else if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 3) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '支付失败'
+			                	}else if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 4) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '已取消'
+			                	}else  if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 5) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '卖家已发货'
+			                	}else  if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 6) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '已收货'
+			                	}else  if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 7) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '已评价'
+			                	}else  if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 8) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '交易完成'
+			                	}else  if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 9) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '售后处理'
+			                	}else  if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 10) {
+			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '已删除'
+			                	}
 		                	}
 		                }
+		                console.log(_this.selectSubjectStatus)
                     }
                 });
 			},

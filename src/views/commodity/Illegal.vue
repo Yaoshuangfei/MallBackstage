@@ -31,9 +31,10 @@
 				</el-col> -->
 			</el-col>
 			<el-col :span="24">
-				<el-col :span="6" class="img_shangp">
+				<el-col :span="3" >
+					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture">
 				</el-col>
-				<el-col :span="6" :offset="1" class="describe_fiast">
+				<el-col :span="4" :offset="3" class="describe_fiast">
 				{{item.name}}
 				</el-col>
 				<el-col :offset="1" :span="3" class="describe">{{item.price}}</el-col>

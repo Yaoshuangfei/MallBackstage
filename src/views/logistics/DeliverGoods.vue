@@ -262,6 +262,9 @@
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	console.log(_this.selectSubjectStatus)
+                    	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+                    		_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
+                    	}
                     	/*for(var i in _this.selectSubjectStatus){
 							console.log(_this.selectSubjectStatus[i].coreUser.nickName+"sssssssssssss");
                     	}*/

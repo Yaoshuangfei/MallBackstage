@@ -7,8 +7,8 @@
 					<el-col :xs="8" :sm="8" :md="8" :lg="8" v-for="item in selectOne">
 							<img class="shopstyle" :src="item.picture">
 						<div style="margin-left: 60px">
-							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+							<el-button type="text" size="small" @click="oneBtn(item)">使用</el-button>
+							<el-button style="margin-left: 40px" type="text" size="small">预览</el-button>
 						</div>
 					</el-col>
 				</el-col>
@@ -17,7 +17,7 @@
 					<el-col :xs="8" :sm="8" :md="8" :lg="8" v-for="item in selectTwo">
 						<img class="shopstyle" :src="item.picture">
 						<div style="margin-left: 60px">
-							<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">使用</el-button>
+							<el-button type="text" size="small" @click="twoBtn(item)">使用</el-button>
 							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
 						</div>
 					</el-col>
@@ -26,6 +26,9 @@
 		    <el-col :xs="9" :sm="9" :md="9" :lg="9">
 		    	预览
 		    </el-col>
+		</el-row>
+		<el-row :gutter="10" style="margin-top: 40px">
+			<el-button type="primary"  @click="uploadBtn()">保存</el-button>
 		</el-row>
 	</section>
 </template>
@@ -40,8 +43,8 @@
 			return {
 				selectOne:[],
 				selectTwo:[],
-				value:'',
-				value1:'',
+				oneId:'',
+				twoId:'',
 				value2:'',
 				selectSubjectStatus: [
 				{
@@ -146,6 +149,31 @@
 	                success:function(data){
 	                  	_this.selectTwo = data.data
 	                  	console.log(_this.selectTwo)
+	                }
+	            })
+			},
+			oneBtn(row){
+				this.oneId = row.id
+			},
+			twoBtn(row){
+				this.twoId = row.id
+			},
+			uploadBtn(){
+				console.log(this.oneId)
+				console.log(this.twoId)
+				const _this = this
+				const params = {
+					styleOneId:this.oneId,
+					styleTwoId:this.twoId
+				}
+				$.ajax({
+	                type:'POST',
+	                dataType:'json',
+	                url:baseUrl+'/api/indexShop/add',
+	                data:JSON.stringify(params),
+	                contentType:'application/json;charset=utf-8',
+	                success:function(data){
+	                  	console.log(data)
 	                }
 	            })
 			},

@@ -223,7 +223,7 @@
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         const _this  = this;
                         const params = {
-                            productId:parseInt(this.product.type)+1,
+                            productId:parseInt(this.product.type),
                             indexStyleId:this.filters.type,
                             orderSort:this.orderDetails.orderNumber,
                         };
@@ -236,7 +236,6 @@
                             url:url,
                             data:data,
                             contentType:'application/json;charset=utf-8',
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {},
                             success:function(data){
                                 if(!data.success){
                                     alert(data.msg)

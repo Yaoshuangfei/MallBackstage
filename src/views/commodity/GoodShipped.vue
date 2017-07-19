@@ -167,8 +167,16 @@
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>
 						<el-col :span="24">
 							物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。
+							<el-col :span="24" style="min-height: 100px;margin-top: 40px">
+								<el-col :span="2" style="line-height: 40px">运费模板：</el-col>
+								<el-col :span="12">
+									<el-select v-model="value" placeholder="请选择">
+										<el-option v-for="item in options" :label="item.label" :value="item.value" :key="item.value"></el-option>
+									</el-select>
+								</el-col>
+							</el-col>
 							<el-col :span="24">
-								<el-col :span="1">重量</el-col>
+								<el-col :span="1" style="line-height: 40px">重量：</el-col>
 								<el-col :span="3">
 									<el-input  v-model="weight" ></el-input>
 								</el-col>
@@ -193,6 +201,7 @@
 	export default {
 		data() {
 			return {
+        		value: '',
 				keynext:true,
 				selectListNameId:'',
 				url:'',
@@ -405,7 +414,8 @@
                             console.log(info)
                             // const info = response.body
 							_this.url = info.data[0].baseUri+info.data[0].uri;
-							_this.CommodityPictures.push(_this.url)
+							console.log(_this.url)
+							// _this.CommodityPictures.push(_this.url)
                         }, error => _this.$emit('complete', 500, error.message))
                 // });
             },
@@ -635,12 +645,12 @@
                     veiw:'',
                     price:this.SuggestedRetailRrice,
                     isVirtual:'0',
-                    carouselPicture:'icon.png,icon1.png',
+                    carouselPicture:this.url,
                     saleState:'1',
                     goodsData:[],
                     catId:this.sels[0].id,
                     storeId:state.storeId,
-                    ftId:'16',
+                    ftId:this.value,
                     pricingModel:this.PricingModel,
                     unit:this.MeasurementUnit,
                     weight:this.weight,
@@ -648,8 +658,8 @@
                     goodsSpecs:[]
                 };
                 //商品图片
-                this.CommodityPictures = this.CommodityPictures.toString()
-                params.carouselPicture = this.CommodityPictures
+                // this.CommodityPictures = this.CommodityPictures
+                // params.carouselPicture = this.CommodityPictures.toString()
                 console.log(this.paramsData)
                 //宝贝属性
                 const arrysp = []
@@ -684,6 +694,7 @@
 	                }
                 }
                  console.log(params)
+                console.log(this.value)
                 $.ajax({
                     type:'POST',
                     dataType:'json',
@@ -693,179 +704,55 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	console.log(data)
-                    	_this.details = false
-                    	_this.next = true
+                    	if(data.code === 1){
+                    		_this.details = false
+                    		_this.next = true
+                    		_this.selectListName()
+                    	}else{
+                    		alert(data.msg)
+                    	}
+                    	
                     }
                 });
 			},
-
-
-
-
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
-			getlist(){
+			gettemplet() {
 				const _this = this
-				_this.table = []
+				_this.ceshiarry = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					storeId:state.storeId,
+					pageNum:this.page,
+					size:10,
+					name:''
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
-	                }
-	              }
-	         	)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/fareTemplate/selectListByStoreId",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	// _this.total = data.data.total
+                    	const info = data.data.list
+                    	console.log(info)
+                    	_this.options = []
+                    	// const arry = []
+                    	for (var i = 0; i < info.length; i++) {
+                    		const obj = {}
+                    		obj.value = info[i].id
+                    		obj.label = info[i].name
+                    		_this.options.push(obj)
+                    	}
+                    	// console.log(_this.ceshiarry)
+                    	// _this.orderInformation = arry
+                    }
+                });
 			},
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getUsers();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
-			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			},
-			//显示编辑界面
-			seeBtn: function (index, row) {
-				this.editFormVisible = true;
-				this.orderDetails = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			}
 		},
 		mounted() {
 			 this.selectListName();
+			 this.gettemplet();
 		}
 	}
 
@@ -898,7 +785,7 @@
 	}
 	.Commodity_information{
 		width: 1600px;
-		height: 2400px;
+		height: 2100px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
 		margin-left: 20px;

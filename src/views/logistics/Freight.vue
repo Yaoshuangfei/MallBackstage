@@ -87,9 +87,70 @@
 				<el-col :span="6" style="line-height: 30px">除指定地区外，其余地区的运费采用“默认运费”</el-col>
 			</el-col>
 			<el-col :span="24">
-				<el-col :span="2" :offset="2"> <el-checkbox v-model="checked">快递</el-checkbox></el-col>
+				<el-col :span="2" :offset="2"> <el-checkbox v-model="checked" @change="showKD">快递</el-checkbox></el-col>
+			</el-col>
+			<!-- ------------------------------------------快递--------------------------------------------------------- -->
+			<el-col :span="24" class="top_margin" v-show="kd_table">
+				<el-col :span="20" :offset="2" style="border:1px solid #ddd">
+					<el-col :span="24" class="top_margin">
+						<el-col :span="2" class="left_temp">默认运费：</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.freight"></el-input></el-col>
+						<el-col :span="1" class="left_temp">kg内，</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.element"></el-input></el-col>
+						<el-col :span="1" style="line-height: 30px">元，</el-col>
+						<el-col :span="1" class="left_temp">每增加</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.zfreight"></el-input></el-col>
+						<el-col :span="1" style="line-height: 30px">kg，</el-col>
+						<el-col :span="1" class="left_temp">增加运费</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.zelement"></el-input></el-col>
+						<el-col :span="1" style="line-height: 30px">元</el-col>
+					</el-col>
+					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
+						<el-table :data="fareCarries" >
+					      <el-table-column prop="data" label="运送到" width="280">
+					      	<template scope="scope">
+					      		{{scope.row.data}}
+					      		<el-button type="text" size="small" @click="kdEditBtn(scope.row)">编辑</el-button>
+							</template>
+					      </el-table-column>
+					      <el-table-column prop="firstHeavy" label="首重(kg)" width="180">
+					      	<template scope="scope">
+					      		<el-input v-model="scope.row.firstHeavy" type="text"></el-input>
+							</template>
+					      </el-table-column>
+					      <el-table-column prop="firstPrice" label="首费(元)" width="180">
+					      	<template scope="scope">
+					      		<el-input v-model="scope.row.firstPrice" type="text"></el-input>
+							</template>
+					      </el-table-column>
+					      <el-table-column prop="addHeavy" label="续重(kg)" width="190">
+						      <template scope="scope">
+						      		<el-input v-model="scope.row.addHeavy" type="text"></el-input>
+								</template>
+					      </el-table-column>
+					      <el-table-column prop="addPrice" label="续费(元)" width="200">
+					      	<template scope="scope">
+					      		<el-input v-model="scope.row.addPrice" type="text"></el-input>
+							</template>
+					      </el-table-column>
+					      <el-table-column label="操作">
+							<template scope="scope">
+								<el-button type="text" size="small" @click="deldetKDsubmit">删除</el-button>
+							</template>
+						</el-table-column>
+					    </el-table>
+					</el-col>
+					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
+						<el-button type="text" size="small" @click="addKDsubmit">为指定地区设置运费</el-button>
+						<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">批量操作</el-button> -->
+					</el-col>
+				</el-col>
 			</el-col>
 			<el-col :span="24" class="top_margin">
+				<el-col :span="2" :offset="2"> <el-checkbox v-model="ems" @change="showEMS">EMS</el-checkbox></el-col>
+			</el-col>
+			<!-- ------------------------------------------EMS--------------------------------------------------------- -->
+			<el-col :span="24" class="top_margin" v-show="EMS_table">
 				<el-col :span="20" :offset="2" style="border:1px solid #ddd">
 					<el-col :span="24" class="top_margin">
 						<el-col :span="2" class="left_temp">默认运费：</el-col>
@@ -141,15 +202,69 @@
 					</el-col>
 					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
 						<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">为指定地区设置运费</el-button>
-						<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">批量操作</el-button>
+						<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">批量操作</el-button> -->
 					</el-col>
 				</el-col>
 			</el-col>
 			<el-col :span="24" class="top_margin">
-				<el-col :span="2" :offset="2"> <el-checkbox v-model="ems">EMS</el-checkbox></el-col>
+				<el-col :span="2" :offset="2"> <el-checkbox v-model="pingyou" @change="showPY">平邮</el-checkbox></el-col>
 			</el-col>
-			<el-col :span="24" class="top_margin">
-				<el-col :span="2" :offset="2"> <el-checkbox v-model="pingyou">平邮</el-checkbox></el-col>
+			<!-- ------------------------------------------平邮--------------------------------------------------------- -->
+			<el-col :span="24" class="top_margin" v-show="py_table">
+				<el-col :span="20" :offset="2" style="border:1px solid #ddd">
+					<el-col :span="24" class="top_margin">
+						<el-col :span="2" class="left_temp">默认运费：</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.freight"></el-input></el-col>
+						<el-col :span="1" class="left_temp">kg内，</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.element"></el-input></el-col>
+						<el-col :span="1" style="line-height: 30px">元，</el-col>
+						<el-col :span="1" class="left_temp">每增加</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.zfreight"></el-input></el-col>
+						<el-col :span="1" style="line-height: 30px">kg，</el-col>
+						<el-col :span="1" class="left_temp">增加运费</el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValue.zelement"></el-input></el-col>
+						<el-col :span="1" style="line-height: 30px">元</el-col>
+					</el-col>
+					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
+						<el-table :data="fareCarries" >
+					      <el-table-column prop="data" label="运送到" width="280">
+					      	<template scope="scope">
+					      		{{scope.row.data}}
+					      		<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							</template>
+					      </el-table-column>
+					      <el-table-column prop="firstHeavy" label="首重(kg)" width="180">
+					      	<template scope="scope">
+					      		<el-input v-model="scope.row.firstHeavy" type="text"></el-input>
+							</template>
+					      </el-table-column>
+					      <el-table-column prop="firstPrice" label="首费(元)" width="180">
+					      	<template scope="scope">
+					      		<el-input v-model="scope.row.firstPrice" type="text"></el-input>
+							</template>
+					      </el-table-column>
+					      <el-table-column prop="addHeavy" label="续重(kg)" width="190">
+						      <template scope="scope">
+						      		<el-input v-model="scope.row.addHeavy" type="text"></el-input>
+								</template>
+					      </el-table-column>
+					      <el-table-column prop="addPrice" label="续费(元)" width="200">
+					      	<template scope="scope">
+					      		<el-input v-model="scope.row.addPrice" type="text"></el-input>
+							</template>
+					      </el-table-column>
+					      <el-table-column label="操作">
+							<template scope="scope">
+								<el-button type="text" size="small" @click="handldeldet(scope.$index, scope.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					    </el-table>
+					</el-col>
+					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
+						<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">为指定地区设置运费</el-button>
+						<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">批量操作</el-button> -->
+					</el-col>
+				</el-col>
 			</el-col>
 			<el-col :span="24" class="top_margin">
 				<el-col :span="2" :offset="1"> <el-checkbox v-model="addfrom.specifyMailStatus">按指定条件包邮可选</el-checkbox></el-col>
@@ -160,7 +275,7 @@
 					      <el-table-column prop="name" label="选择地区" width="280">
 					      	<template scope="scope">
 					      		{{scope.row.name}}
-					      		<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					      		<el-button type="text" size="small" @click="kdEditBtn(scope.row)">编辑</el-button>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="name" label="选择运送方式" width="180">
@@ -188,9 +303,14 @@
 			</el-col>
 			<el-col :span="24" class="top_margin"><el-button type="primary" v-on:click="preservation">保存</el-button></el-col>
 		</el-col>
-
+		<el-dialog title="选择区域" v-model="regionDiv" :close-on-click-modal="false" >
+			
+			<!-- <div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="regionDiv = false">关闭</el-button>
+			</div> -->
+		</el-dialog>
 		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="background:#fff;">
+		<el-col :span="24" class="toolbar" v-show="template" style="background:#fff;">
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
@@ -206,6 +326,10 @@
 	export default {
 		data() {
 			return {
+				kd_table:false,
+				EMS_table:false,
+				py_table:false,
+				regionDiv:false,
 				ceshiarry:[
 					{name:1},
 					{name:2}
@@ -227,15 +351,7 @@
 					valuationType:'0',
 					specifyMailStatus:false
 				},
-				fareCarries:[{
-					data:[],
-					firstHeavy:'',
-					firstPrice:'',
-					addHeavy:'',
-					addPrice:'',
-					mode:0,
-					isDefault:1
-				}],
+				fareCarries:[],
 				isareaId:'',
 				fareIpps:[{
 					ippType:'',
@@ -248,7 +364,7 @@
 				addtemplate:false,
 				radio: '1',
 				piece:'1',
-				checked: true,
+				checked: false,
 				pingyou:false,
 				ems:false,
 				tableData:[{
@@ -290,15 +406,6 @@
 					name: [
 						{ required: true, message: '请输入姓名', trigger: 'blur' }
 					]
-				},
-				//编辑界面数据
-				editForm: {
-					id: 0,
-					username: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -346,6 +453,46 @@
 			}
 		},
 		methods: {
+			showKD(){
+				if(this.checked === false){
+					this.kd_table = false
+				}else{
+					this.kd_table = true
+				}
+			},
+			addKDsubmit(){
+				const obj = {
+					mode:0,
+					isDefault:0,
+					data:'',
+					firstHeavy:'',
+					firstPrice:'',
+					addHeavy:'',
+					addPrice:''
+				}
+				this.fareCarries.push(obj)
+			},
+			kdEditBtn(row){
+				console.log(row)
+				this.regionDiv = true
+			},
+			deldetKDsubmit(){
+
+			},
+			showEMS(){
+				if(this.ems === false){
+					this.EMS_table = false
+				}else{
+					this.EMS_table = true
+				}
+			},
+			showPY(){
+				if(this.pingyou === false){
+					this.py_table = false
+				}else{
+					this.py_table = true
+				}
+			},
 			handldeldet(index ,row){
 				console.log(row)
 			},
@@ -446,11 +593,6 @@
 
 				});
 			},
-			//显示编辑界面
-			seeBtn: function (index, row) {
-				this.editFormVisible = true;
-				this.orderDetails = Object.assign({}, row);
-			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
@@ -461,30 +603,6 @@
 					birth: '',
 					addr: ''
 				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
 			},
 			//新增
 			addSubmit: function () {
