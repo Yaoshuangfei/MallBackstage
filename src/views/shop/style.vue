@@ -24,7 +24,18 @@
 				</el-col>
 			</el-col>
 		    <el-col :xs="9" :sm="9" :md="9" :lg="9">
-		    	预览
+		    	<el-col :xs="24" :sm="24" :md="24" :lg="24">预览</el-col>
+		    	<el-col :xs="24" :sm="24" :md="24" :lg="24">
+		    		<div class="ylback">
+		    			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-left: 18px;margin-top: 230px">
+				    		<img style="width: 256px;height:150px" :src="oneImg">
+				    		<img style="width: 256px;height:150px" :src="twoImg">
+				    	</el-col>
+				    	<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-left: 18px">
+				    		<img style="width: 256px;height:150px" :src="twoImg">
+				    	</el-col> -->
+		    		</div>
+		    	</el-col>
 		    </el-col>
 		</el-row>
 		<el-row :gutter="10" style="margin-top: 40px">
@@ -41,6 +52,8 @@
 	export default {
 		data() {
 			return {
+				oneImg:'',
+				twoImg:'',
 				selectOne:[],
 				selectTwo:[],
 				oneId:'',
@@ -154,9 +167,13 @@
 			},
 			oneBtn(row){
 				this.oneId = row.id
+				this.oneImg = row.picture
+				console.log(row)
 			},
 			twoBtn(row){
 				this.twoId = row.id
+				this.twoImg = row.picture
+				console.log(row)
 			},
 			uploadBtn(){
 				console.log(this.oneId)
@@ -318,9 +335,16 @@
 .shopstyle{
 	width: 200px;
 	height: 200px;
-	border: 1px solid #ddd;
+	/*border: 1px solid #ddd;*/
 	margin-left: 20px;
 	margin-top: 20px;
 	margin-bottom: 20px
+}
+.ylback{
+	width: 300px;
+	height: 605px;
+	background-image: url(../../assets/ipone.png);
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 </style>

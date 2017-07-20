@@ -138,7 +138,7 @@ let routes = [
         iconCls: 'fa el-icon-picture',
         children: [
             { path: '/OrderInformation', component: OrderInformation, name: '订单信息管理' },
-             { path: '/details', component: details, name: '订单详情' ,hidden: true }
+             { path: '/details/:id', component: details, name: '订单详情' ,hidden: true }
         ]
     },
     {

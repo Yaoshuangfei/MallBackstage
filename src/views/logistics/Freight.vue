@@ -115,22 +115,22 @@
 					      </el-table-column>
 					      <el-table-column prop="firstHeavy" label="首重(kg)" width="180">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.firstHeavy" type="text"></el-input>
+					      		<el-input v-model="scope.row.firstHeavy" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="firstPrice" label="首费(元)" width="180">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.firstPrice" type="text"></el-input>
+					      		<el-input v-model="scope.row.firstPrice" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="addHeavy" label="续重(kg)" width="190">
 						      <template scope="scope">
-						      		<el-input v-model="scope.row.addHeavy" type="text"></el-input>
+						      		<el-input v-model="scope.row.addHeavy" type="number"></el-input>
 								</template>
 					      </el-table-column>
 					      <el-table-column prop="addPrice" label="续费(元)" width="200">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.addPrice" type="text"></el-input>
+					      		<el-input v-model="scope.row.addPrice" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column label="操作">
@@ -154,43 +154,43 @@
 				<el-col :span="20" :offset="2" style="border:1px solid #ddd">
 					<el-col :span="24" class="top_margin">
 						<el-col :span="2" class="left_temp">默认运费：</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.freight"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValueEMS.freight"></el-input></el-col>
 						<el-col :span="1" class="left_temp">kg内，</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.element"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValueEMS.element"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">元，</el-col>
 						<el-col :span="1" class="left_temp">每增加</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.zfreight"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValueEMS.zfreight"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">kg，</el-col>
 						<el-col :span="1" class="left_temp">增加运费</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.zelement"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValueEMS.zelement"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">元</el-col>
 					</el-col>
 					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
-						<el-table :data="fareCarries" >
+						<el-table :data="fareCarriesEMS" >
 					      <el-table-column prop="data" label="运送到" width="280">
 					      	<template scope="scope">
 					      		{{scope.row.data}}
-					      		<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					      		<el-button type="text" size="small" @click="kdEditBtn(scope.row)">编辑</el-button>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="firstHeavy" label="首重(kg)" width="180">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.firstHeavy" type="text"></el-input>
+					      		<el-input v-model="scope.row.firstHeavy" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="firstPrice" label="首费(元)" width="180">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.firstPrice" type="text"></el-input>
+					      		<el-input v-model="scope.row.firstPrice" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="addHeavy" label="续重(kg)" width="190">
 						      <template scope="scope">
-						      		<el-input v-model="scope.row.addHeavy" type="text"></el-input>
+						      		<el-input v-model="scope.row.addHeavy" type="number"></el-input>
 								</template>
 					      </el-table-column>
 					      <el-table-column prop="addPrice" label="续费(元)" width="200">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.addPrice" type="text"></el-input>
+					      		<el-input v-model="scope.row.addPrice" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column label="操作">
@@ -201,7 +201,7 @@
 					    </el-table>
 					</el-col>
 					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
-						<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">为指定地区设置运费</el-button>
+						<el-button type="text" size="small" @click="addEMSsubmit">为指定地区设置运费</el-button>
 						<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">批量操作</el-button> -->
 					</el-col>
 				</el-col>
@@ -214,43 +214,43 @@
 				<el-col :span="20" :offset="2" style="border:1px solid #ddd">
 					<el-col :span="24" class="top_margin">
 						<el-col :span="2" class="left_temp">默认运费：</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.freight"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValuePY.freight"></el-input></el-col>
 						<el-col :span="1" class="left_temp">kg内，</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.element"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValuePY.element"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">元，</el-col>
 						<el-col :span="1" class="left_temp">每增加</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.zfreight"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValuePY.zfreight"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">kg，</el-col>
 						<el-col :span="1" class="left_temp">增加运费</el-col>
-						<el-col :span="3"><el-input type="text" v-model="defaultValue.zelement"></el-input></el-col>
+						<el-col :span="3"><el-input type="text" v-model="defaultValuePY.zelement"></el-input></el-col>
 						<el-col :span="1" style="line-height: 30px">元</el-col>
 					</el-col>
 					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
-						<el-table :data="fareCarries" >
+						<el-table :data="fareCarriesPY" >
 					      <el-table-column prop="data" label="运送到" width="280">
 					      	<template scope="scope">
 					      		{{scope.row.data}}
-					      		<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					      		<el-button type="text" size="small" @click="kdEditBtn(scope.row)">编辑</el-button>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="firstHeavy" label="首重(kg)" width="180">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.firstHeavy" type="text"></el-input>
+					      		<el-input v-model="scope.row.firstHeavy" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="firstPrice" label="首费(元)" width="180">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.firstPrice" type="text"></el-input>
+					      		<el-input v-model="scope.row.firstPrice" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column prop="addHeavy" label="续重(kg)" width="190">
 						      <template scope="scope">
-						      		<el-input v-model="scope.row.addHeavy" type="text"></el-input>
+						      		<el-input v-model="scope.row.addHeavy" type="number"></el-input>
 								</template>
 					      </el-table-column>
 					      <el-table-column prop="addPrice" label="续费(元)" width="200">
 					      	<template scope="scope">
-					      		<el-input v-model="scope.row.addPrice" type="text"></el-input>
+					      		<el-input v-model="scope.row.addPrice" type="number"></el-input>
 							</template>
 					      </el-table-column>
 					      <el-table-column label="操作">
@@ -261,7 +261,7 @@
 					    </el-table>
 					</el-col>
 					<el-col :span="20" class="top_margin" style="margin-left: 10px;">
-						<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">为指定地区设置运费</el-button>
+						<el-button type="text" size="small" @click="addPYsubmit">为指定地区设置运费</el-button>
 						<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">批量操作</el-button> -->
 					</el-col>
 				</el-col>
@@ -304,10 +304,13 @@
 			<el-col :span="24" class="top_margin"><el-button type="primary" v-on:click="preservation">保存</el-button></el-col>
 		</el-col>
 		<el-dialog title="选择区域" v-model="regionDiv" :close-on-click-modal="false" >
-			
-			<!-- <div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="regionDiv = false">关闭</el-button>
-			</div> -->
+		<!-- check-strictly  父子联动  :expand-on-click-node="false" 点击箭头展开-->
+			<el-tree :data="treeLisy" show-checkbox    @check-change="handleNodeClick"  node-key="id" ref="tree"  highlight-current style="border: none">
+			</el-tree>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="dequerSubmit">提交</el-button>
+				<!-- <el-button type="primary" @click.native="regionDiv = false">关闭</el-button> -->
+			</div>
 		</el-dialog>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" v-show="template" style="background:#fff;">
@@ -321,7 +324,7 @@
 <script>
 	import { state } from '../../vuex/state'
 	import util from '../../common/js/util'
-	import {baseUrl , editUser, addUser,cityData3} from '../../api/api';
+	import {baseUrl , editUser, addUser,cityData3,cityData2} from '../../api/api';
 
 	export default {
 		data() {
@@ -343,6 +346,24 @@
 					mode:0,
 					isDefault:0
 				},
+				defaultValueEMS:{
+					freight:'',
+					element:'',
+					zfreight:'',
+					zelement:'',
+					data:[],
+					mode:0,
+					isDefault:0
+				},
+				defaultValuePY:{
+					freight:'',
+					element:'',
+					zfreight:'',
+					zelement:'',
+					data:[],
+					mode:0,
+					isDefault:0
+				},
 				addfrom:{
 					name:'',
 					areaId:[],
@@ -352,6 +373,8 @@
 					specifyMailStatus:false
 				},
 				fareCarries:[],
+				fareCarriesEMS:[],
+				fareCarriesPY:[],
 				isareaId:'',
 				fareIpps:[{
 					ippType:'',
@@ -394,6 +417,7 @@
 					label:'退货'
 				}],
 				options: cityData3,
+				treeLisy: cityData2,
 				users: [],
 				total: 0,
 				page: 1,
@@ -449,10 +473,75 @@
 		        }, {
 		          value: '600',
 		          label: '25天内'
-		        }]
+		        }],
+		        role_arr:[],
+		        role_arrinit:[],
+		        roleName_arr:[],
+		        roleName_arrinit:[],
+		        initobj :{},
+		        province:'',
+		        city:'',
+		        area:'',
+		        areaId:'',
+		        cityId:'',
+		        provinceId:''
 			}
 		},
 		methods: {
+			handleNodeClick(row,index){
+				console.log(row)
+				this.role_arr = []
+				this.roleName_arr = []
+				if(index === true){
+					this.role_arrinit.push(row.id)
+					this.roleName_arrinit.push(row.label)
+					var json = {};
+					for(var i = 0; i < this.role_arrinit.length; i++){
+					  if(!json[this.role_arrinit[i]]){
+					   this.role_arr.push(this.role_arrinit[i]);
+					   this.roleName_arr.push(this.roleName_arrinit[i]);
+					   json[this.role_arrinit[i]] = 1;
+					   json[this.roleName_arrinit[i]] = 1;
+					  }
+					}
+					this.role_arrinit = this.role_arr
+					this.roleName_arrinit = this.roleName_arr
+				}else if(index ===false){
+					Array.prototype.indexOf = function(val) {
+						for (var i = 0; i < this.length; i++) {
+							if (this[i] == val) return i;
+						}
+						return -1;
+					};
+					Array.prototype.remove = function(val) {
+						var index = this.indexOf(val);
+						if (index > -1) {
+							this.splice(index, 1);
+						}
+					};
+					this.role_arrinit.remove(row.id);
+					this.role_arr = this.role_arrinit
+					this.roleName_arrinit.remove(row.label);
+					this.roleName_arr = this.roleName_arrinit
+				}
+				// this.fareCarries.data = this.role_arr
+				// this.role_arr.join(',')
+				// this.initobj.data = this.roleName_arr.join(',')
+			},
+			dequerSubmit(){
+				// let _this = this
+				this.initobj.data = this.roleName_arr.join(',')
+				this.initobj.id = this.role_arr.join(',')
+				console.log(this.initobj.id)
+				this.regionDiv = false
+				this.$refs.tree.setCheckedKeys([]);
+				// const params = {
+				// 	accountId:'1',
+				// 	accessToken:'1',
+				// 	orgId:_this.fatherRoleID,
+				// 	resourcesIds:this.role_arr.join(',')
+				// }
+			},
 			showKD(){
 				if(this.checked === false){
 					this.kd_table = false
@@ -462,6 +551,7 @@
 			},
 			addKDsubmit(){
 				const obj = {
+					id:[],
 					mode:0,
 					isDefault:0,
 					data:'',
@@ -472,8 +562,33 @@
 				}
 				this.fareCarries.push(obj)
 			},
+			addEMSsubmit(){
+				const obj = {
+					mode:1,
+					isDefault:0,
+					data:'',
+					firstHeavy:'',
+					firstPrice:'',
+					addHeavy:'',
+					addPrice:''
+				}
+				this.fareCarriesEMS.push(obj)
+			},
+			addPYsubmit(){
+				const obj = {
+					mode:2,
+					isDefault:0,
+					data:'',
+					firstHeavy:'',
+					firstPrice:'',
+					addHeavy:'',
+					addPrice:''
+				}
+				this.fareCarriesPY.push(obj)
+			},
 			kdEditBtn(row){
 				console.log(row)
+				this.initobj = row
 				this.regionDiv = true
 			},
 			deldetKDsubmit(){
@@ -503,8 +618,39 @@
 			},
 			 handleChange(value) {
 		        console.log(value);
-		        this.isareaId = value[value.length-1]
 		        console.log(this.addfrom.areaId)
+		        this.isareaId = value[value.length-1]
+		        console.log(this.isareaId)
+		        console.log(cityData3)
+		        let arry = []
+		        let arry1 = []
+		        this.areaId = value[0]
+		        this.cityId = value[1]
+		        this.provinceId = value[2]
+		        for(var i = 0;i<cityData3.length;i++){
+		        	if(value[0] === cityData3[i].value){
+		        		console.log(cityData3[i].label)
+		        		arry = cityData3[i].children
+		        	}
+		        }
+		        for(var i = 0;i<arry.length;i++){
+		        	if(value[1] === arry[i].value){
+		        		console.log(arry[i].label)
+		        		arry1 = arry[i].children
+		        	}
+		        }
+		        for(var i = 0;i<arry1.length;i++){
+		        	if(value[2] === arry1[i].value){
+		        		console.log(arry1[i].label)
+		        	}
+		        }
+		    },
+		    xunhuan(row){
+		    	for(var i = 0;i<cityData3.length;i++){
+		        	if(value[0] === cityData3[i].value){
+		        		console.log(cityData3[i])
+		        	}
+		        }	
 		    },
 			preservation() {
 				const _this = this
@@ -517,46 +663,126 @@
 				}
 				const params = {
 					name:_this.addfrom.name,
-					areaId:this.isareaId,
+					// areaId:this.isareaId,
 					deliverTime:_this.addfrom.deliverTime,
 					isFree:_this.addfrom.isFree,
 					valuationType:_this.addfrom.valuationType,
-					specifyMailStatus:specifyMailStatu,
 					storeId:state.storeId,
+
+					areaId:this.areaId,
+					cityId:this.cityId,
+					provinceId:this.provinceId,
+
+					province:this.province,
+					city:this.city,
+					area:this.area,
+
+					specifyMailStatus:specifyMailStatu,
+
+					
 					fareCarries:[]
 				}
-				const zobj = {
-					data:this.defaultValue.data,
-					firstHeavy:this.defaultValue.freight,
-					firstPrice:this.defaultValue.element,
-					addHeavy:this.defaultValue.zfreight,
-					addPrice:this.defaultValue.zelement,
-					mode:0,
-					isDefault:0
-				}
-				zobj.data = JSON.stringify(zobj.data)
-				params.fareCarries.push(zobj)
-				if(this.checked === false){
-					check = ''
-				}else{
-					check = 0
-					const fareCarrie = {
-						data:_this.fareCarries[0].data,
-						firstHeavy:_this.fareCarries[0].firstHeavy,
-						firstPrice:_this.fareCarries[0].firstPrice,
-						addHeavy:_this.fareCarries[0].addHeavy,
-						addPrice:_this.fareCarries[0].addPrice,
-						mode:check,
-						isDefault:0
+
+
+
+
+
+				if(this.checked === true){
+					console.log(this.fareCarries)
+					for(var i = 0;i<this.fareCarries.length;i++){
+						const obj = {
+							mode:0,
+							isDefault:0,
+							data:[]
+							// firstHeavy:1,
+							// firstPrice:1,
+							// addHeavy:1,
+							// addPrice:1
+						}
+						obj.firstHeavy = this.fareCarries[i].firstHeavy
+						obj.firstPrice = this.fareCarries[i].firstPrice
+						obj.addHeavy = this.fareCarries[i].addHeavy
+						obj.addPrice = this.fareCarries[i].addPrice
+						obj.data = this.fareCarries[i].id
+						// obj.data = JSON.stringify(obj.data)
+						params.fareCarries.push(obj)
 					}
-					fareCarrie.data = JSON.stringify(fareCarrie.data)
-					params.fareCarries.push(fareCarrie)
-					console.log(fareCarrie)
+					// this.defaultValue.data = JSON.stringify(this.defaultValue.data)
+					// params.fareCarries.push(this.defaultValue)
+					// console.log(params)
 				}
-				console.log(this.defaultValue)
+
+				if(this.ems === true){
+					console.log(this.fareCarriesEMS)
+					for(var i = 0;i<this.fareCarriesEMS.length;i++){
+						const obj = {
+							mode:1,
+							isDefault:0,
+							data:[]
+						}
+						obj.firstHeavy = this.fareCarriesEMS[i].firstHeavy
+						obj.firstPrice = this.fareCarriesEMS[i].firstPrice
+						obj.addHeavy = this.fareCarriesEMS[i].addHeavy
+						obj.addPrice = this.fareCarriesEMS[i].addPrice
+
+						obj.data = JSON.stringify(obj.data)
+						params.fareCarries.push(obj)
+					}
+					// this.defaultValueEMS.data = JSON.stringify(this.defaultValueEMS.data)
+					// params.fareCarries.push(this.defaultValueEMS)
+					// console.log(params)
+				}
+
+				if(this.pingyou === true){
+					console.log(this.fareCarriesPY)
+					for(var i = 0;i<this.fareCarriesPY.length;i++){
+						const obj = {
+							mode:2,
+							isDefault:0,
+							data:[]
+						}
+						obj.firstHeavy = this.fareCarriesPY[i].firstHeavy
+						obj.firstPrice = this.fareCarriesPY[i].firstPrice
+						obj.addHeavy = this.fareCarriesPY[i].addHeavy
+						obj.addPrice = this.fareCarriesPY[i].addPrice
+
+						obj.data = JSON.stringify(obj.data)
+						params.fareCarries.push(obj)
+					}
+					// this.defaultValuePY.data = JSON.stringify(this.defaultValuePY.data)
+					// params.fareCarries.push(this.defaultValuePY)
+					// console.log(params)
+				}
+				
+
+
+
+
 				console.log(params)
-				this.addtemplate = false
-				this.template = true
+
+
+
+
+
+
+
+
+
+
+				
+				// const zobj = {
+				// 	data:this.defaultValue.data,
+				// 	firstHeavy:this.defaultValue.freight,
+				// 	firstPrice:this.defaultValue.element,
+				// 	addHeavy:this.defaultValue.zfreight,
+				// 	addPrice:this.defaultValue.zelement,
+				// 	mode:0,
+				// 	isDefault:0
+				// }
+				// zobj.data = JSON.stringify(zobj.data)
+				// params.fareCarries.push(zobj)
+				// console.log(params)
+				
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -566,6 +792,11 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	console.log(data)
+                    	if(data.code === 1){
+                    		_this.addtemplate = false
+							_this.template = true
+							_this.gettemplet()
+                    	}
                     }
                 });
 			},

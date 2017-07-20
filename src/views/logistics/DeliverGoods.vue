@@ -6,12 +6,12 @@
 				<!-- <el-form-item>
 					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
 				</el-form-item> -->
-				<el-form-item label="状态">
+				<!-- <el-form-item label="状态">
 					<el-select v-model="filters.status" clearable>
 				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
 				      </el-option>
 				    </el-select>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="搜索类型">
 				    <el-select v-model="filters.type" clearable>
 				      <el-option v-for="item in options" :label="item.label" :value="item.value">
@@ -22,7 +22,7 @@
 				    <el-input v-model="filters.name"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="getlist">查询</el-button>
 					<el-button type="primary" v-on:click="getUsers">导出订单</el-button>
 				</el-form-item>
 			</el-form>
@@ -43,7 +43,7 @@
 				<el-col :span="3" :offset="4" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
 				<el-col :span="1" style="margin-left: 20px">{{item.totalMoney}}</el-col>
 				<el-col :span="2" style="margin-left:60px">
-					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
+					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
@@ -115,9 +115,6 @@
 		        }, {
 		          value: '2',
 		          label: '快递单号'
-		        }, {
-		          value: '3',
-		          label: '用户名'
 		        }],
 		        optionKey:[],
 				filters: {
@@ -244,10 +241,16 @@
 					pageNum:this.page,
 					size:10,
 					storeId:state.storeId,
-					order_status:2,
-					refund_status:'',
+					orderStatus:2,
 					orderId:'',
 					expno:''
+				}
+				if(this.filters.type !== ''){
+					if(this.filters.type === '1'){
+						params.orderId = this.filters.name
+					}else if(this.filters.type === '2'){
+						params.expno = this.filters.name
+					}
 				}
 				console.log(params)
 				$.ajax({

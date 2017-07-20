@@ -29,6 +29,8 @@
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column prop="tradeNo" label="订单号">
 			</el-table-column>
+			<el-table-column prop="remark" label="商品名">
+			</el-table-column>
 			<el-table-column prop="userName" label="用户名">
 			</el-table-column>
 			<el-table-column prop="mobile" label="手机号">
@@ -37,18 +39,15 @@
 			</el-table-column>
 			<el-table-column prop="payType" :formatter='formatterType' label="收入方式">
 			</el-table-column>
-			<el-table-column prop="centType" :formatter='formatter' label="来源">
+			<el-table-column prop="type" :formatter='formatter' label="来源">
 			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="交易时间">
 			</el-table-column>
-			<el-table-column label="操作">
+			<!-- <el-table-column label="操作">
 				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
 					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<!-- <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button> -->
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 		</el-table>
 
 		<!--工具条-->
@@ -117,6 +116,9 @@
 				value2:'',
 				selectSubjectStatus: [
 				{
+					value:'',
+					label:'所有状态'
+				},{
 					value:'0',
 					label:'微信支付'
 				},{
@@ -188,6 +190,7 @@
 			},
 			getlist(){
 				const _this = this
+				_this.listLoading = true
 				_this.table = []
 				const params = {
 					pageNum:_this.page,
@@ -215,9 +218,11 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
                     	const info = data.data
                     	_this.orderInformation = info.list
                     	_this.total = info.total
+                    	_this.listLoading = false
                     }
                 });
 			},
@@ -233,37 +238,57 @@
 			//支付方式
 			formatterType(row, column) {
 				let type = ''
-				if(row.payType === '0'){
+				if(row.payType === 0){
 					type = '微信支付'
-				}else if(row.payType === '1'){
+				}else if(row.payType === 1){
 					type = '支付宝支付'
-				}else if(row.payType === '2'){
+				}else if(row.payType === 2){
 					type = '银联支付'
-				}else if(row.payType === '3'){
+				}else if(row.payType === 3){
 					type = '余额支付'
-				}else if(row.payType === '4'){
+				}else if(row.payType === 4){
 					type = '余额金豆混合支付'
-				}else if(row.payType === '5'){
+				}else if(row.payType === 5){
 					type = '金豆支付'
 				}
 				return type
 			},
 			formatter(row, column){
-				let type = ''
-				if(row.centType === 1){
-					type = '购买平台身份'
-				}else if(row.centType === 2){
-					type = '购买店铺身份'
-				}else if(row.centType === 3){
-					type = '购买产品'
-				}else if(row.centType === 4){
-					type = '补货 '
-				}else if(row.centType === 5){
-					type = '业务充值'
-				}else if(row.centType === 6){
-					type = '扫码支付'
+				let centype = ''
+				if(row.type === 1){
+					centype = '提现'
+				}else if(row.type === 2){
+					centype = '分佣'
+				}else if(row.type === 3){
+					centype = '业务充值'
+				}else if(row.type === 4){
+					centype = '余额充值 '
+				}else if(row.type === 5){
+					centype = '商品购买'
+				}else if(row.type === 6){
+					centype = '店铺身份购买'
+				}else if(row.type === 7){
+					centype = '平台身份购买'
+				}else if(row.type === 8){
+					centype = '补货'
+				}else if(row.type === 9){
+					centype = '金豆充值'
+				}else if(row.type === 10){
+					centype = '金豆支出 '
+				}else if(row.type === 11){
+					centype = '店铺收入'
+				}else if(row.type === 12){
+					centype = '手续费'
+				}else if(row.type === 13){
+					centype = '便付劵充值'
+				}else if(row.type === 14){
+					centype = '便付劵转赠 '
+				}else if(row.type === 15){
+					centype = '便付劵兑换金豆'
+				}else if(row.type === 16){
+					centype = '商家会员钱包转平台钱包'
 				}
-				return type
+				return centype
 			}
 		},
 		mounted() {

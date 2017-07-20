@@ -81,11 +81,38 @@
 				value1:'',
 				value2:'',
 				states:[{
-					value:'0',
+					value:'',
 					label:'所有订单'
 				},{
-					value:'1',
-					label:'待付款'
+					value:1,
+					label:'支付中'
+				},{
+					value:2,
+					label:'支付成功'
+				},{
+					value:3,
+					label:'支付失败'
+				},{
+					value:4,
+					label:'已取消'
+				},{
+					value:5,
+					label:'卖家已发货'
+				},{
+					value:6,
+					label:'已收货'
+				},{
+					value:7,
+					label:'已评价'
+				},{
+					value:8,
+					label:'交易完成'
+				},{
+					value:9,
+					label:'售后处理'
+				},{
+					value:10,
+					label:'已删除'
 				}],
 				selectSubjectStatus: [],
 				options: [{
@@ -128,18 +155,7 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				orderInformation:[]
 			}
 		},
 		methods: {
@@ -148,13 +164,19 @@
 				const params = {
 					pageNum:this.page,
 					size:10,
-					/*orderType:'',*/
-					storeId:state.storeId,/*
-					order_status:'',
-					refund_status:'',*/
+					storeId:state.storeId,
+					orderStatus:this.filters.status,
 					orderId:'',
 					expno:''
 				}
+				if(this.filters.type !== ''){
+					if(this.filters.type === '1'){
+						params.orderId = this.filters.name
+					}else if(this.filters.type === '2'){
+						params.expno = this.filters.name
+					}
+				}
+				
 				console.log(params)
 				$.ajax({
                     type:'POST',
