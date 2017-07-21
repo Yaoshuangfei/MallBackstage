@@ -503,6 +503,7 @@
             selectListName(){
                 const _this = this;
                 const url   = baseUrl+"/api/goodsClass/selectListName";
+                _this.data = []
                 const params = {
                     pid:''
                 };

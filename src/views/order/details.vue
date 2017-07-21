@@ -35,7 +35,7 @@
 		<el-col :span="24" class="Payment_method">支付方式：{{table.payMethod}}</el-col> 
 		<el-col class="time" :span="24">下单时间：{{table.payTime}}</el-col> 
 		<el-col :span="24" class="order_information" style="margin-top: 20px">物流信息</el-col>
-		<el-col :span="24" v-for="item in wuliuinfo" style="margin-left: 40px;color: #3e3e3e;margin-top: 10px">
+		<el-col :span="24" v-for="item in wuliuinfo" style="margin-left: 40px;color: #aaa;margin-top: 10px">
 			<el-col :span="24">{{item.AcceptStation}}</el-col>
 			<el-col :span="24">{{item.AcceptTime}}</el-col>
 		</el-col>
@@ -127,7 +127,7 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	console.log(data)
-                    	_this.wuliuinfo = data.data.jsonArray
+                    	_this.wuliuinfo = data.data.jsonArray.reverse()
                     }
                 });
 			}
@@ -184,7 +184,7 @@
 		margin-left: 100px;
 		margin-top: 40px;
 		width: 1200px;
-		height:800px;
+		height:1200px;
 		border: 1px solid #aaa;
 		border-radius: 10px;
 	}
