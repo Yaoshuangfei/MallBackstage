@@ -268,20 +268,6 @@
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
                     		_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
                     	}
-                    	/*for(var i in _this.selectSubjectStatus){
-							console.log(_this.selectSubjectStatus[i].coreUser.nickName+"sssssssssssss");
-                    	}*/
-
-                  //   	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
-		                // 	_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
-		                // 	if(_this.selectSubjectStatus[i].saleStatus === 1) {
-		                // 		_this.selectSubjectStatus[i].saleStatus = '销售中'
-		                // 	}else if(_this.selectSubjectStatus[i].saleStatus === 2) {
-		                // 		_this.selectSubjectStatus[i].saleStatus = '已下架'
-		                // 	}else{
-		                // 		_this.selectSubjectStatus[i].saleStatus = '已删除'
-		                // 	}
-		                // }
                     }
                 });
 			},

@@ -236,16 +236,6 @@
                     	const info = data.data.shopRoles
                     	console.log(data)
                     	_this.identity= info
-                        // if(!data.success){
-                        //     alert(data.msg);
-                        // }else{
-                        //     state.id = data.data.id
-                        //     console.log(state.id)
-                        //     document.cookie="token="+data.data.token;
-                        //     sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
-                        //     _this.$router.push({ path: '/main' });
-
-                        // }
                     }
                 });
 			},

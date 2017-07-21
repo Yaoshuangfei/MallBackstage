@@ -41,7 +41,7 @@
 				<el-col :span="4">下单时间：{{item.payTime}}</el-col>
 				<el-col :span="2" :offset="9">{{item.totalMoney}}</el-col>
 				<el-col :span="2" :offset="1">
-					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
+					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>

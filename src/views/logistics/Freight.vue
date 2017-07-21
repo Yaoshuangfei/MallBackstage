@@ -17,7 +17,7 @@
 						{{item.name}}
 					</el-col>
 					<el-col :span="7" :offset="15" style="">
-						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor">设为默认的运费模板 | </span> <span class="btncolor">修改 | </span> <span class="btncolor">删除</span>
+						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor">设为默认的运费模板 | </span> <!-- <span class="btncolor">修改 | </span> --> <span class="btncolor" @click="deldetBtn(item)">删除</span>
 					</el-col>
 				</el-col>
 				<el-table :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
@@ -488,6 +488,7 @@
 			}
 		},
 		methods: {
+			// 地区树勾选回调 
 			handleNodeClick(row,index){
 				console.log(row)
 				this.role_arr = []
@@ -528,13 +529,14 @@
 				// this.role_arr.join(',')
 				// this.initobj.data = this.roleName_arr.join(',')
 			},
+			// 确认选着地区
 			dequerSubmit(){
 				// let _this = this
 				this.initobj.data = this.roleName_arr.join(',')
 				this.initobj.id = this.role_arr.join(',')
 				console.log(this.initobj.id)
 				this.regionDiv = false
-				this.$refs.tree.setCheckedKeys([]);
+				this.$refs.tree.setCheckedKeys([]);//清空勾选
 				// const params = {
 				// 	accountId:'1',
 				// 	accessToken:'1',
@@ -542,6 +544,7 @@
 				// 	resourcesIds:this.role_arr.join(',')
 				// }
 			},
+			// 显示快递
 			showKD(){
 				if(this.checked === false){
 					this.kd_table = false
@@ -549,6 +552,7 @@
 					this.kd_table = true
 				}
 			},
+			// 添加快递运输方式
 			addKDsubmit(){
 				const obj = {
 					id:[],
@@ -562,6 +566,7 @@
 				}
 				this.fareCarries.push(obj)
 			},
+			// 添加EMS运输方式
 			addEMSsubmit(){
 				const obj = {
 					mode:1,
@@ -574,6 +579,7 @@
 				}
 				this.fareCarriesEMS.push(obj)
 			},
+			// 添加平邮运输方式
 			addPYsubmit(){
 				const obj = {
 					mode:2,
@@ -586,6 +592,7 @@
 				}
 				this.fareCarriesPY.push(obj)
 			},
+			// 显示地区树
 			kdEditBtn(row){
 				console.log(row)
 				this.initobj = row
@@ -594,6 +601,7 @@
 			deldetKDsubmit(){
 
 			},
+			// 显示EMS编辑
 			showEMS(){
 				if(this.ems === false){
 					this.EMS_table = false
@@ -601,6 +609,7 @@
 					this.EMS_table = true
 				}
 			},
+			// 显示平邮编辑
 			showPY(){
 				if(this.pingyou === false){
 					this.py_table = false
@@ -645,13 +654,29 @@
 		        	}
 		        }
 		    },
-		    xunhuan(row){
-		    	for(var i = 0;i<cityData3.length;i++){
-		        	if(value[0] === cityData3[i].value){
-		        		console.log(cityData3[i])
-		        	}
-		        }	
+		    // 删除运费模板
+		    deldetBtn(row){	
+		    	const _this = this
+				this.selectSubjectStatus = []
+				const params = {
+					id:row.id
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/fareTemplate/deleteById",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	if(data.code === 1){
+                    		_this.gettemplet()
+                    	}
+                    	
+                    }
+                });
 		    },
+		    // 添加运费模板
 			preservation() {
 				const _this = this
 				let specifyMailStatu = 0
