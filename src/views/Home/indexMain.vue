@@ -416,9 +416,9 @@
             this.drawCharts()
             this.drawPieChart()
         },
-        updated: function () {
-            this.drawCharts()
-        }
+        // updated: function () {
+        //     this.drawCharts()
+        // }
     }
 </script>
 
