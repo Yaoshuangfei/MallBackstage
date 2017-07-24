@@ -1,76 +1,44 @@
 <template>
   <section>
-    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
-      <el-form-item label="店铺名称">
+    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px" :rules="rules"  ref="filters">
+      <el-form-item label="店铺名称" prop="name">
         <el-input v-model="filters.name" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="所属分类">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+        <el-input v-model="filters.pertain_type" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="主营商品">
-        <el-input v-model="filters.name"  type="textarea" style="width:400px"></el-input>
+        <el-input v-model="filters.marketing_goods"  type="textarea" style="width:400px"></el-input>
       </el-form-item>
-      <el-form-item label="店铺logo">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+      <el-form-item label="店铺logo" prop="url">
+        <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+          <button type="button" class="el-button el-button--primary el-button--small">
+            <span>点击上传</span>
+          </button>
+          <el-col :spam="24">
+          <img style="width: 100px;" v-if="url !== ''" :src="url"></el-col>
+        <!-- <el-input v-model="filters.name" style="width:400px"></el-input> -->
       </el-form-item>
       <el-form-item label="所在地区">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+        <el-input v-model="filters.region" style="width:400px"></el-input>
       </el-form-item>
-      <el-form-item label="详细地址">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+      <el-form-item label="详细地址" prop="address">
+        <el-input v-model="filters.address" style="width:400px"></el-input>
       </el-form-item>
-      <el-form-item label="联系电话">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+      <el-form-item label="客服电话" prop="phone">
+        <el-input v-model="filters.phone" style="width:400px"></el-input>
       </el-form-item>
-      <el-form-item label="QQ">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+      <el-form-item label="QQ" prop="qq">
+        <el-input v-model="filters.qq" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="店铺介绍">
-        <el-input v-model="filters.name"  type="textarea" style="width:400px"></el-input>
+        <el-input v-model="filters.content"  type="textarea" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
         <el-button>取消</el-button>
       </el-form-item>
   </el-form>
-    <!--编辑界面-->
-    <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-      <el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="订单号">
-          <div>{{orderDetails.orderNumber }}</div>
-          <!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-        </el-form-item>
-        <el-form-item label="商品名称">
-          <div>{{orderDetails.commodityName}}</div>
-        </el-form-item>
-        <el-form-item label="用户名">
-          <div>{{orderDetails.userName }}</div>
-        </el-form-item>
-        <el-form-item label="实付金额">
-          <div>{{orderDetails.amountPaid }}</div>
-        </el-form-item>
-        <el-form-item label="订单总价">
-          <div>{{orderDetails.orderTotal }}</div>
-        </el-form-item>
-        <el-form-item label="订单状态">
-          <div>{{orderDetails.orderStatus }}</div>
-        </el-form-item>
-        <el-form-item label="支付方式">
-          <div>{{orderDetails.paymentMethod }}</div>
-        </el-form-item>
-        <el-form-item label="创建时间">
-          <div>{{orderDetails.creationTime}}</div>
-        </el-form-item>
-        <el-form-item label="发货时间">
-          <div>{{orderDetails.deliveryTime}}</div>
-        </el-form-item>
-        <el-col :span='24'></el-col>
-      </el-form>
-      <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-        <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-      </div>
-    </el-dialog>
   </section>
 </template>
 
@@ -82,6 +50,29 @@
   export default {
     data() {
       return {
+        url:'',
+         rules: {
+          name: [
+            { required: true, message: '请输店铺名称', trigger: 'blur' },
+            { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          ],
+          address: [
+            { required: true, message: '请输入详细地址', trigger: 'change' },
+            { min: 3, max: 25, message: '长度在 5 到 25 个字符', trigger: 'blur' }
+          ],
+          url: [
+            {  required: true, message: '请选择图片', trigger: 'change' }
+          ],
+          phone: [
+            {  required: true, message: '请填写客服电话', trigger: 'change' },
+            { min: 8, max: 12, message: '长度在 8 到 12 个字符', trigger: 'blur' }
+          ],
+          qq: [
+            { required: true, message: '请填写QQ号', trigger: 'change' },
+              // { type:'number', required: true, message: '请填写QQ号', trigger: 'change' },
+            { min: 6, max: 11, message: '长度在 6 到 11 个字符', trigger: 'blur' }
+          ]
+        },
         radio: '0',
         checked: true,
         value:'',
@@ -168,37 +159,77 @@
       }
     },
     methods: {
-      //性别显示转换
-      formatSex: function (row, column) {
-        return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+      upload (event) {
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                // console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                    console.log('存在file', file)
+                    this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file);
+                    console.log(this.formData);
+                    this.uploadBanner()
+                } else {
+                    this.fileImg = ''
+                    console.log('不存在file', file)
+                    this.formData = new FormData()
+                }
+            },
+      uploadBanner(){
+              const _this= this;
+              _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                  progress(event) {
+                  }
+              })
+                  .then(response => {
+                    console.log(response)
+                      const info = JSON.parse(response.bodyText);
+        _this.url = info.data[0].baseUri+info.data[0].uri;
+        console.log(_this.url)
+                  }, error => _this.$emit('complete', 500, error.message))
       },
-      getlist(){
+      onSubmit(){
         const _this = this
-        _this.table = []
         const params = {
-          accountId:'1',
-          accessToken:'',
-          resourceType:'',
-          page:{
-            pageNum:_this.page,
-            pageSize:'10'
-          }
+          id:state.storeId,
+          name:this.filters.name,
+          logo:this.url,
+          pertain_type:this.filters.pertain_type,
+          marketing_goods:this.filters.marketing_goods,
+          region:this.filters.region,
+          address:this.filters.address,
+          phone:this.filters.phone,
+          qq:this.filters.qq,
+          content:this.filters.content
         }
         console.log(params)
-        $.post(baseUrl+"/admin/banner/getBannerByPage",
-               { param: JSON.stringify(params) },
-               function(data){
-                const info = eval('(' + data + ')');
-                  const response = JSON.parse(info);
-                  const list = response.obj.results
-                  console.log(response)
-                  // _this.page = response.obj.total
-                  _this.total = response.obj.totalRecord
-                  for(var i = 0;i<list.length;i++){
-                    _this.table.push(list[i])
-                  }
+        $.ajax({
+              type:'POST',
+              dataType:'json',
+              url:baseUrl+"/api/store/update/thisStore",
+              data:JSON.stringify(params),
+              contentType:'application/json;charset=utf-8',
+              success:function(data){
+                console.log(data)
+                if(data.code === 1){
+                  _this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                }else {
+                  _this.$message({
+                    message: data.msg,
+                    type: 'error'
+                  });
                 }
-            )
+              }
+          });
+      },
+      getlist(){
+        
       },
       handleCurrentChange(val) {
         this.page = val;

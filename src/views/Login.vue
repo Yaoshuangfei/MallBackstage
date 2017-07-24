@@ -1,6 +1,6 @@
 <template>
   <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-    <h3 class="title">系统登录</h3>
+    <h3 class="title">商家管理中心</h3>
     <el-form-item prop="account">
       <el-input type="text" v-model="ruleForm2.username" auto-complete="off" @keyup.enter.native="keyLogin" placeholder="账号"></el-input>
     </el-form-item>
@@ -130,6 +130,8 @@
     -moz-border-radius: 5px;
     background-clip: padding-box;
     margin: 180px auto;
+    margin-right: 300px;
+    margin-top: 320px;
     width: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;

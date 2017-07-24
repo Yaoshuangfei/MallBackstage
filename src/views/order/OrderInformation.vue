@@ -223,7 +223,7 @@
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
+				this.getlist();
 			},
 			//获取用户列表
 			getUsers() {

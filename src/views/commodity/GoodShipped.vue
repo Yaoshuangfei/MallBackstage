@@ -329,7 +329,7 @@
 						obj.storage = '',
 						obj.deductibleImazamox = '',
 						obj.specNo = '',
-						obj.specPicture = '',
+						obj.specPicture = this.url,
 						obj.id = ''
 						this.tableData.push(obj)
 					}
@@ -356,7 +356,7 @@
 						obj.storage = '',
 						obj.deductibleImazamox = '',
 						obj.specNo = '',
-						obj.specPicture = '',
+						obj.specPicture = this.url,
 						obj.id = ''
 						this.tableData.push(obj)
 					}
@@ -674,6 +674,7 @@
                 params.goodsData = JSON.stringify(params.goodsData)
                 
                  // console.log(params)
+                 params.goodsSpecs
                 // 商品规格
                 
                 if(this.Specifications.length === 1){

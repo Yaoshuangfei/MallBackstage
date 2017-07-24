@@ -79,15 +79,7 @@
 					<div class="statistics_bottom_left_top">待办事项</div>
 					<div class="statistics_bottom_main">
 						<ul>
-							<li>1、中国地图，省份用户监测</li>
-							<li>1、中国地图，省份用户监测</li>
-							<li>1、中国地图，省份用户监测</li>
-							<li>1、中国地图，省份用户监测</li>
-							<li></li>
-							<li></li>
-							<li></li>
-							<li></li>
-							<li></li>
+							<li style="cursor: pointer;" v-for="item in daibanList"><a :title="item.notifyContent">{{item.notifyContent}}</a></li>
 						</ul>
 					</div>
 				</div>
@@ -124,6 +116,7 @@
     export default {
         data() {
             return {
+            	daibanList:[],
                 radio3: '报表',
                 ruleAll:[{
                 	name:'日报表',
@@ -164,6 +157,22 @@
             }
         },
         methods: {
+        	getGroup(){
+        		const _this = this
+        		$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/notify/selectListGroup",
+                    data:JSON.stringify([1,3,6,8,10,11]),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(data)
+                    	_this.daibanList = info
+                    	// _this.total = info.total
+                    }
+                });
+        	},
         	click(val) {
         		this.type = val
         		this.getline()
@@ -412,7 +421,7 @@
         mounted: function () {
         	this.getlist()
         	this.getline()
-        	// this.getper()
+        	this.getGroup()
             this.drawCharts()
             this.drawPieChart()
         },
