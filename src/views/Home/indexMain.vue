@@ -147,7 +147,7 @@
                 memberPercentage:'',
                 sumTotalQuantity:'',
                 quantityPercentage:'',
-                type:0,
+                type:1,
 
                 listAll:[],//线图
                 sj:[],
@@ -226,6 +226,7 @@
 	              success:function(data){
 	                const info = data.data
 	                // 线形图
+	                console.log(data)
 	                const linelist = info.analysisVOList
 	                // console.log(linelist)
 	                for(var i = 0;i<linelist.length;i++){

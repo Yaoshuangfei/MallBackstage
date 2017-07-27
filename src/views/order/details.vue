@@ -34,10 +34,31 @@
 		</el-col> 
 		<el-col :span="24" class="Payment_method">支付方式：{{table.payMethod}}</el-col> 
 		<el-col class="time" :span="24">下单时间：{{table.payTime}}</el-col> 
-		<el-col :span="24" class="order_information" style="margin-top: 20px">物流信息</el-col>
-		<el-col :span="24" v-for="item in wuliuinfo" style="margin-left: 40px;color: #aaa;margin-top: 10px">
+		<el-col :span="24" class="order_information" style="margin-top: 20px">
+			<el-button @click="seewl" type="text">物流信息</el-button> 
+		</el-col>
+		<el-col :span="24" class="order_information" style="margin-top: 20px">
+			<el-button @click="seefy" type="text">分佣详情</el-button> 
+		</el-col>
+		<el-col :span="24" v-show="wlShow" v-for="item in wuliuinfo" style="margin-left: 40px;color: #aaa;margin-top: 10px">
 			<el-col :span="24">{{item.AcceptStation}}</el-col>
 			<el-col :span="24">{{item.AcceptTime}}</el-col>
+		</el-col>
+		<el-col :span="24" v-show="fyShow" style="margin-left: 40px;color: #aaa;margin-top: 10px">
+			<el-table :data="fenytable" border highlight-current-row style="width: 90%;min-width: 1080px;">
+			<el-table-column prop="nickName" label="用户名">
+			</el-table-column>
+			<el-table-column prop="totalMoney" label="分佣金额">
+			</el-table-column>
+			<el-table-column prop="commissionType" :formatter='formatterfy' label="分佣类型">
+			</el-table-column>
+			<el-table-column prop="status" :formatter='formatter' label="状态">
+			</el-table-column>
+			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
+			</el-table-column>
+			<el-table-column prop="thawingTime" :formatter='formatterjdTime' label="解冻时间">
+			</el-table-column>
+		</el-table>
 		</el-col>
 		<!-- <el-col :span="24" class="order_information" style="margin-top: 20px">发票信息</el-col>
 		<el-col :span="24" class="order_information" style="margin-top: 20px">操作历史</el-col>
@@ -54,10 +75,21 @@
 		data() {
 			return {
 				table:{},
-				wuliuinfo:[]
+				wuliuinfo:[],
+				fenytable:[],
+				wlShow:false,
+				fyShow:false
 			}
 		},
 		methods: {
+			seewl(){
+				this.wlShow = true
+				this.fyShow = false
+			},
+			seefy(){
+				this.fyShow = true
+				this.wlShow = false
+			},
 			getlist(){
 				const _this = this
 				const params = {
@@ -106,17 +138,22 @@
                     		_this.table.status = '已删除'
                     	}
                     	console.log(_this.table)
-                    	console.log(_this.table.orderGoods)
+                    	console.log(data)
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
                     		const params = {
 								expno:_this.table.orderGoods[i].expno,
-								expressCode:_this.table.orderGoods[i].expressCode
+								expressCode:_this.table.orderGoods[i].expressCode,
+								expressName:_this.table.orderGoods[i].expressName,
+								picture:_this.table.orderGoods[i].picture
 							}
+							console.log(params)
 							_this.souTraces(params)
                     	}
+                    	_this.fenyList(_this.table.id)
                     }
                 });
 			},
+			// 物流信息
 			souTraces(params){
 				const _this = this
 				$.ajax({
@@ -130,6 +167,77 @@
                     	_this.wuliuinfo = data.data.jsonArray.reverse()
                     }
                 });
+			},
+			// 分佣明细
+			fenyList(id){
+				const _this = this
+				const params = {
+					orderId:id
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/selectCentsByOrderId",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	_this.fenytable = data.data
+                    	// _this.wuliuinfo = data.data.jsonArray.reverse()
+                    }
+                });
+			},
+			formatterTime(row, column){
+				let curTime = row.createTime;
+                curTime = new Date(curTime).toLocaleString()
+                return curTime
+			},
+			formatterjdTime(row, column){
+				let curTime = row.thawingTime;
+				if(curTime === null){
+					return
+				}
+                curTime = new Date(curTime).toLocaleString()
+                return curTime
+			},
+			formatter(row, column){
+				let type = ''
+				if(row.status === 1){
+					type = '冻结中  '
+				}else if(row.status === 2){
+					type = '已解冻 '
+				}else if(row.status === 3){
+					type = '退款作废'
+				}
+				return type
+			},
+			formatterfy(row, column){
+				let type = ''
+				if(row.commissionType === 0){
+					type = '平台分佣线  '
+				}else if(row.commissionType === 1){
+					type = '直推奖'
+				}else if(row.commissionType === 2){
+					type = '对碰奖 '
+				}else if(row.commissionType === 3){
+					type = '培育奖'
+				}else if(row.commissionType === 4){
+					type = '荣誉奖'
+				}else if(row.commissionType === 5){
+					type = '店铺三级分销  '
+				}else if(row.commissionType === 6){
+					type = '店铺团队奖'
+				}else if(row.commissionType === 7){
+					type = '店铺平级奖 '
+				}else if(row.commissionType === 8){
+					type = '店铺加权分红'
+				}else if(row.commissionType === 9){
+					type = '商品货款'
+				}else if(row.commissionType === 10){
+					type = '花说分佣线奖'
+				}
+				return type
 			}
 		},
 		mounted() {

@@ -24,9 +24,40 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-
+		<el-col :span="24">
+			<el-col :span="4" style="margin-left: 20px">订单编号</el-col>
+			<el-col :span="2">用户名</el-col>
+			<el-col :span="3">手机号</el-col>
+			<el-col :span="2">金额</el-col>
+			<el-col :span="3">手续费</el-col>
+			<el-col :span="3">交易时间</el-col>
+			<el-col :span="3">本单利润</el-col>
+			<el-col :span="3">店铺余额</el-col>
+		</el-col>
+		<el-col v-for="item in orderInformation" :span="24" style="margin-top: 20px;border:1px solid #ddd;">
+			<el-col :span="24" style="height: 40px;line-height: 40px">
+				<el-col :span="4" style="margin-left: 20px">{{item.tradeNo}}</el-col>
+				<el-col :span="2">{{item.coreUserName}}</el-col>
+				<el-col :span="3">{{item.coreUserMobile}}</el-col>
+				<el-col :span="2">{{item.totalMoney}}</el-col>
+				<el-col :span="3">{{item.serviceFee}}</el-col>
+				<el-col :span="3">{{item.createTime}}</el-col>
+				<el-col :span="3">{{item.mallProfits}}</el-col>
+				<el-col :span="3">{{item.storeIncome}}</el-col>
+			</el-col>
+			<el-col :span="24" style="border:1px solid #ddd;" v-if="item.maps.length !== 0">
+				<el-col :span="3" style="margin-left: 20px;margin-top: 20px">分佣明细</el-col>
+				<el-col :span="13">
+					<el-col :span="24" style="margin-top: 10px;" v-for="items in item.maps">{{items.userName}}{{items.remark}}{{items.quota}}</el-col>
+					<!-- <el-col :span="24" style="margin-top: 10px;">订单编号</el-col>
+					<el-col :span="24" style="margin-top: 10px;">订单编号</el-col>
+					<el-col :span="24" style="margin-top: 10px;">订单编号</el-col>
+					<el-col :span="24" style="margin-top: 10px;margin-bottom: 10px">订单编号</el-col> -->
+				</el-col>
+			</el-col>
+		</el-col>
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<!-- <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
 			<el-table-column prop="tradeNo" label="订单号">
 			</el-table-column>
 			<el-table-column prop="remark" label="商品名">
@@ -43,12 +74,7 @@
 			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="交易时间">
 			</el-table-column>
-			<!-- <el-table-column label="操作">
-				<template scope="scope">
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-				</template>
-			</el-table-column> -->
-		</el-table>
+		</el-table> -->
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="background:#fff;">
@@ -109,6 +135,7 @@
 	export default {
 		data() {
 			return {
+				cs:[1,2,3,4,5,6],
 				radio: '0',
 				checked: true,
 				value:'',
@@ -213,7 +240,7 @@
                     type:'POST',
                     dataType:'json',
                     // url:"http://192.168.0.115:8080/api/store/userCashFlow/selectFlowList",
-                    url:baseUrl+"/api/store/userCashFlow/selectFlowList",
+                    url:baseUrl+"/api/store/userCashFlow/selectOrderMallFlowList",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
@@ -223,6 +250,7 @@
                     	_this.orderInformation = info.list
                     	_this.total = info.total
                     	_this.listLoading = false
+                    	console.log(_this.orderInformation)
                     }
                 });
 			},
