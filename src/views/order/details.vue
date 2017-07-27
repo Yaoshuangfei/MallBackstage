@@ -19,7 +19,7 @@
 				</el-col>
 			<el-col :span="5" :offset="1">{{item.productName}}
 				<el-col :span="24" class="size">
-					<el-col :span="8" v-for="itemSta in item.attrName">{{itemSta.key}}：{{itemSta.value}}</el-col>
+					<el-col :span="8" v-for="itemSta in item.attrName">{{itemSta.key}} {{itemSta.value}}</el-col>
 				</el-col>
 			</el-col>
 			<el-col :span="2" :offset="5" style="margin-top: 20px">{{item.productPrice}}</el-col>

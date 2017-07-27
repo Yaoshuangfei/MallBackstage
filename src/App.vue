@@ -33,7 +33,7 @@ body {
 	top: 0px;
 	bottom: 0px;
 	width: 100%;
-	background: url('./assets/login.png')no-repeat top center;
+	background: url('./assets/login.jpg')no-repeat top center;
 }
 
 .el-submenu [class^=fa] {

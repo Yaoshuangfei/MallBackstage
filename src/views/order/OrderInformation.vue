@@ -38,8 +38,8 @@
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：{{item.id}}</el-col>
-				<el-col :span="4">下单时间：{{item.payTime}}</el-col>
-				<el-col :span="2" :offset="9">{{item.totalMoney}}</el-col>
+				<el-col :span="5">下单时间：{{item.payTime}}</el-col>
+				<el-col :span="1" :offset="9">{{item.totalMoney}}</el-col>
 				<el-col :span="2" :offset="1">
 					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>

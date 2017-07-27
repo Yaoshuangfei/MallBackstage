@@ -117,7 +117,7 @@
         data() {
             return {
             	daibanList:[],
-                radio3: '报表',
+                radio3: 0,
                 ruleAll:[{
                 	name:'日报表',
                 	id:0
@@ -147,13 +147,15 @@
                 memberPercentage:'',
                 sumTotalQuantity:'',
                 quantityPercentage:'',
-                type:3,
-                moneyAll:{},
-                countAll:{},
-                avgPrice:{},
-                listAll:[],
-                parobj:[],
-                nameAll:[]
+                type:0,
+
+                listAll:[],//线图
+                sj:[],
+                cj:[],
+                sp:[],
+                pj:[],
+                parobj:[],//饼图
+                parName:[]
             }
         },
         methods: {
@@ -167,16 +169,12 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	const info = data.data
-                    	console.log(data)
+                    	// console.log(data)
                     	_this.daibanList = info
                     	// _this.total = info.total
                     }
                 });
         	},
-        	click(val) {
-        		this.type = val
-        		this.getline()
-			},
         	getlist(){
         		const _this = this
 				$.ajax({
@@ -188,7 +186,7 @@
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
-	                console.log(data)
+	                // console.log(data)
 	                _this.visitPercentage = info.visitPercentage*100
 	                _this.visitCount = info.visitCount
 	                _this.sumTotalMoney = info.sumTotalMoney
@@ -200,69 +198,72 @@
 	              }
 	          });
         	},
+        	click(val) {
+        		this.type = val
+        		this.getline()
+			},
         	getline(){
         		const _this = this
-        		// _this.parobj = []
-        		// _this.nameAll = []
+        		_this.sj = []
+        		_this.cj = []
+        		_this.sp = []
+        		_this.pj = []
+        		_this.parobj = []//初始化饼图数据
+        		_this.parName = []
+        		_this.listAll = []//初始化线形图数据
         		const params = {
         			type:this.type,
         			storeId:state.storeId
         		}
-        		console.log(params)
-        		_this.listAll = []
+        		// console.log(params)
+        		
         		$.ajax({
 	              type:'POST',
 	              dataType:'json',
 	              url:baseUrl+"/api/orderMall/selectByPayTimeGroup",
-	              // url:'http://192.168.0.107:8080/api/orderMall/selectByPayTimeGroup',
 	              data:JSON.stringify(params),
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
-	                console.log(data)
 	                // 线形图
 	                const linelist = info.analysisVOList
-	                for(var i = 0;i<linelist.length;i++){
-	                	if(linelist[i].moneyAll){
-	                		const obj = {}
-	                		const arry = []
-		                	obj.name = '成交额总数'
-		                	obj.type = 'line'
-		                	obj.smooth = true
-		                	obj.data = arry
-		                	arry.push(linelist[i].moneyAll)
-	                		_this.moneyAll = obj
-	                		_this.listAll.push(_this.moneyAll)
-	                	}
-	                	if(linelist[i].countAll){
-	                		const obj = {}
-	                		const arry = []
-		                	obj.name = '成交商品总数'
-		                	obj.type = 'line'
-		                	obj.smooth = true
-		                	obj.data = arry
-		                	arry.push(linelist[i].countAll)
-	                		_this.countAll = obj
-	                		_this.listAll.push(_this.countAll)
-	                	}
-	                	if(linelist[i].avgPrice){
-	                		const obj = {}
-	                		const arry = []
-		                	obj.name = '成交额平均值'
-		                	obj.type = 'line'
-		                	obj.smooth = true
-		                	obj.data = arry
-		                	arry.push(linelist[i].avgPrice)
-	                		_this.avgPrice = obj
-	                		_this.listAll.push(_this.avgPrice)
-	                	}
-	                }
 	                // console.log(linelist)
+	                for(var i = 0;i<linelist.length;i++){
+	                	// 时间
+	                	_this.sj.push( _this.formatterTime(linelist[i].payTime))
+	                	_this.cj.push(linelist[i].moneyAll)
+	                	_this.sp.push(linelist[i].countAll)
+	                	_this.pj.push(linelist[i].avgPrice)
+	                }
+	                const obj = {}
+                	obj.name = '成交额总数'
+                	obj.type = 'line'
+                	obj.smooth = true
+                	obj.data = _this.cj
+            		_this.listAll.push(obj)
+
+            		const obj1 = {}
+                	obj1.name = '成交商品总数'
+                	obj1.type = 'line'
+                	obj1.smooth = true
+                	obj1.data = _this.sp
+            		_this.listAll.push(obj1)
+
+            		const obj2 = {}
+                	obj2.name = '成交额平均值'
+                	obj2.type = 'line'
+                	obj2.smooth = true
+                	obj2.data = _this.pj
+            		_this.listAll.push(obj2)
+            		
+
+
+
 					//饼图数据
 	                const ordlist= info.orderMalls
-	                // console.log(ordlist)
+	                console.log(ordlist)
 	                for(var i = 0;i<ordlist.length;i++){
-	                	var obj = {}
+	                	const obj = {}
 	                	if(ordlist[i].orderType === 3){
 	                		obj.name = '业务充值'
 	                	}else if(ordlist[i].orderType === 4){
@@ -283,60 +284,13 @@
 	                		obj.name = '业务充值'
 	                	}
 	                	obj.value = ordlist[i].totalMoney
+	                	_this.parName.push(obj.name)
 	                	_this.parobj.push(obj)
 	                }
-	                for(var i = 0;i<_this.parobj.length;i++){
-	                	_this.nameAll.push(_this.parobj[i].name)
-	                }
-	                
-	                // console.log(_this.moneyAll)
-	                // console.log(_this.countAll)
-	                // console.log(_this.listAll)
-	                // _this.listAll.push()
-	              }
-	          });
-        	},
-        	getper(){
-        		const _this = this
-        		this.parobj = []
-				$.ajax({
-	              type:'GET',
-	              dataType:'json',
-	              url:baseUrl+"/api/orderMall/selectGroupByUserId",
-	              // url:'http://192.168.0.107:8080/api/orderMall/selectGroupByUserId',
-	              contentType:'application/json;charset=utf-8',
-	              success:function(data){
-	                const info = data.data
-	                console.log(info.orderMalls)
-	                for(var i = 0;i<info.orderMalls.length;i++){
-	                	var obj = {}
-	                	if(info.orderMalls[i].orderType === 3){
-	                		obj.name = '业务充值'
-	                	}else if(info.orderMalls[i].orderType === 4){
-	                		obj.name = '余额充值'
-	                	}else if(info.orderMalls[i].orderType === 5){
-	                		obj.name = '商品购买'
-	                	}else if(info.orderMalls[i].orderType === 6){
-	                		obj.name = '店铺身份购买'
-	                	}else if(info.orderMalls[i].orderType === 7){
-	                		obj.name = '平台身份购买 '
-	                	}else if(info.orderMalls[i].orderType === 8){
-	                		obj.name = '补货'
-	                	}else if(info.orderMalls[i].orderType === 9){
-	                		obj.name = '金豆充值'
-	                	}else if(info.orderMalls[i].orderType === 13){
-	                		obj.name = '便付劵充值'
-	                	}else{
-	                		obj.name = '业务充值'
-	                	}
-	                	obj.value = info.orderMalls[i].totalMoney
-	                	_this.parobj.push(obj)
-	                }
-	                for(var i = 0;i<_this.parobj.length;i++){
-	                	_this.nameAll.push(_this.parobj[i].name)
-	                }
-	                console.log(_this.nameAll)
 	                console.log(_this.parobj)
+	                console.log(_this.parName)
+	                _this.drawColumnChart()
+	                _this.drawPieChart()
 	              }
 	          });
         	},
@@ -348,28 +302,12 @@
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: ["5.21", "5.22", "5.23", "5.24", "5.25", "5.26"]
+                        data: this.sj
                     },
                     yAxis: {
                         type : 'value'
 					},
                     series:this.listAll
-                    // [{
-                    //     name: '销量1',
-                    //     type: 'line',
-                    //     smooth:true,
-                    //     data: [0, 50, 36, 10, 10, 20]
-                    // },{
-                    //     name: '销量2',
-                    //     type: 'line',
-                    //     smooth:true,
-                    //     data: [0, 20, 66, 30, 60, 10]
-                    // },{
-                    //     name: '销量3',
-                    //     type: 'line',
-                    //     smooth:true,
-                    //     data: [0, 40, 40, 40, 20, 7]
-                    // }]
                 });
             },
             drawPieChart() {
@@ -386,8 +324,8 @@
                     legend: {
                         orient: 'vertical',
                         left: 'left',
-                        data: this.nameAll
-                         // data: [ '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                        // data: this.nameAll
+                         data:this.parName
                     },
                     series: [
                         {
@@ -396,10 +334,12 @@
                             radius: '55%',
                             center: ['50%', '60%'],
                             data:this.parobj,
-                             // this.parobj,
-                            // [
-                            //     { name: '商城', value: 335},
-                            //     { name: '邮件营销', value: 310}
+                            //  [
+                            //     { value: 335, name: '余额充值' },
+                            //     { value: 310, name: '商品购买' },
+                            //     { value: 234, name: '平台身份购买' },
+                            //     { value: 135, name: '补货' },
+                            //     { value: 1548, name: '便付劵充值' }
                             // ],
                             itemStyle: {
                                 emphasis: {
@@ -412,18 +352,16 @@
                     ]
                 });
             },
-            drawCharts() {
-                this.drawColumnChart()
-                this.drawPieChart()
-                // this.drawMapChart()
-            },
+            formatterTime(row){
+                return  new Date(row).toLocaleString()
+            }
         },
         mounted: function () {
         	this.getlist()
         	this.getline()
         	this.getGroup()
-            this.drawCharts()
-            this.drawPieChart()
+            // this.drawPieChart()
+            // this.drawPieChart()
         },
         // updated: function () {
         //     this.drawCharts()

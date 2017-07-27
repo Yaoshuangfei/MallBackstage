@@ -61,6 +61,7 @@
 					<el-button type="text" v-on:click="fahuoBtn(items)">发货</el-button>
 				</el-col>
 			</el-col>
+			<el-col :span="24" style="border-top: 1px solid #aaa;height: 30px;line-height: 50px">地址：{{item.provinceName}}{{item.cityName}}{{item.countyName}}{{item.address}}</el-col>
 		</el-col>
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">
