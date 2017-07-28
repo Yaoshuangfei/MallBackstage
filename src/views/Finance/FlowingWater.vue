@@ -41,18 +41,18 @@
 				<el-col :span="3">{{item.coreUserMobile}}</el-col>
 				<el-col :span="2">{{item.totalMoney}}</el-col>
 				<el-col :span="3">{{item.serviceFee}}</el-col>
-				<el-col :span="3">{{item.createTime}}</el-col>
+				<el-col :span="3">{{new Date(item.createTime).toLocaleString()}}</el-col>
 				<el-col :span="3">{{item.mallProfits}}</el-col>
-				<el-col :span="3">{{item.storeIncome}}</el-col>
+				<el-col :span="3">{{item.storeIncome+item.freezeIncome}}冻结余额{{item.freezeIncome}}</el-col>
 			</el-col>
-			<el-col :span="24" style="border:1px solid #ddd;" v-if="item.maps.length !== 0">
-				<el-col :span="3" style="margin-left: 20px;margin-top: 20px">分佣明细</el-col>
+			<el-col :span="24" style="border:1px solid #ddd;" v-if="item.maps.length !== 0" v-for="items in item.maps">
+				<el-col :span="3" style="margin-left: 20px;margin-top: 20px;margin-bottom: 20px">分佣明细</el-col>
 				<el-col :span="13">
-					<el-col :span="24" style="margin-top: 10px;" v-for="items in item.maps">{{items.userName}}{{items.remark}}{{items.quota}}</el-col>
-					<!-- <el-col :span="24" style="margin-top: 10px;">订单编号</el-col>
-					<el-col :span="24" style="margin-top: 10px;">订单编号</el-col>
-					<el-col :span="24" style="margin-top: 10px;">订单编号</el-col>
-					<el-col :span="24" style="margin-top: 10px;margin-bottom: 10px">订单编号</el-col> -->
+					<el-col :span="24" style="margin-top: 10px;" v-for="itemfy in items.commissions">		
+						<el-col :span="24" style="margin-top: 10px;" v-for="itemlx in itemfy.commissionsByType">
+							{{itemlx.userName}}{{itemlx.remark}}{{itemlx.quota}}
+						</el-col>
+					</el-col>
 				</el-col>
 			</el-col>
 		</el-col>
@@ -235,7 +235,7 @@
 				}else if(this.filters.type === '3'){
 					params.mobile = this.filters.name
 				}
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -250,7 +250,7 @@
                     	_this.orderInformation = info.list
                     	_this.total = info.total
                     	_this.listLoading = false
-                    	console.log(_this.orderInformation)
+                    	console.log(_this.orderInformation[0].maps)
                     }
                 });
 			},

@@ -71,7 +71,7 @@ import pjadmin from './views/Increment/pjadmin.vue'
 
 
 
-    console.log(state.loginID)
+    console.log(111)
 
 let routes = [
     {

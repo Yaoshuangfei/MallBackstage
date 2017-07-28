@@ -54,6 +54,8 @@
 			</el-table-column>
 			<el-table-column prop="status" :formatter='formatter' label="状态">
 			</el-table-column>
+			<el-table-column prop="remarks" label="备注">
+			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
 			</el-table-column>
 			<el-table-column prop="thawingTime" :formatter='formatterjdTime' label="解冻时间">
@@ -78,7 +80,7 @@
 				wuliuinfo:[],
 				fenytable:[],
 				wlShow:false,
-				fyShow:false
+				fyShow:true
 			}
 		},
 		methods: {
