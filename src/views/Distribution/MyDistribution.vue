@@ -1,5 +1,6 @@
 <template>
 	<section>
+	<el-col v-if="allshow">
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
 			<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length===5">新增店铺身份</el-button>
 		</el-col>
@@ -176,6 +177,106 @@
 				<el-button type="primary" @click.native="ruleIdVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
+		</el-col>
+<!--====================================================== 磁疗贴======================================================== -->
+		<el-col :span="24" v-if="cltShow">
+					<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
+						<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length >= 1">新增店铺身份</el-button>
+					</el-col>
+					<!--新增界面-->
+				<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false">
+					<el-form :model="orderDetails" label-width="160px">
+						<el-form-item label="角色名称：">
+							<el-input v-model="orderDetails.name" type="text" auto-complete="off"></el-input>
+						</el-form-item>
+						<el-form-item label="价格：">
+							<el-input v-model="orderDetails.price" type="text" auto-complete="off"></el-input>
+						</el-form-item>
+						<el-form-item label="角色图标：">
+							<el-input v-model="orderDetails.icon" type="text" auto-complete="off"></el-input>
+						</el-form-item>
+						<el-col :span='24'></el-col>
+					</el-form>
+					<div slot="footer" class="dialog-footer" style="text-align: center;">
+						<el-button type="primary" @click.native="addSubmit" :loading="editLoading">确定</el-button>
+						<el-button type="primary" @click.native="addFormVisible = false">关闭</el-button>
+					</div>
+				</el-dialog>
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>
+				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
+					<ul class="Grade">
+						<li v-for="item in ruleAll">{{item.name}}</li>
+					</ul>
+				</el-col>
+				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 20px;margin-left: 50px">填写可购买的最高级身份，最多填写1个</el-col>
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">规则</el-col>
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">
+					<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px;margin-left: 60px">身份是否升级</el-col>
+					<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">
+						<el-switch
+							@change='clickrule'
+							:disabled='upgradebtn'
+						  	v-model="ruleIsUpgrade"
+						  	on-color="#13ce66"
+						  	off-color="#ff4949">
+						</el-switch>
+						<!-- <el-select v-model="value" placeholder="请选择">
+						    <el-option
+						      v-for="item in options"
+						      :key="item.value"
+						      :label="item.label"
+						      :value="item.value">
+						    </el-option>
+					  </el-select> -->
+					</el-col>
+					<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px" v-show="ruleIsUpgrade">邀请人数：{{upgrade.invitedMinNum}}</el-col>
+				</el-col>
+				<!--身份升级-->
+				<el-dialog title="身份升级" v-model="ruleIsUpgradeVisible" :close-on-click-modal="false" :show-close='false'>
+					<el-form :model="upgrade" label-width="100px">
+						<el-form-item label="邀请人数">
+							<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
+						</el-form-item>
+						<el-col :span='16' :offset="6">被邀请人身份必须同级或高于才有效</el-col>
+						<!-- <el-form-item label="身份添加">
+							<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
+						</el-form-item> -->
+					</el-form>
+					<div slot="footer" class="dialog-footer" style="text-align: center;">
+						<el-button type="primary" @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
+						<el-button type="primary" @click.native="clerbtn">关闭</el-button>
+					</div>
+				</el-dialog>
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">三级分销</el-col>
+					<el-table :data="cltSan" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px">
+						<el-table-column prop="level" label="等级">
+						</el-table-column>
+						<el-table-column prop="fybi" label="分佣比">
+							<template scope="scope">
+								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>%
+							</template>
+						</el-table-column>
+					</el-table>
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">评级奖</el-col>
+					<el-table :data="cltPingji" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px">
+						<el-table-column prop="level" label="等级">
+						</el-table-column>
+						<el-table-column prop="fybi" label="分佣比">
+							<template scope="scope">
+								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>%
+							</template>
+						</el-table-column>
+					</el-table>
+				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-top: 20px;">团队奖
+					<el-input style="width: 200px" v-model="cltuanduired"></el-input>%
+				</el-col>
+				<el-col :xs="10" :sm="10" :md="10" :lg="10" style="margin-top: 20px;">加权分红
+					<el-input style="width: 200px" v-model="cltJqfred"></el-input>%
+				</el-col>
+				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 120px;">
+					<el-button type="primary" v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
+				</el-col>
+		</el-col>
 	</section>
 </template>
 
@@ -236,15 +337,41 @@
 					]
 				},
 				//编辑界面数据
-				editForm: {
-				},
+				editForm: {},
 				ruleIdVisible:false,//显示佣金新增页面
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
-				orderDetails: {
-				},
-				orderInformation:[]
+				orderDetails: {},
+				orderInformation:[],
+				//////////////////////////////////////////////////////磁疗贴//////////////////////////////////////////////////////////
+				allshow:true,
+				cltShow:false,
+				cltSf:[],
+				cltSan:[{
+					level:'一代',
+					fybi:''
+				},{
+					level:'二代',
+					fybi:''
+				},{
+					level:'三代',
+					fybi:''
+				}],
+				cltPingji:[{
+					level:'一代',
+					fybi:''
+				},{
+					level:'二代',
+					fybi:''
+				},{
+					level:'三代',
+					fybi:''
+				}],
+				cltJqfred:'',
+				cltuanduired:'',
+				cltFyBtn:false,
+				cltId:''
 			}
 		},
 		methods: {
@@ -339,9 +466,10 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	// console.log(data.data)
+                    	console.log(data.data)
                     	const info = data.data.shopRoles
                     	_this.ruleAll = info
+                    	console.log(_this.ruleAll)
                     	for(var i = 0;i<info.length;i++){
                     		_this.arryname.push(info[i].name)
                     	}
@@ -426,7 +554,7 @@
 			addSubmit: function () {
 				const _this = this
 				const params = {
-					storeId:state.id,
+					storeId:state.storeId,
 					level:this.ruleAll.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
@@ -443,7 +571,7 @@
 	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
 	                    	// const info = data.data.shopRoles
-	                    	// console.log(data)
+	                    	console.log(data)
 	                    	// _this.identity= info
 
 	                    	_this.$message({
@@ -623,6 +751,9 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
+                    	if(info.length === 0){
+                    		return
+                    	}
                     	console.log(info)
                     	_this.totalArray = info
                     	console.log(data)
@@ -651,12 +782,85 @@
                     }
                 });
 			},
+			/////////////////////////////// 磁疗贴//////////////////////////////////////////////////////////////////////////
+			getcltList(){
+				const _this = this
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+'/api/corePlaConfig/find/proportion/one',
+                    data:JSON.stringify({}),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        const info = data.data
+                        if(info === null){
+                        	cltFyBtn = true
+                        }
+                        console.log(info)
+                        _this.cltId = info.id
+                        _this.cltSan[0].fybi = info.one
+                        _this.cltSan[1].fybi = info.two
+                        _this.cltSan[2].fybi = info.three
+
+                        _this.cltPingji[0].fybi = info.peersOne
+                        _this.cltPingji[1].fybi = info.peersTwo
+                        _this.cltPingji[2].fybi = info.peersThree
+
+                        _this.cltJqfred = info.codePayScale
+
+                        _this.cltuanduired = info.teamOne
+                    }
+                });
+			},
+			cltUpfy(){
+				const _this = this
+				const params = {
+					one:_this.cltSan[0].fybi,
+					two:_this.cltSan[1].fybi,
+					three:_this.cltSan[2].fybi,
+					teamOne:_this.cltuanduired,
+					peersOne:_this.cltPingji[0].fybi,
+					peersTwo:_this.cltPingji[1].fybi,
+					peersThree:_this.cltPingji[2].fybi,
+					codePayScale:_this.cltJqfred
+				}
+				let url = ''
+				if(_this.cltFyBtn === true){// 添加
+					url = '/api/corePlaConfig/add/store/proportion'
+				}else{
+					params.id = _this.cltId
+					url = '/api/corePlaConfig/update/store/proportion'
+				}
+				console.log(url)
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+url,
+                    data:JSON.stringify({}),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.getcltList()
+                    	}
+                    }
+                });
+			}
 		},
 		mounted() {
-			this.getlist();
-			this.getselectRuleDist();
-			this.selectRuleDist();
-			this.getselectByTwoRuleId();
+			if(state.commissionLine === 3){
+				this.allshow = false
+				this.cltShow = true
+				this.getlist();
+				this.getcltList()
+			}else{
+				this.getlist();
+				this.getselectRuleDist();
+				this.selectRuleDist();
+				this.getselectByTwoRuleId();
+			}
+			
 		}
 	}
 

@@ -142,17 +142,18 @@
                   error: function (XMLHttpRequest, textStatus, errorThrown) {},
                   success:function(data){
                     console.log(data)
-                    _this.total = data.data.total
+                    if(data.code === 1){
+                      _this.total = data.data.total
                       if(!data.success){
                           // alert(data.msg)
                       }else{
-                          var _length 	= data.data.list;
-                          _this.total 	= data.data.total;
+                          var _length   = data.data.list;
+                          _this.total   = data.data.total;
                           for (var i = 0; i < _length.length; i++) {
                               _this.orderInformation.push(_length[i]);
                           }
                       }
-
+                    }
                   }
               });
           },
@@ -182,6 +183,9 @@
                     if(!data.success){
                         alert(data.msg)
                     }else{
+                      if(data.data === null){
+                        return
+                      }
                         var _lengthOne = data.data.styleOneId;
                         var _lengthTwo = data.data.styleTwoId;
                         _this.selectSubjectStatus=([

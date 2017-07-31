@@ -117,7 +117,7 @@
         data() {
             return {
             	daibanList:[],
-                radio3: 0,
+                radio3: 1,
                 ruleAll:[{
                 	name:'日报表',
                 	id:0

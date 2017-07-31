@@ -51,6 +51,16 @@
 					<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
 					<!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
 				</el-form-item>
+				<el-form-item label="图片位置">
+					<el-select v-model="uploadDetails.poType" placeholder="请选择">
+				    <el-option
+				      v-for="item in options"
+				      :key="item.value"
+				      :label="item.label"
+				      :value="item.value">
+				    </el-option>
+				  </el-select>
+				</el-form-item>
 				<el-form-item label="序号" >
 					<el-input v-model="uploadDetails.List" type="text" auto-complete="off"></el-input>
 				</el-form-item>
@@ -148,6 +158,13 @@
 				value2:'',
 				url:'',
 				urls:'',
+				options: [{
+		          value: '1',
+		          label: '首页'
+		        }, {
+		          value: '2',
+		          label: '店铺内'
+		        }],
 				selectSubjectStatus: [
 				{
 					value:'0',
@@ -168,19 +185,6 @@
 					value:'5',
 					label:'退货'
 				}],
-				options: [{
-		          value: '0',
-		          label: '全部'
-		        }, {
-		          value: '1',
-		          label: '订单编号'
-		        }, {
-		          value: '2',
-		          label: '快递单号'
-		        }, {
-		          value: '3',
-		          label: '用户名'
-		        }],
 				filters: {
 					name: '',
 					status:'',
@@ -191,7 +195,6 @@
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
-
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
@@ -207,6 +210,7 @@
 				addLoading: false,
 				//新增界面数据
 				uploadDetails: {
+					poType:'',
 				},
 				//新增界面数据
                 modifyDetails: {
@@ -289,7 +293,7 @@
                     link:this.uploadDetails.uploadImgs,
                     picture:this.url,
                     orderSort:this.uploadDetails.List,
-                    poType:'1',
+                    poType:this.uploadDetails.poType,
                     desc:this.uploadDetails.information,
                 };
                 var url = baseUrl+"/api/indexAdvert/add";

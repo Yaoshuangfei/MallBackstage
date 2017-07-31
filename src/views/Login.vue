@@ -83,40 +83,27 @@
                             document.cookie="token="+data.data.token;
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
+                            _this.getcommissionLine()
                         }
                     }
                 });
             },
-            handleSubmit2(ev) {
-                var _this = this;
-                this.$refs.ruleForm2.validate((valid) => {
-                    if (valid) {
-                        this.logining = true;
-                        var loginParams = { username:this.ruleForm2.username, password: this.ruleForm2.password };
-                        requestLogin(loginParams).then(data => {
-                            this.logining = false;
-                            //NProgress.done();
-                            let { msg, code, user } = data;
-                            console.log(data);
-                            if (code !== 200) {
-                                this.$message({
-                                    message: msg,
-                                    type: 'error'
-                                });
-                            } else {
-                                sessionStorage.setItem('user', JSON.stringify(user));
-                            }
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+            getcommissionLine(){
+                $.ajax({
+                    type:'GET',
+                    dataType:'json',
+                    url:baseUrl+'/api/store/selectStore',
+                    // data:JSON.stringify(data),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        state.commissionLine = data.data.store.commissionLine
                     }
                 });
             }
         },
         mounted() {
-//            this.getuid()
-            // this.cli()
+            // this.getcommissionLine()
         },
     }
 

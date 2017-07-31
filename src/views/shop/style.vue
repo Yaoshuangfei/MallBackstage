@@ -8,7 +8,7 @@
 							<img class="shopstyle" :src="item.picture">
 						<div style="margin-left: 60px">
 							<el-button type="text" size="small" @click="oneBtn(item)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small">预览</el-button>
+							<!-- <el-button style="margin-left: 40px" type="text" size="small">预览</el-button> -->
 						</div>
 					</el-col>
 				</el-col>
@@ -18,7 +18,7 @@
 						<img class="shopstyle" :src="item.picture">
 						<div style="margin-left: 60px">
 							<el-button type="text" size="small" @click="twoBtn(item)">使用</el-button>
-							<el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button>
+							<!-- <el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button> -->
 						</div>
 					</el-col>
 				</el-col>

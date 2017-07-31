@@ -71,8 +71,6 @@ import pjadmin from './views/Increment/pjadmin.vue'
 
 
 
-    console.log(111)
-
 let routes = [
     {
         path: '/login',
