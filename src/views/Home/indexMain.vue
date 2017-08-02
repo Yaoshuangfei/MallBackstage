@@ -78,37 +78,82 @@
 				<div class="grid-content bg-purple" style="margin: auto;overflow-y: auto;">
 					<div class="statistics_bottom_left_top">待办事项</div>
 					<div class="statistics_bottom_main">
-						<ul>
+						<ul >
 							<li style="cursor: pointer;" v-for="item in daibanList"><a :title="item.notifyContent">{{item.notifyContent}}</a></li>
 						</ul>
 					</div>
 				</div>
 			</el-col>
-			<el-col :span="16" style="float:right;margin-top: 0;">
+			<el-col :span="16" style="float:right;margin-top: 0;overflow-y: auto;">
 				<div class="grid-content bg-purple">
 					<div class="statistics_bottom_left_top">订单物流</div>
-					<div id="chartmap" style="width:100%; height:650px;"></div>
+					<div class="statistics_bottom_main">
+						<ul>
+							<li style="cursor: pointer;" v-for="item in dingdanList"><a :title="item.notifyContent">{{item.notifyContent}} ---{{item.notifyTitle}}</a></li>
+						</ul>
+					</div>
 				</div>
 			</el-col>
 		</el-row>
+		<el-dialog :title="addTitle" v-model="editFormVisible" :close-on-click-modal="false" :show-close='false'>
+			<el-col :span="24" :offset='10' v-if="remarkInfo !== '' ">未通过信息：{{remarkInfo}}</el-col>
+			<el-form :model="sfinfo" label-width="180px" style="margin-left: 40px;margin-top: 40px" :rules="rules" ref="sfinfo">
+		      <el-form-item label="法人姓名">
+		        <el-input v-model="sfinfo.realName"></el-input>
+		      </el-form-item>
+		      <el-form-item label="法人身份证号" prop="legalCardCode">
+		        <el-input v-model="sfinfo.legalCardCode" ></el-input>
+		      </el-form-item>
+		      <el-form-item label="手机号">
+		        <el-input v-model="sfinfo.storeMobile"></el-input>
+		      </el-form-item>
+		      <el-form-item label="银行名称">
+		        <el-input v-model="sfinfo.bankName"></el-input>
+		      </el-form-item>
+		      <el-form-item label="对公账户账号">
+		        <el-input v-model="sfinfo.bankCode"></el-input>
+		      </el-form-item>
+		      <el-form-item label="运营地址">
+		        <el-input v-model="sfinfo.theAddress"></el-input>
+		      </el-form-item>
+		      <el-col :span="24" :offset="8" v-if="frImgurl !== '' "><img style="width: 100px" :src="frImgurl"></el-col>
+		      <el-form-item label="上传法人身份证">
+		      	<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(1)" id="fileInput">
+				<button type="button" class="el-button el-button--primary el-button--small">
+					<span>点击上传</span>
+				</button>
+		      </el-form-item>
+		      <el-col :span="24" :offset="8" v-if="frImgurlPointer !== '' "><img style="width: 100px" :src="frImgurlPointer"></el-col>
+		      <el-form-item label="上传法人手持身份证">
+		      	<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(2)" id="fileInput">
+				<button type="button" class="el-button el-button--primary el-button--small">
+					<span>点击上传</span>
+				</button>
+		      </el-form-item>
+		      <el-col :span="24" :offset="8" v-if="businessImgurl !== '' "><img style="width: 100px" :src="businessImgurl"></el-col>
+		      <el-form-item label="上传营业执照">
+		      	<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(3)" id="fileInput">
+				<button type="button" class="el-button el-button--primary el-button--small">
+					<span>点击上传</span>
+				</button> 
+		      </el-form-item>
+		      <el-col :span="24" :offset="8" v-if="bankImgurl !== '' "><img style="width: 100px" :src="bankImgurl"></el-col>
+		      <el-form-item label="上传银行开户许可证">
+		      	<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(4)" id="fileInput">
+				<button type="button" class="el-button el-button--primary el-button--small">
+					<span>点击上传</span>
+				</button>
+		      </el-form-item>
+		  </el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="clupLoad">保存</el-button>
+			</div>
+		</el-dialog>
+		<el-dialog title="提示" v-model="dashVisible" :close-on-click-modal="false" :show-close='false'>
+			<el-col style="margin-bottom: 20px;" :offset='4'><h1>管理员正在审核中，请耐心等待。谢谢配合！</h1></el-col>
+		</el-dialog>
 	</section>
 </template>
-
-<!--<script>-->
-    <!--import echarts from 'echarts'-->
-	<!--export default {-->
-        <!--data () {-->
-            <!--return {-->
-                <!--radio3: '报表',-->
-                <!--chartColumn: null,-->
-                <!--chartBar: null,-->
-                <!--chartLine: null,-->
-                <!--chartPie: null-->
-            <!--};-->
-        <!--}-->
-	<!--}-->
-
-<!--</script>-->
 <script>
     import echarts from 'echarts'
     import { state } from '../../vuex/state'
@@ -116,7 +161,25 @@
     export default {
         data() {
             return {
+            	addTitle:'添加身份信息',
+            	frImgurl:'',
+            	frImgurlPointer:'',
+            	businessImgurl:'',
+            	bankImgurl:'',
+            	formData: new FormData(),
+            	rules:{
+            		legalCardCode: [
+				        { required: true, message: '请输入身份证号', trigger: 'blur' },
+				        { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/, message: '证件号码格式有误！', trigger: 'blur' }
+				      ]
+            	},
+            	sfinfo:{},
+            	editFormVisible:false,//上传材料
+            	dashVisible:false,//待审核
+            	remarkInfo:'',//未通过信息
+            	sfinfoId:'',//修改身份信息ID
             	daibanList:[],
+            	dingdanList:[],
                 radio3: 1,
                 ruleAll:[{
                 	name:'日报表',
@@ -159,6 +222,91 @@
             }
         },
         methods: {
+        	//图片上传
+            upload (index) {
+            	// console.log(index)
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                // console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                    console.log('存在file', file)
+                    this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file);
+                    this.submitUpload(index)
+                    console.log(this.formData);
+                } else {
+                    this.fileImg = ''
+                    console.log('不存在file', file)
+                    this.formData = new FormData()
+                }
+            },
+            submitUpload(index){
+                // this.$confirm('确认修改吗？', '提示', {}).then(() => {
+                    const _this= this;
+                    _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            // const info = response.body
+                            console.log(index)
+                            if(index === 1){
+                            	_this.frImgurl = info.data[0].baseUri+info.data[0].uri;
+                            }else if(index === 2){
+                            	_this.frImgurlPointer = info.data[0].baseUri+info.data[0].uri;
+                            }else if(index === 3){
+                            	_this.businessImgurl = info.data[0].baseUri+info.data[0].uri;
+                            }else if(index === 4){
+                            	_this.bankImgurl = info.data[0].baseUri+info.data[0].uri;
+                            } 
+							// _this.url = info.data[0].baseUri+info.data[0].uri;
+							// console.log(_this.url)
+                            // _this.UploadImg();
+                        }, error => _this.$emit('complete', 500, error.message))
+                // });
+            },
+            clupLoad(){
+            	const _this = this
+            	const params = {
+            		realName:this.sfinfo.realName,
+            		legalCardCode:this.sfinfo.legalCardCode,
+            		storeMobile:this.sfinfo.storeMobile,
+            		bankName:this.sfinfo.bankName,
+            		bankCode:this.sfinfo.bankCode,
+            		theAddress:this.sfinfo.theAddress,
+            		cardImgF:this.frImgurl,
+            		cardImgW:this.frImgurlPointer,
+            		businessLicense:this.businessImgurl,
+            		bankImgW:this.bankImgurl
+            	}
+            	console.log(params)
+            	let url = ''
+            	if(this.sfinfoId === ''){
+            		url = '/api/coreUspAuthentication/add'
+            	}else{
+            		url = '/api/coreUspAuthentication/updateDetails'
+            		params.id = this.sfinfoId
+            	}
+        		$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.editFormVisible = false
+                    	}else{
+                    		_this.$message.error(data.msg);
+                    	}
+                    }
+                });
+            },
         	getGroup(){
         		const _this = this
         		$.ajax({
@@ -171,6 +319,22 @@
                     	const info = data.data
                     	// console.log(data)
                     	_this.daibanList = info
+                    	// _this.total = info.total
+                    }
+                });
+        	},
+        	getDDWL(){
+        		const _this = this
+        		$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/notify/selectListGroup",
+                    data:JSON.stringify([2]),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	const info = data.data
+                    	_this.dingdanList = info
                     	// _this.total = info.total
                     }
                 });
@@ -355,12 +519,38 @@
             },
             formatterTime(row){
                 return  new Date(row).toLocaleString()
+            },
+            getSHinfo(){
+            	const _this = this
+            	$.ajax({
+	              type:'POST',
+	              dataType:'json',
+	              url:baseUrl+"/api/coreUspAuthentication/checkDetails",
+	              data:{},
+	              contentType:'application/json;charset=utf-8',
+	              success:function(data){
+	                const info = data.data
+	                console.log(data)
+	                _this.remarkInfo = data.data.remark
+	                _this.sfinfoId = data.data.id
+	              }
+	          });
             }
         },
         mounted: function () {
+        	// this.getSHinfo()
+        	if(state.storeStatus === 4){
+        		this.editFormVisible = true
+        	}else if(state.storeStatus === 0){//待审核
+        		this.dashVisible = true
+        	}else if(state.storeStatus === 2){//审核未通过
+        		this.addTitle = '修改身份信息'
+        		this.getSHinfo()
+        	}
         	this.getlist()
         	this.getline()
         	this.getGroup()
+        	this.getDDWL()
             // this.drawPieChart()
             // this.drawPieChart()
         },

@@ -77,9 +77,10 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
-                            console.log(data)
+                            // console.log(data)
                             state.storeId = data.data.storeId
                             state.id = data.data.id
+                            state.storeStatus = data.data.storeStatus
                             document.cookie="token="+data.data.token;
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
@@ -96,7 +97,7 @@
                     // data:JSON.stringify(data),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                        console.log(data)
+                        // console.log(data)
                         state.commissionLine = data.data.store.commissionLine
                     }
                 });

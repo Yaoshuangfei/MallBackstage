@@ -50,7 +50,9 @@
 				<el-col :span="13">
 					<el-col :span="24" style="margin-top: 10px;" v-for="itemfy in items.commissions">		
 						<el-col :span="24" style="margin-top: 10px;" v-for="itemlx in itemfy.commissionsByType">
-							{{itemlx.userName}}{{itemlx.remark}}{{itemlx.quota}}
+							<el-col :span="4">{{itemlx.userName}}</el-col>
+							<el-col :span="4">{{itemlx.remark}}</el-col>
+							<el-col :span="4">{{itemlx.quota}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>

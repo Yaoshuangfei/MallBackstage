@@ -125,7 +125,7 @@ let routes = [
             { path: '/Identity', component: Identity, name: '身份管理' },
             { path: '/MyDistribution', component: MyDistribution, name: '我的分销' },
             { path: '/Agent', component: Agent, name: '代理商' },
-             { path: '/superiors', component: superiors, name: '查看上级' ,hidden: true }
+             { path: '/superiors/:id/:name', component: superiors, name: '查看下级' ,hidden: true }
             
         ]
     },
@@ -181,7 +181,7 @@ let routes = [
         iconCls: 'fa el-icon-date',
         children: [
             { path: '/FlowingWater', component: FlowingWater, name: '流水记录' },
-            // { path: '/txgl', component: txgl, name: '提现管理' }
+            { path: '/txgl', component: txgl, name: '提现管理' }
         ]
     },
    {

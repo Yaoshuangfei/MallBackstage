@@ -2,52 +2,19 @@
 	<section>
 		<!--工具条-->
 		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
-			<h3>我的分销商（210）</h3>
+			<h3>我的分销商（{{FxsList.length}}）</h3>
 		</el-col>
 		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
-			<el-col :xs="6" :sm="6" :md="6" :lg="6">
+			<el-col :xs="6" :sm="6" :md="6" :lg="6" v-for="item in FxsList">
 				<div class="agen_div">
-					<div></div>
-					<div>张三</div>
-					<div>一级分销商</div>
 					<div>
-						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
-							<el-button  type="text">查看下级</el-button>
-						</router-link>
+						<img style="width: 100px;height:100px;border-radius: 50%;" src="http://123.206.198.137:8090/uploadWeb/image/20170422/6362842052889194725313329.JPG">
+						<!-- <img style="width: 100px;height:100px;border-radius: 50%;" :src="item.coreUser.headImg"> -->
 					</div>
-				</div>
-			</el-col>
-			<el-col :xs="6" :sm="6" :md="6" :lg="6">
-					<div class="agen_div">
-					<div></div>
-					<div>张三</div>
-					<div>一级分销商</div>
+					<div>{{item.coreUser.nickName}}</div>
+					<div>{{item.shopRoleName}}</div>
 					<div>
-						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
-							<el-button  type="text">查看下级</el-button>
-						</router-link>
-					</div>
-				</div>
-			</el-col>
-			<el-col :xs="6" :sm="6" :md="6" :lg="6">
-					<div class="agen_div">
-					<div></div>
-					<div>张三</div>
-					<div>一级分销商</div>
-					<div>
-						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
-							<el-button  type="text">查看下级</el-button>
-						</router-link>
-					</div>
-				</div>
-			</el-col>
-			<el-col :xs="6" :sm="6" :md="6" :lg="6">
-					<div class="agen_div">
-					<div></div>
-					<div>张三</div>
-					<div>一级分销商</div>
-					<div>
-						<router-link :to="{ name: '查看上级', params: { id: 0 }}">
+						<router-link :to="{ name: '查看下级', params: { id: item.id , name:item.coreUser.nickName}}">
 							<el-button  type="text">查看下级</el-button>
 						</router-link>
 					</div>
@@ -65,7 +32,7 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
+				FxsList:[],
 				checked: true,
 				value:'',
 				value1:'',
@@ -108,7 +75,6 @@
 					status:'',
 					type:''
 				},
-				users: [],
 				total: 100,
 				page: 1,
 				listLoading: false,
@@ -157,31 +123,23 @@
 			},
 			getlist(){
 				const _this = this
-				_this.table = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:this.page,
+					size:10,
+					storeId:state.storeId
 				}
 				console.log(params)
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
+				$.ajax({
+	                type:'POST',
+	                dataType:'json',
+	                url:baseUrl+"/api/shopConfig/selectListBySeller",
+	                data:JSON.stringify(params),
+	                contentType:'application/json;charset=utf-8',
+	                success:function(data){
+	                  	console.log(data)
+	                  	_this.FxsList = data.data.list
 	                }
-	              }
-	         	)
+	            });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -314,7 +272,7 @@
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

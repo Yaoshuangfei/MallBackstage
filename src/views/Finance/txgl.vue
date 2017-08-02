@@ -27,25 +27,24 @@
 
 		<!--列表-->
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="tradeNo" label="订单号">
+			<el-table-column prop="userId" label="用户ID">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
+			<el-table-column prop="withdrawalsName" label="用户名">
 			</el-table-column>
-			<el-table-column prop="mobile" label="手机号">
+			<el-table-column prop="phone" label="手机号">
 			</el-table-column>
-			<el-table-column prop="quota" label="提现金额">
+			<el-table-column prop="withdrawalsPrice" label="提现金额">
 			</el-table-column>
-			<el-table-column prop="payType" :formatter='formatterType' label="订单状态">
+			<el-table-column prop="status" :formatter='formatterType' label="订单状态">
 			</el-table-column>
-			<el-table-column prop="centType" :formatter='formatterTime' label="提现时间">
+			<el-table-column prop="createTime" :formatter='formatterTime' label="提现时间">
+			</el-table-column>
+			<el-table-column prop="reason" label="备注">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<!-- <el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button> -->
-					<!-- <el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button> -->
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">打款</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">不通过 </el-button>
+					<el-button type="text" v-if="scope.row.status !== 2" size="small" @click="TgBtn(scope.row)">打款</el-button>
+					<el-button type="text" v-if="scope.row.status !== 2" size="small" @click="NogBtn(scope.row)">不通过 </el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -56,46 +55,28 @@
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
-
-		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
+		<!-- 通过 -->
+		<el-dialog title="通过" v-model="tongVisible" :close-on-click-modal="false" >
+			<el-form label-width="80px">
+				<el-form-item label="备注">
+					<el-input v-model="tonguoName"></el-input>
 				</el-form-item>
-				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{orderDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-form-item label="分佣详情">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+				<el-button type="primary" @click.native="tonguoSubmit">确定</el-button>
+				<el-button type="primary" @click.native="tongVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
+		<!-- NO通过 -->
+		<el-dialog title="不通过" v-model="NotongVisible" :close-on-click-modal="false" >
+			<el-form label-width="80px">
+				<el-form-item label="备注">
+					<el-input v-model="NotonguoName"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="NotonguoSubmit">确定</el-button>
+				<el-button type="primary" @click.native="NotongVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -109,11 +90,10 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
-				checked: true,
-				value:'',
-				value1:'',
-				value2:'',
+				tonguoName:'',
+				tongVisible:false,
+				NotongVisible:false,
+				NotonguoName:'',
 				selectSubjectStatus: [
 				{
 					value:'0',
@@ -143,71 +123,43 @@
 					status:'',
 					type:''
 				},
-				users: [],
 				total: 1,
 				page: 1,
 				listLoading: false,
-				sels: [],//列表选中列
-
-				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//编辑界面数据
-				editForm: {
-					id: 0,
-					username: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				},
 
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[]
+				orderInformation:[],
+				withdrawalsId:''
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
 			getlist(){
 				const _this = this
 				_this.table = []
 				const params = {
 					pageNum:_this.page,
-					pageSize:10,
-					payType:this.filters.status,
-					tradeNo:'',
-					userName:'',
-					mobile:'',
-					sort:4
-				}
-				if(this.filters.type === '1'){
-					params.tradeNo = this.filters.name
-				}else if(this.filters.type === '2'){
-					params.userName = this.filters.name
-				}else if(this.filters.type === '3'){
-					params.mobile = this.filters.name
+					size:10,
+					storeId:state.storeId,
+					status:'',
+					name:'',
+					withdrawalsId:'',
+					phone:4
 				}
 				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
                     // url:"http://192.168.0.115:8080/api/store/userCashFlow/selectFlowList",
-                    url:baseUrl+"/api/store/userCashFlow/selectFlowList",
+                    url:baseUrl+"/api/withdrawals/selectListBySeller",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
                     	const info = data.data
                     	_this.orderInformation = info.list
                     	_this.total = info.total
@@ -226,18 +178,12 @@
 			//支付方式
 			formatterType(row, column) {
 				let type = ''
-				if(row.payType === '0'){
-					type = '微信支付'
-				}else if(row.payType === '1'){
-					type = '支付宝支付'
-				}else if(row.payType === '2'){
-					type = '银联支付'
-				}else if(row.payType === '3'){
-					type = '余额支付'
-				}else if(row.payType === '4'){
-					type = '余额金豆混合支付'
-				}else if(row.payType === '5'){
-					type = '金豆支付'
+				if(row.status === 1){
+					type = '提现成功'
+				}else if(row.status === 2){
+					type = '提现审核中'
+				}else if(row.status === 3){
+					type = '提现被拒绝'
 				}
 				return type
 			},
@@ -257,7 +203,69 @@
 					type = '扫码支付'
 				}
 				return type
-			}
+			},
+			// 通过
+			TgBtn(row){
+				this.tongVisible = true
+				this.withdrawalsId = row.withdrawalsId
+				console.log(this.withdrawalsId)
+			},
+			tonguoSubmit(){
+				const _this = this
+				const params = {
+					withdrawalsId:this.withdrawalsId,
+					status:1,
+					reason:this.tonguoName
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/withdrawals/update",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.getlist()
+                    	}else{
+                    		_this.$message.error(data.msg)
+                    	}
+                    	_this.tongVisible = false
+                    }
+                });
+			},
+			// 不通过
+			NogBtn(row){
+				this.NotongVisible = true
+				this.withdrawalsId = row.withdrawalsId
+				console.log(this.withdrawalsId)
+			},
+			NotonguoSubmit(){
+				const _this = this
+				const params = {
+					withdrawalsId:this.withdrawalsId,
+					status:3,
+					reason:this.NotonguoName
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/withdrawals/update",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.getlist()
+                    	}else{
+                    		_this.$message.error(data.msg);
+                    	}
+                    	_this.NotongVisible = false
+                    }
+                });
+			},
 		},
 		mounted() {
 			this.getlist();

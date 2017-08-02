@@ -1,5 +1,15 @@
 <template>
 	<section>
+	<el-dialog title="输入密码" v-model="mimayanz" :close-on-click-modal="false" :show-close='false'>
+		<el-form label-width="100px">
+			<el-form-item label="密码">
+				<el-input v-model="password" type="password" auto-complete="off"></el-input>
+			</el-form-item>
+		</el-form>
+		<div slot="footer" class="dialog-footer" style="text-align: center;">
+			<el-button type="primary" @click.native="mimaSubmit" :loading="editLoading">确定</el-button>
+		</div>
+	</el-dialog>
 	<el-col v-if="allshow">
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
 			<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length===5">新增店铺身份</el-button>
@@ -253,7 +263,7 @@
 						</el-table-column>
 						<el-table-column prop="fybi" label="分佣比">
 							<template scope="scope">
-								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>%
+								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -263,15 +273,15 @@
 						</el-table-column>
 						<el-table-column prop="fybi" label="分佣比">
 							<template scope="scope">
-								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>%
+								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
 							</template>
 						</el-table-column>
 					</el-table>
 				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-top: 20px;">团队奖
-					<el-input style="width: 200px" v-model="cltuanduired"></el-input>%
+					<el-input style="width: 200px" v-model="cltuanduired"></el-input>
 				</el-col>
 				<el-col :xs="10" :sm="10" :md="10" :lg="10" style="margin-top: 20px;">加权分红
-					<el-input style="width: 200px" v-model="cltJqfred"></el-input>%
+					<el-input style="width: 200px" v-model="cltJqfred"></el-input>
 				</el-col>
 				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 120px;">
 					<el-button type="primary" v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
@@ -288,6 +298,8 @@
 	export default {
 		data() {
 			return {
+				mimayanz:true,
+				password:'',
 				isindex:'',
 				eidt_size:'',
 				edit_arryinit:[],
@@ -375,6 +387,29 @@
 			}
 		},
 		methods: {
+			// 密码验证
+			mimaSubmit(){
+				const _this = this
+				const params = {
+					password :this.password
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/validatePwd",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+							_this.mimayanz = false
+                    	}else{
+                    		_this.$message.error(data.msg);
+                    	}
+                    }
+                });
+			},
 			//获取邀请人身份
 			click(val) {
 				console.log(val)
@@ -466,6 +501,9 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	if(data.data === null){
+                    		return
+                    	}
                     	console.log(data.data)
                     	const info = data.data.shopRoles
                     	_this.ruleAll = info
@@ -637,7 +675,7 @@
 				}
 				// params.priceProps[0].priceData = JSON.stringify(params.priceProps[0].priceData) 192.168.0.106
 				console.log(params)
-				this.$confirm('确认提交吗？', '提示', {}).then(() => {
+				// this.$confirm('确认提交吗？', '提示', {}).then(() => {
 					$.ajax({
 	                    type:'POST',
 	                    dataType:'json',
@@ -659,7 +697,7 @@
 							_this.click()
 	                    }
 	                });
-				});
+				// });
 			},
 			//显示编辑界面
 			seeBtn: function (val,row,index) {

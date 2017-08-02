@@ -18,13 +18,15 @@
 					<img class="img" :src="scope.row.picture" alt="">
 				</template>
 			</el-table-column>
+			<el-table-column prop="status"  :formatter='formatterType' label="状态">
+			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" size="small" @click="handEnabled(scope.$index, scope.row)">启用</el-button>
-					<el-button type="text" size="small" @click="handDisabled(scope.$index, scope.row)">禁用</el-button>
-					<el-button type="text" size="small" @click="handmodify(scope.$index, scope.row)">修改</el-button>
+					<el-button type="text" v-if='scope.row.status ===0' size="small" @click="handEnabled(scope.$index, scope.row)">启用</el-button>
+					<el-button type="text" v-if='scope.row.status ===1' size="small" @click="handDisabled(scope.$index, scope.row)">禁用</el-button>
+					<el-button type="text" v-if='scope.row.status ===0' size="small" @click="handmodify(scope.$index, scope.row)">修改</el-button>
 					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -82,13 +84,14 @@
 					<el-input v-model="editForm.link" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="banner">
-					<el-input v-model="editForm.picture" type="text" auto-complete="off"></el-input>
+					<!-- <el-input v-model="editForm.picture" type="text" auto-complete="off"></el-input> -->
+					<img style='width: 100px' :src="editForm.picture">
 					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="modifyload" id="fileInputs">
 					<button type="button" class="el-button el-button--primary el-button--small">
 						<span>点击上传</span>
 					</button>
-					<button type="button" class="el-button el-button--primary el-button--small" id="btnClears" @click="modifyclear">清空上传</button>
-					<span style="display: block;font-size: 12px">{{ imageChange }}</span>
+					<!-- <button type="button" class="el-button el-button--primary el-button--small" id="btnClears" @click="modifyclear">清空上传</button> -->
+					<!-- <span style="display: block;font-size: 12px">{{ imageChange }}</span> -->
 					<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
 					<!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
 				</el-form-item>
@@ -331,11 +334,11 @@
                     url:url,
                     data:data,
                     contentType:'application/json;charset=utf-8',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                         if(!data.success){
                             alert(data.msg)
                         }else{
+                        	console.log(data)
                             var _length 	= data.data.list;
                             _this.total 	= data.data.total;
                             for (var i = 0; i < _length.length; i++) {
@@ -619,6 +622,15 @@
                 curTime = new Date(curTime).toLocaleString()
                 return curTime
             },
+            formatterType(row,column){
+                let type = ''
+                if(row.status === 1){
+                	type = '启用'
+                }else{
+                	type = '禁用'
+                }
+                return type
+            }
 		},
 		mounted() {
 			 this.getlist();
@@ -628,7 +640,7 @@
 
 <style>
 	.el-dialog--small {
-    	width: 25%;
+    	width: 30%;
     	border-radius: 10px
 	}
 	.el-form-item__label{

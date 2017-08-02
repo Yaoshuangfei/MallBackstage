@@ -6,6 +6,15 @@
 			<el-col :span="6" :offset="2">订单编号：{{table.id}}</el-col>
 			<el-col :span="6" :offset="2">下单时间：{{table.payTime}}</el-col>
 		</el-col>
+		<el-col :span="24" style="margin-top: 20px">
+			<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>
+			<el-col :span="4"style="margin-top: 20px;margin-left: 40px">
+			<el-button type="primary" @click="editDzBtn">修改</el-button>
+			</el-col>
+			<el-col :span="5"style="margin-top: 20px;margin-left: 40px">收货人：{{table.consignee}}</el-col>
+			<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>
+			<el-col :span="24"style="margin-top: 20px;margin-left: 40px">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
+		</el-col>
 		<el-col :span="24" class="order_information" style="margin-top: 20px">订单信息</el-col>
 		<el-col :span="24" class="commodity">
 			<el-col :span="4" :offset="8">商品名称</el-col>
@@ -66,12 +75,36 @@
 		<el-col :span="24" class="order_information" style="margin-top: 20px">操作历史</el-col>
 		<el-col :span="24" class="footerr_text"><span style="color:red">1245454541</span> 于2014-02-09 11:09:18 订单当前状态：提交订单 下一状态：等待收货</el-col>
 		<el-col :span="24" class="footerr_text"><span style="color:red">admin</span> 于2014-02-09 11:09:18 订单当前状态：提交订单 下一状态：等待收货</el-col> -->
+		<el-dialog title="修改地址" v-model="editFormVisible" :close-on-click-modal="false" >
+			<el-form :model="addfrom" label-width="160px">
+				<el-form-item label="收货人">
+					<el-input v-model="addfrom.consignee" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="手机号">
+					<el-input v-model="addfrom.mobile" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="收货地址">
+					<el-cascader
+				    :options="options"
+				    v-model="addfrom.areaId"
+				    @change="handleChange">
+				  </el-cascader>
+				</el-form-item>
+				<el-form-item label="详细地址">
+					<el-input v-model="addfrom.address" type="text"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="editSubmit">保存</el-button>
+				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script>
 	import { state } from '../../vuex/state'
 	import util from '../../common/js/util'
-	import {baseUrl , editUser, addUser } from '../../api/api';
+	import {baseUrl , editUser, addUser ,cityData3} from '../../api/api';
 
 	export default {
 		data() {
@@ -80,10 +113,88 @@
 				wuliuinfo:[],
 				fenytable:[],
 				wlShow:false,
-				fyShow:true
+				fyShow:true,
+				editFormVisible:false,
+				addfrom:{
+					areaId:[],
+					consignee:'',
+					mobile:'',
+					address:''
+				},
+				options: cityData3,
+				isareaId:'',
+				sName:'',
+				shiName:'',
+				qName:''
 			}
 		},
 		methods: {
+			editDzBtn(){
+				this.editFormVisible = true
+				this.addfrom.consignee = this.table.consignee
+				this.addfrom.mobile = this.table.mobile
+				this.addfrom.address = this.table.address
+			},
+			editSubmit(){
+				const _this = this
+				const params = {
+					storeId:state.storeId,
+					consignee:this.addfrom.consignee,
+					mobile:this.addfrom.mobile,
+					zipCode:'',
+					province:this.addfrom.areaId[0],
+					provinceName:this.sName,
+					city:this.addfrom.areaId[1],
+					cityName:this.shiName,
+					county:this.addfrom.areaId[2],
+					countyName:this.qName,
+					address:this.addfrom.address
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/orderMall/updateOrderAddress",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.editFormVisible = false
+                    		_this.getlist()
+                    	}
+                    	
+                    }
+                });
+			},
+			handleChange(value) {
+		        console.log(value);
+		        console.log(this.addfrom.areaId)
+		        this.isareaId = value[value.length-1]
+		        console.log(this.isareaId)
+		        this.areaId = value[0]
+		        this.cityId = value[1]
+		        this.provinceId = value[2]
+		        let arry = []
+		        let arry1 = []
+		        for(var i = 0;i<cityData3.length;i++){
+		        	if(value[0] === cityData3[i].value){
+		        		console.log(cityData3[i].label)
+		        		this.sName = cityData3[i].children
+		        	}
+		        }
+		        for(var i = 0;i<arry.length;i++){
+		        	if(value[1] === arry[i].value){
+		        		console.log(arry[i].label)
+		        		this.shiName = arry[i].children
+		        	}
+		        }
+		        for(var i = 0;i<arry1.length;i++){
+		        	if(value[2] === arry1[i].value){
+		        		console.log(arry1[i].label)
+		        		this.qName = arry1[i].label
+		        	}
+		        }
+		    },
 			seewl(){
 				this.wlShow = true
 				this.fyShow = false
@@ -110,6 +221,7 @@
                     success:function(data){
                     	const info = data.data
                     	_this.table = info.list[0]
+
                     	_this.table.payTime = new Date(_this.table.payTime).toLocaleString()
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
                     		_this.table.orderGoods[i].attrName = JSON.parse(_this.table.orderGoods[i].attrName)
@@ -166,7 +278,10 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	console.log(data)
-                    	_this.wuliuinfo = data.data.jsonArray.reverse()
+                    	if(data.data !== null){
+                    		_this.wuliuinfo = data.data.jsonArray.reverse()
+                    	}
+                    	
                     }
                 });
 			},
