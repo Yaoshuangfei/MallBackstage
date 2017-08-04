@@ -25,6 +25,7 @@ import Identity from './views/Distribution/Identity.vue'
 import Agent from './views/Distribution/Agent.vue'
 import MyDistribution from './views/Distribution/MyDistribution.vue'
 import superiors from './views/Distribution/superiors.vue'
+import rule from './views/Distribution/rule.vue'
 
 /*订单管理 order*/
 import OrderInformation from './views/order/OrderInformation.vue'
@@ -125,7 +126,8 @@ let routes = [
             { path: '/Identity', component: Identity, name: '身份管理' },
             { path: '/MyDistribution', component: MyDistribution, name: '我的分销' },
             { path: '/Agent', component: Agent, name: '代理商' },
-             { path: '/superiors/:id/:name', component: superiors, name: '查看下级' ,hidden: true }
+            { path: '/rule', component: rule, name: '分销规则管理' },
+            { path: '/superiors/:id/:name', component: superiors, name: '查看下级' ,hidden: true }
             
         ]
     },

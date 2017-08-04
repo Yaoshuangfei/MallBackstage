@@ -3,12 +3,12 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true" :model="filters">
-				<el-form-item label="状态">
+				<!-- <el-form-item label="状态">
 					<el-select v-model="filters.status" clearable>
 				      <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
 				      </el-option>
 				    </el-select>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="搜索类型">
 				    <el-select v-model="filters.type" clearable>
 				      <el-option v-for="item in options" :label="item.label" :value="item.value">
@@ -21,6 +21,18 @@
 				<el-form-item>
 					<el-button type="primary" @click="getlist">查询</el-button>
 					<el-button type="primary">导出</el-button>
+				</el-form-item>
+				<el-form-item label="店铺营业额：" style="margin-right: 40px">
+				    {{totalMoney}}元
+				</el-form-item>
+				<el-form-item label="店铺可提现金额：" style="margin-right: 40px">
+				    {{availableIncome}}元
+				</el-form-item>
+				<el-form-item label="已提现：" style="margin-right: 40px">
+				    {{amount}}元
+				</el-form-item>
+				<el-form-item label="冻结金额：" style="margin-right: 40px">
+				    {{frozenIncome}}元
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -43,9 +55,9 @@
 				<el-col :span="3">{{item.serviceFee}}</el-col>
 				<el-col :span="3">{{new Date(item.createTime).toLocaleString()}}</el-col>
 				<el-col :span="3">{{item.mallProfits}}</el-col>
-				<el-col :span="3">{{item.storeIncome+item.freezeIncome}}冻结余额{{item.freezeIncome}}</el-col>
+				<el-col :span="3">{{item.storeIncome+item.freezeIncome}}</el-col>
 			</el-col>
-			<el-col :span="24" style="border:1px solid #ddd;" v-if="item.maps.length !== 0" v-for="items in item.maps">
+			<el-col :span="24" style="border:1px solid #ddd;background: #eee;" v-if="item.maps.length !== 0" v-for="items in item.maps">
 				<el-col :span="3" style="margin-left: 20px;margin-top: 20px;margin-bottom: 20px">分佣明细</el-col>
 				<el-col :span="13">
 					<el-col :span="24" style="margin-top: 10px;" v-for="itemfy in items.commissions">		
@@ -137,12 +149,10 @@
 	export default {
 		data() {
 			return {
-				cs:[1,2,3,4,5,6],
-				radio: '0',
-				checked: true,
-				value:'',
-				value1:'',
-				value2:'',
+				amount:'',
+				availableIncome:'',
+				totalMoney:'',
+				frozenIncome:'',
 				selectSubjectStatus: [
 				{
 					value:'',
@@ -319,10 +329,29 @@
 					centype = '商家会员钱包转平台钱包'
 				}
 				return centype
+			},
+			getbaafList(){
+				const _this = this
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/myStoreBAAf",
+                    data:JSON.stringify({}),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	console.log(data)
+                    	_this.amount = data.data.amount
+                    	_this.availableIncome = data.data.availableIncome
+                    	_this.totalMoney = data.data.totalMoney
+                    	_this.frozenIncome = data.data.frozenIncome
+                    }
+                });
 			}
 		},
 		mounted() {
 			this.getlist();
+			this.getbaafList()
 		}
 	}
 

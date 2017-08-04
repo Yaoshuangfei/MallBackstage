@@ -5,7 +5,7 @@
 			<h3>我的分销商（{{FxsList.length}}）</h3>
 		</el-col>
 		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
-			<el-col :xs="6" :sm="6" :md="6" :lg="6" v-for="item in FxsList">
+			<el-col :xs="6" :sm="6" :md="6" :lg="6" v-for="item in FxsList" style='margin-bottom: 20px'>
 				<div class="agen_div">
 					<div>
 						<img style="width: 100px;height:100px;border-radius: 50%;" src="http://123.206.198.137:8090/uploadWeb/image/20170422/6362842052889194725313329.JPG">

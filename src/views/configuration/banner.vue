@@ -194,7 +194,7 @@
 					type:''
 				},
 				users: [],
-				total: 100,
+				total: 0,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -299,6 +299,7 @@
                     poType:this.uploadDetails.poType,
                     desc:this.uploadDetails.information,
                 };
+                console.log(params)
                 var url = baseUrl+"/api/indexAdvert/add";
                 var data =JSON.stringify(params);
                 $.ajax({
@@ -324,7 +325,7 @@
 				const _this = this;
                 _this.orderInformation = [];
 				const params = {
-                    poType:'1'
+                    poType:''
 				};
                 var url = baseUrl+"/api/indexAdvert/find/page?pageNum="+_this.page+"&pageSize=10";
                 var data =JSON.stringify(params);
