@@ -352,14 +352,14 @@
 	              success:function(data){
 	                const info = data.data
 	                // console.log(data)
-	                _this.visitPercentage = info.visitPercentage*100
+	                _this.visitPercentage = (info.visitPercentage*100).toFixed(6)
 	                _this.visitCount = info.visitCount
 	                _this.sumTotalMoney = info.sumTotalMoney
-	                _this.moneyPercentage = info.moneyPercentage*100
+	                _this.moneyPercentage = (info.moneyPercentage*100).toFixed(6)
 	                _this.memberCount = info.memberCount
-	                _this.memberPercentage = info.memberPercentage*100
+	                _this.memberPercentage = (info.memberPercentage*100).toFixed(6)
 	                _this.sumTotalQuantity = info.sumTotalQuantity
-	                _this.quantityPercentage = info.quantityPercentage*100
+	                _this.quantityPercentage = (info.quantityPercentage*100).toFixed(6)
 	              }
 	          });
         	},

@@ -1,5 +1,6 @@
 <template>
 	<section>
+
 		<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
 		  <el-col :xs="2" :sm="2" :md="2" :lg="2">店铺身份</el-col>
@@ -15,6 +16,7 @@
 		  </el-col>
 		</el-row>
 		<!--列表-->
+
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">购买身份价格</el-col>
 		<el-table :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
 			<el-table-column type="index">
@@ -29,6 +31,10 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">身份介绍</el-col>
+		<el-col :span="24">
+			<div id = 'editor-trigger' style="height: 500px;"></div>
+		</el-col>
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">商品照片</el-col>
 		<el-col :xs="24" :md="24">
 				<!-- 上传图片 -->
@@ -46,11 +52,18 @@
 				<img :src="item.baseUri+item.uri" style="width:200px;height: 200px;">
 			</el-col>
 		</el-col>
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">身份介绍</el-col>
-		<el-input type="textarea" v-model="desc"></el-input>
+
+
+		<!-- <el-input type="textarea" v-model="desc"></el-input> -->
+
+		
+		<!-- <div style="height: 10px"></div> -->
+		
+		
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">
 		<el-button type="primary" v-on:click="shopRoleAdd">发布</el-button>
 		</el-col>
+
 		<!--新增界面-->
 		<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false" >
 			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
@@ -98,10 +111,15 @@
 	import { state } from '../../vuex/state'
 	import util from '../../common/js/util'
 	import {baseUrl , editUser, addUser } from '../../api/api';
+	import wangEditor from 'wangEditor'
 
 	export default {
+		components: {
+            wangEditor
+        },
 		data() {
 			return {
+				_html:'',
 				desc:'',
 				radio: '0',
 				checked: true,
@@ -372,7 +390,7 @@
 					videoUrl:'',
 					pictureUrl:urls.toString(),
 					introType:0,
-					introData:this.desc
+					introData:this._html
 				}
 				console.log(params)
 				this.$confirm('确认发布吗？', '提示', {}).then(() => {
@@ -395,11 +413,59 @@
 	                });
 						
 				});
-			}
+			},
+			initEditor(data) {
+                const _this = this
+                const editor = new wangEditor('editor-trigger')
+                editor.config.uploadImgUrl = baseUrl+'/api/attachment/upload'
+                editor.config.uploadHeaders = {
+                    'contentType' : 'application/json;charset=utf-8'
+                }
+
+                editor.config.menus = [
+                    'source',
+                    '|',
+                    'bold',
+                    'underline',
+                    'italic',
+                    'strikethrough',
+                    'eraser',
+                    'forecolor',
+                    'bgcolor',
+                    '|',
+                    'quote',
+                    'fontfamily',
+                    'fontsize',
+                    'head',
+                    'unorderlist',
+                    'orderlist',
+                    'alignleft',
+                    'aligncenter',
+                    'alignright',
+                    '|',
+                    'link',
+                    'unlink',
+                    'table',
+                    // 'emotion',
+                    '|',
+                    'img',
+                    '|',
+                    'undo',
+                    'redo',
+                    'fullscreen'
+                ]
+                editor.onchange = function () {
+                    // 编辑区域内容变化时，实时打印出当前内容
+                    _this._html = this.$txt.html()
+                    console.log(_this._html);
+                }
+                editor.create()
+            }
 		},
 		mounted() {
+			this.initEditor()
 			this.getlist();
-			console.log(state.id)
+			// console.log(state.id)
 		}
 	}
 

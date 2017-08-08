@@ -236,7 +236,7 @@
 			},
 			editSubmit() {
 				const _this = this
-				_this.seeForm.goodsData = JSON.stringify(_this.seeForm.goodsData)
+				// _this.seeForm.goodsData = JSON.stringify(_this.seeForm.goodsData)
 				console.log(_this.seeForm.goodsData)
 				// $.ajax({
     //                 type:'POST',
