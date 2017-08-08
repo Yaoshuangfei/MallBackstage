@@ -130,6 +130,9 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                  	console.log(data.data)
+	                  	if(data.data === null){
+	                  		return
+	                  	}
 	                  	_this.roleId = data.data.withdrawalsWeek
 	                  	_this.adminDiscount = data.data.adminDiscount
 	                  	_this.minPrice = data.data.minPrice

@@ -61,7 +61,12 @@
 					<el-input v-model="orderDetails.price" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="角色图标：">
-					<el-input v-model="orderDetails.icon" type="text" auto-complete="off"></el-input>
+					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
+				    <el-button type="button" class="el-button el-button--primary el-button--small">
+				    	<span >点击上传</span>
+				    </el-button>
+				    <img style="width: 100px" :src="orderDetails.icon">
+					<!-- <el-input v-model="orderDetails.icon" type="text" auto-complete="off"></el-input> -->
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -154,6 +159,7 @@
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
+					icon:''
 				},
 				formData: new FormData(),
 				fileImg: ''
@@ -199,6 +205,45 @@
                 	this.formData = new FormData()
                 }
             },
+            upload1 (event) {
+				this.formData = new FormData()
+                let file = event.target.files[0]
+                console.log(this.formData)
+                console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                	console.log('存在file', file)
+                	this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file)
+                    console.log(this.formData)
+                    this.Uploadimg1()
+                } else {
+                	this.fileImg = ''
+                	console.log('不存在file', file)
+                	this.formData = new FormData()
+                }
+            },
+            Uploadimg1(){
+                // this.$confirm('确认上传此图片吗？', '提示', {}).then(() => {
+                    const _this= this;
+                    _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            // const info = response.body eval('(' + data + ')');
+                            const arry = info.data
+                            // _this.imgArry.push(arry[0])
+                            
+							_this.orderDetails.icon = arry[0].baseUri+arry[0].uri;
+							// console.log(_this.imgArry)
+							_this.clear()
+                        }, error => _this.$emit('complete', 500, error.message))
+                // });
+            },
             Uploadimg(){
                 this.$confirm('确认上传此图片吗？', '提示', {}).then(() => {
                     const _this= this;
@@ -233,6 +278,10 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
+                    	if(data.data.shopRoles === null){
+                    		return
+                    	}
                     	const info = data.data.shopRoles
                     	console.log(data)
                     	_this.identity= info

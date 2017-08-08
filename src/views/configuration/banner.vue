@@ -275,7 +275,7 @@
             },
             //添加
             submitUpload(){
-                this.$confirm('确认修改吗？', '提示', {}).then(() => {
+                this.$confirm('确认添加吗？', '提示', {}).then(() => {
                     const _this= this;
                     _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
                         progress(event) {

@@ -832,7 +832,7 @@
                     success:function(data){
                         const info = data.data
                         if(info === null){
-                        	cltFyBtn = true
+                        	_this.cltFyBtn = true
                         }
                         console.log(info)
                         _this.cltId = info.id

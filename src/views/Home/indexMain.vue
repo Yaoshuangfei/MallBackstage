@@ -28,7 +28,7 @@
 					<p>{{visitCount}}</p>
 					<p>
 						<span>{{visitPercentage}}%</span>
-						<span>来自上月</span>
+						<span>来自今天</span>
 					</p>
 				</div>
 			</el-col>
@@ -49,11 +49,11 @@
 				<div class="grid-content bg-purple">
 					<div style="float:left" class="statistics_title_left">
 						<span>财务报表</span>
-						<span>周报表</span>
+						<span>{{baobiaoName}}</span>
 					</div>
 					<div style="float:right;margin-right: 2%;" class="statistics_title_right">
 						<span class="wrapper">
-							  <el-radio-group v-model="radio3" class="wrapper_btn" @change = "click" style="position: relative;top:-5px;">
+							  <el-radio-group v-model="radio" class="wrapper_btn" @change = "click" style="position: relative;top:-5px;">
 							  	<el-radio-button  v-for="item in ruleAll" :label="item.id">{{item.name}}</el-radio-button>
 							  </el-radio-group>
   						</span>
@@ -161,6 +161,7 @@
     export default {
         data() {
             return {
+                baobiaoName:'日营业额',
             	addTitle:'添加身份信息',
             	frImgurl:'',
             	frImgurlPointer:'',
@@ -180,7 +181,7 @@
             	sfinfoId:'',//修改身份信息ID
             	daibanList:[],
             	dingdanList:[],
-                radio3: 1,
+                radio: 0,
                 ruleAll:[{
                 	name:'日报表',
                 	id:0
@@ -210,7 +211,7 @@
                 memberPercentage:'',
                 sumTotalQuantity:'',
                 quantityPercentage:'',
-                type:1,
+                type:0,
 
                 listAll:[],//线图
                 sj:[],
@@ -364,6 +365,18 @@
         	},
         	click(val) {
         		this.type = val
+                console.log(val)
+                if(val === 0){
+                    this.baobiaoName = '日营业额'
+                }else if(val === 1){
+                    this.baobiaoName = '周营业额'
+                }else if(val === 2){
+                    this.baobiaoName = '月营业额'
+                }else if(val === 3){
+                    this.baobiaoName = '季营业额'
+                }else if(val === 4){
+                    this.baobiaoName = '年营业额'
+                }
         		this.getline()
 			},
         	getline(){
@@ -395,7 +408,18 @@
 	                // console.log(linelist)
 	                for(var i = 0;i<linelist.length;i++){
 	                	// 时间
-	                	_this.sj.push( _this.formatterTime(linelist[i].payTime))
+                        var date=new Date(linelist[i].payTime);
+                        if(_this.type === 0){
+                             _this.sj.push(date.getHours()+'时')
+                        }else if(_this.type === 1 || _this.type === 3){
+                             _this.sj.push((date.getMonth()+1)+"月"+date.getDate()+'日')
+                        }else if(_this.type === 2 ){
+
+                            _this.sj.push(date.getDate()+'日')
+                        }else{
+                            _this.sj.push(date.getFullYear()+"-"+(date.getMonth()+1))
+                        }
+	                	// _this.sj.push( _this.formatterTime(linelist[i].payTime))
 	                	_this.cj.push(linelist[i].moneyAll)
 	                	_this.sp.push(linelist[i].countAll)
 	                	_this.pj.push(linelist[i].avgPrice)
@@ -462,8 +486,11 @@
             drawColumnChart() {
                 this.chartColumn = echarts.init(document.getElementById('chartColumn'));
                 this.chartColumn.setOption({
-                    title: { text: '周营业额' },
+                    title: { text: this.baobiaoName },
                     tooltip: {},
+                    legend: {
+                        data:['成交额总数','成交商品总数','成交额平均值']
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,

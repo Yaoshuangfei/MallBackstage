@@ -5,11 +5,12 @@
         <el-input v-model="filters.name" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="所属分类">
-        <el-input v-model="filters.pertain_type" style="width:400px"></el-input>
+        <el-input v-model="filters.pertainType" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="主营商品">
-        <el-input v-model="filters.marketing_goods"  type="textarea" style="width:400px"></el-input>
+        <el-input v-model="filters.marketingGoods"  type="textarea" style="width:400px"></el-input>
       </el-form-item>
+      <!-- <img :src="filters.logo"> -->
       <el-form-item label="店铺logo" prop="url">
         <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
           <button type="button" class="el-button el-button--primary el-button--small">
@@ -197,8 +198,8 @@
           id:state.storeId,
           name:this.filters.name,
           logo:this.url,
-          pertain_type:this.filters.pertain_type,
-          marketing_goods:this.filters.marketing_goods,
+          pertainType:this.filters.pertainType,
+          marketingGoods:this.filters.marketingGoods,
           region:this.filters.region,
           address:this.filters.address,
           phone:this.filters.phone,
@@ -229,7 +230,19 @@
           });
       },
       getlist(){
-        
+        const _this = this
+          $.ajax({
+              type:'POST',
+              dataType:'json',
+              url:baseUrl+"/api/store/find/thisStore",
+              data:JSON.stringify({}),
+              contentType:'application/json;charset=utf-8',
+              success:function(data){
+                console.log(data)
+                _this.filters = data.data
+                _this.url = data.data.logo
+              }
+          });
       },
       handleCurrentChange(val) {
         this.page = val;
@@ -362,7 +375,7 @@
       }
     },
     mounted() {
-      // this.getlist();
+      this.getlist();
     }
   }
 

@@ -72,7 +72,7 @@
 
 							<!-- <img style="width:100px" v-for="item in CommodityPictures" :src="item"> -->
 							</el-col>
-							<el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col>
+							<!-- <el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col> -->
 						</el-col>
 					</el-col>
 					<el-col :span="24">
@@ -100,11 +100,11 @@
 							      		{{scope.row.specData}}
 									</template>
 							      </el-table-column>
-							      <el-table-column prop="goodsId" label="商品id" width="190">
+							      <!-- <el-table-column prop="goodsId" label="商品id" width="190">
 								      <template scope="scope">
 								      		<el-input v-model="scope.row.goodsId" type="text"></el-input>
 										</template>
-							      </el-table-column>
+							      </el-table-column> -->
 							      <el-table-column prop="costPrice" label="成本价(元)" width="180">
 							      	<template scope="scope">
 							      		<el-input v-model="scope.row.costPrice" type="text"></el-input>
@@ -156,11 +156,11 @@
 							</el-col>
 						</el-col>
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述</el-col>
-						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+						<el-col :span="24" style=" border-bottom: 1px solid #ddd;height: 580px">
 							<el-col :span="2" style="text-align: right;line-height: 80px;">商品描述：</el-col>
-							<el-col :span="12" style="margin-left: 0px;border-left: 1px solid #ddd;padding-left: 10px">
+							<el-col :span="12" style="height: 60px;border-left: 1px solid #ddd;padding-left: 10px">
 								<el-col :span="23"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字
-								<el-input type="textarea" v-model="DescriptionGoods" :rows="10"></el-input>
+								<!-- <el-input type="textarea" v-model="DescriptionGoods" :rows="10"></el-input> -->
 								</el-col>
 							</el-col>
 						</el-col>
@@ -186,9 +186,13 @@
 						</el-col>
 					</el-col>
 				</el-col>
-
+			<!-- <el-col :span='24' >11111111111111</el-col>	 -->
+			<el-col :span='24' style="margin-top: 820px">
+				<div id = 'editor-trigger' style="height: 480px"></div>
+			</el-col>
 			</el-col>
 			<el-button type="primary" @click="release" style="margin: 20px;">发布</el-button>
+			
 		</el-col>
 	</section>
 </template>
@@ -197,10 +201,12 @@
 	import { state } from '../../vuex/state'
 	import util from '../../common/js/util'
 	import {baseUrl , editUser, addUser } from '../../api/api';
+	import wangEditor from 'wangEditor'
 
 	export default {
 		data() {
 			return {
+				test_html:'',
         		value: '',
 				keynext:true,
 				selectListNameId:'',
@@ -284,6 +290,9 @@
                 return this.fileImg
             }
         },
+        components: {
+            wangEditor
+        },
 		methods: {
 			handleCheckedCitiesChange(row) {
 				const arry = []
@@ -323,7 +332,7 @@
 					for(var i = 0;i<this.Specifications1.length;i++){
 						const obj = {}
 						obj.specData = this.Specifications1[i].value
-						obj.goodsId = ''
+						// obj.goodsId = ''
 						obj.specPrice = ''
 						obj.costPrice = ''
 						obj.storage = '',
@@ -350,7 +359,7 @@
 					for(var i = 0;i<this.specificatwo.length;i++){
 						const obj = {}
 						obj.specData = this.specificatwo[i]
-						obj.goodsId = ''
+						// obj.goodsId = ''
 						obj.specPrice = ''
 						obj.costPrice = ''
 						obj.storage = '',
@@ -643,7 +652,7 @@
                 const params = {
                     name:this.CommodityName,
                     goodsDesc:this.DescriptionGoods,
-                    veiw:'',
+                    veiw:_this.test_html,
                     price:this.SuggestedRetailRrice,
                     isVirtual:'0',
                     carouselPicture:this.url,
@@ -710,6 +719,7 @@
                     		_this.details = false
                     		_this.next = true
                     		_this.selectListName()
+                    		_this.tableData = []
                     	}else{
                     		alert(data.msg)
                     	}
@@ -751,8 +761,56 @@
                     }
                 });
 			},
+			initEditor(data) {
+                const _this = this
+                const editor = new wangEditor('editor-trigger')
+                editor.config.uploadImgUrl = baseUrl+'/api/attachment/upload'
+                editor.config.uploadHeaders = {
+                    'contentType' : 'application/json;charset=utf-8'
+                }
+
+                editor.config.menus = [
+                    'source',
+                    '|',
+                    'bold',
+                    'underline',
+                    'italic',
+                    'strikethrough',
+                    'eraser',
+                    'forecolor',
+                    'bgcolor',
+                    '|',
+                    'quote',
+                    'fontfamily',
+                    'fontsize',
+                    'head',
+                    'unorderlist',
+                    'orderlist',
+                    'alignleft',
+                    'aligncenter',
+                    'alignright',
+                    '|',
+                    'link',
+                    'unlink',
+                    'table',
+                    // 'emotion',
+                    '|',
+                    'img',
+                    '|',
+                    'undo',
+                    'redo',
+                    'fullscreen'
+                ]
+                editor.onchange = function () {
+                    // 编辑区域内容变化时，实时打印出当前内容
+                    _this.test_html = this.$txt.html()
+                    console.log(_this.test_html);
+                }
+                editor.create()
+            }
 		},
 		mounted() {
+			 this.initEditor()
 			 this.selectListName();
 			 this.gettemplet();
 		}
