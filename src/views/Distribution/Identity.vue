@@ -49,17 +49,10 @@
 		</el-col>
 		<el-col :xs="24" :md="24"  style="margin-top: 20px">
 			<el-col :xs="4" :md="4" v-for="item in imgArry">    <!-- arry[0].baseUri+arry[0].uri -->
-				<img :src="item.baseUri+item.uri" style="width:200px;height: 200px;">
+				<img :src="item" style="width:200px;height: 200px;">
 			</el-col>
 		</el-col>
 
-
-		<!-- <el-input type="textarea" v-model="desc"></el-input> -->
-
-		
-		<!-- <div style="height: 10px"></div> -->
-		
-		
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">
 		<el-button type="primary" v-on:click="shopRoleAdd">发布</el-button>
 		</el-col>
@@ -255,7 +248,6 @@
                             // const info = response.body eval('(' + data + ')');
                             const arry = info.data
                             // _this.imgArry.push(arry[0])
-                            
 							_this.orderDetails.icon = arry[0].baseUri+arry[0].uri;
 							// console.log(_this.imgArry)
 							_this.clear()
@@ -273,9 +265,13 @@
                             const info = JSON.parse(response.bodyText);
                             // const info = response.body eval('(' + data + ')');
                             const arry = info.data
-                            _this.imgArry.push(arry[0])
+                            
                             
 							_this.url = arry[0].baseUri+arry[0].uri;
+							if(_this.imgArry.length <3){
+								_this.imgArry.push(arry[0].baseUri+arry[0].uri)
+							}
+							
 							console.log(_this.imgArry)
 							_this.clear()
                         }, error => _this.$emit('complete', 500, error.message))
@@ -285,7 +281,7 @@
 				const _this = this
 				const params = {
 					storeId:state.storeId,
-					introType:1
+					introType:0
 				}
 				console.log(params)
 				$.ajax({
@@ -301,8 +297,14 @@
                     		return
                     	}
                     	const info = data.data.shopRoles
-                    	console.log(data)
+                    	_this.see_html = data.data.introData
+                    	// const aaa = data.data.pictureUrl
+                    	// console.log(aaa.split(','))
+
+                    	_this.imgArry = data.data.pictureUrl.split(',')
+                    	console.log(_this.imgArry)
                     	_this.identity= info
+                    	_this.initEditor()
                     }
                 });
 			},
@@ -386,7 +388,7 @@
 					urls.push(this.imgArry[i].baseUri+this.imgArry[i].uri)
 				}
 				const params = {
-					storeId:state.id,
+					storeId:state.storeId,
 					videoUrl:'',
 					pictureUrl:urls.toString(),
 					introType:0,
@@ -404,10 +406,18 @@
 	                    success:function(data){
 	                    	// const info = data.data.shopRoles
 	                    	console.log(data)
-	                    	_this.$message({
-								message: '提交成功',
-								type: 'success'
-							});
+	                    	if(data.code === 1){
+	                    		_this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+	                    	}else{
+	                    		_this.$message({
+									message: data.msg,
+									type: 'error'
+								});
+	                    	}
+	                    	
 							// _this.editFormVisible = false
 	                    }
 	                });
@@ -460,10 +470,10 @@
                     console.log(_this._html);
                 }
                 editor.create()
+                editor.$txt.append(_this.see_html)
             }
 		},
 		mounted() {
-			this.initEditor()
 			this.getlist();
 			// console.log(state.id)
 		}

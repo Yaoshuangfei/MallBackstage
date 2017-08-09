@@ -134,14 +134,16 @@
 				this.addfrom.consignee = this.table.consignee
 				this.addfrom.mobile = this.table.mobile
 				this.addfrom.address = this.table.address
+				console.log(this.table)
 			},
 			editSubmit(){
 				const _this = this
+				console.log(this.addfrom)
 				const params = {
-					storeId:state.storeId,
+					id:this.table.id,
 					consignee:this.addfrom.consignee,
 					mobile:this.addfrom.mobile,
-					zipCode:'',
+					zipCode:'000000',
 					province:this.addfrom.areaId[0],
 					provinceName:this.sName,
 					city:this.addfrom.areaId[1],
@@ -150,6 +152,7 @@
 					countyName:this.qName,
 					address:this.addfrom.address
 				}
+				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -178,14 +181,16 @@
 		        let arry1 = []
 		        for(var i = 0;i<cityData3.length;i++){
 		        	if(value[0] === cityData3[i].value){
-		        		console.log(cityData3[i].label)
-		        		this.sName = cityData3[i].children
+		        		console.log(cityData3[i].children)
+		        		this.sName = cityData3[i].label
+		        		arry = cityData3[i].children
 		        	}
 		        }
 		        for(var i = 0;i<arry.length;i++){
 		        	if(value[1] === arry[i].value){
 		        		console.log(arry[i].label)
-		        		this.shiName = arry[i].children
+		        		this.shiName = arry[i].label
+		        		arry1 = arry[i].children
 		        	}
 		        }
 		        for(var i = 0;i<arry1.length;i++){
@@ -221,7 +226,17 @@
                     success:function(data){
                     	const info = data.data
                     	_this.table = info.list[0]
-
+                    	const arryDZ = [
+                    		_this.table.province,
+                    		_this.table.city,
+                    		_this.table.county
+                    	]
+                    	console.log(_this.table)
+                    	console.log(_this.table.province)
+                    	console.log(_this.table.city)
+                    	console.log(_this.table.county)
+                    	_this.addfrom.areaId = arryDZ
+                    	console.log(arryDZ)
                     	_this.table.payTime = new Date(_this.table.payTime).toLocaleString()
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
                     		_this.table.orderGoods[i].attrName = JSON.parse(_this.table.orderGoods[i].attrName)
@@ -260,6 +275,7 @@
 								expressName:_this.table.orderGoods[i].expressName,
 								picture:_this.table.orderGoods[i].picture
 							}
+							// console.log(_this.table.orderGoods[i].province+_this.table.orderGoods[i].city+_this.table.orderGoods[i].county)
 							console.log(params)
 							_this.souTraces(params)
                     	}
@@ -270,6 +286,7 @@
 			// 物流信息
 			souTraces(params){
 				const _this = this
+				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',

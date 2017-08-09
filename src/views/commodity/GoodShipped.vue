@@ -63,16 +63,17 @@
 						<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>
 						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd">
 							<el-col :span="24" style="margin-top: 10px">
+
 							<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">
 							<button type="button" class="el-button el-button--primary el-button--small" style="margin-left: -83px">
 								<span>点击上传</span>
 							</button>
 							<button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button>
-							<span style="display: block;font-size: 12px;margin-bottom: 10px">{{ imageChange }}</span>
+							<!-- <span style="display: block;font-size: 12px;margin-bottom: 10px">{{ imageChange }}</span> -->
 
-							<!-- <img style="width:100px" v-for="item in CommodityPictures" :src="item"> -->
+							<img style="width:100px" v-for="item in CommodityPictures" :src="item">
 							</el-col>
-							<!-- <el-col :span="19"  style="margin-top: 5px;color: #aaa;"><el-input type="textarea" :rows="10"></el-input></el-col> -->
+							<el-col :span="19"  style="margin-top: 5px;color: #aaa;">最多上传三张图片</el-col>
 						</el-col>
 					</el-col>
 					<el-col :span="24">
@@ -234,13 +235,7 @@
 				data1:[],
 				data2:[],
 				data3:[],
-				options: [{
-		          value: '1',
-		          label: '订单编号'
-		        }, {
-		          value: '2',
-		          label: '快递单号'
-		        }],
+				options: [],
 				filters: {
 					name: '',
 					status:'',
@@ -424,7 +419,9 @@
                             // const info = response.body
 							_this.url = info.data[0].baseUri+info.data[0].uri;
 							console.log(_this.url)
-							// _this.CommodityPictures.push(_this.url)
+							if(_this.CommodityPictures.length <3){
+								_this.CommodityPictures.push(_this.url)
+							}
                         }, error => _this.$emit('complete', 500, error.message))
                 // });
             },
@@ -655,7 +652,7 @@
                     veiw:_this.test_html,
                     price:this.SuggestedRetailRrice,
                     isVirtual:'0',
-                    carouselPicture:this.url,
+                    carouselPicture:this.CommodityPictures.toString(),
                     saleState:'1',
                     goodsData:[],
                     catId:this.sels[0].id,
@@ -747,7 +744,10 @@
                     success:function(data){
                     	// _this.total = data.data.total
                     	const info = data.data.list
-                    	console.log(info)
+                    	console.log(data)
+                    	if(info.length === 0){
+                    		alert('请先添加运费模板')
+                    	}
                     	_this.options = []
                     	// const arry = []
                     	for (var i = 0; i < info.length; i++) {
@@ -845,7 +845,7 @@
 	}
 	.Commodity_information{
 		width: 1600px;
-		height: 2100px;
+		height: 2250px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
 		margin-left: 20px;

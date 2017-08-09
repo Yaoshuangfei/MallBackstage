@@ -246,6 +246,7 @@
                 console.log(data)
                 _this.filters = data.data
                 _this.url = data.data.logo
+                _this.initEditor();
               }
           });
       },
@@ -424,11 +425,13 @@
                     console.log(_this._html);
                 }
                 editor.create()
+                console.log(_this.filters)
+                editor.$txt.append(_this.filters.content)
             }
     },
     mounted() {
-      this.initEditor()
       this.getlist();
+      
     }
   }
 

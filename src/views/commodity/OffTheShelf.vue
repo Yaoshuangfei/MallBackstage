@@ -88,19 +88,19 @@
 		<!--编辑 界面-->
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" >
 			<el-form :model="seeForm" label-width="160px">
-				<el-form-item label="订单号">
+				<!-- <el-form-item label="订单号">
 					<el-input v-model="seeForm.goodsNo" type="text" auto-complete="off"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="商品名称">
 					<!-- <div>{{seeForm.name}}</div> -->
 					<el-input v-model="seeForm.name" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="宝贝属性">
+				<!-- <el-form-item label="宝贝属性">
 					<el-col :span="24" v-for="item in seeForm.goodsData">
 						<el-col :span="6"><span>{{item.key}}</span></el-col>
 						<el-col :span="14"><el-input v-model="item.value" type="text" auto-complete="off"></el-input> </el-col>
 					</el-col>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="计量单位">
 					<!-- <div>{{seeForm.unit }}</div> -->
 					<el-input v-model="seeForm.unit" type="text" auto-complete="off"></el-input>
@@ -229,27 +229,29 @@
                     	const info = data.data
                     	console.log(data)
                     	_this.seeForm = info
-                    	_this.seeForm.goodsData = JSON.parse(_this.seeForm.goodsData)
+                    	// _this.seeForm.goodsData = JSON.parse(_this.seeForm.goodsData)
                     	console.log(_this.seeForm.goodsData)
                     }
                 });
 			},
 			editSubmit() {
 				const _this = this
-				// _this.seeForm.goodsData = JSON.stringify(_this.seeForm.goodsData)
-				console.log(_this.seeForm.goodsData)
-				// $.ajax({
-    //                 type:'POST',
-    //                 dataType:'json',
-    //                 url:baseUrl+"/api/goods/update",
-    //                 data:JSON.stringify(_this.seeForm),
-    //                 contentType:'application/json;charset=utf-8',
-    //                 error: function (XMLHttpRequest, textStatus, errorThrown) {},
-    //                 success:function(data){
-    //                 	const info = data.data
-    //                 	console.log(data)
-    //                 }
-    //             });
+				console.log(_this.seeForm)
+				const params = _this.seeForm
+				// params.goodsData = JSON.stringify(params.goodsData)
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goods/update",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                    	const info = data.data
+                    	console.log(data)
+                    }
+                });
 			},
 			// 下架
 			topBtn(id) {

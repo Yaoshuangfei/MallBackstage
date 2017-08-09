@@ -27,11 +27,10 @@
             </el-col>
         <el-col style="margin-top: 40px;">
           <el-form-item label="商品描述">
-            <el-input v-model="filters.name" type="textarea" style="width:400px"></el-input>
+            <div id = 'editor-trigger' style="height: 500px"></div>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="Preservation">保存</el-button>
-            <el-button>取消</el-button>
           </el-form-item>
         </el-col>
       
@@ -43,10 +42,15 @@
   import { state } from '../../vuex/state'
   import util from '../../common/js/util'
   import {baseUrl , editUser, addUser } from '../../api/api';
+  import wangEditor from 'wangEditor'
 
   export default {
+    components: {
+      wangEditor
+    },
     data() {
       return {
+        _html: '',
         uploadBtn:false,
         filters: {
           name: '',
@@ -89,7 +93,9 @@
                 const info = data.data
                 console.log(info)
                 _this.table = info.shopRoles
-                _this.CommodityPictures = info.pictureUrl.split(',')
+                if(info.pictureUrl !== null){
+                    _this.CommodityPictures = info.pictureUrl.split(',')
+                }
                 for(var i = 0;i<info.shopRoles.length;i++){
                     const obj = {}
                     obj.value = info.shopRoles[i].id
@@ -112,9 +118,9 @@
         const params = {
             // introId:''
             storeId:state.storeId,
-            videoUrl:1,
-            pictureUrl:'',
-            introData:'',
+            videoUrl:'',
+            pictureUrl:this.CommodityPictures.toString(),
+            introData:this._html,
             shopRoles:[]
           }
           for(var i = 0;i<this.table.length;i++){
@@ -188,10 +194,62 @@
           }
                     }, error => _this.$emit('complete', 500, error.message))
             // });
-        }
+        },
+         initEditor(data) {
+                const _this = this
+                const editor = new wangEditor('editor-trigger')
+                editor.config.uploadImgUrl = baseUrl+'/api/attachment/upload'
+                editor.config.uploadHeaders = {
+                    'contentType' : 'application/json;charset=utf-8'
+                }
+
+                editor.config.menus = [
+                    'source',
+                    '|',
+                    'bold',
+                    'underline',
+                    'italic',
+                    'strikethrough',
+                    'eraser',
+                    'forecolor',
+                    'bgcolor',
+                    '|',
+                    'quote',
+                    'fontfamily',
+                    'fontsize',
+                    'head',
+                    'unorderlist',
+                    'orderlist',
+                    'alignleft',
+                    'aligncenter',
+                    'alignright',
+                    '|',
+                    'link',
+                    'unlink',
+                    'table',
+                    // 'emotion',
+                    '|',
+                    'img',
+                    '|',
+                    'undo',
+                    'redo',
+                    'fullscreen'
+                ]
+                editor.onchange = function () {
+                    // 编辑区域内容变化时，实时打印出当前内容
+                    _this._html = this.$txt.html()
+                    console.log(_this._html);
+                    console.log(_this.CommodityPictures.toString())
+                }
+                editor.create()
+                console.log(_this.filters)
+                editor.$txt.append(_this.filters.content)
+                // _this.CommodityPictures = info.pictureUrl
+            }
     },
     mounted() {
        this.getlist();
+       this.initEditor()
     }
   }
 
