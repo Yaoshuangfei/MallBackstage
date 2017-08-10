@@ -347,7 +347,6 @@
 							const arry = []
 							arry.push(this.Specifications1[i],this.Specifications2[x])
 							this.specificatwo1.push(arry)
-							
 						}
 					}
 					this.tableData = []
@@ -685,11 +684,12 @@
                 
                 if(this.Specifications.length === 1){
                 	 params.goodsSpecs = this.tableData
+                	 console.log(this.Specifications1)
 	                for(var i = 0;i<params.goodsSpecs.length;i++){
-	                	params.goodsSpecs[i].specData = this.Specifications1[i]
+	                	params.goodsSpecs[i].specData = []
+	                	params.goodsSpecs[i].specData.push(this.Specifications1[i])
 	                	params.goodsSpecs[i].specData = JSON.stringify(params.goodsSpecs[i].specData)
 	                }
-	                console.log(1)
                 }
                 console.log(this.tableData)
                 console.log(this.specificatwo1)

@@ -714,10 +714,20 @@
 
 				if(this.checked === true){
 					console.log(this.fareCarries)
+					const mrobj = {
+						mode:0,
+						isDefault:1,
+						data:'',
+						firstHeavy:this.defaultValue.freight,
+						firstPrice:this.defaultValue.element,
+						addHeavy:this.defaultValue.zfreight,
+						addPrice:this.defaultValue.zelement
+					}
+					params.fareCarries.push(mrobj)
 					for(var i = 0;i<this.fareCarries.length;i++){
 						const obj = {
 							mode:0,
-							isDefault:0,
+							isDefault:1,
 							data:[]
 							// firstHeavy:1,
 							// firstPrice:1,
@@ -739,10 +749,20 @@
 
 				if(this.ems === true){
 					console.log(this.fareCarriesEMS)
+					const mrobj = {
+						mode:1,
+						isDefault:1,
+						data:'',
+						firstHeavy:this.defaultValueEMS.freight,
+						firstPrice:this.defaultValueEMS.element,
+						addHeavy:this.defaultValueEMS.zfreight,
+						addPrice:this.defaultValueEMS.zelement
+					}
+					params.fareCarries.push(mrobj)
 					for(var i = 0;i<this.fareCarriesEMS.length;i++){
 						const obj = {
 							mode:1,
-							isDefault:0,
+							isDefault:1,
 							data:[]
 						}
 						obj.firstHeavy = this.fareCarriesEMS[i].firstHeavy
@@ -760,10 +780,20 @@
 
 				if(this.pingyou === true){
 					console.log(this.fareCarriesPY)
+					const mrobj = {
+						mode:2,
+						isDefault:1,
+						data:'',
+						firstHeavy:this.defaultValuePY.freight,
+						firstPrice:this.defaultValuePY.element,
+						addHeavy:this.defaultValuePY.zfreight,
+						addPrice:this.defaultValuePY.zelement
+					}
+					params.fareCarries.push(mrobj)
 					for(var i = 0;i<this.fareCarriesPY.length;i++){
 						const obj = {
 							mode:2,
-							isDefault:0,
+							isDefault:1,
 							data:[]
 						}
 						obj.firstHeavy = this.fareCarriesPY[i].firstHeavy

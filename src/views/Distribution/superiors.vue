@@ -6,8 +6,8 @@
 		</el-col>
 		<el-col :span="24">
 			<el-col :span="4" style="margin-top: 20%" class='bor_div_left'>{{name}}</el-col>
-			<el-col :span="10" style="margin-left: 60px;margin-bottom: 10px; " v-for="item in list">
-				<el-col :span="24" style="margin-top: 10px">
+			<el-col :span="18" style="margin-left: 60px;margin-bottom: 10px; ">
+				<el-col :span="24" style="margin-top: 10px" v-for="item in list">
 					<el-col :span="4" class='bor_div'>
 						<el-col :span="24">{{item.coreUser.nickName}}</el-col>
 						<el-col :span="24">{{item.shopRoleName}}</el-col>

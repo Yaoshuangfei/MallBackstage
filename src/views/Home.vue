@@ -39,7 +39,7 @@
 				</el-menu> -->
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
 					 unique-opened router v-show="!collapsed">
-					<template  v-for="(item,index) in $router.options.routes"  v-if="!item.hidden">
+					<template  v-for="(item,index) in arry"  v-if="!item.hidden">
 						<el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
@@ -91,10 +91,12 @@
 </template>
 
 <script>
+	import { state } from '../vuex/state'
 	export default {
 		data() {
 			return {
 				sysName:'商家后台管理',
+				arry:[],
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -204,8 +206,23 @@
 				this.sysUserName = user.name || '';
 				this.sysUserAvatar = user.avatar || '';
 			}
-			// this.getMenuList()
-			console.log(this.$router.options.routes)
+			this.arry = this.$router.options.routes
+			if(state.commissionLine !== 3){
+				for(var i = 0;i<this.arry[5].children.length;i++){
+					if(this.arry[5].children[i].name === '分销规则管理'){
+						this.arry[5].children.splice(i,1)
+					}
+				}
+				state.keys = true
+			}else if(state.commissionLine === 3){
+				if(state.keys){
+					const obj = {}
+					obj.name = '分销规则管理'
+					obj.path = "/rule"
+					this.arry[5].children.push(obj)
+				}
+				state.keys = false
+			}
 		}
 	}
 

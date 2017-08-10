@@ -269,6 +269,9 @@
                     	console.log(_this.table)
                     	console.log(data)
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
+                    		if(_this.table.orderGoods[i].picture === null){
+                    			_this.table.orderGoods[i].picture = 'icone.png'
+                    		}
                     		const params = {
 								expno:_this.table.orderGoods[i].expno,
 								expressCode:_this.table.orderGoods[i].expressCode,

@@ -7,6 +7,7 @@ export const state = {
     accessToken: '',
     commissionLine:'',
     storeStatus:'',
+    keys:false,
     HTTPCODE: {
 	    LOGINFAIL: 1000001, //返回值 登录错误
 	    SUCCEED: 1000000, //返回值 成功(1)

@@ -20,6 +20,8 @@
 			</el-table-column>
 			<el-table-column prop="status"  :formatter='formatterType' label="状态">
 			</el-table-column>
+			<el-table-column prop="poType"  :formatter='formatterpoType' label="位置">
+			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
 			</el-table-column>
 			<el-table-column label="操作">
@@ -631,6 +633,9 @@
                 	type = '禁用'
                 }
                 return type
+            },
+            formatterpoType(row,column) {
+            	return row.poType === 1 ?'首页':'店铺内'
             }
 		},
 		mounted() {

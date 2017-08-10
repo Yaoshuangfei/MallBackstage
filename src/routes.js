@@ -186,17 +186,17 @@ let routes = [
             { path: '/txgl', component: txgl, name: '提现管理' }
         ]
     },
-   {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            // { path: '/Replenishment', component: Replenishment, name: '补货专区' ,hidden: true},
-            { path: '/add', component: add, name: '补货专区' ,  }
-        ]
-    },
+   // {
+   //      path: '/',
+   //      component: Home,
+   //      name: '',
+   //      iconCls: 'fa fa-address-card',
+   //      leaf: true,//只有一个节点
+   //      children: [
+   //          // { path: '/Replenishment', component: Replenishment, name: '补货专区' ,hidden: true},
+   //          { path: '/add', component: add, name: '补货专区' ,  }
+   //      ]
+   //  },
     {
         path: '/',
         component: Home,

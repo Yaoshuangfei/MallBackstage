@@ -21,6 +21,11 @@
 				</div>
 			</el-col>
 		</el-col>
+		<!--工具条-->
+		<el-col :span="18" class="toolbar" style="background:#fff;">
+			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+			</el-pagination>
+		</el-col>
 	</section>
 </template>
 
@@ -101,31 +106,15 @@
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
-				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				}
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
 			getlist(){
 				const _this = this
 				const params = {
 					pageNum:this.page,
-					size:10,
+					size:8,
 					storeId:state.storeId
 				}
 				console.log(params)
@@ -143,7 +132,7 @@
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
+				this.getlist();
 			},
 			//获取用户列表
 			getUsers() {

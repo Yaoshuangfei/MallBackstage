@@ -40,16 +40,17 @@
 				<!-- 上传图片 -->
 				<form style="position:relative;">
 				    <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
-				    <el-button type="button" class="el-button el-button--primary el-button--small" :disabled="this.imgArry.length===3">
+				    <el-button type="button" class="el-button el-button--primary el-button--small" v-if="this.imgArry.length <3">
 				    	<span >点击上传</span>
 				    </el-button>
-				    <el-button type="button" class="el-button el-button--primary el-button--small" :disabled="this.imgArry.length===3" id="btnClear" @click="clear">清空上传</el-button>
+				    <!-- <el-button type="button" class="el-button el-button--primary el-button--small" :disabled="this.imgArry.length===3" id="btnClear" @click="clear">清空上传</el-button> -->
 				    <!-- <span style="display: block;font-size: 12px">{{ imageChange }}</span> -->
 				</form>
 		</el-col>
 		<el-col :xs="24" :md="24"  style="margin-top: 20px">
-			<el-col :xs="4" :md="4" v-for="item in imgArry">    <!-- arry[0].baseUri+arry[0].uri -->
-				<img :src="item" style="width:200px;height: 200px;">
+			<el-col :xs="4" :md="4" v-for="item in imgArry">
+				<img style="position: relative;left: 220px;top:-170px;" @click="deldetImg(item)" src="../../assets/delet.png">
+				<img :src="item" style="width:200px;height: 200px;border: 1px solid #f0f0f0;">
 			</el-col>
 		</el-col>
 
@@ -105,6 +106,7 @@
 	import util from '../../common/js/util'
 	import {baseUrl , editUser, addUser } from '../../api/api';
 	import wangEditor from 'wangEditor'
+
 
 	export default {
 		components: {
@@ -183,6 +185,10 @@
 		    }
 	    },
 		methods: {
+			// /删除图片
+			deldetImg(src){
+				this.imgArry.splice(jQuery.inArray(src, this.imgArry),1)
+			},
 			clear(){
 				let btn = document.getElementById("btnClear");
      			let files = document.getElementById("fileInput");
@@ -255,7 +261,7 @@
                 // });
             },
             Uploadimg(){
-                this.$confirm('确认上传此图片吗？', '提示', {}).then(() => {
+                // this.$confirm('确认上传此图片吗？', '提示', {}).then(() => {
                     const _this= this;
                     _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
                         progress(event) {
@@ -275,7 +281,7 @@
 							console.log(_this.imgArry)
 							_this.clear()
                         }, error => _this.$emit('complete', 500, error.message))
-                });
+                // });
             },
 			getlist(){
 				const _this = this
@@ -300,9 +306,7 @@
                     	_this.see_html = data.data.introData
                     	// const aaa = data.data.pictureUrl
                     	// console.log(aaa.split(','))
-
                     	_this.imgArry = data.data.pictureUrl.split(',')
-                    	console.log(_this.imgArry)
                     	_this.identity= info
                     	_this.initEditor()
                     }
@@ -383,14 +387,10 @@
 			},
 			shopRoleAdd() {
 				const _this = this
-				let urls =[]
-				for(var i = 0;i<this.imgArry.length;i++){
-					urls.push(this.imgArry[i].baseUri+this.imgArry[i].uri)
-				}
 				const params = {
 					storeId:state.storeId,
 					videoUrl:'',
-					pictureUrl:urls.toString(),
+					pictureUrl:this.imgArry.toString(),
 					introType:0,
 					introData:this._html
 				}
