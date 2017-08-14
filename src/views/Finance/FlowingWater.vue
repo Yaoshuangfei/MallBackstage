@@ -238,7 +238,7 @@
 					tradeNo:'',
 					userName:'',
 					mobile:'',
-					sort:4
+					sort:'4'
 				}
 				if(this.filters.type === '1'){
 					params.tradeNo = this.filters.name

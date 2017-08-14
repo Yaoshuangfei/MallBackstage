@@ -71,6 +71,9 @@
 				<el-form-item label="邀请人数">
 					<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
 				</el-form-item>
+				<!-- <el-form-item label="角色名称">
+					<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
+				</el-form-item> -->
 				<el-col :span='16' :offset="6">被邀请人身份必须同级或高于才有效</el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
@@ -248,9 +251,16 @@
 							<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
 						</el-form-item>
 						<el-col :span='16' :offset="6">被邀请人身份必须同级或高于才有效</el-col>
-						<!-- <el-form-item label="身份添加">
-							<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
-						</el-form-item> -->
+						<el-form-item label="身份名称">
+							<el-input v-model="upgrade.name" type="text" auto-complete="off"></el-input>
+						</el-form-item>
+						<el-form-item label="角色图标">
+							<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+							<button type="button" class="el-button el-button--primary el-button--small">
+								<span>点击上传</span>
+							</button>
+						</el-form-item>
+						<img v-if="url !== '' " style="width: 100px;" :src="url">
 					</el-form>
 					<div slot="footer" class="dialog-footer" style="text-align: center;">
 						<el-button type="primary" @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
@@ -357,6 +367,8 @@
 				orderDetails: {},
 				orderInformation:[],
 				//////////////////////////////////////////////////////磁疗贴//////////////////////////////////////////////////////////
+				formData: new FormData(),
+				url:'',
 				allshow:true,
 				cltShow:false,
 				cltSf:[],
@@ -554,7 +566,14 @@
 				const params = {
 					id:state.storeId,
 					ruleIsUpgrade:1,
-					invitedMinNum:parseInt(_this.upgrade.invitedMinNum)
+					invitedMinNum:parseInt(_this.upgrade.invitedMinNum),
+					shopRoles:[
+						{
+							name:this.upgrade.name,
+							icon:this.url,
+							level:-1
+						}
+					]
 				}
 				console.log(params)
 				if(this.ruleIsUpgrade){
@@ -821,6 +840,39 @@
                 });
 			},
 			/////////////////////////////// 磁疗贴//////////////////////////////////////////////////////////////////////////
+			//图片上传
+            upload (event) {
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                // console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                    console.log('存在file', file)
+                    this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file);
+                    console.log(this.formData);
+                    this.getImgUrl()
+                } else {
+                    this.fileImg = ''
+                    console.log('不存在file', file)
+                    this.formData = new FormData()
+                }
+            },
+            getImgUrl(){
+                const _this= this;
+                _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                    progress(event) {
+                    }
+                })
+                    .then(response => {
+                    	console.log(response)
+                        const info = JSON.parse(response.bodyText);
+						_this.url = info.data[0].baseUri+info.data[0].uri;
+						// _this.getUrl()
+                    }, error => _this.$emit('complete', 500, error.message))
+			},
 			getcltList(){
 				const _this = this
 				$.ajax({

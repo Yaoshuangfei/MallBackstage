@@ -13,7 +13,7 @@
 	  			店主：{{name}}
 	  			</el-col>
 	  			<el-col :xs="12" :sm="12" :md="12" :lg="12">
-	  			联系电话：112345155565
+	  			联系电话：{{phone}}
 	  			</el-col>
 	  			<el-col :xs="12" :sm="12" :md="12" :lg="12">
 	  			好评率：{{favorableRate}}
@@ -109,7 +109,7 @@
 		data() {
 			return {
 				name:'',
-
+				phone:'',
 				favorableRate:'',
 				goodsScore:'',
 				sellerScore:'',
@@ -162,16 +162,42 @@
 	                  		}
 	                  	}
 	                  	_this.name = info.store.name
+	                  	_this.phone = info.store.phone
 	                  	_this.favorableRate = info.store.favorableRate
 	                  	_this.goodsScore = info.store.goodsScore
 	                  	_this.sellerScore = info.store.sellerScore
 	                  	_this.logisticsScore = info.store.logisticsScore
 	                }
 	            })
+			},
+			getcommit(){
+				let url = ''
+				if(state.commissionLine === 2){
+					url = baseUrl + '/api/shopMember/selectListByRole'
+				}else{
+					url = baseUrl + '/api/shopConfig/selectListBySeller'
+				}
+				const params = {
+					pageNum:1,
+					size:10,
+					storeId:state.storeId
+				}
+				$.ajax({
+		              type:'POST',
+		              dataType:'json',
+		              url:url,
+		              data:JSON.stringify(params),
+		              contentType:'application/json;charset=utf-8',
+		              success:function(data){
+		                console.log(data)
+		              }
+		          });
 			}
+
 		},
 		mounted() {
 			this.getlist()
+			this.getcommit()
 		}
 	}
 

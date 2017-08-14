@@ -86,10 +86,10 @@
 		<el-dialog title="编辑购买身份价格" v-model="editFormVisible" :close-on-click-modal="false" >
 			<el-form :model="editForm" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="角色名称：">
-					{{editForm.name}}
+					<el-input v-model="editForm.name" type="text"></el-input>
 				</el-form-item>
 				<el-form-item label="价格：">
-					<el-input v-model="editForm.price" type="text" auto-complete="off"></el-input>
+					<el-input v-model="editForm.price" type="text"></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -358,8 +358,10 @@
 			// 提交修改
 			upedit() {
 				const _this = this
+				console.log(this.editForm)
 				const params = {
 					id:this.editForm.id,
+					name:this.editForm.name,
 					price:this.editForm.price
 				}
 				console.log(params)
@@ -368,18 +370,20 @@
 					$.ajax({
 	                    type:'POST',
 	                    dataType:'json',
-	                    url:baseUrl+"/api/shopRole/updatePrice",
+	                    url:baseUrl+"/api/shopRole/updateRole",
 	                    data:JSON.stringify(params),
 	                    contentType:'application/json;charset=utf-8',
 	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
 	                    	// const info = data.data.shopRoles
 	                    	console.log(data)
-	                    	_this.$message({
-								message: '提交成功',
-								type: 'success'
-							});
-							_this.editFormVisible = false
+	                    	if(data.code === 1){
+		                    	_this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								_this.editFormVisible = false
+	                    	}
 	                    }
 	                });
 						
