@@ -28,8 +28,12 @@
     </el-col>
     <el-col :span="24" style="margin-top: 20px;margin-bottom: 20px">
       <template>
-        <el-radio class="radio" v-model="radio" label="2">总数量</el-radio>
-        <el-radio class="radio" v-model="radio" label="3">总价格</el-radio>
+        <el-radio-group v-model="radio" @change="radiochange">
+            <el-radio :label="2">总数量</el-radio>
+            <el-radio :label="3">总价格</el-radio>
+        </el-radio-group>
+        <!-- <el-radio class="radio" v-model="radio" label="2">总数量</el-radio> -->
+        <!-- <el-radio class="radio" v-model="radio" label="3">总价格</el-radio> -->
       </template>
     </el-col>
     <el-table :data="table" border highlight-current-row v-loading="listLoading" style="width: 1002px;">
@@ -37,7 +41,7 @@
       </el-table-column>
       <el-table-column prop="name" label="身份" width="350px">
       </el-table-column>
-      <el-table-column prop="addPrice" label="总数量" width="350px">
+      <el-table-column prop="addPrice" :label="tableName" width="350px">
         <template scope="scope">
             <el-input type="text" class="noneborder" v-model="scope.row.addPrice"></el-input>
         </template>
@@ -103,6 +107,7 @@
     },
     data() {
       return {
+        tableName:'总数量',
         shopAggregate:[],
         shopTable:[],
         value:'',
@@ -133,6 +138,14 @@
         }
     },
     methods: {
+        radiochange(){
+            console.log(this.radio)
+            if(this.radio === 2){
+                this.tableName = '总数量'
+            }else if(this.radio === 3){
+                this.tableName = '总价格'
+            }
+        },
         // 添加补货商品
         shopAdd(){
           this.shopVisible = true
@@ -285,17 +298,23 @@
             success:function(data){
               console.log(data)
               // shopTable price name
-              for (var i = 0; i < data.data.mixedGoodsList.length; i++) {
-                    const obj = {}
-                    obj.name = data.data.mixedGoodsList[i].mixedName
-                    obj.price = data.data.mixedGoodsList[i].mixedPrice
-                    obj.id = data.data.mixedGoodsList[i].specId
-                    _this.shopTable.push(obj)
+              if(data.data.mixedGoodsList !== null){
+                 for (var i = 0; i < data.data.mixedGoodsList.length; i++) {
+                        const obj = {}
+                        obj.name = data.data.mixedGoodsList[i].mixedName
+                        obj.price = data.data.mixedGoodsList[i].mixedPrice
+                        obj.id = data.data.mixedGoodsList[i].specId
+                        _this.shopTable.push(obj)
+                  }
+                  console.log(data.data.introduce.introType)
+                  _this.radio = data.data.introduce.introType
+                  _this.CommodityPictures = data.data.introduce.pictureUrl.split(',')
+                  _this.showHtml = data.data.introduce.introData
+
+
               }
-              _this.radio = data.data.introduce.introType.toString()
-              _this.CommodityPictures = data.data.introduce.pictureUrl.split(',')
-              _this.showHtml = data.data.introduce.introData
-              _this.initEditor()
+                  _this.initEditor()
+             
             }
         });   
       },

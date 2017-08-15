@@ -1,11 +1,11 @@
 <template>
 	<section>
 
-		<el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
+		<el-button type="primary" v-on:click="addIDCard(1)" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
 		  <el-col :xs="2" :sm="2" :md="2" :lg="2">店铺身份</el-col>
 		  <el-col :xs="15" :sm="15" :md="15" :lg="15">
-		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" style="margin-bottom: 40px">
+		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" style="margin-bottom: 40px" v-if="item.level !== -100">
 		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
 		  				<img :src="item.icon">
 		 			</el-col>
@@ -15,13 +15,43 @@
 		 		</el-col>
 		  </el-col>
 		</el-row>
+		<el-button v-if="commissionLine === 5" :disabled="addBtn" type="primary" v-on:click="addIDCard(2)" style="margin-top: 20px;margin-bottom: 20px">新增大区身份</el-button>
+		<el-col :span="24"  v-if="commissionLine === 5" >
+			<el-col :xs="2" :sm="2" :md="2" :lg="2">大区身份</el-col>
+			  <el-col :xs="15" :sm="15" :md="15" :lg="15">
+			  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" v-if="item.level === -100" style="margin-bottom: 40px">
+			  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+			  				<img :src="item.icon">
+			 			</el-col>
+			 			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+			  				{{item.name}}
+			 			</el-col>
+			 		</el-col>
+			  </el-col>
+		</el-col>
 		<!--列表-->
-
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">购买身份价格</el-col>
-		<el-table :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
+		<el-table v-if="commissionLine !== 3 && commissionLine !== 5" :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
 			<el-table-column type="index">
 			</el-table-column>
 			<el-table-column prop="name" label="身份">
+			</el-table-column>
+			<el-table-column prop="price" label="价格">
+			</el-table-column>
+			<el-table-column label="操作">
+				<template scope="scope">
+					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
+			<el-table-column type="index">
+			</el-table-column>
+			<el-table-column prop="name" label="身份">
+			</el-table-column>
+			<el-table-column prop="goodsNum" label="商品数量">
+			</el-table-column>
+			<el-table-column prop="costPrice" label="成品单价">
 			</el-table-column>
 			<el-table-column prop="price" label="价格">
 			</el-table-column>
@@ -67,6 +97,12 @@
 				<el-form-item label="价格：">
 					<el-input v-model="orderDetails.price" type="text" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5">
+					<el-input v-model="orderDetails.goodsNum" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5">
+					<el-input v-model="orderDetails.costPrice" type="text" auto-complete="off"></el-input>
+				</el-form-item>
 				<el-form-item label="角色图标：">
 					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
 				    <el-button type="button" class="el-button el-button--primary el-button--small">
@@ -87,6 +123,12 @@
 			<el-form :model="editForm" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="角色名称：">
 					<el-input v-model="editForm.name" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5">
+					<el-input v-model="editForm.goodsNum" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5">
+					<el-input v-model="editForm.costPrice" type="text"></el-input>
 				</el-form-item>
 				<el-form-item label="价格：">
 					<el-input v-model="editForm.price" type="text"></el-input>
@@ -114,6 +156,9 @@
         },
 		data() {
 			return {
+				commissionLine:state.commissionLine,
+				addID:'',
+				addBtn:false,
 				_html:'',
 				desc:'',
 				radio: '0',
@@ -299,20 +344,26 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	console.log(data)
-                    	if(data.data.shopRoles === null){
-                    		return
+                    	if(data.data.shopRoles !== null){
+	                    	const info = data.data.shopRoles
+	                    	_this.see_html = data.data.introData
+	                    	// const aaa = data.data.pictureUrl
+	                    	// console.log(aaa.split(','))
+	                    	_this.imgArry = data.data.pictureUrl.split(',')
+	                    	_this.identity= info
+	                    	for (var i = 0; i < info.length; i++) {
+	                    		if(info[i].level === -100){
+	                    			_this.addBtn = true
+	                    		}
+	                    	}
                     	}
-                    	const info = data.data.shopRoles
-                    	_this.see_html = data.data.introData
-                    	// const aaa = data.data.pictureUrl
-                    	// console.log(aaa.split(','))
-                    	_this.imgArry = data.data.pictureUrl.split(',')
-                    	_this.identity= info
                     	_this.initEditor()
                     }
                 });
 			},
-			addIDCard() {
+			addIDCard(val) {
+				console.log(val)
+				this.addID = val
 				this.addFormVisible = true
 			},
 			//新增
@@ -325,6 +376,12 @@
 					price:this.orderDetails.price,
 					icon:this.orderDetails.icon
 				}
+				if(this.addID === 2){
+					params.level = -100
+					params.commissionType = 0
+					params.costPrice = this.orderDetails.costPrice
+					params.goodsNum = this.orderDetails.goodsNum
+				}
 				console.log(params)
 				this.$confirm('确认提交吗？', '提示', {}).then(() => {
 					$.ajax({
@@ -335,10 +392,7 @@
 	                    contentType:'application/json;charset=utf-8',
 	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
-	                    	// const info = data.data.shopRoles
 	                    	console.log(data)
-	                    	// _this.identity= info
-
 	                    	_this.$message({
 								message: '提交成功',
 								type: 'success'
@@ -362,10 +416,13 @@
 				const params = {
 					id:this.editForm.id,
 					name:this.editForm.name,
-					price:this.editForm.price
+					price:this.editForm.price,
+				}
+				if(this.commissionLine === 3 || this.commissionLine === 5){
+					params.goodsNum = this.editForm.goodsNum
+					params.costPrice = this.editForm.costPrice
 				}
 				console.log(params)
-
 				this.$confirm('确认提交吗？', '提示', {}).then(() => {
 					$.ajax({
 	                    type:'POST',

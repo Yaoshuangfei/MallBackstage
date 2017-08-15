@@ -207,14 +207,17 @@
 				this.sysUserAvatar = user.avatar || '';
 			}
 			this.arry = this.$router.options.routes
-			if(state.commissionLine !== 3){
+			console.log(state.commissionLine)
+			if(state.commissionLine !== 3 && state.commissionLine !== 5){
+				console.log(1)
 				for(var i = 0;i<this.arry[5].children.length;i++){
 					if(this.arry[5].children[i].name === '分销规则管理'){
 						this.arry[5].children.splice(i,1)
 					}
 				}
 				state.keys = true
-			}else if(state.commissionLine === 3){
+			}else if(state.commissionLine === 3 || state.commissionLine === 5){
+				console.log(2)
 				if(state.keys){
 					const obj = {}
 					obj.name = '分销规则管理'

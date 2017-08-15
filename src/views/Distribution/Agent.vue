@@ -8,8 +8,8 @@
 			<el-col :xs="6" :sm="6" :md="6" :lg="6" v-for="item in FxsList" style='margin-bottom: 20px'>
 				<div class="agen_div">
 					<div>
-						<img style="width: 100px;height:100px;border-radius: 50%;" src="http://123.206.198.137:8090/uploadWeb/image/20170422/6362842052889194725313329.JPG">
-						<!-- <img style="width: 100px;height:100px;border-radius: 50%;" :src="item.coreUser.headImg"> -->
+						<img style="width: 100px;height:100px;border-radius: 50%;" :src="item.coreUser.headImg" v-if="item.coreUser.headImg !== null">
+						<img v-else style="width: 100px;height:100px;border-radius: 50%;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
 					</div>
 					<div>{{item.coreUser.nickName}}</div>
 					<div>{{item.shopRoleName}}</div>
@@ -80,7 +80,7 @@
 					status:'',
 					type:''
 				},
-				total: 100,
+				total: 0,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -126,6 +126,7 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                  	console.log(data)
+	                  	_this.total = data.data.total
 	                  	_this.FxsList = data.data.list
 	                }
 	            });
@@ -133,21 +134,6 @@
 			handleCurrentChange(val) {
 				this.page = val;
 				this.getlist();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
 			},
 			//删除
 			handleDel: function (index, row) {

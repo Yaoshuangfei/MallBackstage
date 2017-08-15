@@ -14,7 +14,7 @@
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
 			<!-- <el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length===5">新增店铺身份</el-button> -->
 		</el-col>
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级5</el-col>
 		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
 			<ul class="Grade">
 				<li v-for="item in ruleAll">{{item.name}}</li>
@@ -216,16 +216,9 @@
 					</div>
 				</el-dialog>
 				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px" v-if="commissionLine === 5">小区</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
 					<ul class="Grade">
-						<li v-for="item in ruleAll" v-if="item.level !== -100">{{item.name}}</li>
-					</ul>
-				</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px" v-if="commissionLine === 5">大区</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
-					<ul class="Grade">
-						<li v-for="item in ruleAll" v-if="item.level === -100">{{item.name}}</li>
+						<li v-for="item in ruleAll">{{item.name}}</li>
 					</ul>
 				</el-col>
 				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 20px;margin-left: 50px">填写可购买的最高级身份，最多填写1个</el-col>
@@ -268,38 +261,6 @@
 							</button>
 						</el-form-item>
 						<img v-if="url !== '' " style="width: 100px;" :src="url">
-					</el-form>
-					<div slot="footer" class="dialog-footer" style="text-align: center;">
-						<el-button type="primary" @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
-						<el-button type="primary" @click.native="clerbtn">关闭</el-button>
-					</div>
-				</el-dialog>
-				<el-dialog title="身份升级" v-model="ruleIsUpgradeVisible_5" :close-on-click-modal="false" :show-close='false'>
-					<el-form :model="upgrade" label-width="100px">
-						<el-form-item label="邀请人数">
-							<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-col :span='16' :offset="6">被邀请人身份必须同级或高于才有效</el-col>
-						<el-form-item label="身份名称">
-							<el-input v-model="upgrade.name" type="text" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="角色图标">
-							<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
-							<button type="button" class="el-button el-button--primary el-button--small">
-								<span>点击上传</span>
-							</button>
-						</el-form-item>
-						<img v-if="url_5 !== '' " style="width: 100px;" :src="url_5">
-						<el-form-item label="身份名称">
-							<el-input v-model="upgrade.name1" type="text" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="角色图标">
-							<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
-							<button type="button" class="el-button el-button--primary el-button--small">
-								<span>点击上传</span>
-							</button>
-						</el-form-item>
-						<img v-if="url_51 !== '' " style="width: 100px;" :src="url_51">
 					</el-form>
 					<div slot="footer" class="dialog-footer" style="text-align: center;">
 						<el-button type="primary" @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
@@ -360,9 +321,6 @@
 	export default {
 		data() {
 			return {
-				url_5:'',
-				url_51:'',
-				ruleIsUpgradeVisible_5:false,
 				commissionLine:state.commissionLine,
 				quyufred:'',
 				mimayanz:true,
@@ -454,9 +412,6 @@
 					fybi:''
 				},{
 					level:'二代',
-					fybi:''
-				},{
-					level:'三代',
 					fybi:''
 				}],
 				cltJqfred:'',
@@ -625,11 +580,7 @@
 			clickrule(val) {
 				// console.log(val)
 				if(val){
-					if(this.commissionLine === 5){
-						this.ruleIsUpgradeVisible_5 = true
-					}else{
-						this.ruleIsUpgradeVisible = true
-					}
+					this.ruleIsUpgradeVisible = true
 				}
 			},
 			upgradetSubmit(){
@@ -641,11 +592,7 @@
 					shopRoles:[
 						{
 							name:this.upgrade.name,
-							icon:this.url_5,
-							level:0
-						},{
-							name:this.upgrade.name1,
-							icon:this.url_51,
+							icon:this.url,
 							level:-1
 						}
 					]
@@ -664,17 +611,10 @@
 	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
 	                    	console.log(data)
-	                    	if(data.code === 1){
-		                    	_this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-	                    	}else{
-	                    		_this.$message({
-									message: data.msg,
-									type: 'error'
-								});
-	                    	}
+	                    	_this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
 	                    }
 	                });
 				});
@@ -682,12 +622,8 @@
 				this.upgradebtn = true
 			},
 			clerbtn(){	
-				if(this.commissionLine === 5){
-					this.ruleIsUpgradeVisible_5 = false
-				}else{
-					this.ruleIsUpgradeVisible = false
-				}
-					this.ruleIsUpgrade = false
+				this.ruleIsUpgradeVisible = false
+				this.ruleIsUpgrade = false
 			},
 			// 显示新增店铺身份页面
 			addIDCard() {
@@ -955,46 +891,7 @@
                     .then(response => {
                     	console.log(response)
                         const info = JSON.parse(response.bodyText);
-						
-						if(_this.commissionLine === 5){
-							_this.url_5 = info.data[0].baseUri+info.data[0].uri;
-						}else{
-							_this.url = info.data[0].baseUri+info.data[0].uri;
-						}
-						// _this.getUrl()
-                    }, error => _this.$emit('complete', 500, error.message))
-			},
-			upload1 (event) {
-                this.formData = new FormData()
-                let file = event.target.files[0]
-                // console.log(file)
-                const self = this
-                // const flag = this.flag
-                if (file) {
-                    console.log('存在file', file)
-                    this.fileImg = file.name
-                    // console.log(this.formData)
-                    this.formData.append('file', file);
-                    console.log(this.formData);
-                    this.getImgUrl1()
-                } else {
-                    this.fileImg = ''
-                    console.log('不存在file', file)
-                    this.formData = new FormData()
-                }
-            },
-            getImgUrl1(){
-                const _this= this;
-                _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
-                    progress(event) {
-                    }
-                })
-                    .then(response => {
-                    	console.log(response)
-                        const info = JSON.parse(response.bodyText);
-						
-						_this.url_51 = info.data[0].baseUri+info.data[0].uri;
-						
+						_this.url = info.data[0].baseUri+info.data[0].uri;
 						// _this.getUrl()
                     }, error => _this.$emit('complete', 500, error.message))
 			},
@@ -1013,18 +910,13 @@
                         }
                         console.log(info)
                         _this.cltId = info.id
-                        // 三级分销
                         _this.cltSan[0].fybi = info.one
                         _this.cltSan[1].fybi = info.two
                         _this.cltSan[2].fybi = info.three
-                        // 平级奖
+
                         _this.cltPingji[0].fybi = info.peersOne
                         _this.cltPingji[1].fybi = info.peersTwo
                         _this.cltPingji[2].fybi = info.peersThree
-                        // 与花说区域奖
-                        _this.qyPingji[0].fybi = info.specialOne
-                        _this.qyPingji[1].fybi = info.specialTwo
-                        _this.qyPingji[2].fybi = info.specialThree
 
                         _this.cltJqfred = info.codePayScale
 
@@ -1051,18 +943,13 @@
 					params.id = _this.cltId
 					url = '/api/corePlaConfig/update/store/proportion'
 				}
-				if(this.commissionLine === 5){
-					params.specialOne = this.qyPingji[0].fybi
-					params.specialTwo = this.qyPingji[1].fybi
-					params.specialThree = this.qyPingji[2].fybi
-				}
 				console.log(url)
 				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
                     url:baseUrl+url,
-                    data:JSON.stringify(params),
+                    data:JSON.stringify({}),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	console.log(data)

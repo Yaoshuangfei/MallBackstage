@@ -24,6 +24,7 @@ import Authentication from './views/configuration/Authentication.vue'
 import Identity from './views/Distribution/Identity.vue'
 import Agent from './views/Distribution/Agent.vue'
 import MyDistribution from './views/Distribution/MyDistribution.vue'
+import MyDistribution_5 from './views/Distribution/MyDistribution_5.vue'
 import superiors from './views/Distribution/superiors.vue'
 import rule from './views/Distribution/rule.vue'
 
@@ -125,6 +126,7 @@ let routes = [
         children: [
             { path: '/Identity', component: Identity, name: '身份管理' },
             { path: '/MyDistribution', component: MyDistribution, name: '我的分销' },
+            // { path: '/MyDistribution_5', component: MyDistribution_5, name: '我的分销' },
             { path: '/Agent', component: Agent, name: '代理商' },
             { path: '/rule', component: rule, name: '分销规则管理' },
             { path: '/superiors/:id/:name', component: superiors, name: '查看下级' ,hidden: true }
