@@ -1,304 +1,237 @@
 <template>
   <section>
-    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
+    <el-form  label-width="180px" style="margin-left: 40px;margin-top: 40px">
       <el-form-item label="展示位置">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
+        <el-select v-model="value" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="上传">
-        <div style="height:100px;width:100px;border: 1px solid #ddd"></div>
-        <div>视频格式为avi/mp4等，大小不超过5M</div>
-        <el-button type="text" @click="onSubmit">确认上传</el-button>
-        <el-button type="text" @click="onSubmit">取消</el-button>
+        <div>视频格式为avi/mp4等，大小不超过50M</div>
+            <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+              <el-button type="button" class="el-button el-button--primary el-button--small">
+                <span >点击上传</span>
+              </el-button>
       </el-form-item>
+      <el-col :span="24" style="padding-bottom: 20px;">
+        <el-col :span="3"  style="margin-right: 60px">
+          <video v-if="url !== '' "  width="220" height="240" controls="controls">
+              <source :src="url" type="video/mp4" />
+          </video>
+          <!-- <video style="width:100px;" :src="url" type="video/mp4"></video> -->
+          <!-- <el-button type="text" @click="onSubmit">查看</el-button> -->
+          <!-- <el-button type="text" @click="onSubmit">上传</el-button> -->
+          <!-- <el-button type="text" @click="onSubmit">取消</el-button> -->
+        </el-col>
+      </el-col>
+      <el-button type="primary" @click="uploadBtn">确认上传</el-button>
       <el-col :span="24" style="padding-bottom: 20px;">历史上传的视频</el-col>
       <el-col :span="24" style="padding-bottom: 20px;">
-        <el-col :span="3" style="padding-bottom: 20px;">
-            <div style="height:100px;width:100px;border: 1px solid #ddd">
-              
-            </div>
-          <el-button type="text" @click="onSubmit">查看</el-button>
-          <el-button type="text" @click="onSubmit">上传</el-button>
-          <el-button type="text" @click="onSubmit">取消</el-button>
-        </el-col>
-        <el-col :span="3" style="padding-bottom: 20px;">
-            <div style="height:100px;width:100px;border: 1px solid #ddd">
-              
-            </div>
-            <el-button type="text" @click="onSubmit">查看</el-button>
-            <el-button type="text" @click="onSubmit">上传</el-button>
-            <el-button type="text" @click="onSubmit">取消</el-button>
-        </el-col>
-        <el-col :span="3" style="padding-bottom: 20px;">
-              <div style="height:100px;width:100px;border: 1px solid #ddd">
-              
-             </div>
-             <el-button type="text" @click="onSubmit">查看</el-button>
-            <el-button type="text" @click="onSubmit">上传</el-button>
-            <el-button type="text" @click="onSubmit">取消</el-button>
+        <el-col :span="3"  style="margin-right: 60px" v-for="item in urlArry">
+          <video v-if="urlArry !== [] "  width="220" height="240" controls="controls"><!-- autoplay="autoplay" 直接播放 -->
+              <source :src="item" type="video/mp4" />
+          </video>
+          <!-- <video style="width:100px;" :src="url" type="video/mp4"></video> -->
+          <!-- <el-button type="text" @click="onSubmit">查看</el-button> -->
+          <!-- <el-button type="text" @click="onSubmit">上传</el-button> -->
+          <!-- <el-button type="text" @click="onSubmit">取消</el-button> -->
         </el-col>
       </el-col>
   </el-form>
+
+  <el-col v-if="baonian" :span="24" style="width: 100%;height: 1000px;position: absolute;top:0;background: rgba(0,0,0,.5);">
+        <el-col :span="8" style="margin-top:10%;margin-left: 26%;height: 300px;width: 600px;background: #fff;border-radius: 5px">
+            <el-col :span="12" :offset="8" style="margin-top: 88px;margin-bottom: 40px"><h2>是否使用上传视频功能</h2></el-col>
+            <el-col :span="24">
+                <el-col :span="12" :offset="4"><el-button type="primary" @click="oneBtn">试用一个月</el-button></el-col>
+                <el-col :span="5"><el-button type="primary" @click="storeVideo">包年888元</el-button></el-col>
+            </el-col>
+        </el-col>
+        <el-col v-if="passIval" :span="24" style="margin-top:-11%;margin-left: 31%;height: 150px;width: 410px;background: #eee;border-radius: 5px">
+            <el-col :span="24" style="margin-top: 40px;margin-left: 70px">
+                <el-col :span="5">支付密码：</el-col>
+                <el-col :span="10"><el-input type="password" v-model="pasword"> </el-input></el-col>
+            </el-col>
+            <el-col :span="5" :offset="8" style="margin-top: 20px;">
+                <el-button type="primary" @click="onPassUp">确认</el-button>
+            </el-col>
+            <el-col :span="5" style="margin-top: 20px;">
+                <el-button type="primary" @click="clertBtn">取消</el-button>
+            </el-col>
+        </el-col>
+  </el-col>
   </section>
 </template>
 
 <script>
   import { state } from '../../vuex/state'
   import util from '../../common/js/util'
-  import {baseUrl , editUser, addUser } from '../../api/api';
+  import {baseUrl  } from '../../api/api';
 
   export default {
     data() {
       return {
-        radio: '0',
-        checked: true,
+        passIval:false,
+        listLoading:true,
+        baonian:true,
         value:'',
-        value1:true,
-        value2:'',
-        selectSubjectStatus: [
-        {
-          value:'0',
-          label:'全部'
+        pasword:'',
+        formData: new FormData(),
+        url:'',
+        urlArry:[],
+        options:[{
+            value:1,
+            label:'店铺内'
         },{
-          value:'1',
-          label:'待付款'
-        },{
-          value:'2',
-          label:'待发货'
-        },{
-          value:'3',
-          label:'已发货'
-        },{
-          value:'4',
-          label:'待评价'
-        },{
-          value:'5',
-          label:'退货'
-        }],
-        options: [{
-              value: '0',
-              label: '全部'
-            }, {
-              value: '1',
-              label: '订单编号'
-            }, {
-              value: '2',
-              label: '快递单号'
-            }, {
-              value: '3',
-              label: '用户名'
-            }],
-        filters: {
-          name: '',
-          status:'',
-          type:''
-        },
-        users: [],
-        total: 100,
-        page: 1,
-        listLoading: false,
-        sels: [],//列表选中列
-
-        editFormVisible: false,//编辑界面是否显示
-        editLoading: false,
-        editFormRules: {
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'blur' }
-          ]
-        },
-        //编辑界面数据
-        editForm: {
-          id: 0,
-          username: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        },
-
-        addFormVisible: false,//新增界面是否显示
-        addLoading: false,
-        //新增界面数据
-        orderDetails: {
-        },
-        orderInformation:[{
-          orderNumber :'145877458784524c',
-          courierNumber :'145877458784524c',
-          userName:'吸引力量',
-          amountPaid :'300',
-          orderTotal :'900',
-          orderStatus :'待付款',
-          paymentMethod :'微信支付',
-          creationTime:'2017-09-08 17:09',
-          deliveryTime:'2017-09-08 17:09',
-          commodityName:'雨花说'
+            value:2,
+            label:'身份详情banner'
         }]
       }
     },
     methods: {
-      //性别显示转换
-      formatSex: function (row, column) {
-        return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-      },
-      getlist(){
-        const _this = this
-        _this.table = []
-        const params = {
-          accountId:'1',
-          accessToken:'',
-          resourceType:'',
-          page:{
-            pageNum:_this.page,
-            pageSize:'10'
-          }
-        }
-        console.log(params)
-        $.post(baseUrl+"/admin/banner/getBannerByPage",
-               { param: JSON.stringify(params) },
-               function(data){
-                const info = eval('(' + data + ')');
-                  const response = JSON.parse(info);
-                  const list = response.obj.results
-                  console.log(response)
-                  // _this.page = response.obj.total
-                  _this.total = response.obj.totalRecord
-                  for(var i = 0;i<list.length;i++){
-                    _this.table.push(list[i])
-                  }
+            // 视频上传返回url
+              upload (event) {
+                this.formData = new FormData()
+                        let file = event.target.files[0]
+                        console.log(this.formData)
+                        console.log(file)
+                        const self = this
+                        // const flag = this.flag
+                        if (file) {
+                          console.log('存在file', file)
+                          // this.fileImg = file.name
+                            // console.log(this.formData)
+                            this.formData.append('file', file)
+                            console.log(this.formData)
+                            this.Uploadimg()
+                        } else {
+                          // this.fileImg = ''
+                          console.log('不存在file', file)
+                          this.formData = new FormData()
+                        }
+                },
+                Uploadimg(){
+                    const _this= this;
+                    _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            // const info = response.body eval('(' + data + ')');
+                            const arry = info.data
+                            
+                            
+                            _this.url = arry[0].baseUri+arry[0].uri;
+                            // if(_this.urlArry.length <3){
+                            //     _this.urlArry.push(arry[0].baseUri+arry[0].uri)
+                            // }
+                        }, error => _this.$emit('complete', 500, error.message))
+            },
+            // 上传视频
+            uploadBtn(){
+                const _this = this
+                const params = {
+                    index:this.value,
+                    url:this.url
                 }
-            )
-      },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.getUsers();
-      },
-      //获取用户列表
-      onSubmit() {
-        let para = {
-          page: this.page,
-          name: this.filters.name
-        };
-        this.listLoading = true;
-        //NProgress.start();
-        getUserListPage(para).then((res) => {
-          this.total = res.data.total;
-          this.users = res.data.users;
-          this.listLoading = false;
-          //NProgress.done();
-        });
-      },
-      //删除
-      handleDel: function (index, row) {
-        this.$confirm('确认删除该记录吗?', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { id: row.id };
-          removeUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
 
-        });
-      },
-      //显示编辑界面
-      seeBtn: function (index, row) {
-        this.editFormVisible = true;
-        this.orderDetails = Object.assign({}, row);
-      },
-      //显示新增界面
-      handleAdd: function () {
-        this.addFormVisible = true;
-        this.addForm = {
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        };
-      },
-      //编辑
-      editSubmit: function () {
-        this.$refs.editForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.editLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.editForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              editUser(para).then((res) => {
-                this.editLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
+                console.log(params)
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/storeVideo/upload",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                      console.log(data)
+                    }
                 });
-                this.$refs['editForm'].resetFields();
-                this.editFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      //新增
-      addSubmit: function () {
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.addLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.addForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              addUser(para).then((res) => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
-                });
-                this.$refs['addForm'].resetFields();
-                this.addFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      selsChange: function (sels) {
-        this.sels = sels;
-      },
-      //批量删除
-      batchRemove: function () {
-        var ids = this.sels.map(item => item.id).toString();
-        this.$confirm('确认删除选中记录吗？', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { ids: ids };
-          batchRemoveUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
+            },
+            // 使用一个月
+            oneBtn(){
+                const _this = this
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/storeVideo/addCheck",
+                    data:JSON.stringify({}),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                      console.log(data)
+                      if(data.code === 1){
+                        _this.baonian = false
+                      }
+                    }
+                });   
+                
+            },
+            // 购买视频
+            storeVideo(){
+                this.passIval = true
+            },
+            clertBtn(){
+                this.passIval = false
+            },
+            //确认密码
+            onPassUp(){
+                const _this = this
+                const params = {
+                    payPassword:this.pasword
+                }
 
-        });
-      }
-    },
+                console.log(params)
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/storeVideo/pay",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                      console.log(data)
+                      if(data.code === 1){
+                        _this.$message({
+                          message: '成功',
+                          type: 'success'
+                        });
+                        _this.passIval = false
+                        _this.baonian = false
+                      }else{
+                        _this.$message({
+                          message: data.msg,
+                          type: 'error'
+                        });
+                      }
+                    }
+                });
+            },
+            // 获取视频信息
+            getlist(){
+                const _this = this
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/storeVideo/selectOne",
+                    data:JSON.stringify({}),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                      console.log(data)
+                      if(data.data !== null){
+                        if(data.data.status === 1|| data.data.status === 2){
+                                 _this.urlArry = data.data.url.split(',')
+                                 _this.baonian = false
+                          }
+                      }
+                    }
+                });   
+            }
+        },
     mounted() {
-      // this.getlist();
+      this.getlist();
     }
   }
 

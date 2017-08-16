@@ -196,7 +196,7 @@ let routes = [
         leaf: true,//只有一个节点
         children: [
             // { path: '/Replenishment', component: Replenishment, name: '补货专区' ,hidden: true},
-            { path: '/add', component: add, name: '补货专区' ,  }
+            { path: '/add', component:add, name: '补货专区' ,  }
         ]
     },
     {

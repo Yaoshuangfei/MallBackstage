@@ -92,6 +92,7 @@
 		<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false" >
 			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="角色名称：">
+				<div id = 'editor-trigger' style="height: 500px;"></div>
 					<el-input v-model="orderDetails.name" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="价格：">
@@ -347,9 +348,9 @@
                     	if(data.data.shopRoles !== null){
 	                    	const info = data.data.shopRoles
 	                    	_this.see_html = data.data.introData
-	                    	// const aaa = data.data.pictureUrl
-	                    	// console.log(aaa.split(','))
-	                    	_this.imgArry = data.data.pictureUrl.split(',')
+	                    	if(data.data.pictureUrl !== null){
+	                    		_this.imgArry = data.data.pictureUrl.split(',')
+	                    	}
 	                    	_this.identity= info
 	                    	for (var i = 0; i < info.length; i++) {
 	                    		if(info[i].level === -100){

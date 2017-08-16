@@ -1,30 +1,7 @@
 <template>
   <section>
-  	<el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">补货的商品</el-col>
-    <el-col :span="4" :offset="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">从已上架的商品中获取</el-col>
-    <el-col :span="2" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
-      <el-button type="text" @click.native="shopAdd">添加</el-button>
-    </el-col>
-    <!-- <el-col :span="2" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">删除</el-col> -->
-    <el-table :data="shopTable" highlight-current-row v-loading="listLoading" style="width: 1002px;">
-      <el-table-column type="index" label="序号" width="300px">
-      </el-table-column>
-      <el-table-column prop="name" label="商品名称" width="350px">
-      </el-table-column>
-      <el-table-column prop="price" label="售价" width="350px">
-        <template scope="scope">
-            <el-input type="text" class="noneborder" v-model="scope.row.price"></el-input>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-col :span="24" :offset="4" style="margin-top: 40px">
-      <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
-      <el-button type="primary" @click="Preservation">保存</el-button>
-    </el-col>
-    <el-col :span="14" style="margin-top: 40px;border-bottom: 1px dashed red;"></el-col>
     <el-col :soan="24" style="margin-top: 20px;font-size: 18px;">
       <el-col :span="2">混批设置</el-col>
-      <el-col :span="6" style="font-size: 12px;color: #aaa;margin-top: 5px">注：混批方式只能二选一;获取千面可分佣的身份ABC</el-col>
     </el-col>
     <el-col :span="24" style="margin-top: 20px;margin-bottom: 20px">
       <template>
@@ -32,8 +9,6 @@
             <el-radio :label="2">总数量</el-radio>
             <el-radio :label="3">总价格</el-radio>
         </el-radio-group>
-        <!-- <el-radio class="radio" v-model="radio" label="2">总数量</el-radio> -->
-        <!-- <el-radio class="radio" v-model="radio" label="3">总价格</el-radio> -->
       </template>
     </el-col>
     <el-table :data="table" border highlight-current-row v-loading="listLoading" style="width: 1002px;">
@@ -52,6 +27,31 @@
       <el-button type="primary" @click="Preservation">保存</el-button>
     </el-col>
     <el-col :span="14" style="margin-top: 40px;border-bottom: 1px dashed red;"></el-col>
+    <el-col :span="24">
+    	<el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">补货的商品</el-col>
+      <el-col :span="2" :offset="8"  style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
+        <el-button type="text" @click.native="shopAdd">添加</el-button>
+      </el-col>
+    </el-col>
+    <!-- <el-col :span="2" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">删除</el-col> -->
+    <el-table :data="shopTable" highlight-current-row v-loading="listLoading" style="width: 1002px;">
+      <el-table-column type="index" label="序号" width="300px">
+      </el-table-column>
+      <el-table-column prop="name" label="商品名称" width="350px">
+      </el-table-column>
+      <el-table-column prop="price" label="售价" width="350px">
+        <template scope="scope">
+            <el-input type="text" class="noneborder" v-model="scope.row.price"></el-input>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-col :span="24" :offset="4" style="margin-top: 40px">
+      <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
+      <el-button type="primary" @click="Preservation">保存</el-button>
+    </el-col>
+    <el-col :span="14" style="margin-top: 40px;border-bottom: 1px dashed red;"></el-col>
+
+    
     <el-col :span="24" style="padding-top: 20px;font-size: 18px;margin-bottom: 20px;">商品图片</el-col>
     <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
       
@@ -74,9 +74,7 @@
           </el-col>
           <el-col :span="24">商品详情描述</el-col>
         <el-col style="margin-top: 40px;">
-          <!-- <el-form-item label="商品描述"> -->
-            <div id = 'editor-trigger' style="height: 500px"></div>
-          <!-- </el-form-item> -->
+          <div id = 'editor-trigger' style="height: 500px"></div>
           <el-form-item>
             <el-button style="margin-top: 40px;margin-left: 35%" type="primary" @click="Preservation">发布</el-button>
           </el-form-item>

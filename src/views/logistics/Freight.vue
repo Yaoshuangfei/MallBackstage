@@ -716,8 +716,8 @@
 					console.log(this.fareCarries)
 					const mrobj = {
 						mode:0,
-						isDefault:1,
-						data:'',
+						isDefault:0,
+						data:"''",
 						firstHeavy:this.defaultValue.freight,
 						firstPrice:this.defaultValue.element,
 						addHeavy:this.defaultValue.zfreight,
@@ -751,7 +751,7 @@
 					console.log(this.fareCarriesEMS)
 					const mrobj = {
 						mode:1,
-						isDefault:1,
+						isDefault:0,
 						data:'',
 						firstHeavy:this.defaultValueEMS.freight,
 						firstPrice:this.defaultValueEMS.element,
@@ -782,7 +782,7 @@
 					console.log(this.fareCarriesPY)
 					const mrobj = {
 						mode:2,
-						isDefault:1,
+						isDefault:0,
 						data:'',
 						firstHeavy:this.defaultValuePY.freight,
 						firstPrice:this.defaultValuePY.element,
