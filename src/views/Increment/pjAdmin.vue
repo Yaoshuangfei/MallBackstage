@@ -26,20 +26,20 @@
 
 		<!--列表-->
 		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="tradeNo" label="商品编号">
+			<el-table-column prop="goodsId" label="商品编号">
 			</el-table-column>
-			<el-table-column prop="userName" label="买家">
+			<el-table-column prop="coreUser.realName" label="买家">
 			</el-table-column>
-			<el-table-column prop="mobile" label="电话">
+			<el-table-column prop="coreUser.mobile" label="电话">
 			</el-table-column>
-			<el-table-column prop="quota" label="商品名称">
+			<el-table-column prop="goods.name" label="商品名称">
 			</el-table-column>
-			<el-table-column prop="payType" :formatter='formatterType' label="评价">
+			<el-table-column prop="crate" :formatter='formatterType' label="评价">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">回复</el-button>
+					<el-button type="text" size="small" @click="seeBtn(scope.row)">查看</el-button>
+					<el-button type="text" size="small" @click="handleEdit(scope.row)">回复</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -53,43 +53,76 @@
 
 		<!--编辑界面-->
 		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{orderDetails.orderNumber }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
+			<el-form :model="orderDetails" label-width="160px">
+				<el-form-item label="商品编号">
+					<div>{{orderDetails.goodsId }}</div>
+				</el-form-item>
+				<!-- <el-form-item label="买家">
+					<div>{{orderDetails.coreUser.realName}}</div>
+				</el-form-item>
+				<el-form-item label="电话">
+					<div>{{orderDetails.coreUser.mobile}}</div>
 				</el-form-item>
 				<el-form-item label="商品名称">
-					<div>{{orderDetails.commodityName}}</div>
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{orderDetails.userName }}</div>
-				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{orderDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="订单总价">
+					<div>{{orderDetails.goods.name }}</div>
+				</el-form-item> -->
+				<el-form-item label="数量：">
 					<div>{{orderDetails.orderTotal }}</div>
 				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{orderDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{orderDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{orderDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{orderDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-form-item label="分佣详情">
-					<div>{{orderDetails.deliveryTime}}</div>
+				<el-form-item label="评价：">
+					<div>{{orderDetails.content }}</div>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
 				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
+		<!-- 回复 -->
+		<el-dialog title="回复" v-model="hfInfo" :close-on-click-modal="false" >
+			<el-form :model="orderDetails" label-width="160px">
+				<el-form-item label="商品编号">
+					<div>{{editForm.goodsId }}</div>
+				</el-form-item>
+				<<!-- el-form-item label="买家">
+					<div>{{editForm.coreUser.realName}}</div>
+				</el-form-item>
+				<el-form-item label="电话">
+					<div>{{editForm.coreUser.mobile}}</div>
+				</el-form-item>
+				<el-form-item label="商品名称">
+					<div>{{editForm.goods.name }}</div>
+				</el-form-item> -->
+				<el-form-item label="数量：">
+					<div>{{editForm.orderTotal }}</div>
+				</el-form-item>
+				<el-form-item label="评价：">
+					<div>好评</div>
+					<div v-if="editForm.crate === 1">好评</div>
+					<div v-if="editForm.crate === 2">中评</div>
+					<div v-if="editForm.crate === 3">差评</div>
+				</el-form-item>
+				<el-form-item>
+					<div>editForm.content</div>
+					<img width="100px" :src="editForm.picImgs">
+				</el-form-item>
+				<el-form-item label="回复内容：">
+					<el-input  v-model="deco" type="textarea" :rows="2" auto-complete="off"></el-input>
+				</el-form-item>
+				<!-- <el-form-item label="图片">
+					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+					<button type="button" class="el-button el-button--primary el-button--small">
+						<span>点击上传</span>
+					</button>
+				</el-form-item>
+	            <el-col :span="24" v-for="item in CommodityPictures">
+	              <img style="position: relative;left: 120px;top: -77px;" @click="deldetImg(item)" src="../../assets/delet.png">
+	              <img :src="item" style="width:100px;height: 100px;border: 1px solid #f0f0f0;">
+	            </el-col> -->
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
+				<el-button type="primary" @click.native="hfInfo = false">关闭</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -103,67 +136,52 @@
 	export default {
 		data() {
 			return {
-				radio: '0',
-				checked: true,
-				value:'',
-				value1:'',
-				value2:'',
-				selectSubjectStatus: [
-				{
-					value:'0',
-					label:'全部'
-				},{
-					value:'1',
+				hfInfo:false,
+				formData: new FormData(),
+				CommodityPictures:[],
+				selectSubjectStatus: [{
+					value:1,
 					label:'好评'
 				},{
-					value:'2',
+					value:2,
 					label:'中评'
 				},{
-					value:'3',
+					value:3,
 					label:'差评'
 				}],
 				options: [{
 		          value: '1',
-		          label: '商家编号'
+		          label: '商品编号'
 		        }, {
 		          value: '2',
 		          label: '手机号'
 		        }, {
 		          value: '3',
-		          label: '买家昵称'
+		          label: '昵称'
+		        }, {
+		          value: '4',
+		          label: '真实姓名'
 		        }],
 				filters: {
 					name: '',
 					status:'',
 					type:''
 				},
-				users: [],
 				total: 1,
 				page: 1,
 				listLoading: false,
-				sels: [],//列表选中列
-
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
-				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
 				//编辑界面数据
 				editForm: {
-					id: 0,
-					username: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
 				},
-
+				deco:'',
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
+					coreUser:{},
+					goods:{}
 				},
 				orderInformation:[]
 			}
@@ -178,83 +196,91 @@
 				_this.table = []
 				const params = {
 					pageNum:_this.page,
-					pageSize:10,
-					payType:this.filters.status,
-					tradeNo:'',
-					userName:'',
+					size:10,
+					storeId:state.storeId,
+					goodsId:'',
 					mobile:'',
-					sort:4
+					nickName:'',
+					realName:'',
+					crate:this.filters.status
 				}
 				if(this.filters.type === '1'){
-					params.tradeNo = this.filters.name
+					params.goodsId = this.filters.name
 				}else if(this.filters.type === '2'){
-					params.userName = this.filters.name
-				}else if(this.filters.type === '3'){
 					params.mobile = this.filters.name
+				}else if(this.filters.type === '3'){
+					params.nickName = this.filters.name
+				}else if(this.filters.type === '4'){
+					params.realName = this.filters.name
 				}
 				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
-                    // url:"http://192.168.0.115:8080/api/store/userCashFlow/selectFlowList",
-                    url:baseUrl+"/api/store/userCashFlow/selectFlowList",
+                    url:baseUrl+"/api/ordersEvaluate/selectListOfGoods",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
                     	const info = data.data
-                    	_this.orderInformation = info.list
+                    	// _this.orderInformation = info.list
                     	_this.total = info.total
                     }
                 });
 			},
+			// 查看
+			seeBtn(row){
+				this.editFormVisible = true
+				this.orderDetails = row
+				console.log(this.orderDetails)
+			},
+			// 回复
+			handleEdit(row){
+				this.hfInfo = true
+				this.editForm = row
+			},
+			editSubmit(){
+				console.log(this.deco)
+				const params = {
+					evaluateId:this.editForm.id,
+					replyContent:this.deco,
+					replyPicture:''
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/evaluateReply/add",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	_this.getlist()
+                    }
+                });
+			},
+			// /删除图片
+	        deldetImg(src){
+	          this.CommodityPictures.splice(jQuery.inArray(src, this.CommodityPictures),1)
+	        },
 			handleCurrentChange(val) {
 				this.page = val;
 				this.getlist();
 			},
-			formatterTime(row, column){
-				let curTime = row.createTime;
-                curTime = new Date(curTime).toLocaleString()
-                return curTime
-			},
-			//支付方式
-			formatterType(row, column) {
+			formatterType(row, column){
 				let type = ''
-				if(row.payType === '0'){
-					type = '微信支付'
-				}else if(row.payType === '1'){
-					type = '支付宝支付'
-				}else if(row.payType === '2'){
-					type = '银联支付'
-				}else if(row.payType === '3'){
-					type = '余额支付'
-				}else if(row.payType === '4'){
-					type = '余额金豆混合支付'
-				}else if(row.payType === '5'){
-					type = '金豆支付'
+				if(row.crate === 1){
+					type = '好评'
+				}else if(row.crate === 2){
+					type = '中评'
+				}else if(row.crate === 3){
+					type = '差评'
 				}
-				return type
-			},
-			formatter(row, column){
-				let type = ''
-				if(row.centType === 1){
-					type = '购买平台身份'
-				}else if(row.centType === 2){
-					type = '购买店铺身份'
-				}else if(row.centType === 3){
-					type = '购买产品'
-				}else if(row.centType === 4){
-					type = '补货 '
-				}else if(row.centType === 5){
-					type = '业务充值'
-				}else if(row.centType === 6){
-					type = '扫码支付'
-				}
-				return type
+                return type
 			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
 		}
 	}
 

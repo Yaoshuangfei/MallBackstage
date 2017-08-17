@@ -265,6 +265,7 @@
                 // const flag = this.flag
                 if (file) {
                     console.log('存在file', file)
+                    console.log(file.size)
                     this.fileImg = file.name
                     // console.log(this.formData)
                     this.formData.append('file', file);

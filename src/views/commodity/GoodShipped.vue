@@ -156,6 +156,14 @@
 								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
 							</el-col>
 						</el-col>
+						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
+							<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">基础服务：</el-col>
+							<el-col :span="12" style="margin-left: 10px;margin-top: 20px">
+								<el-checkbox-group v-model="checkedCities" :min="0" :max="6" @change="clicka">
+								    <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+								</el-checkbox-group>
+							</el-col>
+						</el-col>
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述</el-col>
 						<el-col :span="24" style=" border-bottom: 1px solid #ddd;height: 580px">
 							<el-col :span="2" style="text-align: right;line-height: 80px;">商品描述：</el-col>
@@ -207,6 +215,10 @@
 	export default {
 		data() {
 			return {
+				listBiaoq:[],
+				onbiaoqList:[],
+				cities:[],
+				checkedCities:[],
 				test_html:'',
         		value: '',
 				keynext:true,
@@ -661,8 +673,22 @@
                     unit:this.MeasurementUnit,
                     weight:this.weight,
                     goodsNo:this.productCode,
-                    goodsSpecs:[]
+                    goodsSpecs:[],
+                    goodsServiceStr:''
                 };
+                const bqarry = []
+                console.log(this.onbiaoqList)
+                console.log(this.listBiaoq)
+                for (var i = 0; i < this.onbiaoqList.length; i++) {
+                	for (var x = 0; x < this.listBiaoq.length; x++) {
+                		if(this.onbiaoqList[i] === this.listBiaoq[x].name){
+                			bqarry.push(this.listBiaoq[x].id)
+                		}
+                	}
+                }
+               
+                // console.log(bqarry.toString())
+                params.goodsServiceStr = bqarry.toString()
                 //商品图片
                 // this.CommodityPictures = this.CommodityPictures
                 // params.carouselPicture = this.CommodityPictures.toString()
@@ -701,7 +727,7 @@
 
 	                }
                 }
-                 console.log(params)
+                console.log(params)
                 console.log(this.value)
                 $.ajax({
                     type:'POST',
@@ -807,12 +833,41 @@
                     console.log(_this.test_html);
                 }
                 editor.create()
+            },
+            getPList(){
+            	const _this = this
+            	_this.cities = []
+            	const params = {
+            		pageNum:1,
+            		size:20
+            	}
+            	$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/goodsTag/selectList",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	const info = data.data
+                    	for (var i = 0; i < info.list.length; i++) {
+                    		_this.cities.push(info.list[i].name)
+                    		// info.list[i]
+                    	}
+                    	_this.listBiaoq = info.list
+                    }
+                });
+            },
+            clicka(val){
+            	console.log(val)
+            	this.onbiaoqList = val
             }
 		},
 		mounted() {
 			 this.initEditor()
 			 this.selectListName();
 			 this.gettemplet();
+			 this.getPList()
 		}
 	}
 
