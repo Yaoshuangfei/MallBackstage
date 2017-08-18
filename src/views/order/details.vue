@@ -429,7 +429,7 @@
 		margin-left: 100px;
 		margin-top: 40px;
 		width: 1200px;
-		height:1200px;
+		height:1600px;
 		border: 1px solid #aaa;
 		border-radius: 10px;
 	}

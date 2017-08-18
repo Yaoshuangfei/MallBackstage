@@ -5,23 +5,29 @@
 			<h3>我的分销商（{{list.length}}）- 上级  - {{name}}</h3>
 		</el-col>
 		<el-col :span="24">
-			<el-col :span="4" style="margin-top: 20%" class='bor_div_left'>{{name}}</el-col>
-			<el-col :span="18" style="margin-left: 60px;margin-bottom: 10px; ">
-				<el-col :span="24" style="margin-top: 10px" v-for="item in list">
-					<el-col :span="4" class='bor_div'>
-						<el-col :span="24">{{item.coreUser.nickName}}</el-col>
-						<el-col :span="24">{{item.shopRoleName}}</el-col>
-						<el-col :span="24">{{item.coreUser.mobile}}</el-col>
-					</el-col>
-					<el-col :span="10" style="margin-left: 60px">
-						<el-col :span="24" v-for="items in item.list" style='margin-bottom: 10px;'>
-							<el-col :span="24" class='bor_div'>
-								<el-col :span="24">{{items.coreUser.nickName}}</el-col>
-								<el-col :span="24">{{items.shopRoleName}}</el-col>
-								<el-col :span="24">{{items.coreUser.mobile}}</el-col>
+			<el-col :span="4" style="margin-top: 20%;" class='bor_div_left'>{{name}}</el-col>
+			<el-col :span="18" style="margin-left: 60px;margin-bottom: 10px;">
+				<el-col :span="24" style="margin-top: 10px;" v-for="item in list">
+						<el-col :span="4" class='bor_div'>
+							<div @click="onDown(item.id)" style="cursor: pointer;">
+								<el-col :span="24" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
+								<el-col :span="24">{{item.shopRoleName}}</el-col>
+								<el-col :span="24" v-if="item.coreUser !== null">{{item.coreUser.mobile}}</el-col>
+							</div>
+						</el-col>
+						<el-col v-if="item.list.length > 0" :span="1" style="border:1px solid #ddd;margin-top: 20px;margin-left: 10px;"></el-col>
+						<el-col :span="10" style="margin-left: 0px">
+							<el-col :span="24" v-for="items in item.list" style="border-left:1px solid #aaa;padding-left: 15px;height:80px">
+								<el-col :span="24" class='bor_div'>
+									<div @click="onDown(items.id)" style="cursor: pointer;">
+										<el-col :span="24" v-if="items.coreUser !== null">{{items.coreUser.nickName}}</el-col>
+										<el-col :span="24">{{items.shopRoleName}}</el-col>
+										<el-col :span="24" v-if="items.coreUser !== null">{{items.coreUser.mobile}}</el-col>
+									</div>
+								</el-col>
 							</el-col>
 						</el-col>
-					</el-col>
+					<el-col v-if="item.list.length > 0" :span="4" :offset="5" style="border-top:1px solid #bbb;"></el-col>
 				</el-col>
 			</el-col>
 
@@ -38,14 +44,21 @@
 		data() {
 			return {
 				name:'',
-				list:[]
+				list:[],
+				id:this.$route.params.id
 			}
 		},
 		methods: {
+			onDown(val){
+				console.log(val)
+				this.id = val
+				this.list = []
+				this.getlist()
+			},
 			getlist(){
 				const _this = this
 				const params = {
-					id:this.$route.params.id,
+					id:this.id,
 					lvl:3
 				}
 				$.ajax({
@@ -56,19 +69,16 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                	const info = data.data
-	                  	console.log(data.data)
+	                  	console.log(info)
 	                  	for(var i = 0;i<info.length;i++){
 	                  		if(info[i].lvl === 0){
 		                  		_this.name = info[i].coreUser.nickName
 		                  	}
 		                  	if(info[i].lvl === 1){
-		                  		console.log(info[i])
-		                  		console.log(info[i].id)
 		                  		info[i].list = []
 		                  		for(var x = 0;x<info.length;x++){
 		                  			if(info[i].id === info[x].configId){
 		                  				info[i].list.push(info[x])
-		                  				console.log(info[x])
 		                  			}
 		                  		}
 		                  		_this.list.push(info[i])
@@ -89,6 +99,7 @@
 <style>
 	.bor_div_left{
 		border: 1px solid #aaa;
+		border-radius: 10px;
 		width:200px;
 		height: 60px;
 		line-height: 60px;
@@ -96,9 +107,9 @@
 	}
 	.bor_div{
 		border: 1px solid #aaa;
+		border-radius: 10px;
 		width:200px;
 		height: 60px;
-		/*line-height: 50px;*/
 		text-align: center;
 	}
 </style>

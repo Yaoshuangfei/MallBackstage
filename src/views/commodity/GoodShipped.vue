@@ -61,17 +61,21 @@
 					</el-col>
 					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
 						<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>
-						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd">
+						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd;height: 182px">
 							<el-col :span="24" style="margin-top: 10px">
-
-							<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">
-							<button type="button" class="el-button el-button--primary el-button--small" style="margin-left: -83px">
-								<span>点击上传</span>
-							</button>
-							<button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button>
+								
+							<!-- <button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button> -->
 							<!-- <span style="display: block;font-size: 12px;margin-bottom: 10px">{{ imageChange }}</span> -->
-
-							<img style="width:100px" v-for="item in CommodityPictures" :src="item">
+								<el-col :span="4" v-for="item in CommodityPictures">
+									<img style="position: relative;left: 80px;top:30px;" @click="deldetImg(item)" src="../../assets/delet.png">
+									<img style="width:100px;border:1px solid #aaa" :src="item">
+								</el-col>
+								<el-col v-if="CommodityPictures.length < 3" :span="4" style="margin-top: 10px">
+									<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">
+									<button type="button" class="el-button el-button--primary el-button--small" style="margin-left: -83px">
+										<span>点击上传</span>
+									</button>
+								</el-col>
 							</el-col>
 							<el-col :span="19"  style="margin-top: 5px;color: #aaa;">最多上传三张图片</el-col>
 						</el-col>
@@ -196,7 +200,7 @@
 					</el-col>
 				</el-col>
 			<!-- <el-col :span='24' >11111111111111</el-col>	 -->
-			<el-col :span='24' style="margin-top: 820px">
+			<el-col :span='24' style="margin-top: 904px">
 				<div id = 'editor-trigger' style="height: 480px"></div>
 			</el-col>
 			</el-col>
@@ -301,6 +305,10 @@
             wangEditor
         },
 		methods: {
+			// /删除图片
+			deldetImg(src){
+				this.CommodityPictures.splice(jQuery.inArray(src, this.CommodityPictures),1)
+			},
 			handleCheckedCitiesChange(row) {
 				const arry = []
 				// console.log(row.name)
