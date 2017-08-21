@@ -192,7 +192,9 @@
                     	_this.selectSubjectStatus = info.list
                     	console.log(_this.selectSubjectStatus)
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
-		                	_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
+                    		if(_this.selectSubjectStatus[i].payTime !== null){
+		                		_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
+                    		}
 		                	for(var x = 0;x<_this.selectSubjectStatus[i].orderGoods.length;x++){
 		                		if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 1) {
 			                		_this.selectSubjectStatus[i].orderGoods[x].orderStatus = '支付中'

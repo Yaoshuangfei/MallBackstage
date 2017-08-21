@@ -25,6 +25,14 @@
         </el-col>
       </el-col>
       <el-button type="primary" @click="uploadBtn">确认上传</el-button>
+      <el-col :span="24" style="padding-bottom: 20px;margin-top: 20px">展示的视频</el-col>
+      <el-col :span="24" style="padding-bottom: 20px;height: 300px">
+        <el-col :span="3"  style="margin-right: 60px" v-for="item in urlArry">
+          <video v-if="historyArry !== [] "  width="220" height="240" controls="controls"><!-- autoplay="autoplay" 直接播放 -->
+              <source :src="item" type="video/mp4" />
+          </video>
+        </el-col>
+      </el-col>
       <el-col :span="24" style="padding-bottom: 20px;">历史上传的视频</el-col>
       <el-col :span="24" style="padding-bottom: 20px;">
         <el-col :span="3"  style="margin-right: 60px" v-for="item in urlArry">
@@ -71,6 +79,7 @@
   export default {
     data() {
       return {
+        historyArry:[],
         passIval:false,
         listLoading:true,
         baonian:true,
@@ -135,7 +144,6 @@
                     index:this.value,
                     url:this.url
                 }
-
                 console.log(params)
                 $.ajax({
                     type:'POST',
@@ -146,6 +154,9 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                       console.log(data)
+                      if(data.code === 1){
+                         _this.getlist()
+                      }
                     }
                 });
             },
@@ -220,6 +231,7 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                       console.log(data)
+                      _this.baonian = false
                       if(data.data !== null){
                         if(data.data.status === 1|| data.data.status === 2){
                                  _this.urlArry = data.data.url.split(',')
@@ -228,10 +240,30 @@
                       }
                     }
                 });   
+            },
+             // 获取展示的视频信息
+            gethistory(){
+                const _this = this
+                const params = {
+                  pageNum:1,
+                  pageSize:5
+                }
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/storeVideo/selectList",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                      console.log(data)
+                    }
+                });   
             }
         },
     mounted() {
       this.getlist();
+      this.gethistory()
     }
   }
 
