@@ -48,7 +48,8 @@
 			</el-col>
 			<el-col :span="24" v-for="items in item.orderGoods">
 				<el-col :span="3">
-					<img style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
+					<img v-if="items.picture !== 'icon.png' " style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
+					<img v-else style="width: 100px;margin-left: 40px;margin-top: 30px" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
 				</el-col>
 				<el-col :span="6" :offset="1" class="describe_fiast">
 				{{items.productName}}

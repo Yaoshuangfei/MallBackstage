@@ -22,8 +22,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="24" :offset="4" style="margin-top: 40px">
-      <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
+    <el-col :span="24" :offset="6" style="margin-top: 40px">
+      <!-- <el-col :span="4"><el-button type="primary">修改</el-button></el-col> -->
       <el-button type="primary" @click="Preservation">保存</el-button>
     </el-col>
     <el-col :span="14" style="margin-top: 40px;border-bottom: 1px dashed red;"></el-col>
@@ -45,8 +45,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="24" :offset="4" style="margin-top: 40px">
-      <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
+    <el-col :span="24" :offset="6" style="margin-top: 40px">
+      <!-- <el-col ><el-button type="primary">修改</el-button></el-col> -->
       <el-button type="primary" @click="Preservation">保存</el-button>
     </el-col>
     <el-col :span="14" style="margin-top: 40px;border-bottom: 1px dashed red;"></el-col>
@@ -274,6 +274,17 @@
             error: function (XMLHttpRequest, textStatus, errorThrown) {},
             success:function(data){
               console.log(data)
+              if(data.code === 1){
+                _this.$message({
+                  message: '保存成功',
+                  type: 'success'
+                });
+              }else{
+                _this.$message({
+                  message: data.msg,
+                  type: 'error'
+                });
+              }
             }
         });   
       },
