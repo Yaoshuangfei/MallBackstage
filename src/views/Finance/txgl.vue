@@ -43,8 +43,8 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" v-if="scope.row.status !== 2" size="small" @click="TgBtn(scope.row)">打款</el-button>
-					<el-button type="text" v-if="scope.row.status !== 2" size="small" @click="NogBtn(scope.row)">不通过 </el-button>
+					<el-button type="text" v-if="scope.row.status !== 1" size="small" @click="TgBtn(scope.row)">通过</el-button>
+					<el-button type="text" v-if="scope.row.status !== 1" size="small" @click="NogBtn(scope.row)">不通过 </el-button>
 				</template>
 			</el-table-column>
 		</el-table>

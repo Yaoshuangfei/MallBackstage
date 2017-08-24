@@ -669,6 +669,7 @@
 									message: '提交成功',
 									type: 'success'
 								});
+								_this.clerbtn = false
 	                    	}else{
 	                    		_this.$message({
 									message: data.msg,
@@ -1010,9 +1011,11 @@
                         const info = data.data
                         if(info === null){
                         	_this.cltFyBtn = true
+                        }else{
+                        	
+                        _this.cltId = info.id
                         }
                         console.log(info)
-                        _this.cltId = info.id
                         // 三级分销
                         _this.cltSan[0].fybi = info.one
                         _this.cltSan[1].fybi = info.two
@@ -1068,6 +1071,11 @@
                     	console.log(data)
                     	if(data.code === 1){
                     		_this.getcltList()
+                    	}else{
+                    		_this.$message({
+								message: data.msg,
+								type: 'error'
+							});
                     	}
                     }
                 });
