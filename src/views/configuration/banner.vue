@@ -2,7 +2,7 @@
 	<section>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
+			<el-form :inline="true">
 				<el-form-item>
 					<el-button type="primary" v-on:click="addbanner">添加</el-button>
 				</el-form-item>
@@ -110,57 +110,17 @@
 				<el-button type="primary" @click.native="modifybannerdiv = false">取消</el-button>
 			</div>
 		</el-dialog>
-		<!--编辑界面-->
-		<el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="uploadDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="订单号">
-					<div>{{uploadDetails.uploadImgs }}</div>
-					<!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
-				</el-form-item>
-				<el-form-item label="用户名">
-					<div>{{uploadDetails.List }}</div>
-				</el-form-item>
-				<el-form-item label="实付金额">
-					<div>{{uploadDetails.amountPaid }}</div>
-				</el-form-item>
-				<el-form-item label="订单总价">
-					<div>{{uploadDetails.orderTotal }}</div>
-				</el-form-item>
-				<el-form-item label="订单状态">
-					<div>{{uploadDetails.orderStatus }}</div>
-				</el-form-item>
-				<el-form-item label="支付方式">
-					<div>{{uploadDetails.paymentMethod }}</div>
-				</el-form-item>
-				<el-form-item label="创建时间">
-					<div>{{uploadDetails.creationTime}}</div>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<div>{{uploadDetails.deliveryTime}}</div>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
 <script>
 	import { state } from '../../vuex/state'
 	import util from '../../common/js/util'
-	import {baseUrl , editUser, addUser } from '../../api/api';
+	import {baseUrl} from '../../api/api';
 
 	export default {
 		data() {
 			return {
-				radio: '0',
-				checked: true,
-				value:'',
-				value1:'',
-				value2:'',
 				url:'',
 				urls:'',
 				options: [{
@@ -170,37 +130,9 @@
 		          value: '2',
 		          label: '店铺内'
 		        }],
-				selectSubjectStatus: [
-				{
-					value:'0',
-					label:'全部'
-				},{
-					value:'1',
-					label:'待付款'
-				},{
-					value:'2',
-					label:'待发货'
-				},{
-					value:'3',
-					label:'已发货'
-				},{
-					value:'4',
-					label:'待评价'
-				},{
-					value:'5',
-					label:'退货'
-				}],
-				filters: {
-					name: '',
-					status:'',
-					type:''
-				},
-				users: [],
 				total: 0,
 				page: 1,
 				listLoading: false,
-				sels: [],//列表选中列
-				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
 					name: [
@@ -248,10 +180,7 @@
                 let btn = document.getElementById("btnClear");
                 let files = document.getElementById("fileInput");
                 this.fileImg = '';
-                // for IE, Opera, Safari, Chrome
                 if (files !== null && files.value) {
-                    //     files.outerHTML = files.outerHTML;
-                    // } else { // FF(包括3.5)
                     files.value = "";
                     this.formData = new FormData()
                 }
@@ -260,19 +189,12 @@
             upload (event) {
                 this.formData = new FormData()
                 let file = event.target.files[0]
-                // console.log(file)
                 const self = this
-                // const flag = this.flag
                 if (file) {
-                    console.log('存在file', file)
-                    console.log(file.size)
                     this.fileImg = file.name
-                    // console.log(this.formData)
                     this.formData.append('file', file);
-                    console.log(this.formData);
                 } else {
                     this.fileImg = ''
-                    console.log('不存在file', file)
                     this.formData = new FormData()
                 }
             },
@@ -286,7 +208,6 @@
                     })
                         .then(response => {
                             const info = JSON.parse(response.bodyText);
-                            // const info = response.body
 							_this.url = info.data[0].baseUri+info.data[0].uri;
                             _this.UploadImg();
                         }, error => _this.$emit('complete', 500, error.message))
@@ -302,7 +223,6 @@
                     poType:this.uploadDetails.poType,
                     desc:this.uploadDetails.information,
                 };
-                console.log(params)
                 var url = baseUrl+"/api/indexAdvert/add";
                 var data =JSON.stringify(params);
                 $.ajax({
@@ -342,7 +262,6 @@
                         if(!data.success){
                             alert(data.msg)
                         }else{
-                        	console.log(data)
                             var _length 	= data.data.list;
                             _this.total 	= data.data.total;
                             for (var i = 0; i < _length.length; i++) {
@@ -507,10 +426,7 @@
         let btn = document.getElementById("btnClears");
         let files = document.getElementById("fileInputs");
         this.fileImg = '';
-        // for IE, Opera, Safari, Chrome
         if (files !== null && files.value) {
-            //     files.outerHTML = files.outerHTML;
-            // } else { // FF(包括3.5)
             files.value = "";
             this.formData = new FormData()
         }
@@ -519,18 +435,12 @@
             modifyload (event) {
         this.formData = new FormData()
         let file = event.target.files[0]
-        // console.log(file)
         const self = this
-        // const flag = this.flag
         if (file) {
-            console.log('存在file', file)
             this.fileImg = file.name
-            // console.log(this.formData)
             this.formData.append('file', file);
-            console.log(this.formData);
         } else {
             this.fileImg = ''
-            console.log('不存在file', file)
             this.formData = new FormData()
         }
     },
@@ -584,11 +494,7 @@
 
 
 
-			//显示编辑界面
-			seeBtn: function (index, row) {
-				this.editFormVisible = true;
-				this.uploadDetails = Object.assign({}, row);
-			},
+			
 			//显示添加banner页面
 			addbanner: function (index, row) {
 				this.addbannerdiv = true;

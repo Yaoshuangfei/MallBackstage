@@ -26,11 +26,6 @@
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：111111111111111111</el-col>
 				<el-col :span="4">下单时间：2017-08-09 12:20</el-col>
-				<el-col :span="4" :offset="10">
-					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
-						<el-button style="margin-top:-5px"  type="text">查看下级</el-button>
-					</router-link>
-				</el-col>
 			</el-col>
 			<el-col :span="24">
 				<el-col :span="6" class="img_shangp">
@@ -224,15 +219,12 @@
 						pageSize:'10'
 					}
 				}
-				console.log(params)
 				$.post(baseUrl+"/admin/banner/getBannerByPage",
 	             { param: JSON.stringify(params) },
 	             function(data){
 	             	const info = eval('(' + data + ')');
 	                const response = JSON.parse(info);
 	                const list = response.obj.results
-	                console.log(response)
-	                // _this.page = response.obj.total
 	                _this.total = response.obj.totalRecord
 	                for(var i = 0;i<list.length;i++){
 	                	_this.table.push(list[i])

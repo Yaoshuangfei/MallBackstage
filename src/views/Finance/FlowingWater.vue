@@ -247,22 +247,17 @@
 				}else if(this.filters.type === '3'){
 					params.mobile = this.filters.name
 				}
-				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
-                    // url:"http://192.168.0.115:8080/api/store/userCashFlow/selectFlowList",
                     url:baseUrl+"/api/store/userCashFlow/selectOrderMallFlowList",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data)
                     	const info = data.data
                     	_this.orderInformation = info.list
                     	_this.total = info.total
                     	_this.listLoading = false
-                    	console.log(_this.orderInformation[0].maps)
                     }
                 });
 			},
@@ -340,7 +335,6 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data)
                     	_this.amount = data.data.amount
                     	_this.availableIncome = data.data.availableIncome
                     	_this.totalMoney = data.data.totalMoney

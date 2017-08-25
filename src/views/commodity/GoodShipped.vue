@@ -171,13 +171,13 @@
 						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述</el-col>
 						<el-col :span="24" style=" border-bottom: 1px solid #ddd;height: 580px">
 							<el-col :span="2" style="text-align: right;line-height: 80px;">商品描述：</el-col>
-							<el-col :span="12" style="height: 60px;border-left: 1px solid #ddd;padding-left: 10px">
-								<el-col :span="23"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字
-								<!-- <el-input type="textarea" v-model="DescriptionGoods" :rows="10"></el-input> -->
+							<el-col :span="20" style="height: 60px;border-left: 1px solid #ddd;padding-left: 10px">
+								<el-col :span="24"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字
+								<el-input type="textarea" v-model="DescriptionGoods" :rows="3"></el-input>
 								</el-col>
 							</el-col>
 						</el-col>
-						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>
+						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;margin-top: 20px">商品物流信息</el-col>
 						<el-col :span="24">
 							物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。
 							<el-col :span="24" style="min-height: 100px;margin-top: 40px">
@@ -200,7 +200,7 @@
 					</el-col>
 				</el-col>
 			<!-- <el-col :span='24' >11111111111111</el-col>	 -->
-			<el-col :span='24' style="margin-top: 904px">
+			<el-col :span='24' style="margin-top: 950px">
 				<div id = 'editor-trigger' style="height: 480px"></div>
 			</el-col>
 			</el-col>

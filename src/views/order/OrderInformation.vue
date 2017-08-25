@@ -41,7 +41,7 @@
 				<el-col :span="5">下单时间：{{item.payTime}}</el-col>
 				<el-col :span="1" :offset="9">{{item.totalMoney}}</el-col>
 				<el-col :span="2" :offset="1">
-					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
+					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 0 }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
@@ -178,7 +178,7 @@
 					}
 				}
 				
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -188,10 +188,10 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(info)
+                    	// console.log(info)
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
-                    	console.log(_this.selectSubjectStatus)
+                    	// console.log(_this.selectSubjectStatus)
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
                     		if(_this.selectSubjectStatus[i].payTime !== null){
 		                		_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
@@ -220,7 +220,7 @@
 			                	}
 		                	}
 		                }
-		                console.log(_this.selectSubjectStatus)
+		                // console.log(_this.selectSubjectStatus)
                     }
                 });
 			},

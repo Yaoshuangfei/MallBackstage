@@ -131,7 +131,7 @@
            },
           getlist(){
             const _this = this;
-            _this.orderInformation = [];
+            // _this.orderInformation = [];
             const url   = baseUrl+"/api/indexProductConf/page/product?pageNum="+_this.page+"&pageSize=20";
               $.ajax({
                   type:'POST',
@@ -149,9 +149,10 @@
                       }else{
                           var _length   = data.data.list;
                           _this.total   = data.data.total;
-                          for (var i = 0; i < _length.length; i++) {
-                              _this.orderInformation.push(_length[i]);
-                          }
+                          _this.orderInformation = _length
+                          // for (var i = 0; i < _length.length; i++) {
+                          //     _this.orderInformation.push(_length[i]);
+                          // }
                       }
                     }
                   }
@@ -179,7 +180,6 @@
                 contentType:'application/json;charset=utf-8',
                 error: function (XMLHttpRequest, textStatus, errorThrown) {},
                 success:function(data){
-                    console.log(data)
                     if(!data.success){
                         alert(data.msg)
                     }else{
@@ -231,7 +231,6 @@
                             indexStyleId:this.filters.type,
                             orderSort:this.orderDetails.orderNumber,
                         };
-                        console.log(params)
                         const url    = baseUrl+"/api/indexProductConf/add";
                         const data   =JSON.stringify(params);
                         $.ajax({

@@ -43,7 +43,7 @@
 				<el-col :span="3" :offset="4" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
 				<el-col :span="1" style="margin-left: 20px">{{item.totalMoney}}</el-col>
 				<el-col :span="2" style="margin-left:60px">
-					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
+					<router-link :to="{ name: '订单详情', params: { id: item.id ,index:1}}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
@@ -170,7 +170,6 @@
 				this.optionKey = []
 				this.keyvalue =''
 				this.expno = ''
-				console.log(row)
 				this.editFormVisible = true
 				this.ddId = row.id
 				this.dpId = row.storeId
@@ -188,7 +187,6 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data.data)
                     	_this.optionKey = []
                     	if(data.data !== null && data.data !== []){
                     		for(var i = 0;i<data.data.length;i++){
@@ -199,13 +197,10 @@
                     			_this.keyvalue = obj.value
                     		}
                     	}
-                    	console.log(_this.optionKey)
                     }
                 });
 			},
 			upSubmit() {
-				console.log(this.keyvalue)
-				console.log(this.expno)
 				let express = ''
 				for(var i = 0;i<this.optionKey.length;i++){
 					if(this.keyvalue === this.optionKey[i].value){
@@ -220,7 +215,6 @@
 					expressName:express,
 					expressCode:this.keyvalue,
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -229,7 +223,6 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data)
                     	_this.editFormVisible = false
                     	_this.getlist()
                     }
@@ -253,7 +246,6 @@
 						params.expno = this.filters.name
 					}
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -265,7 +257,6 @@
                     	const info = data.data
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
-                    	console.log(_this.selectSubjectStatus)
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
                     		_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
                     	}
@@ -282,7 +273,6 @@
 					expressName:expressName,
 					expressCode:expressCode
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -291,7 +281,6 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data)
                     }
                 });
 			},
@@ -306,12 +295,10 @@
 					name: this.filters.name
 				};
 				this.listLoading = true;
-				//NProgress.start();
 				getUserListPage(para).then((res) => {
 					this.total = res.data.total;
 					this.users = res.data.users;
 					this.listLoading = false;
-					//NProgress.done();
 				});
 			},
 			//删除

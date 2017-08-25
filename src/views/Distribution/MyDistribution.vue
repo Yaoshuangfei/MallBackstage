@@ -1071,6 +1071,10 @@
                     	console.log(data)
                     	if(data.code === 1){
                     		_this.getcltList()
+                    		_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
                     	}else{
                     		_this.$message({
 								message: data.msg,

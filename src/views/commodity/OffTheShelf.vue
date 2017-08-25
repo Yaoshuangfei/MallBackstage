@@ -156,7 +156,6 @@
 					saleStatus:2,//状态
 					storeId:state.storeId
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -166,7 +165,6 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(info)
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
@@ -193,7 +191,6 @@
 				const params = {
 					id:id,
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -203,10 +200,8 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(data)
                     	_this.orderDetails = info
                     	_this.orderDetails.goodsData = JSON.parse(_this.orderDetails.goodsData)
-                    	console.log(_this.orderDetails.goodsData)
                     }
                 });
 			},
@@ -217,7 +212,6 @@
 				const params = {
 					id:id,
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -227,19 +221,13 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(data)
                     	_this.seeForm = info
-                    	// _this.seeForm.goodsData = JSON.parse(_this.seeForm.goodsData)
-                    	console.log(_this.seeForm.goodsData)
                     }
                 });
 			},
 			editSubmit() {
 				const _this = this
-				console.log(_this.seeForm)
 				const params = _this.seeForm
-				// params.goodsData = JSON.stringify(params.goodsData)
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -249,7 +237,6 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(data)
                     }
                 });
 			},
@@ -260,7 +247,6 @@
 					id:id,
 					saleStatus:1
 				}
-				console.log(params)
 				this.$confirm('确认上架该商品吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
@@ -289,7 +275,6 @@
 				const params = {
 					id:id,
 				}
-				console.log(params)
 				this.$confirm('确认删除该商品吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
@@ -301,7 +286,6 @@
 	                    contentType:'application/json;charset=utf-8',
 	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
-	                    	console.log(data)
 	                    	_this.$message({
 								message: data.msg,
 								type: 'success'

@@ -149,17 +149,13 @@
 					withdrawalsId:'',
 					phone:4
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
-                    // url:"http://192.168.0.115:8080/api/store/userCashFlow/selectFlowList",
                     url:baseUrl+"/api/withdrawals/selectListBySeller",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                    	console.log(data)
                     	const info = data.data
                     	_this.orderInformation = info.list
                     	_this.total = info.total
@@ -208,7 +204,6 @@
 			TgBtn(row){
 				this.tongVisible = true
 				this.withdrawalsId = row.withdrawalsId
-				console.log(this.withdrawalsId)
 			},
 			tonguoSubmit(){
 				const _this = this
@@ -217,7 +212,6 @@
 					status:1,
 					reason:this.tonguoName
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -225,7 +219,6 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
                     	if(data.code === 1){
                     		_this.getlist()
                     	}else{
@@ -239,7 +232,6 @@
 			NogBtn(row){
 				this.NotongVisible = true
 				this.withdrawalsId = row.withdrawalsId
-				console.log(this.withdrawalsId)
 			},
 			NotonguoSubmit(){
 				const _this = this
@@ -248,7 +240,6 @@
 					status:3,
 					reason:this.NotonguoName
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -256,7 +247,6 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
                     	if(data.code === 1){
                     		_this.getlist()
                     	}else{

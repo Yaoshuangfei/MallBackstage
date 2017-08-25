@@ -130,14 +130,12 @@
 		              accountId: '1',
 		              accessToken: '1'
 		        }
-		         console.log(params);
 			   	$.post("http://192.168.10.18:8080/shangfu-admin-web//backstage/menu/getMenu",
 			    { param: JSON.stringify(params) },
 			        function(data){
 			            const info = eval('(' + data + ')');
 			            const resepene = JSON.parse(info)
 			            const list = resepene.obj
-			            console.log(list)
 			            for(var i = 0;i<list.length;i++){
 			            	var father = {}
 			            	father.name = list[i].name
@@ -150,7 +148,6 @@
 		                		_this.meunList.push(father)
 		                	}
 			            }
-			            console.log(_this.meunList)
 			        }
 			    );
 			},
@@ -167,13 +164,10 @@
 				}
 			},
 			onSubmit() {
-				console.log('submit!');
 			},
 			handleopen() {
-				//console.log('handleopen');
 			},
 			handleclose() {
-				//console.log('handleclose');
 			},
 			handleselect: function (a, b) {
 			},
@@ -207,9 +201,7 @@
 				this.sysUserAvatar = user.avatar || '';
 			}
 			this.arry = this.$router.options.routes
-			console.log(state.commissionLine)
 			if(state.commissionLine !== 3 && state.commissionLine !== 5){
-				console.log(1)
 				for(var i = 0;i<this.arry[5].children.length;i++){
 					if(this.arry[5].children[i].name === '分销规则管理'){
 						this.arry[5].children.splice(i,1)
@@ -217,7 +209,6 @@
 				}
 				state.keys = true
 			}else if(state.commissionLine === 3 || state.commissionLine === 5){
-				console.log(2)
 				if(state.keys){
 					const obj = {}
 					obj.name = '分销规则管理'
