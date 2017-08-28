@@ -28,7 +28,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column type="index">
 			</el-table-column>
 			<el-table-column prop="courierNumber" label="店铺名">

@@ -1,5 +1,8 @@
 <template>
 	<section>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;">
+			公益广告
+		</el-col>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true" :model="filters">
@@ -34,26 +37,26 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="订单编号">
+		<el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;" id="table">
+			<el-table-column prop="orderNumber" label="订单编号" width="110px;">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户名">
+			<el-table-column prop="userName" label="用户名" width="110px;">
 			</el-table-column>
-			<el-table-column prop="amountPaid" label="手机号">
+			<el-table-column prop="amountPaid" label="手机号" width="90px;">
 			</el-table-column>
-			<el-table-column prop="orderTotal" label="充值金额">
+			<el-table-column prop="orderTotal" label="充值金额" width="110px;">
 			</el-table-column>
-			<el-table-column prop="orderStatus" label="充值手机号">
+			<el-table-column prop="orderStatus" label="充值手机号" width="150px;">
 			</el-table-column>
-			<el-table-column prop="creationTime" label="支付方式">
+			<el-table-column prop="creationTime" label="支付方式" width="150px;">
 			</el-table-column>
 			<el-table-column prop="deliveryTime" label="成本">
 			</el-table-column>
-			<el-table-column prop="deliveryTime" label="手续费6%">
+			<el-table-column prop="deliveryTime" label="手续费6%" width="150px;">
 			</el-table-column>
 			<el-table-column prop="deliveryTime" label="利润">
 			</el-table-column>
-			<el-table-column prop="deliveryTime" label="充值时间">
+			<el-table-column prop="deliveryTime" label="充值时间" width="110px;">
 			</el-table-column>
 			<!-- <el-table-column label="操作">
 				<template scope="scope">

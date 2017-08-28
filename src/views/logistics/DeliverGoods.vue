@@ -1,6 +1,7 @@
 <template>
 	<section>
 		<!--工具条-->
+
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true" :model="filters">
 				<!-- <el-form-item>
@@ -27,22 +28,22 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-		<el-col :span="24">
-			<el-col :span="4" :offset="4">商品详情</el-col>
-			<el-col :span="2">单价</el-col>
-			<el-col :span="2">数量</el-col>
-			<el-col :span="2">买家</el-col>
-			<el-col :span="2" style="margin-left: 20px">订单总价</el-col>
-			<el-col :span="2">操作</el-col>
+		<el-col :span="24" style="background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;">
+			<el-col style="width:340px;">商品详情</el-col>
+			<el-col style="width:98px;">单价</el-col>
+			<el-col style="width:90px;">数量</el-col>
+			<el-col style="width:137px;">买家</el-col>
+			<el-col style="width:180px;">订单总价</el-col>
+			<el-col style="width:84px;">状态</el-col>
 		</el-col>
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：{{item.id}}</el-col>
-				<el-col :span="6">下单时间：{{item.createTime}}</el-col>
-				<el-col :span="3" :offset="4" v-if="item.coreUser === null">/</el-col>
-				<el-col :span="3" :offset="4" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
-				<el-col :span="1" style="margin-left: 20px">{{item.totalMoney}}</el-col>
-				<el-col :span="2" style="margin-left:60px">
+				<el-col :span="7">下单时间：{{item.createTime}}</el-col>
+				<el-col :span="3" :offset="1" v-if="item.coreUser === null">/</el-col>
+				<el-col :span="3" :offset="1" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
+				<el-col :span="1"  style="margin-left:70px">{{item.totalMoney}}</el-col>
+				<el-col :span="2"  style="margin-left:75px">
 					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
@@ -52,16 +53,16 @@
 				<el-col :span="3" >
 					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="items.picture">
 				</el-col>
-				<el-col :span="6" :offset="1" class="describe">
+				<el-col  style="width:180px;" :offset="1" class="describe">
 				{{items.productName}}
 				</el-col>
-				<el-col :offset="1" :span="3" class="describe">{{items.productPrice}}</el-col>
-				<el-col :span="2" :offset="1"  class="describe">{{items.payTime}}</el-col>
-				<el-col :span="1" :offset="5" class="describe">
+				<el-col style="text-align: center;width:98px;" class="describe">{{items.productPrice}}</el-col>
+				<el-col style="text-align: center;width:90px;"  class="describe">{{items.payTime}}</el-col>
+				<el-col style="text-align: right;width:137px;margin-left: 240px;" class="describe">
 					<el-button type="text" v-on:click="fahuoBtn(items)">发货</el-button>
 				</el-col>
 			</el-col>
-			<el-col :span="24" style="border-top: 1px solid #aaa;height: 30px;line-height: 50px">地址：{{item.provinceName}}{{item.cityName}}{{item.countyName}}{{item.address}}</el-col>
+			<el-col :span="24" style="border-top: 1px solid #aaa;height: 30px;line-height: 50px;padding-left: 20px;">地址：{{item.provinceName}}{{item.cityName}}{{item.countyName}}{{item.address}}</el-col>
 		</el-col>
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">

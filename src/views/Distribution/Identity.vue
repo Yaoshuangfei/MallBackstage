@@ -1,6 +1,8 @@
 <template>
 	<section>
-
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			身份管理
+		</el-col>
 		<el-button type="primary" v-on:click="addIDCard(1)" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
 		  <el-col :xs="2" :sm="2" :md="2" :lg="2">店铺身份</el-col>
@@ -78,7 +80,7 @@
 				</form>
 		</el-col>
 		<el-col :xs="24" :md="24"  style="margin-top: 20px">
-			<el-col :xs="4" :md="4" v-for="item in imgArry">
+			<el-col :xs="6" :md="6" v-for="item in imgArry">
 				<img style="position: relative;left: 220px;top:-170px;" @click="deldetImg(item)" src="../../assets/delet.png">
 				<img :src="item" style="width:200px;height: 200px;border: 1px solid #f0f0f0;">
 			</el-col>

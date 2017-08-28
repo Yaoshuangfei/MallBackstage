@@ -1,7 +1,10 @@
 <template>
 	<section>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			提现管理
+		</el-col>
 		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
+		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff" id="txgl">
 			<el-form :inline="true" :model="filters">
 				<el-form-item label="状态">
 					<el-select v-model="filters.status" clearable>
@@ -26,12 +29,12 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" id="table">
 			<el-table-column prop="userId" label="用户ID">
 			</el-table-column>
 			<el-table-column prop="withdrawalsName" label="用户名">
 			</el-table-column>
-			<el-table-column prop="phone" label="手机号">
+			<el-table-column prop="phone" label="手机号" width="150px;">
 			</el-table-column>
 			<el-table-column prop="withdrawalsPrice" label="提现金额">
 			</el-table-column>
@@ -275,5 +278,7 @@
 </script>
 
 <style>
-	
-</style>
+	#txgl .el-input__icon+.el-input__inner {padding-right: inherit;}
+	#table thead tr th {background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;}
+	#table thead tr th div {background: #cab78c;color: #fff;}
+</style>s

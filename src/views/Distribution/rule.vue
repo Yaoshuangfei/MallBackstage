@@ -1,28 +1,31 @@
 <template>
 	<section>
-		<el-col :span="24" style="margin-top: 80px;margin-left: 60px;">
-			<el-col :span="2" style="margin-top: 8px">最低提现额度</el-col>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			分享规则管理
+		</el-col>
+		<el-col :span="24" style="width:100%;margin-top: 80px;padding-left: 60px;">
+			<el-col :span="3" style="margin-top: 8px">最低提现额度</el-col>
 			<el-col :span="4">
 				<el-input v-model="minPrice"></el-input>
 			</el-col>
 			<el-col :span="1" style="margin-top: 8px">元</el-col>
 		</el-col>
-		<el-col :span="24" style="margin-top: 40px;margin-left: 60px;">
-			<el-col :span="2" style="margin-top: 8px">提现时间</el-col>
+		<el-col :span="24" style="width:100%;margin-top: 40px;padding-left: 60px;">
+			<el-col :span="3" style="margin-top: 8px">提现时间</el-col>
 			<el-col :span="20">
 				<el-radio-group v-model="roleId" @change = "click">
 			    	<el-radio-button  v-for="item in ruleAll" :label="item.id">{{item.name}}</el-radio-button>
 			    </el-radio-group>
 			</el-col>
 		</el-col>
-		<el-col :span="24" style="margin-top: 40px;margin-left: 60px;">
-			<el-col :span="2" style="margin-top: 8px">手续费</el-col>
+		<el-col :span="24" style="width:100%;margin-top: 40px;padding-left: 60px;">
+			<el-col :span="3" style="margin-top: 8px">手续费</el-col>
 			<el-col :span="4">
 				<el-input v-model="adminDiscount" type="number"></el-input>
 			</el-col>
 			<el-col :span="1"  style="margin-top: 8px">%</el-col>
 		</el-col>
-		<el-col :span="24" style="margin-top: 40px;margin-left: 200px">
+		<el-col :span="24" style="width:100%;margin-top: 40px;padding-left: 200px">
 			<el-button type="primary" @click="onSubmit">保存</el-button>
 			<el-button type="primary" @click="eidtSubmit">修改</el-button>
 		</el-col>

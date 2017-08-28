@@ -1,14 +1,14 @@
 <template>
 	<el-row :gutter="10">
-	  <el-col :xs="18" :sm="18" :md="18" :lg="18" style="margin-top: 50px;background: #ddd;padding-top: 40px;padding-bottom: 30px">
-	  	<el-col :xs="3" :sm="3" :md="3" :lg="3">
-	  		<img style="width: 100px;margin-left: 40px;border-radius: 50px;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
+	  <el-col :xs="24" style="background: #f4f2e8;margin-left: 40px;padding: inherit;height:187px;">
+	  	<el-col :span="5" style="padding: inherit;vertical-align: middle;height:100%;line-height: 182px;">
+	  		<img style="width: 100px;margin-left: 40px;border-radius: 50px;vertical-align: middle;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
 	  	</el-col>
-	  	<el-col :xs="8" :sm="6" :md="4" :lg="8">
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
-	  			<h1>商家后台管理中心</h1>
+	  	<el-col :span="10" style="padding: inherit;margin-top: 44px;">
+			<el-col :xs="24" :sm="24" :md="24" :lg="24">
+	  			<div style="font-size: 20px;color: #cab78c;">商家后台管理中心</div>
 	  		</el-col>
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="padding: inherit;margin-top: 40px;color: #616161;">
 	  			<el-col :xs="12" :sm="12" :md="12" :lg="12">
 	  			店主：{{name}}
 	  			</el-col>
@@ -20,26 +20,26 @@
 	  			</el-col>
 	  		</el-col>
 	  	</el-col>
-	  	<el-col :xs="8" :sm="6" :md="4" :lg="8">
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
-	  			<h3>商家动态评分</h3>
+	  	<el-col :span="9" style="padding: inherit;text-align: center;font-size: 14px;">
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="padding: inherit;margin-top: 44px;color: #616161;margin-bottom: 16px;">
+	  			<div>商家动态评分</div>
 	  		</el-col>
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="padding: inherit;margin-bottom: 6px;color: #616161;">
 	  			描述相符：{{goodsScore}}
 	  		</el-col>
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="padding: inherit;margin-bottom: 6px;color: #616161;">
 	  			服务态度：{{sellerScore}}
 	  		</el-col>
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="padding: inherit;margin-bottom: 6px;color: #616161;">
 	  			发货速度：{{logisticsScore}}
 	  		</el-col>
 	  	</el-col>
 	  </el-col>
-	  <el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 50px;margin-left: 40px">
-	  	<el-col :xs="12" :sm="12" :md="12" :lg="11">
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border:1px solid #ddd;padding-bottom: 20px;">
-		  		<el-col :xs="24" :sm="24" :md="24" :lg="24"  style="border-bottom:1px solid #ddd;margin-bottom: 20px;">
-		  			<h1>商品提示</h1>
+	  <el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 50px;margin-left: 40px;padding: inherit;">
+	  	<el-col :span="14">
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border:1px solid #e6eef9;padding-bottom: 20px;">
+		  		<el-col :xs="24" :sm="24" :md="24" :lg="24"  style="border-bottom:1px dashed #f4f2e8;margin-bottom: 20px;">
+		  			<h1 style="color:#cab78c;">商品提示</h1>
 		  		</el-col>
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
 		  			<el-col :xs="24" :sm="24" :md="24" :lg="24">
@@ -61,9 +61,9 @@
 		  		</el-col>
 	  		</el-col>
 
-	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border:1px solid #ddd;padding-bottom: 20px;margin-top: 20px">
-		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border-bottom:1px solid #ddd;margin-bottom: 20px;">
-		  			<h1>交易提醒</h1>
+	  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border:1px solid #e6eef9;padding-bottom: 20px;margin-top: 20px">
+		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border-bottom:1px dashed #f4f2e8;margin-bottom: 20px;">
+		  			<h1 style="color:#cab78c;">交易提醒</h1>
 		  		</el-col>
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
 		  			近期出售：所有订单
@@ -84,21 +84,21 @@
 		  		</el-col>
 	  		</el-col>
 	  	</el-col>
-	  	<el-col :xs="12" :sm="12" :md="12" :lg="12">
-	  		<el-col :xs="13" :sm="13" :md="13" :lg="13" style="border:1px solid #ddd;padding-bottom: 20px;">
+	  	<el-col :span="9" style="padding: inherit;margin-left: 38px;">
+	  		<el-col :span="24" style="border:1px solid #ddd;padding-bottom: 20px;">
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border-bottom:1px solid #ddd;margin-bottom: 20px;">
-		  			<h1>我的分销商</h1>
+		  			<h1 style="color:#cab78c;">我的分销商</h1>
 		  		</el-col>
-		  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
+		  		<el-col :span="24">
 		  			<el-col v-if="dlsList === []">暂无消息</el-col>
 		  			<el-col v-else :xs="24" :sm="24" :md="24" :lg="24" v-for="item in dlsList" style="margin-top: 20px;">
-		  				<el-col :xs="5" :sm="5" :md="5" :lg="5">
-		  				<img v-if="item.coreUser.headImg === null" style="width:50px;border-radius: 50px;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
-		  				<img v-else :src="item.coreUser.headImg">
+		  				<el-col :span="4">
+		  				<img v-if="item.coreUser.headImg === null" style="width:44px;height:44px;border-radius: 50px;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
+		  				<img v-else :src="item.coreUser.headImg" style="width:44px;height:44px;border-radius: 50px;">
 		  				</el-col>
-		  				<el-col :xs="5" :sm="5" :md="5" :lg="11" style="margin-top: 15px;">{{item.coreUser.nickName}}</el-col>
-		  				<el-col :xs="5" :sm="5" :md="5" :lg="2" style="margin-top: 15px;">{{item.shopRoleName}}</el-col>
-		  				<el-col :xs="5" :sm="5" :md="5" :lg="5" style="margin-top: 15px;"><el-button type="text" size="small">查看更多</el-button></el-col>
+		  				<el-col :span="8" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; ">{{item.coreUser.nickName}}</el-col>
+		  				<el-col :span="6" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; ">{{item.shopRoleName}}</el-col>
+		  				<el-col :span="6" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; "><el-button type="text" size="small" style="color: #9f3333;">查看更多</el-button></el-col>
 		  			</el-col>
 		  		</el-col>
 	  		</el-col>

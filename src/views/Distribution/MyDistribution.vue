@@ -1,5 +1,8 @@
 <template>
 	<section>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			我的分销
+		</el-col>
 	<el-dialog title="输入密码" v-model="mimayanz" :close-on-click-modal="false" :show-close='false'>
 		<el-form label-width="100px">
 			<el-form-item label="密码">

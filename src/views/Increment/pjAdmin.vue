@@ -1,5 +1,8 @@
 <template>
 	<section>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			评价管理
+		</el-col>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true" :model="filters">
@@ -25,7 +28,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;" id="table">
 			<el-table-column prop="goodsId" label="商品编号">
 			</el-table-column>
 			<el-table-column prop="coreUser.realName" label="买家">

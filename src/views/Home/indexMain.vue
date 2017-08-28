@@ -1,10 +1,10 @@
 <template>
-	<section style="background: #f7f7f7;">
+	<section>
 		<!--顶部数据-->
 		<el-row :gutter="20" class="main_top">
-			<el-col :span="4">
+			<el-col :span="6">
 				<div class="grid-content bg-purple Finance">
-					<p>店铺会员人数</p>
+					<p>会员人数</p>
 					<p>{{memberCount}}</p>
 					<p>
 						<span>{{memberPercentage}}%</span>
@@ -12,7 +12,7 @@
 					</p>
 				</div>
 			</el-col>
-			<el-col :span="4">
+			<el-col :span="6">
 				<div class="grid-content bg-purple Finance">
 					<p>总营业额</p>
 					<p>{{sumTotalMoney}}</p>
@@ -22,9 +22,9 @@
 					</p>
 				</div>
 			</el-col>
-			<el-col :span="4">
+			<el-col :span="6">
 				<div class="grid-content bg-purple Finance">
-					<p>店铺访问量</p>
+					<p>点击量</p>
 					<p>{{visitCount}}</p>
 					<p>
 						<span>{{visitPercentage}}%</span>
@@ -32,7 +32,7 @@
 					</p>
 				</div>
 			</el-col>
-			<el-col :span="4">
+			<el-col :span="6">
 				<div class="grid-content bg-purple Finance">
 					<p>成交量</p>
 					<p>{{sumTotalQuantity}}</p>
@@ -49,7 +49,7 @@
 				<div class="grid-content bg-purple">
 					<div style="float:left" class="statistics_title_left">
 						<span>财务报表</span>
-						<span>{{baobiaoName}}</span>
+						<!--<span>{{baobiaoName}}</span>-->
 					</div>
 					<div style="float:right;margin-right: 2%;" class="statistics_title_right">
 						<span class="wrapper">
@@ -64,17 +64,17 @@
 				<div class="grid-content bg-purple-light">
 					<el-row>
 						<el-col :span="16">
-							<div id="chartColumn" style="width:100%; height:650px;"></div>
+							<div id="chartColumn" style="width:100%; height:480px;"></div>
 						</el-col>
 						<el-col :span="8">
-							<div id="chartPie" style="width:100%; height:650px;"></div>
+							<div id="chartPie" style="width:100%; height:480px;"></div>
 						</el-col>
 					</el-row>
 				</div>
 			</el-col>
 		</el-row>
 		<el-row class="statistics_bottom">
-			<el-col :span="7" style="margin-top: 0;">
+			<el-col :span="8" style="margin-top: 0;">
 				<div class="grid-content bg-purple" style="margin: auto;overflow-y: auto;">
 					<div class="statistics_bottom_left_top">待办事项</div>
 					<div class="statistics_bottom_main">
@@ -84,7 +84,7 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :span="16" style="float:right;margin-top: 0;overflow-y: auto;">
+			<el-col :span="15" style="float:right;margin-top: 0;overflow-y: auto;">
 				<div class="grid-content bg-purple">
 					<div class="statistics_bottom_left_top">订单物流</div>
 					<div class="statistics_bottom_main">
@@ -517,7 +517,7 @@
                         orient: 'vertical',
                         left: 'left',
                         // data: this.nameAll
-                         data:this.parName
+//                         data:this.parName
                     },
                     series: [
                         {
@@ -598,12 +598,13 @@
 				padding: 0;
 				color: #6a7c8f;
 			}
-			p:nth-child(1) {  font-size: 14px;  }
-			p:nth-child(2) {  font-size: 36px;font-weight: 900  }
+			p:nth-child(1) {  font-size: 12px;color: #616161;  }
+			p:nth-child(2) {  font-size: 28px;color: #9f3333; }
 			p:nth-child(3) {
-				font-size: 14px;
+				font-size: 12px;
+				color: #616161;
 				span:nth-child(1){
-					color: #1abb9c;
+					color: #cab78c;
 				}
 			}
 		}
@@ -636,21 +637,19 @@
 	}
 	.statistics {
 		font-family: "Microsoft YaHei";
-		border: 1px solid #cdcdcd;
-		box-shadow: 0 2px 10px rgba(0,0,0,.1);
+		border: 1px solid #e6eef9;
 		.statistics_img , .statistics_title {
 			margin-top: 0;
 		}
 		.statistics_title {
-			height:70px;
-			border-bottom: 1px solid #cdcdcd;
-			line-height: 70px;
+			height:60px;
+			border-bottom: 1px dashed #f4f2e8;
+			line-height: 60px;
 			.statistics_title_left {
-				height:70px;
+				height:60px;
 				span:nth-child(1) {
-					font-size: 30px;
-					font-weight: 900;
-					color: #6a7c8f;
+					font-size: 20px;
+					color: #cab78c;
 					margin: 0 20px;
 				}
 				span:nth-child(2) {
@@ -666,17 +665,15 @@
 	.statistics_bottom {
 		font-family: "Microsoft YaHei";
 		margin-top: 30px;
-		height:720px;
-		margin-bottom: 100px;
+		height:454px;
 		.grid-content {
-			border: 1px solid #cdcdcd;
-			box-shadow: 0 2px 10px rgba(0,0,0,.1);
-			height:720px;
+			border: 1px solid #e6eef9;
+			height:454px;
 			.statistics_bottom_left_top {
 				height:70px;
-				font-size: 30px;
+				font-size: 20px;
 				font-weight: 900;
-				color: #6a7c8f;
+				color: #cab78c;
 				padding: 0 5%;
 				border-bottom: 1px solid #cdcdcd;
 				line-height: 70px;
@@ -692,16 +689,15 @@
 					margin: auto;
 				}
 				li {
-					height:64px;
-					line-height: 64px;
-					font-size: 18px;
+					height:34px;
+					line-height: 34px;
+					font-size: 14px;
 					color: #333;
 					white-space:nowrap;
 					text-overflow:ellipsis;
 					-o-text-overflow:ellipsis;
 					overflow: hidden;
 					width:100%;
-					border-bottom: 1px solid #cdcdcd;
 				}
 			}
 		}

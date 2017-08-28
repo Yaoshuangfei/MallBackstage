@@ -1,16 +1,24 @@
 <template>
   <section>
-    <!--工具条-->
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-      <el-form :inline="true" :model="filters">
+    <el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+      首页商品
+      <el-form :inline="true" :model="filters" style="position: absolute;top:6px;right:0;">
         <el-form-item>
-          <el-button type="primary" v-on:click="addBtn">新增</el-button>
+          <el-button type="primary" v-on:click="addBtn" style="background: transparent;border: transparent;">+  添加</el-button>
         </el-form-item>
       </el-form>
     </el-col>
+    <!--工具条-->
+    <!--<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">-->
+      <!--<el-form :inline="true" :model="filters">-->
+        <!--<el-form-item>-->
+          <!--<el-button type="primary" v-on:click="addBtn">新增</el-button>-->
+        <!--</el-form-item>-->
+      <!--</el-form>-->
+    <!--</el-col>-->
 
     <!--列表-->
-    <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+    <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;">
       <el-table-column prop="indexStyleId" :formatter='formatter' label="位置">
       </el-table-column>
       <el-table-column prop="goodsName" label="商品名称">
@@ -36,7 +44,7 @@
     </el-col>
 
     <!--编辑界面-->
-    <el-dialog title="新增" v-model="editFormVisible" :close-on-click-modal="false" >
+    <el-dialog id="addBanner" title="新增" v-model="editFormVisible" :close-on-click-modal="false" >
       <el-form :model="orderDetails" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="位置">
             <el-select v-model="filters.type" clearable>

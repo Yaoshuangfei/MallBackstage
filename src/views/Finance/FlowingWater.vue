@@ -22,49 +22,52 @@
 					<el-button type="primary" @click="getlist">查询</el-button>
 					<el-button type="primary">导出</el-button>
 				</el-form-item>
-				<el-form-item label="店铺营业额：" style="margin-right: 40px">
-				    {{totalMoney}}元
-				</el-form-item>
-				<el-form-item label="店铺可提现金额：" style="margin-right: 40px">
-				    {{availableIncome}}元
-				</el-form-item>
-				<el-form-item label="已提现：" style="margin-right: 40px">
-				    {{amount}}元
-				</el-form-item>
-				<el-form-item label="冻结金额：" style="margin-right: 40px">
-				    {{frozenIncome}}元
-				</el-form-item>
+				<div>
+					<el-form-item label="店铺营业额：" style="margin-right: 40px">
+						{{totalMoney}}元
+					</el-form-item>
+					<el-form-item label="店铺可提现金额：" style="margin-right: 40px">
+						{{availableIncome}}元
+					</el-form-item>
+					<el-form-item label="已提现：" style="margin-right: 40px">
+						{{amount}}元
+					</el-form-item>
+					<el-form-item label="冻结金额：" style="margin-right: 40px">
+						{{frozenIncome}}元
+					</el-form-item>
+				</div>
+
 			</el-form>
 		</el-col>
-		<el-col :span="24">
-			<el-col :span="4" style="margin-left: 20px">订单编号</el-col>
+		<el-col :span="24" style="background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;">
+			<el-col :span="6" style="margin-left: 20px">订单编号</el-col>
 			<el-col :span="2">用户名</el-col>
 			<el-col :span="3">手机号</el-col>
 			<el-col :span="2">金额</el-col>
-			<el-col :span="3">手续费</el-col>
+			<el-col :span="1">手续费</el-col>
 			<el-col :span="3">交易时间</el-col>
 			<el-col :span="3">本单利润</el-col>
 			<el-col :span="3">店铺余额</el-col>
 		</el-col>
 		<el-col v-for="item in orderInformation" :span="24" style="margin-top: 20px;border:1px solid #ddd;">
-			<el-col :span="24" style="height: 40px;line-height: 40px">
-				<el-col :span="4" style="margin-left: 20px">{{item.tradeNo}}</el-col>
-				<el-col :span="2">{{item.coreUserName}}</el-col>
-				<el-col :span="3">{{item.coreUserMobile}}</el-col>
-				<el-col :span="2">{{item.totalMoney}}</el-col>
-				<el-col :span="3">{{item.serviceFee}}</el-col>
-				<el-col :span="3">{{new Date(item.createTime).toLocaleString()}}</el-col>
-				<el-col :span="3">{{item.mallProfits}}</el-col>
-				<el-col :span="3">{{item.storeIncome+item.freezeIncome}}</el-col>
+			<el-col :span="24" style="height: 62px;margin-top: 40px;font-size: 14px;color: #616161;">
+				<el-col :span="6" style="margin-left: 20px">{{item.tradeNo}}</el-col>
+				<el-col :span="2" class="center">{{item.coreUserName}}</el-col>
+				<el-col :span="3" class="center">{{item.coreUserMobile}}</el-col>
+				<el-col :span="2" class="center">{{item.totalMoney}}</el-col>
+				<el-col :span="1" class="center">{{item.serviceFee}}</el-col>
+				<el-col :span="3" class="center">{{new Date(item.createTime).toLocaleString()}}</el-col>
+				<el-col :span="3" class="center">{{item.mallProfits}}</el-col>
+				<el-col :span="3" class="center">{{item.storeIncome+item.freezeIncome}}</el-col>
 			</el-col>
-			<el-col :span="24" style="border:1px solid #ddd;background: #eee;" v-if="item.maps.length !== 0" v-for="items in item.maps">
+			<el-col :span="24" style="border-top:1px dashed #f4f2e8;" v-if="item.maps.length !== 0" v-for="items in item.maps">
 				<el-col :span="3" style="margin-left: 20px;margin-top: 20px;margin-bottom: 20px">分佣明细</el-col>
 				<el-col :span="13">
-					<el-col :span="24" style="margin-top: 10px;" v-for="itemfy in items.commissions">		
-						<el-col :span="24" style="margin-top: 10px;" v-for="itemlx in itemfy.commissionsByType">
-							<el-col :span="4">{{itemlx.userName}}</el-col>
-							<el-col :span="4">{{itemlx.remark}}</el-col>
-							<el-col :span="4">{{itemlx.quota}}</el-col>
+					<el-col :span="24" style="margin-top: 10px;" v-for="itemfy in items.commissions">
+						<el-col :span="24" style="margin-bottom: 10px;" v-for="itemlx in itemfy.commissionsByType">
+							<el-col :span="8">{{itemlx.userName}}</el-col>
+							<el-col :span="8">{{itemlx.remark}}</el-col>
+							<el-col :span="6">{{itemlx.quota}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -358,5 +361,5 @@
 </script>
 
 <style>
-	
+	.center {text-align: center;}
 </style>

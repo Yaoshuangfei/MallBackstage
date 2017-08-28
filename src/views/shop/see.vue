@@ -1,14 +1,19 @@
 <template>
   <section>
-    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px" :rules="rules"  ref="filters">
-      <el-form-item label="店铺名称" prop="name">
+    <el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+      店铺详情
+    </el-col>
+    <el-form :model="filters" label-width="110px"  :rules="rules"  ref="filters">
+      <el-form-item label="店铺名称" prop="name" >
         <el-input v-model="filters.name" style="width:400px"></el-input>
+        <span class="text">店铺名称请控制长度不超过20字</span>
       </el-form-item>
       <el-form-item label="所属分类">
         <el-input v-model="filters.pertainType" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="主营商品">
-        <el-input v-model="filters.marketingGoods"  type="textarea" style="width:400px"></el-input>
+        <el-input v-model="filters.marketingGoods"  type="textarea" style="width:784px;height:64px;resize: none;"></el-input>
+        <div class="text" style="margin-left: 10px;">主营商品关键字（Tag）有助于搜索店铺时找到您的店铺；关键字最多可输入50字，请用“，”进行分隔，例如“男装，女装，童装”</div>
       </el-form-item>
       <!-- <img :src="filters.logo"> -->
       <el-form-item label="店铺logo" prop="url">
@@ -25,6 +30,7 @@
       </el-form-item>
       <el-form-item label="详细地址" prop="address">
         <el-input v-model="filters.address" style="width:400px"></el-input>
+        <span class="text">不必重复填写所在地区</span>
       </el-form-item>
       <el-form-item label="客服电话" prop="phone">
         <el-input v-model="filters.phone" style="width:400px"></el-input>
@@ -440,6 +446,8 @@
 <style>
   
   .el-form-item__label{
-    text-align: left;
+    text-align: right;
+    margin-right: 10px;
   }
+  .text {color: #ababab;font-size: 12px;}
 </style>

@@ -14,16 +14,16 @@
 		</el-col>
 
 		<!--列表-->
-		<el-col :span="24">
-			<el-col :span="4" :offset="4">商品名称</el-col>
-			<el-col :span="2">价格</el-col>
-			<el-col :span="2" style="margin-left: 20px">库存</el-col>
-			<el-col :span="2" style="margin-left: 40px">操作</el-col>
+		<el-col :span="24" style="background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;">
+			<el-col :span="8">商品名称</el-col>
+			<el-col :span="2" :offset="2">价格</el-col>
+			<el-col :span="2" :offset="2">库存</el-col>
+			<el-col :span="7" :offset="3" style="margin-left: 20px">操作</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
-			<el-col :span="24"  class="table_div_head">
+			<el-col :span="24"  class="table_div_head" style="background: #fff;">
 				<el-col :span="6">订单编号：{{item.goodsNo}}</el-col>
-				<el-col :span="5">下单时间：{{item.createTime}}</el-col>
+				<el-col :span="10">下单时间：{{item.createTime}}</el-col>
 				<!-- <el-col :span="3" :offset="10">
 					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
 						<el-button style="margin-top:-5px"  type="text">查看下级</el-button>
@@ -34,12 +34,12 @@
 				<el-col :span="3" >
 					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture">
 				</el-col>
-				<el-col :span="4" :offset="3" class="describe">
+				<el-col :span="6" :offset="1" class="describe">
 				{{item.name}}
 				</el-col>
-				<el-col :offset="1" :span="3" class="describe">{{item.price}}</el-col>
-				<el-col :span="2" class="describe">{{item.storage}}</el-col>
-				<el-col :span="7" class="describe" :offset="1">
+				<el-col style="margin-left: 20px;" :span="3" class="describe">{{item.price}}</el-col>
+				<el-col :span="2" :offset="1" class="describe">{{item.storage}}</el-col>
+				<el-col :span="5" :offset="1" class="describe" >
 					<el-button type="text" @click="seeBtn(item.id)">查看</el-button>
 					<el-button type="text" @click="editBtn(item.id)">编辑</el-button>
 					<el-button type="text" @click="topBtn(item.id)">上架</el-button>

@@ -1,32 +1,35 @@
 <template>
 	<section>
-		<el-row :gutter="10" style="margin-top: 40px">
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			店铺样式管理
+		</el-col>
+		<el-row :gutter="10">
 			<el-col :xs="15" :sm="15" :md="15" :lg="15">
-				<el-col :xs="24" :sm="24" :md="24" :lg="24">
-					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块一</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8" v-for="item in selectOne">
+				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border: 1px solid #e6eef9;margin-bottom: 20px;">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" style="text-align: center;height:57px;line-height: 57px;border-bottom: 1px dashed #f4f2e8;font-size: 20px;color: #cab78c;">模块一</el-col>
+					<el-col :xs="12" :sm="12" :md="12" :lg="12" v-for="item in selectOne" style="text-align: center;">
 							<img class="shopstyle" :src="item.picture">
-						<div style="margin-left: 60px">
+						<div>
 							<el-button type="text" size="small" @click="oneBtn(item)">使用</el-button>
 							<!-- <el-button style="margin-left: 40px" type="text" size="small">预览</el-button> -->
 						</div>
 					</el-col>
 				</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24">
-					<el-col :xs="24" :sm="24" :md="24" :lg="24">模块二</el-col>
-					<el-col :xs="8" :sm="8" :md="8" :lg="8" v-for="item in selectTwo">
+				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="border: 1px solid #e6eef9;margin-bottom: 20px;">
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" style="text-align: center;height:57px;line-height: 57px;border-bottom: 1px dashed #f4f2e8;font-size: 20px;color: #cab78c;">模块二</el-col>
+					<el-col :xs="12" :sm="12" :md="12" :lg="12" v-for="item in selectTwo" style="text-align: center;">
 						<img class="shopstyle" :src="item.picture">
-						<div style="margin-left: 60px">
+						<div>
 							<el-button type="text" size="small" @click="twoBtn(item)">使用</el-button>
 							<!-- <el-button style="margin-left: 40px" type="text" size="small" @click="seeBtn(scope.$index, scope.row)">预览</el-button> -->
 						</div>
 					</el-col>
 				</el-col>
 			</el-col>
-		    <el-col :xs="9" :sm="9" :md="9" :lg="9">
-		    	<el-col :xs="24" :sm="24" :md="24" :lg="24">预览</el-col>
+		    <el-col :xs="9" :sm="9" :md="9" :lg="9" style="border: 1px solid #e6eef9;margin-bottom: 20px;">
+		    	<el-col :xs="24" :sm="24" :md="24" :lg="24" style="text-align: center;height:57px;line-height: 57px;border-bottom: 1px dashed #f4f2e8;font-size: 20px;color: #cab78c;">预览</el-col>
 		    	<el-col :xs="24" :sm="24" :md="24" :lg="24">
-		    		<div class="ylback">
+		    		<div class="ylback" style="margin-top: 20px;">
 		    			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-left: 18px;margin-top: 230px">
 				    		<img style="width: 256px;height:150px" :src="oneImg">
 				    		<img style="width: 256px;height:150px" :src="twoImg">
@@ -336,7 +339,6 @@
 	width: 200px;
 	height: 200px;
 	/*border: 1px solid #ddd;*/
-	margin-left: 20px;
 	margin-top: 20px;
 	margin-bottom: 20px
 }

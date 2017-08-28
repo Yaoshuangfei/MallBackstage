@@ -21,26 +21,26 @@
 				<el-form-item>
 				    <el-input v-model="filters.name"></el-input>
 				</el-form-item>
-				<el-form-item>
+				<el-form-item style="margin-right: inherit;">
 					<el-button type="primary" v-on:click="getlist">查询</el-button>
 					<el-button type="primary">导出订单</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
-		<el-col :span="24">
-			<el-col :span="4" :offset="4">商品详情</el-col>
-			<el-col :span="2">单价</el-col>
-			<el-col :span="2">数量</el-col>
-			<el-col :span="2">买家</el-col>
-			<el-col :span="2" style="margin-left: 20px">订单总价</el-col>
-			<el-col :span="2">状态</el-col>
+		<el-col :span="24" style="background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;">
+			<el-col style="width:340px;">商品详情</el-col>
+			<el-col style="width:98px;">单价</el-col>
+			<el-col style="width:90px;">数量</el-col>
+			<el-col style="width:137px;">买家</el-col>
+			<el-col style="width:180px;">订单总价</el-col>
+			<el-col style="width:84px;">状态</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：{{item.id}}</el-col>
-				<el-col :span="5">下单时间：{{item.payTime}}</el-col>
-				<el-col :span="1" :offset="9">{{item.totalMoney}}</el-col>
-				<el-col :span="2" :offset="1">
+				<el-col :span="7">下单时间：{{item.payTime}}</el-col>
+				<el-col :span="1" :offset="6">{{item.totalMoney}}</el-col>
+				<el-col :span="2" :offset="2">
 					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
@@ -50,13 +50,13 @@
 				<el-col :span="3">
 					<img style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
 				</el-col>
-				<el-col :span="6" :offset="1" class="describe_fiast">
+				<el-col style="width:180px;" :offset="1" class="describe_fiast">
 				{{items.productName}}
 				</el-col>
-				<el-col :offset="1" :span="3" class="describe">{{items.productPrice}}</el-col>
-				<el-col :span="2" class="describe">{{items.quantity}}</el-col>
-				<el-col :span="3" class="describe">{{item.consignee}}</el-col>
-				<el-col :span="2" :offset="3" class="describe">{{items.orderStatus}}</el-col>
+				<el-col style="text-align: center;width:98px;" class="describe">{{items.productPrice}}</el-col>
+				<el-col style="text-align: center;width:90px;" class="describe">{{items.quantity}}</el-col>
+				<el-col style="text-align: center;width:137px;" class="describe">{{item.consignee}}</el-col>
+				<el-col style="text-align: center;width:84px;margin-left: 190px;" class="describe">{{items.orderStatus}}</el-col>
 			</el-col>
 		</el-col>
 		<!--工具条-->
@@ -363,14 +363,12 @@
 <style>
 	.table_div{
 		margin-top: 20px;
-		width: 1200px;
 		border: 1px solid #aaa;
 		padding-bottom: 20px;
 	}
 	.table_div_head{
 		padding-top:15px;
 		padding-left: 40px;
-		width: 1200px;
 		height:50px;
 		border-bottom: 1px solid #aaa;
 		background-color: #eee;

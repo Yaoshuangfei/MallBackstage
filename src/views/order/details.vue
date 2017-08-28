@@ -54,7 +54,7 @@
 			<el-col :span="24">{{item.AcceptTime}}</el-col>
 		</el-col>
 		<el-col :span="24" v-show="fyShow" style="margin-left: 40px;color: #aaa;margin-top: 10px">
-			<el-table :data="fenytable" border highlight-current-row style="width: 90%;min-width: 1080px;">
+			<el-table :data="fenytable" border highlight-current-row style="width: 90%;">
 			<el-table-column prop="nickName" label="用户名">
 			</el-table-column>
 			<el-table-column prop="totalMoney" label="分佣金额">
@@ -389,7 +389,6 @@
 		margin-top: 20px;
 	}
 	.time{
-		width: 1130px;
 		margin-left: 20px;
 		margin-top: 20px;
 		padding-bottom: 10px;
@@ -397,12 +396,10 @@
 	.Payment_method{
 		border-top: 1px solid #eee;
 		border-bottom: 1px solid #eee;
-		/*color: #aaa;*/
-		width: 1130px;
-		margin-left: 20px;
 		margin-top: 20px;
 		padding-bottom: 10px;
 		padding-top: 10px;
+		padding-left: 20px;
 	}
 	.size{
 		color: #bbb;
@@ -416,41 +413,35 @@
 		width: 50px;
 		height: 50px;
 		border: 1px solid #ddd;
-		margin-left: 20px;
 	}
 	.commodity{
 		border-bottom: 1px solid #ddd;
-		width: 1130px;
-		margin-left: 20px;
 		margin-top: 20px;
+		padding-left: 20px;
 		padding-bottom: 10px;
 	}
 	.detalis_order{
-		margin-left: 100px;
+		margin-left: 20px;
 		margin-top: 40px;
-		width: 1200px;
+		width: 100%;
 		height:1600px;
 		border: 1px solid #aaa;
 		border-radius: 10px;
 	}
 	.detalis_order_top{
 		border-bottom: 1px solid #aaa;
-		width: 1110px;
 		height:50px;
 		line-height: 50px;
 		font-size: 18px;
 		color: #20a0ff;
 		margin-left: 20px;
-		padding-left:20px;
 	}
 	.order_information{
 		border: 1px solid #ddd;
-		width:1130px;
 		height:40px;
 		line-height: 40px;
 		font-size: 14px;
 		color: #20a0ff;
-		margin-left: 20px;
 		padding-left:20px;
 	}
 </style>

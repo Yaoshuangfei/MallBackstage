@@ -1,5 +1,8 @@
 <template>
 	<section>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;text-align: center;margin-bottom: 20px;">
+			请选择商品类别
+		</el-col>
 		<el-col :span="24" v-show="next">
 			<el-col :span="24" class="Choice_div">
 				<el-col :span="6" class="Choice">
@@ -32,7 +35,7 @@
 				</el-col>
 				<el-col :span="24" class="head_text">
 					<el-col :span="2" class="leftg_text">商品品牌：</el-col></el-col>
-				<el-col :span="24" :offset="2" style="margin-top: 10px">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>
+				<el-col :span="24"  style="margin-top: 10px;padding-left: 20px;">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>
 				<el-col :span="18" :offset="3" class="body_text">
 					<el-col :span="19" :offset="2" style="margin-top: 10px">
 						<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
@@ -189,7 +192,7 @@
 								</el-col>
 							</el-col>
 							<el-col :span="24">
-								<el-col :span="1" style="line-height: 40px">重量：</el-col>
+								<el-col :span="2" style="line-height: 40px">重量：</el-col>
 								<el-col :span="3">
 									<el-input  v-model="weight" ></el-input>
 								</el-col>
@@ -883,35 +886,30 @@
 
 <style>
 	.Choice_div{
-		width: 1600px;
-		height: 500px;
+		height: 350px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
-		margin-left: 20px;
+		/*margin-left: 20px;*/
 	}
 	.Choice{
-		width: 350px;
-		height: 400px;
+		width: 210px;
+		height: 300px;
 		border: 1px solid #ddd;
-		margin-left: 40px;
-		margin-top: 40px;
+		margin-left: 20px;
+		margin-top: 20px;
 		overflow: auto;
 	}
 	.footer_choice{
-		width: 1600px;
 		height: 40px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
-		margin-left: 20px;
 		line-height: 40px;
 		padding-left: 20px;
 	}
 	.Commodity_information{
-		width: 1600px;
-		height: 2250px;
+		height: 2400px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
-		margin-left: 20px;
 	}
 	.head_text{
 		height: 40px;

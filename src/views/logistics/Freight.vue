@@ -1,26 +1,34 @@
 <template>
 	<section>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			运费模板
+			<el-form :inline="true" :model="filters" style="position: absolute;top:6px;right:0;">
+				<el-form-item>
+					<el-button type="primary" v-on:click="addTemplate" style="background: transparent;border: transparent;">+ 新增运费模板</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
 		<el-col :span="24" v-show="template">
 			<!--工具条-->
-			<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-				<el-form :inline="true">
-					<el-form-item>
-						<el-button type="primary" v-on:click="addTemplate">新增运费模板</el-button>
-					</el-form-item>
-				</el-form>
-			</el-col>
+			<!--<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">-->
+				<!--<el-form :inline="true">-->
+					<!--<el-form-item>-->
+						<!--<el-button type="primary" v-on:click="addTemplate">新增运费模板</el-button>-->
+					<!--</el-form-item>-->
+				<!--</el-form>-->
+			<!--</el-col>-->
 			<el-col :span="24" style="margin-bottom: 20px">件数模板</el-col>
 			<!--列表-->
 			<el-col v-for="item in ceshiarry" style="margin-bottom: 40px">
-				<el-col :span="24" style="border: 1px solid #ddd;height: 40px;line-height: 40px">
-					<el-col :span="1" :offset="1" style="">
+				<el-col :span="24" style="border: 1px solid #ddd;height: 40px;line-height: 40px;background: #f4f2e8;">
+					<el-col :span="4"  :offset="1" style="">
 						{{item.name}}
 					</el-col>
-					<el-col :span="7" :offset="15" style="">
-						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor">设为默认的运费模板 | </span> <!-- <span class="btncolor">修改 | </span> --> <span class="btncolor" @click="deldetBtn(item)">删除</span>
+					<el-col :span="15"  style="float:right;text-align: right;padding-right: 20px;font-size: 12px;color: #616161;">
+						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor" style="font-size: 14px;margin-left: 50px; ">设为默认的运费模板 | </span>  <span style="font-size: 14px;" class="btncolor">修改 | </span>  <span style="font-size: 14px;" class="btncolor" @click="deldetBtn(item)">删除</span>
 					</el-col>
 				</el-col>
-				<el-table :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
+				<el-table :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;">
 					<el-table-column prop="mode" :formatter='formatter' label="运送方式">
 					</el-table-column>
 					<el-table-column prop="data1" label="运送到">
@@ -970,7 +978,7 @@
 
 <style>
 	.btncolor{
-		color: #20a0ff;
+		color: #9f3333;
 		cursor: pointer;
 	}
 	.left_temp{

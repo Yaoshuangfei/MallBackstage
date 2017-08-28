@@ -1,17 +1,18 @@
 <template>
 	<section>
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-			<el-form :inline="true" :model="filters">
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			Banner
+			<el-form :inline="true" :model="filters" style="position: absolute;top:6px;right:0;">
 				<el-form-item>
-					<el-button type="primary" v-on:click="addbanner">添加</el-button>
+					<el-button type="primary" v-on:click="addbanner" style="background: transparent;border: transparent;">+  添加</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
+		<!--工具条-->
 
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column type="index">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;">
+			<el-table-column type="index" label="序号" width="80px;">
 			</el-table-column>
 			<el-table-column prop="picture" label="图片">
 				<template scope="scope">
@@ -40,8 +41,8 @@
 			</el-pagination>
 		</el-col>
 		<!--新增banner-->
-		<el-dialog title="添加banner" v-model="addbannerdiv" :close-on-click-modal="false">
-			<el-form :model="uploadDetails" label-width="60px" :rules="editFormRules" ref="editForm">
+		<el-dialog id="addBanner" title="添加banner" v-model="addbannerdiv" :close-on-click-modal="false">
+			<el-form :model="uploadDetails" label-width="60px" :rules="editFormRules" ref="editForm" >
 				<el-form-item label="链接">
 					<el-input v-model="uploadDetails.uploadImgs" type="text" auto-complete="off"></el-input>
 				</el-form-item>
@@ -55,7 +56,7 @@
 					<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
 					<!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
 				</el-form-item>
-				<el-form-item label="图片位置">
+				<el-form-item label="位置">
 					<el-select v-model="uploadDetails.poType" placeholder="请选择">
 				    <el-option
 				      v-for="item in options"
@@ -69,7 +70,7 @@
 					<el-input v-model="uploadDetails.List" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="描述">
-					<el-input v-model="uploadDetails.information" type="text" auto-complete="off"></el-input>
+					<el-input v-model="uploadDetails.information" type="textarea" auto-complete="off" ></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -647,7 +648,7 @@
 
 <style>
 	.el-dialog--small {
-    	width: 30%;
+    	width: 600px;
     	border-radius: 10px
 	}
 	.el-form-item__label{
@@ -660,4 +661,10 @@
 		width:100px;
 		height:100px;
 	}
+	#addBanner .el-dialog__title {font-size: 16px;font-weight: inherit;color: #cab78c;}
+	#addBanner .el-dialog__header {color: #cab78c;text-align: center;border-bottom: 1px dashed #cab78c;padding-bottom: 10px;}
+	#addBanner .el-dialog__headerbtn {display: none;}
+	#addBanner .el-dialog__body {width:380px;margin: auto !important;}
+	#addBanner textarea {height:120px;resize: none;}
+	#addBanner .dialog-footer button {margin: 0 50px 20px 50px;width:92px;height:32px;}
 </style>
