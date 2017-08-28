@@ -9,7 +9,7 @@
 		<el-col :span="24" style="margin-top: 20px">
 			<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>
 			<el-col :span="4"style="margin-top: 20px;margin-left: 40px">
-			<el-button type="primary" @click="editDzBtn">修改</el-button>
+			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
 			</el-col>
 			<el-col :span="5"style="margin-top: 20px;margin-left: 40px">收货人：{{table.consignee}}</el-col>
 			<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>
@@ -134,11 +134,11 @@
 				this.addfrom.consignee = this.table.consignee
 				this.addfrom.mobile = this.table.mobile
 				this.addfrom.address = this.table.address
-				console.log(this.table)
+				// console.log(this.table)
 			},
 			editSubmit(){
 				const _this = this
-				console.log(this.addfrom)
+				// console.log(this.addfrom)
 				const params = {
 					id:this.table.id,
 					consignee:this.addfrom.consignee,
@@ -152,7 +152,7 @@
 					countyName:this.qName,
 					address:this.addfrom.address
 				}
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -160,7 +160,7 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
+                    	// console.log(data)
                     	if(data.code === 1){
                     		_this.editFormVisible = false
                     		_this.getlist()
@@ -170,10 +170,10 @@
                 });
 			},
 			handleChange(value) {
-		        console.log(value);
-		        console.log(this.addfrom.areaId)
+		        // console.log(value);
+		        // console.log(this.addfrom.areaId)
 		        this.isareaId = value[value.length-1]
-		        console.log(this.isareaId)
+		        // console.log(this.isareaId)
 		        this.areaId = value[0]
 		        this.cityId = value[1]
 		        this.provinceId = value[2]
@@ -181,21 +181,21 @@
 		        let arry1 = []
 		        for(var i = 0;i<cityData3.length;i++){
 		        	if(value[0] === cityData3[i].value){
-		        		console.log(cityData3[i].children)
+		        		// console.log(cityData3[i].children)
 		        		this.sName = cityData3[i].label
 		        		arry = cityData3[i].children
 		        	}
 		        }
 		        for(var i = 0;i<arry.length;i++){
 		        	if(value[1] === arry[i].value){
-		        		console.log(arry[i].label)
+		        		// console.log(arry[i].label)
 		        		this.shiName = arry[i].label
 		        		arry1 = arry[i].children
 		        	}
 		        }
 		        for(var i = 0;i<arry1.length;i++){
 		        	if(value[2] === arry1[i].value){
-		        		console.log(arry1[i].label)
+		        		// console.log(arry1[i].label)
 		        		this.qName = arry1[i].label
 		        	}
 		        }
@@ -224,6 +224,7 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
+                    	// console.log(data)
                     	const info = data.data
                     	_this.table = info.list[0]
                     	const arryDZ = [
@@ -231,16 +232,16 @@
                     		_this.table.city,
                     		_this.table.county
                     	]
-                    	console.log(_this.table)
-                    	console.log(_this.table.province)
-                    	console.log(_this.table.city)
-                    	console.log(_this.table.county)
+                    	// console.log(_this.table)
+                    	// console.log(_this.table.province)
+                    	// console.log(_this.table.city)
+                    	// console.log(_this.table.county)
                     	_this.addfrom.areaId = arryDZ
-                    	console.log(arryDZ)
+                    	// console.log(arryDZ)
                     	_this.table.payTime = new Date(_this.table.payTime).toLocaleString()
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
                     		_this.table.orderGoods[i].attrName = JSON.parse(_this.table.orderGoods[i].attrName)
-                    		console.log(_this.table.orderGoods[i].attrName)
+                    		// console.log(_this.table.orderGoods[i].attrName)
                     	}
                     	if(_this.table.payMethod === '0'){
                     		_this.table.payMethod = '微信支付'
@@ -266,8 +267,8 @@
                     	}else if(_this.table.status === 5){
                     		_this.table.status = '已删除'
                     	}
-                    	console.log(_this.table)
-                    	console.log(data)
+                    	// console.log(_this.table)
+                    	// console.log(data)
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
                     		if(_this.table.orderGoods[i].picture === null){
                     			_this.table.orderGoods[i].picture = 'icone.png'
@@ -279,7 +280,7 @@
 								picture:_this.table.orderGoods[i].picture
 							}
 							// console.log(_this.table.orderGoods[i].province+_this.table.orderGoods[i].city+_this.table.orderGoods[i].county)
-							console.log(params)
+							// console.log(params)
 							_this.souTraces(params)
                     	}
                     	_this.fenyList(_this.table.id)
@@ -289,7 +290,7 @@
 			// 物流信息
 			souTraces(params){
 				const _this = this
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -297,7 +298,7 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
+                    	// console.log(data)
                     	if(data.data !== null){
                     		_this.wuliuinfo = data.data.jsonArray.reverse()
                     	}
@@ -311,7 +312,7 @@
 				const params = {
 					orderId:id
 				}
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -319,7 +320,7 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
+                    	// console.log(data)
                     	_this.fenytable = data.data
                     	// _this.wuliuinfo = data.data.jsonArray.reverse()
                     }

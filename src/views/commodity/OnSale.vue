@@ -33,7 +33,7 @@
 			</el-col>
 			<el-col :span="24">
 				<el-col :span="3" >
-					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture">
+					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture[0]">
 				</el-col>
 				<el-col :span="6" :offset="1"  class="describe">
 				{{item.name}}
@@ -168,6 +168,7 @@
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+                    		_this.selectSubjectStatus[i].carouselPicture = _this.selectSubjectStatus[i].carouselPicture.split(',')
 		                	_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
 		                	if(_this.selectSubjectStatus[i].saleStatus === 1) {
 		                		_this.selectSubjectStatus[i].saleStatus = '销售中'
@@ -177,6 +178,7 @@
 		                		_this.selectSubjectStatus[i].saleStatus = '已删除'
 		                	}
 		                }
+		                console.log(_this.selectSubjectStatus)
                     }
                 });
 			},

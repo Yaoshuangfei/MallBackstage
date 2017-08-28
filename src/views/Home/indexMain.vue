@@ -225,27 +225,19 @@
         methods: {
         	//图片上传
             upload (index) {
-            	// console.log(index)
                 this.formData = new FormData()
                 let file = event.target.files[0]
-                // console.log(file)
                 const self = this
-                // const flag = this.flag
                 if (file) {
-                    console.log('存在file', file)
                     this.fileImg = file.name
-                    // console.log(this.formData)
                     this.formData.append('file', file);
                     this.submitUpload(index)
-                    console.log(this.formData);
                 } else {
                     this.fileImg = ''
-                    console.log('不存在file', file)
                     this.formData = new FormData()
                 }
             },
             submitUpload(index){
-                // this.$confirm('确认修改吗？', '提示', {}).then(() => {
                     const _this= this;
                     _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
                         progress(event) {
@@ -253,8 +245,6 @@
                     })
                         .then(response => {
                             const info = JSON.parse(response.bodyText);
-                            // const info = response.body
-                            console.log(index)
                             if(index === 1){
                             	_this.frImgurl = info.data[0].baseUri+info.data[0].uri;
                             }else if(index === 2){
@@ -264,11 +254,7 @@
                             }else if(index === 4){
                             	_this.bankImgurl = info.data[0].baseUri+info.data[0].uri;
                             } 
-							// _this.url = info.data[0].baseUri+info.data[0].uri;
-							// console.log(_this.url)
-                            // _this.UploadImg();
                         }, error => _this.$emit('complete', 500, error.message))
-                // });
             },
             clupLoad(){
             	const _this = this
@@ -284,7 +270,6 @@
             		businessLicense:this.businessImgurl,
             		bankImgW:this.bankImgurl
             	}
-            	console.log(params)
             	let url = ''
             	if(this.sfinfoId === ''){
             		url = '/api/coreUspAuthentication/add'
@@ -299,7 +284,6 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
                     	if(data.code === 1){
                     		_this.editFormVisible = false
                     	}else{
@@ -318,9 +302,7 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	const info = data.data
-                    	// console.log(data)
                     	_this.daibanList = info
-                    	// _this.total = info.total
                     }
                 });
         	},
@@ -333,10 +315,8 @@
                     data:JSON.stringify([2]),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	console.log(data)
                     	const info = data.data
                     	_this.dingdanList = info
-                    	// _this.total = info.total
                     }
                 });
         	},
@@ -346,12 +326,10 @@
 	              type:'POST',
 	              dataType:'json',
 	              url:baseUrl+"/api/admin/userCashFlow/data/analysis",
-	              // url:'http://192.168.0.107:8080/api/admin/userCashFlow/data/analysis',
 	              data:{},
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
-	                // console.log(data)
 	                _this.visitPercentage = (info.visitPercentage*100).toFixed(6)
 	                _this.visitCount = info.visitCount
 	                _this.sumTotalMoney = info.sumTotalMoney
@@ -365,7 +343,6 @@
         	},
         	click(val) {
         		this.type = val
-                console.log(val)
                 if(val === 0){
                     this.baobiaoName = '日营业额'
                 }else if(val === 1){
@@ -392,7 +369,6 @@
         			type:this.type,
         			storeId:state.storeId
         		}
-        		// console.log(params)
         		
         		$.ajax({
 	              type:'POST',
@@ -402,10 +378,7 @@
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
-	                // 线形图
-	                console.log(data)
 	                const linelist = info.analysisVOList
-	                // console.log(linelist)
 	                for(var i = 0;i<linelist.length;i++){
 	                	// 时间
                         var date=new Date(linelist[i].payTime);
@@ -419,7 +392,6 @@
                         }else{
                             _this.sj.push(date.getFullYear()+"-"+(date.getMonth()+1))
                         }
-	                	// _this.sj.push( _this.formatterTime(linelist[i].payTime))
 	                	_this.cj.push(linelist[i].moneyAll)
 	                	_this.sp.push(linelist[i].countAll)
 	                	_this.pj.push(linelist[i].avgPrice)
@@ -450,7 +422,6 @@
 
 					//饼图数据
 	                const ordlist= info.orderMalls
-	                console.log(ordlist)
 	                for(var i = 0;i<ordlist.length;i++){
 	                	const obj = {}
 	                	if(ordlist[i].orderType === 3){
@@ -476,8 +447,6 @@
 	                	_this.parName.push(obj.name)
 	                	_this.parobj.push(obj)
 	                }
-	                console.log(_this.parobj)
-	                console.log(_this.parName)
 	                _this.drawColumnChart()
 	                _this.drawPieChart()
 	              }
@@ -516,8 +485,7 @@
                     legend: {
                         orient: 'vertical',
                         left: 'left',
-                        // data: this.nameAll
-//                         data:this.parName
+						data:this.parName
                     },
                     series: [
                         {
@@ -526,13 +494,6 @@
                             radius: '55%',
                             center: ['50%', '60%'],
                             data:this.parobj,
-                            //  [
-                            //     { value: 335, name: '余额充值' },
-                            //     { value: 310, name: '商品购买' },
-                            //     { value: 234, name: '平台身份购买' },
-                            //     { value: 135, name: '补货' },
-                            //     { value: 1548, name: '便付劵充值' }
-                            // ],
                             itemStyle: {
                                 emphasis: {
                                     shadowBlur: 10,
@@ -557,7 +518,6 @@
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
 	                const info = data.data
-	                console.log(data)
 	                _this.remarkInfo = data.data.remark
 	                _this.sfinfoId = data.data.id
 	              }
@@ -565,7 +525,6 @@
             }
         },
         mounted: function () {
-        	// this.getSHinfo()
         	if(state.storeStatus === 4){
         		this.editFormVisible = true
         	}else if(state.storeStatus === 0){//待审核
@@ -578,8 +537,6 @@
         	this.getline()
         	this.getGroup()
         	this.getDDWL()
-            // this.drawPieChart()
-            // this.drawPieChart()
         },
         // updated: function () {
         //     this.drawCharts()

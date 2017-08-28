@@ -153,7 +153,6 @@
 					storeId:state.storeId,
 					name:this.name
 				}
-				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -163,7 +162,6 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(data)
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){

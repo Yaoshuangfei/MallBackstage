@@ -9,9 +9,9 @@
 		  <el-col :xs="15" :sm="15" :md="15" :lg="15">
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" style="margin-bottom: 40px" v-if="item.level !== -100">
 		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
-		  				<img :src="item.icon">
+		  				<img style="width: 100px;border:1px solid #eee;border-radius: 10px;" :src="item.icon">
 		 			</el-col>
-		 			<el-col :xs="4" :sm="4" :md="4" :lg="4">
+		 			<el-col style="margin-top: 35px" :xs="4" :sm="4" :md="4" :lg="4">
 		  				{{item.name}}
 		 			</el-col>
 		 		</el-col>
@@ -23,7 +23,7 @@
 			  <el-col :xs="15" :sm="15" :md="15" :lg="15">
 			  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" v-if="item.level === -100" style="margin-bottom: 40px">
 			  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
-			  				<img :src="item.icon">
+			  				<img style="width: 100px;" :src="item.icon">
 			 			</el-col>
 			 			<el-col :xs="4" :sm="4" :md="4" :lg="4">
 			  				{{item.name}}
@@ -94,7 +94,6 @@
 		<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false" >
 			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="角色名称：">
-				<div id = 'editor-trigger' style="height: 500px;"></div>
 					<el-input v-model="orderDetails.name" type="text" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="价格：">

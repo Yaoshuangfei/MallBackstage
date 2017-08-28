@@ -38,15 +38,12 @@
                 rules2: {
                     username: [
                         { required: true, message: '请输入账号', trigger: 'blur' },
-                        //{ validator: validaePass }
                     ],
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' },
-                        //{ validator: validaePass2 }
                     ],
                     yanzm: [
                         { required: true, message: '请输入验证码', trigger: 'blur' },
-                        //{ validator: validaePass2 }
                     ]
                 },
                 checked: true
@@ -63,7 +60,6 @@
             },
             logi() {
                 const _this = this
-                // var url  = 'http://192.168.0.106:8080/api/core/partnersLogin';
                 var url  = baseUrl+'/api/core/partnersLogin';
                 var data = {userName: this.ruleForm2.username, password: this.ruleForm2.password};
                 $.ajax({
@@ -77,7 +73,6 @@
                         if(!data.success){
                             alert(data.msg);
                         }else{
-                            // console.log(data)
                             state.storeId = data.data.storeId
                             state.id = data.data.id
                             state.storeStatus = data.data.storeStatus
@@ -94,17 +89,14 @@
                     type:'GET',
                     dataType:'json',
                     url:baseUrl+'/api/store/selectStore',
-                    // data:JSON.stringify(data),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                        // console.log(data)
                         state.commissionLine = data.data.store.commissionLine
                     }
                 });
             }
         },
         mounted() {
-            // this.getcommissionLine()
         },
     }
 

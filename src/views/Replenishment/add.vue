@@ -47,8 +47,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="20" :offset="4" style="margin-top: 40px">
-      <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
+
+    <el-col :span="24" :offset="6" style="margin-top: 40px">
+      <!-- <el-col :span="4"><el-button type="primary">修改</el-button></el-col> -->
       <el-button type="primary" @click="Preservation">保存</el-button>
     </el-col>
     <el-col :span="24" style="margin-top: 40px;border-bottom: 1px dashed #cab78c;"></el-col>
@@ -81,7 +82,7 @@
           </el-form-item>
         </el-col>
       <!--添加商品-->
-        <el-dialog title="选着补货商品" v-model="shopVisible" :close-on-click-modal="false" :show-close='false'>
+        <el-dialog title="选择补货商品" v-model="shopVisible" :close-on-click-modal="false" :show-close='false'>
           <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
@@ -138,7 +139,6 @@
     },
     methods: {
         radiochange(){
-            console.log(this.radio)
             if(this.radio === 2){
                 this.tableName = '总数量'
             }else if(this.radio === 3){
@@ -152,9 +152,8 @@
           this.getShoplist()
         },
         addShopInfo(){
-          console.log(this.value)
-          console.log(this.shopAggregate[this.value])
           this.shopVisible = false
+          this.shopAggregate[this.value].id = this.shopAggregate[this.value].goodsSpecs[0].id
           this.shopTable.push(this.shopAggregate[this.value])
         },
         // /删除图片
@@ -171,7 +170,6 @@
             saleStatus:1,
             storeId:state.storeId
           }
-          console.log(params)
           $.ajax({
                 type:'POST',
                 dataType:'json',
@@ -179,10 +177,8 @@
                 data:JSON.stringify(params),
                 contentType:'application/json;charset=utf-8',
                 success:function(data){
-                  console.log(data)
                   const info = data.data.list
                   _this.shopAggregate = info
-                  console.log(info)
                   for (var i = 0; i < info.length; i++) {
                     const obj = {}
                     obj.value = i
@@ -200,7 +196,6 @@
             storeId:state.storeId,
             introType:1
           }
-          // console.log(params)
           $.ajax({
                 type:'POST',
                 dataType:'json',
@@ -210,7 +205,6 @@
                 error: function (XMLHttpRequest, textStatus, errorThrown) {},
                 success:function(data){
                   const info = data.data
-                  console.log(info)
                   _this.table = info.shopRoles
                   if(info.pictureUrl !== null){
                       _this.CommodityPictures = info.pictureUrl.split(',')
@@ -225,7 +219,6 @@
             });
       },
       click(row){
-        console.log(row)
         for(var i = 0;i<this.table.length;i++){
             if(row === this.table[i].id){
               this.filters.price = this.table[i].addPrice
@@ -254,7 +247,6 @@
             obj.addPrice = this.table[i].addPrice
             params.shopRoles.push(obj)
           }
-          console.log(this.shopTable)
           for(var i = 0;i<this.shopTable.length;i++){
             const obj = {}
             obj.specId = this.shopTable[i].id
@@ -263,8 +255,6 @@
             params.mixedGoodsList.push(obj)
           }
           // params.pictureUrl = this.CommodityPictures.toString()
-          // console.log(this.CommodityPictures.toString())
-          console.log(params)
          $.ajax({
             type:'POST',
             dataType:'json',
@@ -274,7 +264,17 @@
             contentType:'application/json;charset=utf-8',
             error: function (XMLHttpRequest, textStatus, errorThrown) {},
             success:function(data){
-              console.log(data)
+              if(data.code === 1){
+                _this.$message({
+                  message: '保存成功',
+                  type: 'success'
+                });
+              }else{
+                _this.$message({
+                  message: data.msg,
+                  type: 'error'
+                });
+              }
             }
         });   
       },
@@ -295,8 +295,6 @@
             data:JSON.stringify(params),
             contentType:'application/json;charset=utf-8',
             success:function(data){
-              console.log(data)
-              // shopTable price name
               if(data.data.mixedGoodsList !== null){
                  for (var i = 0; i < data.data.mixedGoodsList.length; i++) {
                         const obj = {}
@@ -305,12 +303,9 @@
                         obj.id = data.data.mixedGoodsList[i].specId
                         _this.shopTable.push(obj)
                   }
-                  console.log(data.data.introduce.introType)
                   _this.radio = data.data.introduce.introType
                   _this.CommodityPictures = data.data.introduce.pictureUrl.split(',')
                   _this.showHtml = data.data.introduce.introData
-
-
               }
                   _this.initEditor()
              
@@ -337,24 +332,18 @@
         upload (event) {
             this.formData = new FormData()
             let file = event.target.files[0]
-            // console.log(file)
             const self = this
             // const flag = this.flag
             if (file) {
-                console.log('存在file', file)
                 this.fileImg = file.name
-                // console.log(this.formData)
                 this.formData.append('file', file);
-                console.log(this.formData);
                 this.submitUpload()
             } else {
                 this.fileImg = ''
-                console.log('不存在file', file)
                 this.formData = new FormData()
             }
         },
         submitUpload(){
-            // this.$confirm('确认修改吗？', '提示', {}).then(() => {
                 const _this= this;
                 _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
                     progress(event) {
@@ -362,12 +351,9 @@
                 })
                     .then(response => {
                         const info = JSON.parse(response.bodyText);
-                        console.log(info)
-                        // const info = response.body
           _this.url = info.data[0].baseUri+info.data[0].uri;
           _this.CommodityPictures.push(_this.url)
                     }, error => _this.$emit('complete', 500, error.message))
-            // });
         },
          initEditor(data) {
                 const _this = this

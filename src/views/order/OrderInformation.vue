@@ -48,7 +48,8 @@
 			</el-col>
 			<el-col :span="24" v-for="items in item.orderGoods">
 				<el-col :span="3">
-					<img style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
+					<img v-if="items.picture !== 'icon.png' " style="width: 100px;margin-left: 40px;margin-top: 30px" :src="items.picture">
+					<img v-else style="width: 100px;margin-left: 40px;margin-top: 30px" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
 				</el-col>
 				<el-col style="width:180px;" :offset="1" class="describe_fiast">
 				{{items.productName}}
@@ -177,7 +178,7 @@
 					}
 				}
 				
-				console.log(params)
+				// console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -187,10 +188,10 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	console.log(info)
+                    	// console.log(info)
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
-                    	console.log(_this.selectSubjectStatus)
+                    	// console.log(_this.selectSubjectStatus)
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
                     		if(_this.selectSubjectStatus[i].payTime !== null){
 		                		_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
@@ -219,7 +220,7 @@
 			                	}
 		                	}
 		                }
-		                console.log(_this.selectSubjectStatus)
+		                // console.log(_this.selectSubjectStatus)
                     }
                 });
 			},

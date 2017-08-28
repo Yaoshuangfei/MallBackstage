@@ -145,7 +145,6 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                	const info = data.data
-	                  	console.log(data.data)
 	                  	for(var i = 0;i<info.goodsList.length;i++){
 	                  		if(info.goodsList[i].saleStatus === 1){
 	                  			_this.xsznum = info.goodsList[i].countGroup
@@ -197,10 +196,8 @@
 		              data:JSON.stringify(params),
 		              contentType:'application/json;charset=utf-8',
 		              success:function(data){
-		                console.log(data)
 		                if(data.data.list !== null){
 		                	_this.dlsList = data.data.list
-		                	console.log(_this.dlsList)
 		                }
 		              }
 		          });

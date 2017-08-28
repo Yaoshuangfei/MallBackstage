@@ -153,7 +153,6 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                  	_this.selectOne = data.data
-	                  	console.log(_this.selectOne)
 	                }
 	            })
 	            $.ajax({
@@ -164,23 +163,18 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                  	_this.selectTwo = data.data
-	                  	console.log(_this.selectTwo)
 	                }
 	            })
 			},
 			oneBtn(row){
 				this.oneId = row.id
 				this.oneImg = row.picture
-				console.log(row)
 			},
 			twoBtn(row){
 				this.twoId = row.id
 				this.twoImg = row.picture
-				console.log(row)
 			},
 			uploadBtn(){
-				console.log(this.oneId)
-				console.log(this.twoId)
 				const _this = this
 				const params = {
 					styleOneId:this.oneId,
@@ -193,7 +187,6 @@
 	                data:JSON.stringify(params),
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
-	                  	console.log(data)
 	                }
 	            })
 			},

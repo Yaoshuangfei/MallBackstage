@@ -18,41 +18,29 @@
           <video v-if="url !== '' "  width="220" height="240" controls="controls">
               <source :src="url" type="video/mp4" />
           </video>
-          <!-- <video style="width:100px;" :src="url" type="video/mp4"></video> -->
-          <!-- <el-button type="text" @click="onSubmit">查看</el-button> -->
-          <!-- <el-button type="text" @click="onSubmit">上传</el-button> -->
-          <!-- <el-button type="text" @click="onSubmit">取消</el-button> -->
         </el-col>
       </el-col>
       <el-button type="primary" @click="uploadBtn">确认上传</el-button>
-      <el-col :span="24" style="padding-bottom: 20px;margin-top: 20px">展示的视频</el-col>
-      <el-col :span="24" style="padding-bottom: 20px;height: 300px">
+      <el-col :span="24" style="padding-bottom: 20px;margin-top: 20px">历史上传的视频</el-col>
+        <el-col :span="24" style="padding-bottom: 20px;">
         <el-col :span="3"  style="margin-right: 60px" v-for="item in urlArry">
-          <video v-if="historyArry !== [] "  width="220" height="240" controls="controls"><!-- autoplay="autoplay" 直接播放 -->
-              <source :src="item" type="video/mp4" />
-          </video>
-        </el-col>
-      </el-col>
-      <el-col :span="24" style="padding-bottom: 20px;">历史上传的视频</el-col>
-      <el-col :span="24" style="padding-bottom: 20px;">
-        <el-col :span="3"  style="margin-right: 60px" v-for="item in urlArry">
+          <el-col :span="5" :offset="12" v-if="item.index === 1">店铺</el-col>
+          <el-col :span="5" :offset="12" v-if="item.index === 2">身份</el-col>
           <video v-if="urlArry !== [] "  width="220" height="240" controls="controls"><!-- autoplay="autoplay" 直接播放 -->
-              <source :src="item" type="video/mp4" />
+              <source :src="item.url" type="video/mp4" />
           </video>
-          <!-- <video style="width:100px;" :src="url" type="video/mp4"></video> -->
-          <!-- <el-button type="text" @click="onSubmit">查看</el-button> -->
-          <!-- <el-button type="text" @click="onSubmit">上传</el-button> -->
-          <!-- <el-button type="text" @click="onSubmit">取消</el-button> -->
+          <el-button type="text" @click="onSubmit(item.index,item.url)">上传</el-button>
         </el-col>
       </el-col>
+      
   </el-form>
 
   <el-col v-if="baonian" :span="24" style="width: 100%;height: 1000px;position: absolute;top:0;background: rgba(0,0,0,.5);">
         <el-col :span="8" style="margin-top:10%;margin-left: 26%;height: 300px;width: 600px;background: #fff;border-radius: 5px">
             <el-col :span="12" :offset="8" style="margin-top: 88px;margin-bottom: 40px"><h2>是否使用上传视频功能</h2></el-col>
             <el-col :span="24">
-                <el-col :span="12" :offset="4"><el-button type="primary" @click="oneBtn">试用一个月</el-button></el-col>
-                <el-col :span="5"><el-button type="primary" @click="storeVideo">包年888元</el-button></el-col>
+                <el-col :span="5" :offset="4"><el-button :disabled="shiyong" type="primary" @click="oneBtn">试用一个月</el-button></el-col>
+                <el-col :span="5" :offset="4" ><el-button type="primary" @click="storeVideo">包年888元</el-button></el-col>
             </el-col>
         </el-col>
         <el-col v-if="passIval" :span="24" style="margin-top:-11%;margin-left: 31%;height: 150px;width: 410px;background: #eee;border-radius: 5px">
@@ -79,10 +67,11 @@
   export default {
     data() {
       return {
-        historyArry:[],
+        shiyong:false,
+        historyUrl:'',
         passIval:false,
         listLoading:true,
-        baonian:true,
+        baonian:false,
         value:'',
         pasword:'',
         formData: new FormData(),
@@ -105,16 +94,12 @@
                         console.log(this.formData)
                         console.log(file)
                         const self = this
-                        // const flag = this.flag
                         if (file) {
                           console.log('存在file', file)
-                          // this.fileImg = file.name
-                            // console.log(this.formData)
                             this.formData.append('file', file)
                             console.log(this.formData)
                             this.Uploadimg()
                         } else {
-                          // this.fileImg = ''
                           console.log('不存在file', file)
                           this.formData = new FormData()
                         }
@@ -127,14 +112,8 @@
                     })
                         .then(response => {
                             const info = JSON.parse(response.bodyText);
-                            // const info = response.body eval('(' + data + ')');
                             const arry = info.data
-                            
-                            
                             _this.url = arry[0].baseUri+arry[0].uri;
-                            // if(_this.urlArry.length <3){
-                            //     _this.urlArry.push(arry[0].baseUri+arry[0].uri)
-                            // }
                         }, error => _this.$emit('complete', 500, error.message))
             },
             // 上传视频
@@ -153,9 +132,41 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                      console.log(data)
                       if(data.code === 1){
-                         _this.getlist()
+                          _this.gethistory()
+                      }else{
+                        _this.$message({
+                          message: data.msg,
+                          type: 'error'
+                        })
+                      }
+                    }
+                });
+            },
+            onSubmit(index,url){
+              const _this = this
+                const params = {
+                    index:index,
+                    url:url
+                }
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/store/storeVideo/upload",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+                    success:function(data){
+                      if(data.code === 1){
+                          _this.gethistory()
+                      }else if(data.code === 4){
+                          _this.baonian = true
+                          _this.shiyong = true
+                      }else{
+                        _this.$message({
+                          message: data.msg,
+                          type: 'error'
+                        })
                       }
                     }
                 });
@@ -171,7 +182,6 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                      console.log(data)
                       if(data.code === 1){
                         _this.baonian = false
                       }
@@ -192,8 +202,6 @@
                 const params = {
                     payPassword:this.pasword
                 }
-
-                console.log(params)
                 $.ajax({
                     type:'POST',
                     dataType:'json',
@@ -202,7 +210,6 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                      console.log(data)
                       if(data.code === 1){
                         _this.$message({
                           message: '成功',
@@ -225,18 +232,17 @@
                 $.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"/api/store/storeVideo/selectOne",
+                    url:baseUrl+"/api/store/storeVideo/check",
                     data:JSON.stringify({}),
                     contentType:'application/json;charset=utf-8',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                      console.log(data)
-                      _this.baonian = false
-                      if(data.data !== null){
-                        if(data.data.status === 1|| data.data.status === 2){
-                                 _this.urlArry = data.data.url.split(',')
-                                 _this.baonian = false
-                          }
+                      if(data.code === 2){
+                        _this.baonian = false
+                      }else if(data.code === 4){
+                        _this.baonian = true
+                        _this.shiyong = true
+                      }else{
+                        _this.baonian = true
                       }
                     }
                 });   
@@ -256,7 +262,8 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
-                      console.log(data)
+                      _this.urlArry = data.data.list
+                      _this.historyUrl = data.data.list[0].url
                     }
                 });   
             }

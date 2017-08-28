@@ -174,19 +174,13 @@
       upload (event) {
                 this.formData = new FormData()
                 let file = event.target.files[0]
-                // console.log(file)
                 const self = this
-                // const flag = this.flag
                 if (file) {
-                    console.log('存在file', file)
                     this.fileImg = file.name
-                    // console.log(this.formData)
                     this.formData.append('file', file);
-                    console.log(this.formData);
                     this.uploadBanner()
                 } else {
                     this.fileImg = ''
-                    console.log('不存在file', file)
                     this.formData = new FormData()
                 }
             },
@@ -197,10 +191,8 @@
                   }
               })
                   .then(response => {
-                    console.log(response)
                       const info = JSON.parse(response.bodyText);
-        _this.url = info.data[0].baseUri+info.data[0].uri;
-        console.log(_this.url)
+                  _this.url = info.data[0].baseUri+info.data[0].uri;
                   }, error => _this.$emit('complete', 500, error.message))
       },
       onSubmit(){
@@ -217,7 +209,6 @@
           qq:this.filters.qq,
           content:this._html
         }
-        console.log(params)
         $.ajax({
               type:'POST',
               dataType:'json',
@@ -225,7 +216,6 @@
               data:JSON.stringify(params),
               contentType:'application/json;charset=utf-8',
               success:function(data){
-                console.log(data)
                 if(data.code === 1){
                   _this.$message({
                     message: '添加成功',
@@ -249,7 +239,6 @@
               data:JSON.stringify({}),
               contentType:'application/json;charset=utf-8',
               success:function(data){
-                console.log(data)
                 _this.filters = data.data
                 _this.url = data.data.logo
                 _this.initEditor();
@@ -428,10 +417,8 @@
                 editor.onchange = function () {
                     // 编辑区域内容变化时，实时打印出当前内容
                     _this._html = this.$txt.html()
-                    console.log(_this._html);
                 }
                 editor.create()
-                console.log(_this.filters)
                 editor.$txt.append(_this.filters.content)
             }
     },
