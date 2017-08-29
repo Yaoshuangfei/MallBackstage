@@ -3,28 +3,6 @@
     <el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;">
       店铺样式管理
     </el-col>
-    <el-col :span="24">
-      <el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 20px;color: #cab78c;">补货的商品</el-col>
-      <el-col :span="2" :offset="8"  style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
-        <el-button type="text" @click.native="shopAdd">添加</el-button>
-      </el-col>
-    </el-col>
-    <el-table :data="shopTable" highlight-current-row v-loading="listLoading">
-      <el-table-column type="index" label="序号" width="239px">
-      </el-table-column>
-      <el-table-column prop="name" label="商品名称" width="350px">
-      </el-table-column>
-      <el-table-column prop="price" label="售价" width="350px">
-        <template scope="scope">
-          <el-input type="text" class="noneborder" v-model="scope.row.price"></el-input>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-col :span="20" :offset="4" style="margin-top: 40px">
-      <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
-      <el-button type="primary" @click="Preservation">保存</el-button>
-    </el-col>
-    <el-col :span="24" style="margin-top: 40px;border-bottom: 1px dashed #cab78c;"></el-col>
     <el-col :soan="24" style="margin-top: 20px;font-size: 18px;">
       <el-col :span="2">混批设置</el-col>
     </el-col>
@@ -47,12 +25,33 @@
         </template>
       </el-table-column>
     </el-table>
-
     <el-col :span="24" :offset="6" style="margin-top: 40px">
       <!-- <el-col :span="4"><el-button type="primary">修改</el-button></el-col> -->
       <el-button type="primary" @click="Preservation">保存</el-button>
     </el-col>
     <el-col :span="24" style="margin-top: 40px;border-bottom: 1px dashed #cab78c;"></el-col>
+      <el-col :span="24">
+          <el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 20px;color: #cab78c;">补货的商品</el-col>
+          <el-col :span="2" :offset="8"  style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
+              <el-button type="text" @click.native="shopAdd">添加</el-button>
+          </el-col>
+      </el-col>
+      <el-table :data="shopTable" highlight-current-row v-loading="listLoading">
+          <el-table-column type="index" label="序号" width="239px">
+          </el-table-column>
+          <el-table-column prop="name" label="商品名称" width="350px">
+          </el-table-column>
+          <el-table-column prop="price" label="售价" width="350px">
+              <template scope="scope">
+                  <el-input type="text" class="noneborder" v-model="scope.row.price"></el-input>
+              </template>
+          </el-table-column>
+      </el-table>
+      <el-col :span="20" :offset="4" style="margin-top: 40px">
+          <el-col :span="4"><el-button type="primary">修改</el-button></el-col>
+          <el-button type="primary" @click="Preservation">保存</el-button>
+      </el-col>
+      <el-col :span="24" style="margin-top: 40px;border-bottom: 1px dashed #cab78c;"></el-col>
     <!-- <el-col :span="2" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">删除</el-col> -->
     <el-col :span="24" style="padding-top: 20px;font-size: 18px;margin-bottom: 20px;">商品图片</el-col>
     <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
