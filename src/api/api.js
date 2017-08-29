@@ -20,7 +20,6 @@ export const addUser = params => { return axios.get(`${base}/user/add`, { params
 export const  baseUrl = 'http://121.43.178.109:8110/ser';// 测试服务器
 // export const  baseUrl = 'http://123.206.115.18:8083';// 正式服务器
 // export const  baseUrl = '/apis';// 正式服务器
-<<<<<<< HEAD
 //export const  baseUrl = 'http://192.168.2.159:8080';
 
 
@@ -95,9 +94,6 @@ export const  baseUrl = 'http://121.43.178.109:8110/ser';// 测试服务器
 
 
 
-=======
-// export const  baseUrl = 'http://192.168.2.246:8080';
->>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
 
 export const  cityData3 = [{
 	value: '110000',

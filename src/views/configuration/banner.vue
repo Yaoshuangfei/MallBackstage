@@ -2,11 +2,7 @@
 	<section>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
 			Banner
-<<<<<<< HEAD
 			<el-form :inline="true" style="position: absolute;top:6px;right:0;">
-=======
-			<el-form :inline="true"  style="position: absolute;top:6px;right:0;">
->>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
 				<el-form-item>
 					<el-button type="primary" v-on:click="addbanner" style="background: transparent;border: transparent;">+  添加</el-button>
 				</el-form-item>
