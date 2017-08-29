@@ -3,7 +3,6 @@
     <el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;">
       店铺样式管理
     </el-col>
-    
     <el-col :soan="24" style="margin-top: 20px;font-size: 18px;">
       <el-col :span="2">混批设置</el-col>
     </el-col>
@@ -31,7 +30,7 @@
       <!-- <el-col :span="4"><el-button type="primary">修改</el-button></el-col> -->
       <el-button type="primary"  @click="Preservation">保存</el-button>
     </el-col>
-    <el-col :span="24" style="margin-top: 40px;border-bottom: 1px dashed #cab78c;"></el-col>
+
     <!-- <el-col :span="2" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">删除</el-col> -->
     <el-col :span="24">
       <el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 20px;color: #cab78c;">补货的商品</el-col>
@@ -169,7 +168,7 @@
             size:1000,
             name:this.name,
             saleStatus:1,
-            storeId:state.storeId
+              storeId:localStorage.getItem("storeId"),
           }
           $.ajax({
                 type:'POST',
@@ -194,7 +193,7 @@
           _this.options = []
           _this.table = []
           const params = {
-            storeId:state.storeId,
+              storeId:localStorage.getItem("storeId"),
             introType:1
           }
           $.ajax({
@@ -234,7 +233,7 @@
         const _this = this
         const params = {
             // introId:''
-            storeId:state.storeId,
+            storeId:localStorage.getItem("storeId"),
             videoUrl:'',
             pictureUrl:this.CommodityPictures.toString(),
             introData:this._html,
@@ -287,7 +286,7 @@
       getBuos(){
           const _this = this
           const params = {
-            storeId:state.storeId
+              storeId:localStorage.getItem("storeId"),
           }
           $.ajax({
             type:'POST',

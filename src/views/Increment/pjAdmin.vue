@@ -200,7 +200,7 @@
 				const params = {
 					pageNum:_this.page,
 					size:10,
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					goodsId:'',
 					mobile:'',
 					nickName:'',

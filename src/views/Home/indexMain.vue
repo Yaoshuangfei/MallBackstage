@@ -75,13 +75,17 @@
 		</el-row>
 		<el-row class="statistics_bottom">
 			<el-col :span="8" style="margin-top: 0;">
-				<div class="grid-content bg-purple" style="margin: auto;overflow-y: auto;">
+				<div class="grid-content bg-purple" >
 					<div class="statistics_bottom_left_top">待办事项</div>
 					<div class="statistics_bottom_main">
 						<ul >
 							<li style="cursor: pointer;" v-for="item in daibanList"><a :title="item.notifyContent">{{item.notifyContent}}</a></li>
 						</ul>
 					</div>
+					<el-col :span="24" class="toolbar" style="background:#fff;text-align: center;margin-top: 80px;">
+						<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total">
+						</el-pagination>
+					</el-col>
 				</div>
 			</el-col>
 			<el-col :span="15" style="float:right;margin-top: 0;overflow-y: auto;">
@@ -92,6 +96,10 @@
 							<li style="cursor: pointer;" v-for="item in dingdanList"><a :title="item.notifyContent">{{item.notifyContent}} ---{{item.notifyTitle}}</a></li>
 						</ul>
 					</div>
+					<el-col :span="24" class="toolbar" id="toolbarasd" style="background:#fff;text-align: center;margin-top: 80px;">
+						<el-pagination layout="prev, pager, next" @current-change="handleCurrentChanges" :page-size="10" :total="totals">
+						</el-pagination>
+					</el-col>
 				</div>
 			</el-col>
 		</el-row>
@@ -176,7 +184,15 @@
 				      ]
             	},
             	sfinfo:{},
+<<<<<<< HEAD
             	editFormVisible:true,//上传材料
+=======
+                total:7,
+                page: 1,
+                totals:10,
+                pages: 1,
+            	editFormVisible:false,//上传材料
+>>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
             	dashVisible:false,//待审核
             	remarkInfo:'',//未通过信息
             	sfinfoId:'',//修改身份信息ID
@@ -296,30 +312,48 @@
                 });
             },
         	getGroup(){
-        		const _this = this
+        		const _this = this;
+                const params = {
+                    pageNum :this.page,
+                    size:7,
+                    notifyTypes:'1,3,6,8,10,11'
+                }
         		$.ajax({
                     type:'POST',
                     dataType:'json',
                     url:baseUrl+"/api/notify/selectListGroup",
-                    data:JSON.stringify([1,3,6,8,10,11]),
+                    data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	const info = data.data
-                    	_this.daibanList = info
+                    	_this.daibanList = info.records;
+                        _this.total = info.total
                     }
                 });
         	},
         	getDDWL(){
-        		const _this = this
-        		$.ajax({
+                const _this = this;
+                const params = {
+                    pageNum :this.pages,
+                    size:7,
+                    notifyTypes:'2'
+                }
+                $.ajax({
                     type:'POST',
                     dataType:'json',
                     url:baseUrl+"/api/notify/selectListGroup",
-                    data:JSON.stringify([2]),
+                    data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	const info = data.data
-                    	_this.dingdanList = info
+                        console.log(data)
+                        const info = data.data
+						if(info.records.length===0){
+							$('#toolbarasd').hide();
+						}else {
+                            _this.dingdanList = info.records;
+                            _this.totals = info.total
+						}
+
                     }
                 });
         	},
@@ -332,6 +366,7 @@
 	              data:{},
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
+	                  console.log(data)
 	                const info = data.data
 	                _this.visitPercentage = (info.visitPercentage*100).toFixed(6)
 	                _this.visitCount = info.visitCount
@@ -370,7 +405,7 @@
         		_this.listAll = []//初始化线形图数据
         		const params = {
         			type:this.type,
-        			storeId:state.storeId
+                    storeId:localStorage.getItem("storeId")
         		}
         		
         		$.ajax({
@@ -530,7 +565,15 @@
                     }
 	              }
 	          });
-            }
+            },
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getGroup();
+            },
+            handleCurrentChanges(val) {
+                this.pages = val;
+                this.getDDWL();
+            },
         },
         mounted: function () {
             console.log(state.storeStatus)
@@ -540,12 +583,21 @@
         		this.dashVisible = true
         	}else if(state.storeStatus === 2){//审核未通过
         		this.addTitle = '修改身份信息'
+<<<<<<< HEAD
             }
         	this.getSHinfo()
         	this.getlist()
         	this.getline()
         	this.getGroup()
         	this.getDDWL()
+=======
+        		this.getSHinfo()
+        	}
+        	this.getlist();
+        	this.getline();
+        	this.getGroup();
+        	this.getDDWL();
+>>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
         },
         // updated: function () {
         //     this.drawCharts()

@@ -2,7 +2,7 @@
 	<section>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
 			运费模板
-			<el-form :inline="true" :model="filters" style="position: absolute;top:6px;right:0;">
+			<el-form :inline="true"  style="position: absolute;top:6px;right:0;">
 				<el-form-item>
 					<el-button type="primary" v-on:click="addTemplate" style="background: transparent;border: transparent;">+ 新增运费模板</el-button>
 				</el-form-item>
@@ -929,7 +929,7 @@
 				const _this = this
 				_this.ceshiarry = []
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					pageNum:this.page,
 					size:10,
 					name:''

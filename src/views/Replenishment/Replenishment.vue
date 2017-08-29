@@ -53,7 +53,7 @@
 				const _this = this
 				_this.table = []
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					introType:1
 				}
 				console.log(params)

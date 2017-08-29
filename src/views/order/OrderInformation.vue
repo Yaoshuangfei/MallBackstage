@@ -165,7 +165,8 @@
 				const params = {
 					pageNum:this.page,
 					size:10,
-					storeId:state.storeId,
+//					storeId:state.storeId,
+					storeId:localStorage.getItem("storeId"),
 					orderStatus:this.filters.status,
 					orderId:'',
 					expno:''
@@ -177,7 +178,6 @@
 						params.expno = this.filters.name
 					}
 				}
-				
 				// console.log(params)
 				$.ajax({
                     type:'POST',

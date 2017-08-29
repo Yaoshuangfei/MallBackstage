@@ -154,7 +154,7 @@
 					size:10,
 					name:this.name,
 					saleStatus:2,//状态
-					storeId:state.storeId
+                    storeId:localStorage.getItem("storeId"),
 				}
 				$.ajax({
                     type:'POST',

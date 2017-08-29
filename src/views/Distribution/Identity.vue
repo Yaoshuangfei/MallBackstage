@@ -333,7 +333,8 @@
 			getlist(){
 				const _this = this
 				const params = {
-					storeId:state.storeId,
+//					storeId:state.storeId,
+					storeId:localStorage.getItem("storeId"),
 					introType:0
 				}
 				console.log(params)
@@ -372,7 +373,7 @@
 			addSubmit: function () {
 				const _this = this
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					level:this.identity.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
@@ -451,7 +452,7 @@
 			shopRoleAdd() {
 				const _this = this
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					videoUrl:'',
 					pictureUrl:this.imgArry.toString(),
 					introType:0,
