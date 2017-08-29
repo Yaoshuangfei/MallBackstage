@@ -67,7 +67,8 @@
 							<div id="chartColumn" style="width:100%; height:480px;"></div>
 						</el-col>
 						<el-col :span="8">
-							<div id="chartPie" style="width:100%; height:480px;"></div>
+							<el-col :span="24" style="text-align: center;font-weight: 900;font-size: 24px;">店铺收入支出分析图</el-col>
+							<div id="chartPie" style="width:100%; height:380px;margin-top: 50px;"></div>
 						</el-col>
 					</el-row>
 				</div>
@@ -509,7 +510,7 @@
                 this.chartPie = echarts.init(document.getElementById('chartPie'));
                 this.chartPie.setOption({
                     title: {
-                        text: '店铺收入支出分析图',
+//                        text: '店铺收入支出分析图',
                         x: 'center'
                     },
                     tooltip: {

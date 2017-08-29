@@ -1,6 +1,9 @@
 <template>
   <section>
-    <el-form  label-width="180px" style="margin-left: 40px;margin-top: 40px">
+      <el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+          视频管理
+      </el-col>
+    <el-form  label-width="180px" style="margin-left: 40px;">
       <el-form-item label="展示位置">
         <el-select v-model="value" placeholder="请选择">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -35,12 +38,13 @@
       
   </el-form>
 
-  <el-col v-if="baonian" :span="24" style="width: 1000px;height: 1000px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;">
-        <el-col :span="8" style="height: 300px;width: 600px;background: #fff;border-radius: 5px;position: relative;top:50%;margin-top: -150px;left:50%;margin-left: -300px;">
-            <el-col :span="12" :offset="6" style="margin-top: 88px;margin-bottom: 40px"><h2>是否使用上传视频功能</h2></el-col>
+  <el-col v-if="baonian" :span="24" style="width: 990px;height: 1000px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;">
+        <el-col :span="8" style="height: 216px;width: 520px;background: #fff;border-radius: 5px;position: relative;top:50%;margin-top: -150px;left:50%;margin-left: -300px;">
+            <el-col :span="24" style="height:46px;line-height: 46px;border-bottom: 1px dashed #cab78c;font-size: 16px;color: #cab78c;">提示</el-col>
+            <el-col :span="24" style="text-align: center;font-size: 16px;color:#616161;margin: 40px 0; ">是否使用上传视频功能</el-col>
             <el-col :span="24">
-                <el-col :span="5" :offset="4"><el-button :disabled="shiyong" type="primary" @click="oneBtn">试用一个月</el-button></el-col>
-                <el-col :span="5" :offset="4" ><el-button type="primary" @click="storeVideo">包年888元</el-button></el-col>
+                <el-col :span="12"><el-button :disabled="shiyong"  @click="oneBtn" style="background:#cab78c;color: #fff;border: 1px solid #cab78c;">试用一个月</el-button></el-col>
+                <el-col :span="12" ><el-button  @click="storeVideo" style="background:#fff;color: #cab78c;border: 1px solid #cab78c;">包年888元</el-button></el-col>
             </el-col>
         </el-col>
         <el-col v-if="passIval" :span="24" style="margin-top:-11%;margin-left: 31%;height: 150px;width: 410px;background: #eee;border-radius: 5px">
