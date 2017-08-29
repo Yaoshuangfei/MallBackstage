@@ -44,7 +44,7 @@
 				<el-col :span="3" :offset="1" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
 				<el-col :span="1"  style="margin-left:70px">{{item.totalMoney}}</el-col>
 				<el-col :span="2"  style="margin-left:75px">
-					<router-link :to="{ name: '订单详情', params: { id: item.id }}">
+					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 1 }}">
 						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>

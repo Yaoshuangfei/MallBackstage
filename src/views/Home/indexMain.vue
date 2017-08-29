@@ -156,6 +156,7 @@
 		  </el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
 				<el-button type="primary" @click.native="clupLoad">保存</el-button>
+                <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
 		<el-dialog title="提示" v-model="dashVisible" :close-on-click-modal="false" :show-close='false'>
@@ -184,11 +185,15 @@
 				      ]
             	},
             	sfinfo:{},
+<<<<<<< HEAD
+            	editFormVisible:true,//上传材料
+=======
                 total:7,
                 page: 1,
                 totals:10,
                 pages: 1,
             	editFormVisible:false,//上传材料
+>>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
             	dashVisible:false,//待审核
             	remarkInfo:'',//未通过信息
             	sfinfoId:'',//修改身份信息ID
@@ -284,16 +289,18 @@
             		bankImgW:this.bankImgurl
             	}
             	let url = ''
+                console.log(this.sfinfoId)
             	if(this.sfinfoId === ''){
             		url = '/api/coreUspAuthentication/add'
             	}else{
             		url = '/api/coreUspAuthentication/updateDetails'
             		params.id = this.sfinfoId
             	}
+                console.log(url)
         		$.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"",
+                    url:baseUrl+url,
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
@@ -546,12 +553,17 @@
 	              type:'POST',
 	              dataType:'json',
 	              url:baseUrl+"/api/coreUspAuthentication/checkDetails",
-	              data:{},
+	              data:JSON.stringify({}),
 	              contentType:'application/json;charset=utf-8',
 	              success:function(data){
+                    console.log(data)
 	                const info = data.data
-	                _this.remarkInfo = data.data.remark
-	                _this.sfinfoId = data.data.id
+                    if(info === null){
+
+                    }else{
+    	                _this.remarkInfo = info.remark
+    	                _this.sfinfoId = info.id
+                    }
 	              }
 	          });
             },
@@ -565,18 +577,28 @@
             },
         },
         mounted: function () {
+            console.log(state.storeStatus)
         	if(state.storeStatus === 4){
         		this.editFormVisible = true
         	}else if(state.storeStatus === 0){//待审核
         		this.dashVisible = true
         	}else if(state.storeStatus === 2){//审核未通过
         		this.addTitle = '修改身份信息'
+<<<<<<< HEAD
+            }
+        	this.getSHinfo()
+        	this.getlist()
+        	this.getline()
+        	this.getGroup()
+        	this.getDDWL()
+=======
         		this.getSHinfo()
         	}
         	this.getlist();
         	this.getline();
         	this.getGroup();
         	this.getDDWL();
+>>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
         },
         // updated: function () {
         //     this.drawCharts()
