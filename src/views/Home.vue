@@ -4,12 +4,12 @@
 			<div id="main_top_name">
 				<span>{{sysUserName}}</span>，欢迎您登录商家后台管理中心！
 				<el-dropdown trigger="hover" style="float:right;">
-					<span class="el-dropdown-link userinfo-inner">退出</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-					</el-dropdown-menu>
+					<el-dropdown-item divided @click.native="logout" style="border-top: inherit;margin-top: inherit;">退出</el-dropdown-item>
+					<!--<el-dropdown-menu slot="dropdown">-->
+						<!--<el-dropdown-item>我的消息</el-dropdown-item>-->
+						<!--<el-dropdown-item>设置</el-dropdown-item>-->
+						<!--<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
+					<!--</el-dropdown-menu>-->
 				</el-dropdown>
 			</div>
 		</el-col>

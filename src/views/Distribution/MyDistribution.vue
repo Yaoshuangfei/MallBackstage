@@ -352,7 +352,7 @@
 					<el-button type="primary" v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
 				</el-col>
 		</el-col>
-		<el-col v-if="mimayanz":span="24" style="width: 990px;height: 1500px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;z-index: 9;">
+		<el-col v-if="mimayanz":span="24" style="width: 990px;height: 1200px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;z-index: 9;">
 			<el-col :span="8" style="height: 300px;width: 600px;background: #fff;border-radius: 5px;position: relative;top:20%;left:50%;margin-left: -300px;">
 				<el-col :span="24" style="text-align: center;height:78px;line-height: 78px;font-size: 24px;">请输入密码</el-col>
 				<el-col :span="24"  style=""><el-input style="width:50%;" v-model="password" type="password" auto-complete="off"></el-input></el-col>
