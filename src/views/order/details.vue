@@ -213,7 +213,7 @@
 				const params = {
 					pageNum:1,
 					size:10,
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					orderId:this.$route.params.id,
 					expno:''
 				}

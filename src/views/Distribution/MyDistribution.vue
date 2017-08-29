@@ -3,16 +3,16 @@
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
 			我的分销
 		</el-col>
-	<el-dialog title="输入密码" v-model="mimayanz" :close-on-click-modal="false" :show-close='false'>
-		<el-form label-width="100px">
-			<el-form-item label="密码">
-				<el-input v-model="password" type="password" auto-complete="off"></el-input>
-			</el-form-item>
-		</el-form>
-		<div slot="footer" class="dialog-footer" style="text-align: center;">
-			<el-button type="primary" @click.native="mimaSubmit" :loading="editLoading">确定</el-button>
-		</div>
-	</el-dialog>
+	<!--<el-dialog title="输入密码" v-model="mimayanz" :close-on-click-modal="false" :show-close='false'>-->
+		<!--<el-form label-width="100px">-->
+			<!--<el-form-item label="密码">-->
+				<!--<el-input v-model="password" type="password" auto-complete="off"></el-input>-->
+			<!--</el-form-item>-->
+		<!--</el-form>-->
+		<!--<div slot="footer" class="dialog-footer" style="text-align: center;">-->
+			<!--<el-button type="primary" @click.native="mimaSubmit" :loading="editLoading">确定</el-button>-->
+		<!--</div>-->
+	<!--</el-dialog>-->
 	<el-col v-if="allshow">
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
 			<!-- <el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length===5">新增店铺身份</el-button> -->
@@ -352,6 +352,27 @@
 					<el-button type="primary" v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
 				</el-col>
 		</el-col>
+		<el-col v-if="mimayanz":span="24" style="width: 990px;height: 1500px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;z-index: 9;">
+			<el-col :span="8" style="height: 300px;width: 600px;background: #fff;border-radius: 5px;position: relative;top:20%;left:50%;margin-left: -300px;">
+				<el-col :span="24" style="text-align: center;height:78px;line-height: 78px;font-size: 24px;">请输入密码</el-col>
+				<el-col :span="24"  style=""><el-input style="width:50%;" v-model="password" type="password" auto-complete="off"></el-input></el-col>
+				<el-col :span="24">
+					<el-col :span="5" style="margin-top:40px;position: relative;left:50%;margin-left: -60px;"><el-button type="primary" @click.native="mimaSubmit" :loading="editLoading">确定</el-button></el-col>
+				</el-col>
+			</el-col>
+			<!--<el-col v-if="passIval" :span="24" style="margin-top:-11%;margin-left: 31%;height: 150px;width: 410px;background: #eee;border-radius: 5px">-->
+				<!--<el-col :span="24" style="margin-top: 40px;margin-left: 70px">-->
+					<!--<el-col :span="5">支付密码：</el-col>-->
+					<!--<el-col :span="10"><el-input type="password" v-model="pasword"> </el-input></el-col>-->
+				<!--</el-col>-->
+				<!--<el-col :span="5" :offset="8" style="margin-top: 20px;">-->
+					<!--<el-button type="primary" @click="onPassUp">确认</el-button>-->
+				<!--</el-col>-->
+				<!--<el-col :span="5" style="margin-top: 20px;">-->
+					<!--<el-button type="primary" @click="clertBtn">取消</el-button>-->
+				<!--</el-col>-->
+			<!--</el-col>-->
+		</el-col>
 	</section>
 </template>
 
@@ -363,6 +384,7 @@
 	export default {
 		data() {
 			return {
+                baonian:true,
 				url_5:'',
 				url_51:'',
 				ruleIsUpgradeVisible_5:false,
@@ -701,7 +723,7 @@
 			addSubmit: function () {
 				const _this = this
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					level:this.ruleAll.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
@@ -885,7 +907,7 @@
 			selectRuleDist() {
 				const _this = this
 				const params = {
-					storeId:state.storeId
+                    storeId:localStorage.getItem("storeId")
 				}
 				// console.log(params)  this.initArry 判断当前值 可以做存储  orderInformation 页面展示数据
 				$.ajax({
@@ -897,6 +919,7 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                        console.log(data);
                     	const info = data.data
                     	if(info.length === 0){
                     		return

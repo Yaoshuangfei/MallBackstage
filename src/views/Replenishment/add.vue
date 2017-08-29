@@ -168,7 +168,7 @@
             size:1000,
             name:this.name,
             saleStatus:1,
-            storeId:state.storeId
+              storeId:localStorage.getItem("storeId"),
           }
           $.ajax({
                 type:'POST',
@@ -193,7 +193,7 @@
           _this.options = []
           _this.table = []
           const params = {
-            storeId:state.storeId,
+              storeId:localStorage.getItem("storeId"),
             introType:1
           }
           $.ajax({
@@ -233,7 +233,7 @@
         const _this = this
         const params = {
             // introId:''
-            storeId:state.storeId,
+            storeId:localStorage.getItem("storeId"),
             videoUrl:'',
             pictureUrl:this.CommodityPictures.toString(),
             introData:this._html,
@@ -286,7 +286,7 @@
       getBuos(){
           const _this = this
           const params = {
-            storeId:state.storeId
+              storeId:localStorage.getItem("storeId"),
           }
           $.ajax({
             type:'POST',

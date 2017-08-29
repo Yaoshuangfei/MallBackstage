@@ -86,7 +86,7 @@
 					withdrawalsWeek:this.roleId,
 					adminDiscount:parseInt(this.adminDiscount),
 					minPrice:parseInt(this.minPrice),
-					storeId:state.storeId
+                    storeId:localStorage.getItem("storeId")
 				}
 				console.log(params)
 				$.ajax({
@@ -107,7 +107,7 @@
 					withdrawalsWeek:this.roleId,
 					adminDiscount:parseInt(this.adminDiscount),
 					minPrice:parseInt(this.minPrice),
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					allocationId:this.allocationId
 				}
 				console.log(params)
@@ -152,33 +152,33 @@
 </script>
 
 <style>
-	.agen_div{
-		border: 1px solid #aaa;
-		width:200px;
-		height: 300px;
+	/*.agen_div{*/
+		/*border: 1px solid #aaa;*/
+		/*width:200px;*/
+		/*height: 300px;*/
 
-	}
-	.agen_div div:nth-child(1){
-		border: 1px solid #aaa;
-		width:100px;
-		height: 100px;
-		border-radius: 50px;
-		margin-left: 45px;
-		margin-top: 20px;
-	}
-	.agen_div div:nth-child(2){
-		width: 200px;
-		text-align: center;
-		margin-top: 20px;
-	}
-	.agen_div div:nth-child(3){
-		width: 200px;
-		text-align: center;
-		margin-top: 20px;
-	}
-	.agen_div div:nth-child(4){
-		width: 200px;
-		text-align: center;
-		margin-top: 20px;
-	}
+	/*}*/
+	/*.agen_div div:nth-child(1){*/
+		/*border: 1px solid #aaa;*/
+		/*width:100px;*/
+		/*height: 100px;*/
+		/*border-radius: 50px;*/
+		/*margin-left: 45px;*/
+		/*margin-top: 20px;*/
+	/*}*/
+	/*.agen_div div:nth-child(2){*/
+		/*width: 200px;*/
+		/*text-align: center;*/
+		/*margin-top: 20px;*/
+	/*}*/
+	/*.agen_div div:nth-child(3){*/
+		/*width: 200px;*/
+		/*text-align: center;*/
+		/*margin-top: 20px;*/
+	/*}*/
+	/*.agen_div div:nth-child(4){*/
+		/*width: 200px;*/
+		/*text-align: center;*/
+		/*margin-top: 20px;*/
+	/*}*/
 </style>

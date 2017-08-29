@@ -35,9 +35,9 @@
       
   </el-form>
 
-  <el-col v-if="baonian" :span="24" style="width: 100%;height: 1000px;position: absolute;top:0;background: rgba(0,0,0,.5);">
-        <el-col :span="8" style="margin-top:10%;margin-left: 26%;height: 300px;width: 600px;background: #fff;border-radius: 5px">
-            <el-col :span="12" :offset="8" style="margin-top: 88px;margin-bottom: 40px"><h2>是否使用上传视频功能</h2></el-col>
+  <el-col v-if="baonian" :span="24" style="width: 1000px;height: 1000px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;">
+        <el-col :span="8" style="height: 300px;width: 600px;background: #fff;border-radius: 5px;position: relative;top:50%;margin-top: -150px;left:50%;margin-left: -300px;">
+            <el-col :span="12" :offset="6" style="margin-top: 88px;margin-bottom: 40px"><h2>是否使用上传视频功能</h2></el-col>
             <el-col :span="24">
                 <el-col :span="5" :offset="4"><el-button :disabled="shiyong" type="primary" @click="oneBtn">试用一个月</el-button></el-col>
                 <el-col :span="5" :offset="4" ><el-button type="primary" @click="storeVideo">包年888元</el-button></el-col>
@@ -71,7 +71,7 @@
         historyUrl:'',
         passIval:false,
         listLoading:true,
-        baonian:false,
+        baonian:true,
         value:'',
         pasword:'',
         formData: new FormData(),

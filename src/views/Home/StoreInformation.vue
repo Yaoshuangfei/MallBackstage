@@ -43,20 +43,28 @@
 		  		</el-col>
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24">
 		  			<el-col :xs="24" :sm="24" :md="24" :lg="24">
-		  				<el-col :xs="12" :sm="12" :md="12" :lg="12">
-		  					上架商品（{{num}}）
-		  				</el-col>
-		  				<el-col :xs="12" :sm="12" :md="12" :lg="12">
-		  					差评（{{cpnum}}）
-		  				</el-col>
+						<router-link :to="{ name: '出售中的商品'}" style="color: #333;">
+							<el-col :xs="12" :sm="12" :md="12" :lg="12">
+								上架商品（{{num}}）
+							</el-col>
+						</router-link>
+						<router-link :to="{ name: '评价管理'}" style="color: #333;">
+							<el-col :xs="12" :sm="12" :md="12" :lg="12">
+								差评（{{cpnum}}）
+							</el-col>
+						</router-link>
 		  			</el-col>
-		  			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px">
-		  				<el-col :xs="12" :sm="12" :md="12" :lg="12">
-		  					出售中的商品（{{num}}）
-		  				</el-col>
-		  				<el-col :xs="12" :sm="12" :md="12" :lg="12">
-		  					违规下架的商品（{{num}}）
-		  				</el-col>
+		  			<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;">
+						<router-link :to="{ name: '出售中的商品'}" style="color: #333;">
+							<el-col :xs="12" :sm="12" :md="12" :lg="12">
+								出售中的商品（{{num}}）
+							</el-col>
+						</router-link>
+						<router-link :to="{ name: '下架商品'}" style="color: #333;">
+							<el-col :xs="12" :sm="12" :md="12" :lg="12">
+								违规下架的商品（{{num}}）
+							</el-col>
+						</router-link>
 		  			</el-col>
 		  		</el-col>
 	  		</el-col>
@@ -69,18 +77,26 @@
 		  			近期出售：所有订单
 		  		</el-col>
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px">
-		  			<el-col :xs="8" :sm="8" :md="8" :lg="6">
-		  				待收货（{{dshnum}}）
-		  			</el-col>
-		  			<el-col :xs="8" :sm="8" :md="8" :lg="6">
-		  				待发货（{{dfhnum}}）
-		  			</el-col>
-		  			<el-col :xs="8" :sm="8" :md="8" :lg="6">
-		  				待评价（{{dpjnum}}）
-		  			</el-col>
-		  			<el-col :xs="8" :sm="8" :md="8" :lg="6">
-		  				退货（{{thnum}}）
-		  			</el-col>
+					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+						<el-col :xs="8" :sm="8" :md="8" :lg="6">
+							待收货（{{dshnum}}）
+						</el-col>
+					</router-link>
+					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+						<el-col :xs="8" :sm="8" :md="8" :lg="6">
+							待发货（{{dfhnum}}）
+						</el-col>
+					</router-link>
+					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+						<el-col :xs="8" :sm="8" :md="8" :lg="6">
+							待评价（{{dpjnum}}）
+						</el-col>
+					</router-link>
+					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+						<el-col :xs="8" :sm="8" :md="8" :lg="6">
+							退货（{{thnum}}）
+						</el-col>
+					</router-link>
 		  		</el-col>
 	  		</el-col>
 	  	</el-col>
@@ -187,8 +203,10 @@
 				const params = {
 					pageNum:1,
 					size:10,
-					storeId:state.storeId
+//					storeId:state.storeId
+					storeId:localStorage.getItem("storeId")
 				}
+				console.log(params);
 				$.ajax({
 		              type:'POST',
 		              dataType:'json',
@@ -196,6 +214,7 @@
 		              data:JSON.stringify(params),
 		              contentType:'application/json;charset=utf-8',
 		              success:function(data){
+		                  console.log(data)
 		                if(data.data.list !== null){
 		                	_this.dlsList = data.data.list
 		                }

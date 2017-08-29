@@ -30,7 +30,7 @@
 			<div>
 				<el-button style="width: 300px;margin-left: 90px;margin-top: 20px;background: #cab78c;color: #fff;" @click.native="passwdUpEdit" :loading="editLoading">确认修改</el-button>
 			</div>
-			<el-button style="margin-left: 350px" type="text" v-on:click="forgetPassword">忘记密码</el-button>
+			<!--<el-button style="margin-left: 350px" type="text" v-on:click="forgetPassword">忘记密码</el-button>-->
 		</el-col>
 
 		<el-col v-if="forget" :span="24" style="margin-top: 40px;">
@@ -338,6 +338,7 @@
             passwdUpEdit(){
                 const _this = this
                 const params = {
+                    type:2,
                     password:this.jiumima.jiuPassword,
                     newPassword:this.jiumima.password
                 }
@@ -345,7 +346,7 @@
                 $.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"/api/admin/coreAdmin/updatePassword",
+                    url:baseUrl+"/api/coreUser/resetPassword",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){

@@ -633,7 +633,7 @@
 			addSubmit: function () {
 				const _this = this
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					level:this.ruleAll.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
@@ -817,7 +817,7 @@
 			selectRuleDist() {
 				const _this = this
 				const params = {
-					storeId:state.storeId
+                    storeId:localStorage.getItem("storeId"),
 				}
 				// console.log(params)  this.initArry 判断当前值 可以做存储  orderInformation 页面展示数据
 				$.ajax({

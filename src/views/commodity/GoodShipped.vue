@@ -684,7 +684,7 @@
                     saleState:'1',
                     goodsData:[],
                     catId:this.sels[0].id,
-                    storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
                     ftId:this.value,
                     pricingModel:this.PricingModel,
                     unit:this.MeasurementUnit,
@@ -771,7 +771,7 @@
 				const _this = this
 				_this.ceshiarry = []
 				const params = {
-					storeId:state.storeId,
+                    storeId:localStorage.getItem("storeId"),
 					pageNum:this.page,
 					size:10,
 					name:''

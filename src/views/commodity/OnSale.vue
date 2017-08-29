@@ -152,7 +152,7 @@
 					size:10,
 					name:this.name,
 					saleStatus:1,
-					storeId:state.storeId
+                    storeId:localStorage.getItem("storeId")
 				}
 				console.log(params)
 				$.ajax({
