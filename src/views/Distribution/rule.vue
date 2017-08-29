@@ -13,9 +13,12 @@
 		<el-col :span="24" style="width:100%;margin-top: 40px;padding-left: 60px;">
 			<el-col :span="3" style="margin-top: 8px">提现时间</el-col>
 			<el-col :span="20">
-				<el-radio-group v-model="roleId" @change = "click">
+				<el-checkbox-group v-model="roleId" @change = "click">
+				    <el-checkbox v-for="city in ruleAll" :label="city.id" :key="city.id">{{city.name}}</el-checkbox>
+				</el-checkbox-group>
+				<!-- <el-radio-group v-model="roleId" @change = "click">
 			    	<el-radio-button  v-for="item in ruleAll" :label="item.id">{{item.name}}</el-radio-button>
-			    </el-radio-group>
+			    </el-radio-group> -->
 			</el-col>
 		</el-col>
 		<el-col :span="24" style="width:100%;margin-top: 40px;padding-left: 60px;">
@@ -26,8 +29,8 @@
 			<el-col :span="1"  style="margin-top: 8px">%</el-col>
 		</el-col>
 		<el-col :span="24" style="width:100%;margin-top: 40px;padding-left: 200px">
-			<el-button type="primary" @click="onSubmit">保存</el-button>
-			<el-button type="primary" @click="eidtSubmit">修改</el-button>
+			<el-button v-if="bcandEdit" type="primary" @click="onSubmit">保存</el-button>
+			<el-button v-else type="primary" @click="eidtSubmit">修改</el-button>
 		</el-col>
 	</section>
 </template>
@@ -40,37 +43,38 @@
 	export default {
 		data() {
 			return {
+				bcandEdit:false,
 				minPrice:'',
 				adminDiscount:'',
-				roleId:'',
+				roleId:[],
 				allocationId:'',
 				ruleAll:[
 					{
-						id:1,
+						id:'1',
 						name:'星期一'
 					},
 					{
-						id:2,
+						id:'2',
 						name:'星期二'
 					},
 					{
-						id:3,
+						id:'3',
 						name:'星期三'
 					},
 					{
-						id:4,
+						id:'4',
 						name:'星期四'
 					},
 					{
-						id:5,
+						id:'5',
 						name:'星期五'
 					},
 					{
-						id:6,
+						id:'6',
 						name:'星期六'
 					},
 					{
-						id:7,
+						id:'7',
 						name:'星期七'
 					}
 				]
@@ -83,7 +87,7 @@
 			onSubmit(){
 				const _this = this
 				const params = {
-					withdrawalsWeek:this.roleId,
+					withdrawalsWeekStr:this.roleId.toString(),
 					adminDiscount:parseInt(this.adminDiscount),
 					minPrice:parseInt(this.minPrice),
 					storeId:state.storeId
@@ -104,7 +108,7 @@
 			eidtSubmit(){
 				const _this = this
 				const params = {
-					withdrawalsWeek:this.roleId,
+					withdrawalsWeekStr:this.roleId.toString(),
 					adminDiscount:parseInt(this.adminDiscount),
 					minPrice:parseInt(this.minPrice),
 					storeId:state.storeId,
@@ -132,11 +136,12 @@
 	                data:JSON.stringify({}),
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
-	                  	console.log(data.data)
+	                  	console.log(data)
 	                  	if(data.data === null){
+	                  		_this.bcandEdit = true
 	                  		return
 	                  	}
-	                  	_this.roleId = data.data.withdrawalsWeek
+	                  	_this.roleId = data.data.withdrawalsWeekStr.split(',')
 	                  	_this.adminDiscount = data.data.adminDiscount
 	                  	_this.minPrice = data.data.minPrice
 	                  	_this.allocationId = data.data.allocationId

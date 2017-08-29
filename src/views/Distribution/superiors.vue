@@ -4,9 +4,19 @@
 		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
 			<h3>我的分销商（{{list.length}}）- 上级  - {{name}}</h3>
 		</el-col>
+		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
+			<el-form :inline="true">
+				<el-form-item label="会员用户昵称">
+				    <el-input v-model="searchName"></el-input>
+				</el-form-item>
+				<el-form-item style="margin-right: inherit;">
+					<el-button type="primary" v-on:click="getlist">查询</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
 		<el-col :span="24">
 			<el-col :span="4" style="margin-top: 20%;" class='bor_div_left'>{{name}}</el-col>
-			<el-col :span="18" style="margin-left: 60px;margin-bottom: 10px;">
+			<el-col :span="15" style="margin-left: 60px;margin-bottom: 10px;">
 				<el-col :span="24" style="margin-top: 10px;" v-for="item in list">
 						<el-col :span="4" class='bor_div'>
 							<div @click="onDown(item.id)" style="cursor: pointer;">
@@ -27,7 +37,7 @@
 								</el-col>
 							</el-col>
 						</el-col>
-					<el-col v-if="item.list.length > 0" :span="4" :offset="5" style="border-top:1px solid #bbb;"></el-col>
+					<el-col v-if="item.list.length > 0" :span="4" style="border-top:1px solid #bbb;margin-left: 234px;"></el-col>
 				</el-col>
 			</el-col>
 
@@ -43,9 +53,11 @@
 	export default {
 		data() {
 			return {
-				name:'',
+				searchName:'',
+				name:this.$route.params.name,
 				list:[],
-				id:this.$route.params.id
+				id:this.$route.params.id,
+				initParams:{}
 			}
 		},
 		methods: {
@@ -59,8 +71,10 @@
 				const _this = this
 				const params = {
 					id:this.id,
-					lvl:3
+					lvl:3,
+					searchName:this.searchName
 				}
+				// this.initParams = params
 				$.ajax({
 	                type:'POST',
 	                dataType:'json',

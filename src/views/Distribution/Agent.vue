@@ -1,14 +1,31 @@
 <template>
 	<section>
-
-		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
-			我的分销商（{{FxsList.length}}）
-		</el-col>
-
 		<!--工具条-->
-		<!--<el-col :span="24" style="padding-bottom: 0px;background: #fff">-->
-			<!--<h3></h3>-->
-		<!--</el-col>-->
+		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
+			<h3>我的分销商（{{FxsList.length}}）</h3>
+		</el-col>
+		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
+			<el-form :inline="true">
+				<el-form-item label="条件">
+					<el-select v-model="condition" clearable>
+				      <el-option v-for="item in states" :label="item.label" :value="item.value">
+				      </el-option>
+				    </el-select>
+				</el-form-item>
+				<!-- <el-form-item label="搜索类型">
+				    <el-select v-model="filters.type" clearable>
+				      <el-option v-for="item in options" :label="item.label" :value="item.value">
+				      </el-option>
+				    </el-select>
+				</el-form-item> -->
+				<el-form-item>
+				    <el-input v-model="value"></el-input>
+				</el-form-item>
+				<el-form-item style="margin-right: inherit;">
+					<el-button type="primary" v-on:click="getlist">查询</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
 		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
 			<el-col :xs="6" :sm="6" :md="6" :lg="6" v-for="item in FxsList" style='margin-bottom: 20px'>
 				<div class="agen_div">
@@ -44,7 +61,21 @@
 			return {
 				FxsList:[],
 				total: 0,
-				page: 1
+				page: 1,
+				condition:'',
+				value:'',
+				states:[
+					{
+						value:'1',
+						label:'昵称'
+					},{
+						value:'2',
+						label:'真实姓名'
+					},{
+						value:'3',
+						label:'手机号'
+					}
+				]
 			}
 		},
 		methods: {
@@ -54,6 +85,13 @@
 					pageNum:this.page,
 					size:8,
 					storeId:state.storeId
+				}
+				if(this.condition === '1'){
+					params.nickName = this.value
+				}else if(this.condition === '2'){
+					params.realName = this.value
+				}else if(this.condition === '3'){
+					params.mobile = this.value
 				}
 				console.log(params)
 				$.ajax({
