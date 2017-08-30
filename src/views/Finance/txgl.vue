@@ -38,6 +38,10 @@
 			</el-table-column>
 			<el-table-column prop="withdrawalsPrice" label="提现金额">
 			</el-table-column>
+			<el-table-column prop="actualAmount" label="到账金额">
+			</el-table-column>
+			<el-table-column prop="serviceCharge" label="手续费">
+			</el-table-column>
 			<el-table-column prop="status" :formatter='formatterType' label="订单状态">
 			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="提现时间">

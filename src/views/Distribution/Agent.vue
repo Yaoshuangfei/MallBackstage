@@ -31,16 +31,16 @@
 		</el-col>
 		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
 			<el-col :xs="6" :sm="6" :md="6" :lg="6" v-for="item in FxsList" style='margin-bottom: 20px'>
-				<div class="agen_div" style="height:260px;border: 1px solid #cab78c;">
+				<div class="agen_div">
 					<div>
-						<img style="width: 140px;height:140px;border-radius: 50%;" :src="item.coreUser.headImg" v-if="item.coreUser.headImg !== null">
-						<img v-else style="width: 140px;height:140px;border-radius: 50%;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
+						<img style="width: 100px;height:100px;border-radius: 50%;" :src="item.coreUser.headImg" v-if="item.coreUser.headImg !== null">
+						<img v-else style="width: 100px;height:100px;border-radius: 50%;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
 					</div>
 					<div>{{item.coreUser.nickName}}</div>
 					<div>{{item.shopRoleName}}</div>
-					<div style="color: #9f3333;">
-						<router-link :to="{ name: '查看下级', params: { id: item.id , name:item.coreUser.nickName}}" style="color: #9f3333;">
-							<el-button  type="text" style="color: #9f3333;">查看下级</el-button>
+					<div>
+						<router-link :to="{ name: '查看下级', params: { id: item.id , name:item.coreUser.nickName}}">
+							<el-button  type="text">查看下级</el-button>
 						</router-link>
 					</div>
 				</div>
@@ -87,8 +87,7 @@
 				const params = {
 					pageNum:this.page,
 					size:8,
-//					storeId:state.storeId
-					storeId:localStorage.getItem("storeId")
+					storeId:state.storeId
 				}
 				if(this.condition === '1'){
 					params.nickName = this.value
@@ -127,32 +126,30 @@
 	.agen_div{
 		border: 1px solid #aaa;
 		width:200px;
-		height: 260px;
-		text-align: center;
+		height: 300px;
 
 	}
 	.agen_div div:nth-child(1){
+		border: 1px solid #aaa;
+		width:100px;
+		height: 100px;
+		border-radius: 50px;
+		margin-left: 45px;
 		margin-top: 20px;
 	}
 	.agen_div div:nth-child(2){
+		width: 200px;
 		text-align: center;
 		margin-top: 20px;
-		font-size: 18px;
-		color: #616161;
-		white-space:nowrap;
-		text-overflow:ellipsis;
-		-o-text-overflow:ellipsis;
-		overflow: hidden;
 	}
 	.agen_div div:nth-child(3){
+		width: 200px;
 		text-align: center;
-		font-size: 12px;
-		color: #616161;
+		margin-top: 20px;
 	}
 	.agen_div div:nth-child(4){
+		width: 200px;
 		text-align: center;
-	}
-	.agen_div div:nth-child(4) a{
-		color: #9f3333;
+		margin-top: 20px;
 	}
 </style>
