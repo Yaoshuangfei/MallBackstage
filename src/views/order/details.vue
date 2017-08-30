@@ -264,8 +264,8 @@
                     		_this.table.status = '支付失败'
                     	}else if(_this.table.status === 4){
                     		_this.table.status = '已完成'
-                    	}else if(_this.table.status === 5){
-                    		_this.table.status = '已删除'
+                    	}else if(_this.table.status === 5 || _this.table.status === 7){
+                    		_this.table.status = '已取消'
                     	}
                     	// console.log(_this.table)
                     	// console.log(data)

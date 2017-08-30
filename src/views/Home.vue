@@ -114,7 +114,9 @@
 						<div style="font-size: 14px;">浙江省杭州市拱墅区天堂E谷</div></div>
 				</div>
 				<div class="bottomConterText">
-					<div style="margin-right:10px;width:100px;height:100px;background: #fff;"></div>
+					<div style="margin-right:10px;width:100px;height:100px;">
+						<img src="../assets/xyl.png">
+					</div>
 					<div>
 						<div style="font-size: 18px;text-align: left;">扫描二维码</div>
 						<div style="font-size: 14px;text-align: left;">下载“吸引力商城APP”</div>
@@ -124,7 +126,7 @@
 					<div style="margin-right: :10px;"><img src="../assets/icon_phone.png" alt=""></div>
 					<div>
 						<div style="font-size: 18px;text-align: left;">电话</div>
-						<div style="font-size: 14px;text-align: left;">13569856985</div>
+						<div style="font-size: 14px;text-align: left;">暂未开通</div>
 					</div>
 				</div>
 			</div>

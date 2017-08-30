@@ -322,9 +322,12 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	const info = data.data
-                    	_this.daibanList = info.records;
-                        _this.total = info.total
+                        console.log(data)
+                        if(data.code === 1){
+                        	const info = data.data
+                        	_this.daibanList = info.records;
+                            _this.total = info.total
+                        }
                     }
                 });
         	},
@@ -343,13 +346,15 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                         console.log(data)
-                        const info = data.data
-						if(info.records.length===0){
-							$('#toolbarasd').hide();
-						}else {
-                            _this.dingdanList = info.records;
-                            _this.totals = info.total
-						}
+                        if(data.code === 1){
+                            const info = data.data
+    						if(info.records.length===0){
+    							$('#toolbarasd').hide();
+    						}else {
+                                _this.dingdanList = info.records;
+                                _this.totals = info.total
+    						}
+                        }
 
                     }
                 });
