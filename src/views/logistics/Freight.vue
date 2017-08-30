@@ -28,10 +28,10 @@
 						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor" style="font-size: 14px;margin-left: 50px; ">设为默认的运费模板 | </span>  <span style="font-size: 14px;" class="btncolor">修改 | </span>  <span style="font-size: 14px;" class="btncolor" @click="deldetBtn(item)">删除</span>
 					</el-col>
 				</el-col>
-				<el-table :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;">
-					<el-table-column prop="mode" :formatter='formatter' label="运送方式">
+				<el-table id="yfmb" border :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">
+					<el-table-column prop="mode" :formatter='formatter' label="运送方式" width="95px">
 					</el-table-column>
-					<el-table-column prop="data1" label="运送到">
+					<el-table-column prop="data1" label="运送到" width="395px">
 					</el-table-column>
 					<el-table-column prop="firstHeavy" label="首件（个）">
 					</el-table-column>
@@ -988,4 +988,6 @@
 	.top_margin{
 		margin-top: 20px;
 	}
+	#yfmb  .el-table td, .el-table th.is-leaf {background: #fff;}
+	#yfmb   .el-table__fixed-header-wrapper thead div, .el-table__header-wrapper thead div {background: #fff;text-align: center;}
 </style>

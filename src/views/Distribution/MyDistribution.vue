@@ -196,9 +196,6 @@
 		</el-col>
 <!--====================================================== 磁疗贴======================================================== -->
 		<el-col :span="24" v-if="cltShow">
-					<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
-						<!-- <el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length >= 1">新增店铺身份</el-button> -->
-					</el-col>
 					<!--新增界面-->
 				<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false">
 					<el-form :model="orderDetails" label-width="160px">
@@ -218,23 +215,23 @@
 						<el-button type="primary" @click.native="addFormVisible = false">关闭</el-button>
 					</div>
 				</el-dialog>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px" v-if="commissionLine === 5">小区</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
+				<!--<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>-->
+				<el-col :xs="2" :sm="2" :md="2" :lg="2"  v-if="commissionLine === 5" style="text-align: right;font-size: 16px;color: #616161;height:32px;line-height: 32px;">小区</el-col>
+				<el-col :xs="22" :sm="22" :md="22" :lg="22" style="height:32px;line-height: 32px;margin-bottom: 20px;" >
 					<ul class="Grade">
 						<li v-for="item in ruleAll" v-if="item.level !== -100">{{item.name}}</li>
 					</ul>
 				</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px" v-if="commissionLine === 5">大区</el-col>
-				<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px;margin-bottom: 20px">
+				<el-col :xs="2" :sm="2" :md="2" :lg="2"  v-if="commissionLine === 5" style="text-align: right;font-size: 16px;color: #616161;height:32px;line-height: 32px;" >大区</el-col>
+				<el-col :xs="22" :sm="22" :md="22" :lg="22" style="height:32px;line-height: 32px;margin-bottom: 20px;">
 					<ul class="Grade">
 						<li v-for="item in ruleAll" v-if="item.level === -100">{{item.name}}</li>
 					</ul>
 				</el-col>
-				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 20px;margin-left: 50px">填写可购买的最高级身份，最多填写1个</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">规则</el-col>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">
-					<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px;margin-left: 60px">身份是否升级</el-col>
+				<!--<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 20px;margin-left: 50px">填写可购买的最高级身份，最多填写1个</el-col>-->
+				<!--<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">规则</el-col>-->
+				<el-col :xs="14" :sm="14" :md="14" :lg="14" >
+					<el-col :xs="6" :sm="6" :md="6" :lg="6" style="font-size: 16px;color: #616161;">身份是否升级</el-col>
 					<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">
 						<el-switch
 							@change='clickrule'
@@ -252,8 +249,9 @@
 						    </el-option>
 					  </el-select> -->
 					</el-col>
-					<el-col :xs="3" :sm="3" :md="3" :lg="3" style="margin-bottom: 20px" v-show="ruleIsUpgrade">邀请人数：{{upgrade.invitedMinNum}}</el-col>
+					<el-col :xs="5" :sm="5" :md="5" :lg="5" style="font-size: 16px;color: #616161;" v-show="ruleIsUpgrade">邀请人数：{{upgrade.invitedMinNum}}</el-col>
 				</el-col>
+			<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin-bottom: 20px;"></el-col>
 				<!--身份升级-->
 				<el-dialog title="身份升级" v-model="ruleIsUpgradeVisible" :close-on-click-modal="false" :show-close='false'>
 					<el-form :model="upgrade" label-width="100px">
@@ -309,36 +307,39 @@
 						<el-button type="primary" @click.native="clerbtn">关闭</el-button>
 					</div>
 				</el-dialog>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">三级分销</el-col>
-					<el-table :data="cltSan" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px">
+				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">三级分销</el-col>
+					<el-table class="fenyong" border :data="cltSan" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 						<el-table-column prop="level" label="等级">
 						</el-table-column>
 						<el-table-column prop="fybi" label="分佣比">
 							<template scope="scope">
-								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
+								<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
 							</template>
 						</el-table-column>
 					</el-table>
-				<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">平级奖</el-col>
-				<el-table :data="cltPingji" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px">
+				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
+				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">平级奖</el-col>
+				<el-table :data="cltPingji" class="fenyong" border highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 					<el-table-column prop="level" label="等级">
 					</el-table-column>
 					<el-table-column prop="fybi" label="分佣比">
 						<template scope="scope">
-							<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
+							<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-col v-if='commissionLine === 5' :xs="14" :sm="14" :md="14" :lg="14" style="margin-bottom: 20px">区域分红</el-col>
-				<el-table v-if='commissionLine === 5' :data="qyPingji" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px">
+				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
+				<el-col v-if='commissionLine === 5' :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">区域分红</el-col>
+				<el-table v-if='commissionLine === 5' class="fenyong" border :data="qyPingji" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 					<el-table-column prop="level" label="等级">
 					</el-table-column>
 					<el-table-column prop="fybi" label="分佣比">
 						<template scope="scope">
-							<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
+							<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
 						</template>
 					</el-table-column>
 				</el-table>
+				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
 				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-top: 20px;">团队奖
 					<el-input style="width: 200px" v-model="cltuanduired"></el-input>
 				</el-col>
@@ -348,16 +349,19 @@
 				<el-col :xs="10" :sm="10" :md="10" :lg="10" style="margin-top: 20px;">加权分红
 					<el-input style="width: 200px" v-model="cltJqfred"></el-input>
 				</el-col>
+				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
 				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 120px;">
 					<el-button type="primary" v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
 				</el-col>
 		</el-col>
-		<el-col v-if="mimayanz":span="24" style="width: 990px;height: 1200px;position: absolute;top:208px;background: rgba(0,0,0,.5);text-align:center;z-index: 9;">
-			<el-col :span="8" style="height: 300px;width: 600px;background: #fff;border-radius: 5px;position: relative;top:20%;left:50%;margin-left: -300px;">
-				<el-col :span="24" style="text-align: center;height:78px;line-height: 78px;font-size: 24px;">请输入密码</el-col>
+		<el-col v-if="mimayanz" :span="24" style="width: 100%;height:100%;position: fixed;top:0;left:0;z-index:9;background: rgba(0,0,0,.5);text-align:center;">
+			<el-col :span="8" style="height: 216px;width: 520px;background: #fff;border-radius: 5px;position: relative;top:50%;margin-top: -150px;left:50%;margin-left: -300px;">
+				<el-col :span="24" style="height:46px;line-height: 46px;border-bottom: 1px dashed #cab78c;font-size: 16px;color: #cab78c;">提示</el-col>
+				<el-col :span="24" style="text-align: center;font-size: 16px;color:#616161;margin: 20px 0;font-weight: 900; ">请输入密码</el-col>
 				<el-col :span="24"  style=""><el-input style="width:50%;" v-model="password" type="password" auto-complete="off"></el-input></el-col>
 				<el-col :span="24">
-					<el-col :span="5" style="margin-top:40px;position: relative;left:50%;margin-left: -60px;"><el-button type="primary" @click.native="mimaSubmit" :loading="editLoading">确定</el-button></el-col>
+					<el-col :span="12" style="margin-top: 20px;"><el-button type="primary" @click.native="mimaSubmit" :loading="editLoading" style="background:#cab78c;color: #fff;border: 1px solid #cab78c;">确定</el-button></el-col>
+					<el-col :span="12" style="margin-top: 20px;"><el-button type="primary" @click.native="mimaSubmits" style="background:#fff;color: #cab78c;border: 1px solid #cab78c;">取消</el-button></el-col>
 				</el-col>
 			</el-col>
 			<!--<el-col v-if="passIval" :span="24" style="margin-top:-11%;margin-left: 31%;height: 150px;width: 410px;background: #eee;border-radius: 5px">-->
@@ -513,6 +517,9 @@
                     	}
                     }
                 });
+			},
+            mimaSubmits(){
+                window.history.go(-1);
 			},
 			//获取邀请人身份
 			click(val) {
@@ -1133,15 +1140,17 @@
 	
 	.Grade {
 		list-style: none;
+		margin: 0;
 	}
+	.Grade ul {margin: 0;}
 	.Grade li{
-		float: left;
-		margin-right: 20px;
-		width:200px;
-		height: 50px;
+		display: inline-block;
+		width:100px;
+		height: 32px;
 		border: 1px solid #ddd;
 		text-align: center;
-		line-height: 50px;
+		line-height: 32px;
+		margin: 0 10px;
 	}
 	.headerfx{
 		list-style:none;

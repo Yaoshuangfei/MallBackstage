@@ -45,7 +45,7 @@
 				<el-col :span="1"  style="margin-left:70px">{{item.totalMoney}}</el-col>
 				<el-col :span="2"  style="margin-left:75px">
 					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 1 }}">
-						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
+						<el-button style="margin-top:-5px;color: #9f3333;"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
 			</el-col>
@@ -59,10 +59,10 @@
 				<el-col style="text-align: center;width:98px;" class="describe">{{items.productPrice}}</el-col>
 				<el-col style="text-align: center;width:90px;"  class="describe">{{items.payTime}}</el-col>
 				<el-col style="text-align: right;width:137px;margin-left: 240px;" class="describe">
-					<el-button type="text" v-on:click="fahuoBtn(items)">发货</el-button>
+					<el-button type="text" v-on:click="fahuoBtn(items)" style="color: #9f3333;">发货</el-button>
 				</el-col>
 			</el-col>
-			<el-col :span="24" style="border-top: 1px solid #aaa;height: 30px;line-height: 50px;padding-left: 20px;">地址：{{item.provinceName}}{{item.cityName}}{{item.countyName}}{{item.address}}</el-col>
+			<el-col :span="24" style="border-top: 1px solid #e6eef9;height: 30px;line-height: 50px;padding-left: 20px;">地址：{{item.provinceName}}{{item.cityName}}{{item.countyName}}{{item.address}}</el-col>
 		</el-col>
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">

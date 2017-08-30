@@ -193,9 +193,6 @@
 		</el-col>
 <!--====================================================== 磁疗贴======================================================== -->
 		<el-col :span="24" v-if="cltShow">
-					<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px">
-						<!-- <el-button type="primary" v-on:click="addIDCard" style="margin-top: 20px" :disabled="this.ruleAll.length >= 1">新增店铺身份</el-button> -->
-					</el-col>
 					<!--新增界面-->
 				<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false">
 					<el-form :model="orderDetails" label-width="160px">
@@ -273,7 +270,7 @@
 						</el-table-column>
 						<el-table-column prop="fybi" label="分佣比">
 							<template scope="scope">
-								<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
+								<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -283,7 +280,7 @@
 					</el-table-column>
 					<el-table-column prop="fybi" label="分佣比">
 						<template scope="scope">
-							<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
+							<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -293,7 +290,7 @@
 					</el-table-column>
 					<el-table-column prop="fybi" label="分佣比">
 						<template scope="scope">
-							<el-input style="width: 100px" v-model="scope.row.fybi"></el-input>
+							<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -979,18 +976,20 @@
 </script>
 
 <style>
-	
+
 	.Grade {
 		list-style: none;
+		margin: 0;
 	}
+	.Grade ul {margin: 0;}
 	.Grade li{
-		float: left;
-		margin-right: 20px;
-		width:200px;
-		height: 50px;
-		border: 1px solid #ddd;
+		display: inline-block;
+		width:100px;
+		height: 32px;
+		border: 1px solid #e6eef9;
 		text-align: center;
-		line-height: 50px;
+		line-height: 32px;
+		margin: 0 10px;
 	}
 	.headerfx{
 		list-style:none;
@@ -1023,4 +1022,6 @@
 		width: 235px;
 		height: 10px;
 	}
+	.fenyong .cell {text-align: center;}
+	.fenyong .el-input__inner {text-align: center;border: transparent;background: transparent;}
 </style>

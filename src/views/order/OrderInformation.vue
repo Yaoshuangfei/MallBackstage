@@ -7,13 +7,13 @@
 					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
 				</el-form-item> -->
 				<el-form-item label="状态">
-					<el-select v-model="filters.status" clearable>
+					<el-select v-model="filters.status" clearable style="width:150px;">
 				      <el-option v-for="item in states" :label="item.label" :value="item.value">
 				      </el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="搜索类型">
-				    <el-select v-model="filters.type" clearable>
+				    <el-select v-model="filters.type" clearable style="width:150px;">
 				      <el-option v-for="item in options" :label="item.label" :value="item.value">
 				      </el-option>
 				    </el-select>
@@ -42,7 +42,7 @@
 				<el-col :span="1" :offset="6">{{item.totalMoney}}</el-col>
 				<el-col :span="2" :offset="2">
 					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 0}}">
-						<el-button style="margin-top:-5px"  type="text">查看订单</el-button>
+						<el-button style="margin-top:-5px;color: #9f3333;"  type="text">查看订单</el-button>
 					</router-link>
 				</el-col>
 			</el-col>
@@ -76,6 +76,7 @@
 	export default {
 		data() {
 			return {
+                typeId:'',
 				radio: '0',
 				checked: true,
 				value:'',
@@ -355,7 +356,12 @@
 			}
 		},
 		mounted() {
-			this.getlist();
+			if(this.$route.params.id !== ':id' ){
+			    this.filters.status = this.$route.params.id
+                this.getlist();
+			}else{
+                this.getlist();
+			}
 		}
 	}
 
@@ -364,16 +370,15 @@
 <style>
 	.table_div{
 		margin-top: 20px;
-		border: 1px solid #aaa;
+		border: 1px solid #e6eef9 ;
 		padding-bottom: 20px;
 	}
 	.table_div_head{
 		padding-top:15px;
 		padding-left: 40px;
 		height:50px;
-		border-bottom: 1px solid #aaa;
-		background-color: #eee;
-		border-right: 1px solid #aaa;
+		border-bottom: 1px dashed #cab78c;
+		/*border-right: 1px solid #aaa;*/
 	}
 	.img_shangp{
 		width:100px;

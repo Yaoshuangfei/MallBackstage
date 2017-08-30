@@ -2,11 +2,7 @@
 	<section>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
 			Banner
-<<<<<<< HEAD
 			<el-form :inline="true" style="position: absolute;top:6px;right:0;">
-=======
-			<el-form :inline="true"  style="position: absolute;top:6px;right:0;">
->>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
 				<el-form-item>
 					<el-button type="primary" v-on:click="addbanner" style="background: transparent;border: transparent;">+  添加</el-button>
 				</el-form-item>
@@ -15,7 +11,7 @@
 		<!--工具条-->
 
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table id="bannersss" :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">
 			<el-table-column type="index" label="序号" width="80px;">
 			</el-table-column>
 			<el-table-column prop="picture" label="图片">
@@ -27,7 +23,7 @@
 			</el-table-column>
 			<el-table-column prop="poType"  :formatter='formatterpoType' label="位置">
 			</el-table-column>
-			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
+			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间" width="300px">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
@@ -577,4 +573,7 @@
 	#addBanner .el-dialog__body {width:380px;margin: auto !important;}
 	#addBanner textarea {height:120px;resize: none;}
 	#addBanner .dialog-footer button {margin: 0 50px 20px 50px;width:92px;height:32px;}
+	#bannersss .el-table th>.cell {text-align: center;background: #f4f2e8;}
+	#bannersss .el-table td, .el-table th.is-leaf {background: #f4f2e8;}
+	#bannersss .el-table__fixed-header-wrapper thead div, .el-table__header-wrapper thead div {background: #f4f2e8;color: #616161;}
 </style>

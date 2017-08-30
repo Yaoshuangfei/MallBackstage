@@ -77,22 +77,22 @@
 		  			近期出售：所有订单
 		  		</el-col>
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" style="margin-top: 20px">
-					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+					<router-link :to="{ name: '订单信息管理',params:{id:5}}" style="color: #333;">
 						<el-col :xs="8" :sm="8" :md="8" :lg="6">
 							待收货（{{dshnum}}）
 						</el-col>
 					</router-link>
-					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+					<router-link :to="{ name: '订单信息管理',params:{id:2}}" style="color: #333;">
 						<el-col :xs="8" :sm="8" :md="8" :lg="6">
 							待发货（{{dfhnum}}）
 						</el-col>
 					</router-link>
-					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+					<router-link :to="{ name: '订单信息管理',params:{id:6}}" style="color: #333;">
 						<el-col :xs="8" :sm="8" :md="8" :lg="6">
 							待评价（{{dpjnum}}）
 						</el-col>
 					</router-link>
-					<router-link :to="{ name: '订单信息管理'}" style="color: #333;">
+					<router-link :to="{ name: '订单信息管理',params:{id:4}}" style="color: #333;">
 						<el-col :xs="8" :sm="8" :md="8" :lg="6">
 							退货（{{thnum}}）
 						</el-col>
@@ -114,8 +114,16 @@
 		  				</el-col>
 		  				<el-col :span="8" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; ">{{item.coreUser.nickName}}</el-col>
 		  				<el-col :span="6" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; ">{{item.shopRoleName}}</el-col>
-		  				<el-col :span="6" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; "><el-button type="text" size="small" style="color: #9f3333;">查看更多</el-button></el-col>
+						<el-col :span="6" style="margin-top: 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; ">
+							<router-link :to="{ name: '查看下级', params: { id: item.id , name:item.coreUser.nickName}}" style="color: #333;">
+								<el-button type="text" size="small" style="color: #9f3333;">查看更多</el-button>
+							</router-link>
+						</el-col>
 		  			</el-col>
+					<el-col :span="24" class="toolbar" style="background:#fff;text-align: center;margin-top: 80px;">
+						<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="9" :total="total">
+						</el-pagination>
+					</el-col>
 		  		</el-col>
 	  		</el-col>
 	  	</el-col>
@@ -138,7 +146,8 @@
 				goodsScore:'',
 				sellerScore:'',
 				logisticsScore:'',
-
+                total:9,
+                page: 1,
 				num:0,
 				xsznum:0,
 				xjnum:0,
@@ -214,13 +223,18 @@
 		              data:JSON.stringify(params),
 		              contentType:'application/json;charset=utf-8',
 		              success:function(data){
-		                  console.log(data)
+		                  console.log(data.data)
 		                if(data.data.list !== null){
 		                	_this.dlsList = data.data.list
+                            _this.total = data.data.total
 		                }
 		              }
 		          });
-			}
+			},
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getcommit();
+            },
 
 		},
 		mounted() {

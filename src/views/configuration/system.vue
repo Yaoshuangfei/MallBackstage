@@ -45,7 +45,7 @@
 
     <!--编辑界面-->
     <el-dialog id="addBanner" title="新增" v-model="editFormVisible" :close-on-click-modal="false" >
-      <el-form :model="orderDetails" label-width="80px" :rules="editFormRules" ref="editForm">
+      <el-form :model="orderDetails" label-width="100px" :rules="editFormRules" ref="editForm">
         <el-form-item label="位置">
             <el-select v-model="filters.type" clearable>
               <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
@@ -64,8 +64,8 @@
         <el-col :span='24'></el-col>
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
-        <el-button type="primary" @click.native="editFormVisible = false">取消</el-button>
+        <el-button type="primary" @click.native="editSubmit" :loading="editLoading" style="border: 1px solid #cab78c;background: #cab78c;color: #fff;width:90px;height:30px;line-height: 10px; ">确定</el-button>
+        <el-button type="primary" @click.native="editFormVisible = false" style="border: 1px solid #cab78c;background: #fff;color: #333;width:90px;height:30px;line-height: 10px; ">取消</el-button>
       </div>
     </el-dialog>
   </section>
@@ -412,5 +412,5 @@
 </script>
 
 <style>
-  
+  #addBanner .el-form-item__label {margin-right: inherit;}
 </style>

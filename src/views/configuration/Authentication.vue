@@ -1,366 +1,290 @@
 <template>
   <section>
-    <!--工具条-->
-    <!-- <el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
-      <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model="filters.name" placeholder="支付银行"></el-input>
+    <el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+      身份认证
+    </el-col>
+      <el-form id="sfrz" :model="sfinfo" label-width="135px"  :rules="rules" ref="sfinfo">
+        <el-form-item label="法人姓名:">
+          <el-input v-model="sfinfo.realName" style="width:200px;"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="filters.status" clearable>
-              <el-option v-for="item in selectSubjectStatus" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+        <el-form-item label="法人身份证号:" prop="legalCardCode">
+          <el-input v-model="sfinfo.legalCardCode" style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="搜索类型">
-            <el-select v-model="filters.type" clearable>
-              <el-option v-for="item in options" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+        <el-form-item label="手机号:">
+          <el-input v-model="sfinfo.storeMobile" style="width:200px;"></el-input>
         </el-form-item>
-        <el-form-item>
-            <el-input v-model="filters.name"></el-input>
+        <el-form-item label="银行名称:">
+          <el-input v-model="sfinfo.bankName" style="width:300px;"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" v-on:click="getUsers">查询</el-button>
+        <el-form-item label="对公账户账号:">
+          <el-input v-model="sfinfo.bankCode" style="width:400px;"></el-input>
         </el-form-item>
-      </el-form>
-    </el-col> -->
-    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
-      <el-form-item label="法人姓名">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="法人身份">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="对公账户账号">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="运营地址">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="上传法人身份证">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="上传法人手持身份证">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="上传营业执照">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item label="上传银行开户许可证">
-        <el-input v-model="filters.name" style="width:400px"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
-        <el-button>取消</el-button>
-      </el-form-item>
-  </el-form>
-    <!--编辑界面-->
-    <el-dialog title="订单详情" v-model="editFormVisible" :close-on-click-modal="false" >
-      <el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="订单号">
-          <div>{{orderDetails.orderNumber }}</div>
-          <!-- <el-input v-model="addForm.name" type="text" auto-complete="off"></el-input> -->
+        <el-form-item label="运营地址:">
+          <el-input v-model="sfinfo.theAddress" style="width:500px;"></el-input>
         </el-form-item>
-        <el-form-item label="商品名称">
-          <div>{{orderDetails.commodityName}}</div>
+        <el-form-item label="法人身份证:" style="position: relative;height:234px;">
+          <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px;z-index: 1;"  @change="upload(1)" id="fileInput" >
+          <button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+            <span >点击上传</span>
+          </button>
+          <span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+          <img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;">
+          <el-col :span="24" v-if="frImgurl !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="frImgurl"></el-col>
         </el-form-item>
-        <el-form-item label="用户名">
-          <div>{{orderDetails.userName }}</div>
+        <el-form-item label="法人手持身份证:" style="position: relative;height:234px;">
+          <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px;z-index: 1;"  @change="upload(2)" id="fileInput" >
+          <button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+            <span >点击上传</span>
+          </button>
+          <span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+          <img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;">
+          <el-col :span="24" v-if="frImgurlPointer !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="frImgurlPointer"></el-col>
         </el-form-item>
-        <el-form-item label="实付金额">
-          <div>{{orderDetails.amountPaid }}</div>
+        <el-form-item label="营业执照:" style="position: relative;height:234px;">
+          <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px;z-index: 1;"  @change="upload(3)" id="fileInput" >
+          <button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+            <span >点击上传</span>
+          </button>
+          <span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+          <img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;">
+          <el-col :span="24" v-if="businessImgurl !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="businessImgurl"></el-col>
         </el-form-item>
-        <el-form-item label="订单总价">
-          <div>{{orderDetails.orderTotal }}</div>
+        <el-form-item label="银行开户许可证:" style="position: relative;height:234px;">
+          <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px;z-index: 1;"  @change="upload(4)" id="fileInput" >
+          <button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+            <span >点击上传</span>
+          </button>
+          <span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+          <img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;">
+          <el-col :span="24" v-if="bankImgurl !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="bankImgurl"></el-col>
         </el-form-item>
-        <el-form-item label="订单状态">
-          <div>{{orderDetails.orderStatus }}</div>
-        </el-form-item>
-        <el-form-item label="支付方式">
-          <div>{{orderDetails.paymentMethod }}</div>
-        </el-form-item>
-        <el-form-item label="创建时间">
-          <div>{{orderDetails.creationTime}}</div>
-        </el-form-item>
-        <el-form-item label="发货时间">
-          <div>{{orderDetails.deliveryTime}}</div>
-        </el-form-item>
-        <el-col :span='24'></el-col>
+
+        <!--<el-col :span="24"  v-if="frImgurlPointer !== '' "><img style="width: 100px" :src="frImgurlPointer"></el-col>-->
+        <!--<el-form-item label="法人手持身份证:">-->
+          <!--<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(2)" id="fileInput">-->
+          <!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small">-->
+            <!--<span>点击上传</span>-->
+          <!--</button>-->
+        <!--</el-form-item>-->
+        <!--<el-col :span="24"  v-if="businessImgurl !== '' "><img style="width: 100px" :src="businessImgurl"></el-col>-->
+        <!--<el-form-item label="营业执照:">-->
+          <!--<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(3)" id="fileInput">-->
+          <!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small">-->
+            <!--<span>点击上传</span>-->
+          <!--</button>-->
+        <!--</el-form-item>-->
+        <!--<el-col :span="24" v-if="bankImgurl !== '' "><img style="width: 100px" :src="bankImgurl"></el-col>-->
+        <!--<el-form-item label="银行开户许可证:">-->
+          <!--<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload(4)" id="fileInput">-->
+          <!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small">-->
+            <!--<span>点击上传</span>-->
+          <!--</button>-->
+        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <!-- <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button> -->
+        <el-button type="primary" @click.native="clupLoad">保存</el-button>
         <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
       </div>
-    </el-dialog>
   </section>
 </template>
 
 <script>
-  import { state } from '../../vuex/state'
-  import util from '../../common/js/util'
-  import {baseUrl , editUser, addUser } from '../../api/api';
+    import echarts from 'echarts'
+    import { state } from '../../vuex/state'
+    import {baseUrl} from '../../api/api';
+    export default {
+        data() {
+            return {
+                baobiaoName:'日营业额',
+                addTitle:'添加身份信息',
+                frImgurl:'',
+                frImgurlPointer:'',
+                businessImgurl:'',
+                bankImgurl:'',
+                formData: new FormData(),
+                rules:{
+                    legalCardCode: [
+                        { required: true, message: '请输入身份证号', trigger: 'blur' },
+                        { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/, message: '证件号码格式有误！', trigger: 'blur' }
+                    ]
+                },
+                sfinfo:{},
+                total:7,
+                page: 1,
+                totals:10,
+                pages: 1,
+                editFormVisible:false,//上传材料
+                dashVisible:false,//待审核
+                remarkInfo:'',//未通过信息
+                sfinfoId:'',//修改身份信息ID
+                daibanList:[],
+                dingdanList:[],
+                radio: 0,
+                ruleAll:[{
+                    name:'日报表',
+                    id:0
+                },{
+                    name:'周报表',
+                    id:1
+                },{
+                    name:'月报表',
+                    id:2
+                },{
+                    name:'季报表',
+                    id:3
+                },{
+                    name:'年报表',
+                    id:4
+                }],
+                chartColumn: null,
+                chartBar: null,
+                chartLine: null,
+                chartPie: null,
+                chartmap: null,
+                visitPercentage:'',
+                visitCount:'',
+                sumTotalMoney:'',
+                moneyPercentage:'',
+                memberCount:'',
+                memberPercentage:'',
+                sumTotalQuantity:'',
+                quantityPercentage:'',
+                type:0,
 
-  export default {
-    data() {
-      return {
-        radio: '0',
-        checked: true,
-        value:'',
-        value1:true,
-        value2:'',
-        selectSubjectStatus: [
-        {
-          value:'0',
-          label:'全部'
-        },{
-          value:'1',
-          label:'待付款'
-        },{
-          value:'2',
-          label:'待发货'
-        },{
-          value:'3',
-          label:'已发货'
-        },{
-          value:'4',
-          label:'待评价'
-        },{
-          value:'5',
-          label:'退货'
-        }],
-        options: [{
-              value: '0',
-              label: '全部'
-            }, {
-              value: '1',
-              label: '订单编号'
-            }, {
-              value: '2',
-              label: '快递单号'
-            }, {
-              value: '3',
-              label: '用户名'
-            }],
-        filters: {
-          name: '',
-          status:'',
-          type:''
+                listAll:[],//线图
+                sj:[],
+                cj:[],
+                sp:[],
+                pj:[],
+                parobj:[],//饼图
+                parName:[]
+            }
         },
-        users: [],
-        total: 100,
-        page: 1,
-        listLoading: false,
-        sels: [],//列表选中列
-
-        editFormVisible: false,//编辑界面是否显示
-        editLoading: false,
-        editFormRules: {
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'blur' }
-          ]
-        },
-        //编辑界面数据
-        editForm: {
-          id: 0,
-          username: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        },
-
-        addFormVisible: false,//新增界面是否显示
-        addLoading: false,
-        //新增界面数据
-        orderDetails: {
-        },
-        orderInformation:[{
-          orderNumber :'145877458784524c',
-          courierNumber :'145877458784524c',
-          userName:'吸引力量',
-          amountPaid :'300',
-          orderTotal :'900',
-          orderStatus :'待付款',
-          paymentMethod :'微信支付',
-          creationTime:'2017-09-08 17:09',
-          deliveryTime:'2017-09-08 17:09',
-          commodityName:'雨花说'
-        }]
-      }
-    },
-    methods: {
-      //性别显示转换
-      formatSex: function (row, column) {
-        return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-      },
-      getlist(){
-        const _this = this
-        _this.table = []
-        const params = {
-          accountId:'1',
-          accessToken:'',
-          resourceType:'',
-          page:{
-            pageNum:_this.page,
-            pageSize:'10'
-          }
-        }
-        console.log(params)
-        $.post(baseUrl+"/admin/banner/getBannerByPage",
-               { param: JSON.stringify(params) },
-               function(data){
-                const info = eval('(' + data + ')');
-                  const response = JSON.parse(info);
-                  const list = response.obj.results
-                  console.log(response)
-                  // _this.page = response.obj.total
-                  _this.total = response.obj.totalRecord
-                  for(var i = 0;i<list.length;i++){
-                    _this.table.push(list[i])
-                  }
+        methods: {
+            //图片上传
+            upload (index) {
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                const self = this
+                if (file) {
+                    this.fileImg = file.name
+                    this.formData.append('file', file);
+                    this.submitUpload(index)
+                } else {
+                    this.fileImg = ''
+                    this.formData = new FormData()
                 }
-            )
-      },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.getUsers();
-      },
-      //获取用户列表
-      getUsers() {
-        let para = {
-          page: this.page,
-          name: this.filters.name
-        };
-        this.listLoading = true;
-        //NProgress.start();
-        getUserListPage(para).then((res) => {
-          this.total = res.data.total;
-          this.users = res.data.users;
-          this.listLoading = false;
-          //NProgress.done();
-        });
-      },
-      //删除
-      handleDel: function (index, row) {
-        this.$confirm('确认删除该记录吗?', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { id: row.id };
-          removeUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
-
-        });
-      },
-      //显示编辑界面
-      seeBtn: function (index, row) {
-        this.editFormVisible = true;
-        this.orderDetails = Object.assign({}, row);
-      },
-      //显示新增界面
-      handleAdd: function () {
-        this.addFormVisible = true;
-        this.addForm = {
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        };
-      },
-      //编辑
-      editSubmit: function () {
-        this.$refs.editForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.editLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.editForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              editUser(para).then((res) => {
-                this.editLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
+            },
+            submitUpload(index){
+                const _this= this;
+                _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                    progress(event) {
+                    }
+                })
+                    .then(response => {
+                        const info = JSON.parse(response.bodyText);
+                        if(index === 1){
+                            _this.frImgurl = info.data[0].baseUri+info.data[0].uri;
+                        }else if(index === 2){
+                            _this.frImgurlPointer = info.data[0].baseUri+info.data[0].uri;
+                        }else if(index === 3){
+                            _this.businessImgurl = info.data[0].baseUri+info.data[0].uri;
+                        }else if(index === 4){
+                            _this.bankImgurl = info.data[0].baseUri+info.data[0].uri;
+                        }
+                    }, error => _this.$emit('complete', 500, error.message))
+            },
+            clupLoad(){
+                const _this = this
+                const params = {
+                    realName:this.sfinfo.realName,
+                    legalCardCode:this.sfinfo.legalCardCode,
+                    storeMobile:this.sfinfo.storeMobile,
+                    bankName:this.sfinfo.bankName,
+                    bankCode:this.sfinfo.bankCode,
+                    theAddress:this.sfinfo.theAddress,
+                    cardImgF:this.frImgurl,
+                    cardImgW:this.frImgurlPointer,
+                    businessLicense:this.businessImgurl,
+                    bankImgW:this.bankImgurl
+                }
+                let url = ''
+                console.log(this.sfinfoId)
+                if(this.sfinfoId === ''){
+                    url = '/api/coreUspAuthentication/add'
+                }else{
+                    url = '/api/coreUspAuthentication/updateDetails'
+                    params.id = this.sfinfoId
+                }
+                console.log(url)
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+url,
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        if(data.code === 1){
+                            _this.editFormVisible = false
+                        }else{
+                            _this.$message.error(data.msg);
+                        }
+                    }
                 });
-                this.$refs['editForm'].resetFields();
-                this.editFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      //新增
-      addSubmit: function () {
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.addLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.addForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              addUser(para).then((res) => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
+            },
+            getGroup(){
+                const _this = this;
+                const params = {
+                    pageNum :this.page,
+                    size:7,
+                    notifyTypes:'1,3,6,8,10,11'
+                }
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/notify/selectListGroup",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        const info = data.data
+                        _this.daibanList = info.records;
+                        _this.total = info.total
+                    }
                 });
-                this.$refs['addForm'].resetFields();
-                this.addFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      selsChange: function (sels) {
-        this.sels = sels;
-      },
-      //批量删除
-      batchRemove: function () {
-        var ids = this.sels.map(item => item.id).toString();
-        this.$confirm('确认删除选中记录吗？', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { ids: ids };
-          batchRemoveUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
+            },
+            getDDWL(){
+                const _this = this;
+                const params = {
+                    pageNum :this.pages,
+                    size:7,
+                    notifyTypes:'2'
+                }
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/notify/selectListGroup",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        const info = data.data
+                        if(info.records.length===0){
+                            $('#toolbarasd').hide();
+                        }else {
+                            _this.dingdanList = info.records;
+                            _this.totals = info.total
+                        }
 
-        });
-      }
-    },
-    mounted() {
-      // this.getlist();
+                    }
+                });
+            },
+        },
+        mounted: function () {
+        },
+        // updated: function () {
+        //     this.drawCharts()
+        // }
     }
-  }
-
 </script>
 
 <style>
@@ -368,4 +292,5 @@
   .el-form-item__label{
     text-align: left;
   }
+  #sfrz .el-form-item__label {margin-right: inherit;text-align: right;font-size: 16px;color: #616161;}
 </style>

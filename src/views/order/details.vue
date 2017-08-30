@@ -1,28 +1,33 @@
 <template>
 	<div class="detalis_order">
-		<div class="detalis_order_top">订单详情</div>
-		<el-col :span="24" style="margin-top: 20px"><!-- :offset="4" -->
-			<el-col :span="4" :offset="1">支付状态：{{table.status}}</el-col>
-			<el-col :span="6" :offset="2">订单编号：{{table.id}}</el-col>
-			<el-col :span="6" :offset="2">下单时间：{{table.payTime}}</el-col>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;">
+			订单详情
 		</el-col>
-		<el-col :span="24" style="margin-top: 20px">
-			<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>
-			<el-col :span="4"style="margin-top: 20px;margin-left: 40px">
-			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
-			</el-col>
-			<el-col :span="5"style="margin-top: 20px;margin-left: 40px">收货人：{{table.consignee}}</el-col>
-			<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>
-			<el-col :span="24"style="margin-top: 20px;margin-left: 40px">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
+		<el-col :span="24" style="font-size: 16px;border-bottom: 1px dashed #cab78c;color: #616161;line-height: 55px;"><!-- :offset="4" -->
+			<el-col :span="6" :offset="2">支付状态：{{table.status}}</el-col>
+			<el-col :span="8" >订单编号：{{table.id}}</el-col>
+			<el-col :span="8" >下单时间：{{table.payTime}}</el-col>
+			<el-col :span="6" :offset="2" >收货人：{{table.consignee}}</el-col>
+			<el-col :span="8" >电话：{{table.mobile}}</el-col>
+			<el-col :span="22" :offset="2">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
 		</el-col>
-		<el-col :span="24" class="order_information" style="margin-top: 20px">订单信息</el-col>
-		<el-col :span="24" class="commodity">
+		<!--<el-col :span="24" style="margin-top: 20px">-->
+			<!--<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>-->
+			<!--<el-col :span="4"style="margin-top: 20px;margin-left: 40px">-->
+			<!--<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>-->
+			<!--</el-col>-->
+			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">收货人：{{table.consignee}}</el-col>-->
+			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>-->
+			<!--<el-col :span="24"style="margin-top: 20px;margin-left: 40px">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>-->
+		<!--</el-col>-->
+		<el-col :span="24" class="order_information" style="margin-top: 10px">订单信息</el-col>
+		<el-col :span="24" class="commodity" style="background: #f4f2e8;height:36px;line-height: 36px;color: #616161;">
 			<el-col :span="4" :offset="8">商品名称</el-col>
 			<el-col :span="2" :offset="5">单价</el-col>
 			<el-col :span="2">数量</el-col>
 			<el-col :span="2">商品总价</el-col>
 		</el-col>
-		<el-col :span="24" class="commodity" v-for="item in table.orderGoods">
+		<el-col :span="24" class="commodity" v-for="item in table.orderGoods" style="border: 1px solid #e6eef9;margin-top: inherit;height:100px;padding-top: 20px;">
 			<el-col :span="6">
 					<img style="width: 80px;margin-left: 40px;" :src="item.picture">
 				</el-col>
@@ -35,19 +40,23 @@
 			<el-col :span="2" style="margin-top: 20px">{{item.quantity}}</el-col>
 			<el-col :span="2" style="margin-top: 20px">{{item.productPrice*item.quantity}}</el-col>
 		</el-col>
-		<el-col :span="24" class="commodity">支付金额：<span style="color:red;">￥{{table.totalMoney}}</span></el-col> 
-		<el-col :span="24" style="color:#aaa;margin-top: 20px">
+		<!--<el-col :span="24" class="commodity">支付金额：<span style="color:red;">￥{{table.totalMoney}}</span></el-col> -->
+		<el-col :span="24" style="margin-top: 20px;color: #616161;line-height: 30px;">
 			<el-col :span="8" :offset="1">商品总价：￥{{table.productValue}}</el-col>
 			<el-col :span="8" class="">金豆抵扣金额：￥{{table.goldPrice}}</el-col>
 			<el-col :span="6" class="">运费价格：￥{{table.expressValue}}</el-col>
-		</el-col> 
-		<el-col :span="24" class="Payment_method">支付方式：{{table.payMethod}}</el-col> 
-		<el-col class="time" :span="24">下单时间：{{table.payTime}}</el-col> 
-		<el-col :span="24" class="order_information" style="margin-top: 20px">
-			<el-button @click="seewl" type="text">物流信息</el-button> 
+			<el-col :span="8" :offset="1">支付方式：{{table.payMethod}}</el-col>
+			<el-col :span="8" class="">下单时间：{{table.payTime}}</el-col>
+			<el-col :span="7" style="margin-top: 20px;">支付金额：<span style="color:red;font-size: 24px;">￥{{table.totalMoney}}</span></el-col>
+		</el-col>
+		<el-col :span="24" style="border-bottom: 1px dashed #cab78c;color: #616161;margin-top: 10px;"><!-- :offset="4" --></el-col>
+		<!--<el-col :span="24" class="Payment_method">支付方式：{{table.payMethod}}</el-col> -->
+		<!--<el-col class="time" :span="24">下单时间：{{table.payTime}}</el-col> -->
+		<el-col :span="24" class="order_information" style="margin-top: 20px;font-size: 20px;color: #cab78c;">
+			<el-button @click="seewl" type="text" style="font-size: 20px;color: #cab78c;">物流信息</el-button>
 		</el-col>
 		<el-col :span="24" class="order_information" style="margin-top: 20px">
-			<el-button @click="seefy" type="text">分佣详情</el-button> 
+			<el-button @click="seefy" type="text" style="font-size: 20px;color: #cab78c;">分佣详情</el-button>
 		</el-col>
 		<el-col :span="24" v-show="wlShow" v-for="item in wuliuinfo" style="margin-left: 40px;color: #aaa;margin-top: 10px">
 			<el-col :span="24">{{item.AcceptStation}}</el-col>
@@ -423,14 +432,11 @@
 	}
 	.detalis_order{
 		margin-left: 20px;
-		margin-top: 40px;
 		width: 100%;
 		height:1600px;
-		border: 1px solid #aaa;
 		border-radius: 10px;
 	}
 	.detalis_order_top{
-		border-bottom: 1px solid #aaa;
 		height:50px;
 		line-height: 50px;
 		font-size: 18px;
@@ -438,11 +444,11 @@
 		margin-left: 20px;
 	}
 	.order_information{
-		border: 1px solid #ddd;
 		height:40px;
 		line-height: 40px;
-		font-size: 14px;
-		color: #20a0ff;
+		font-size: 20px;
+		color: #cab78c;
 		padding-left:20px;
+
 	}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;margin-top: 40px">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;margin-top: 40px">
 			<el-table-column type="index" label="序号">
 			</el-table-column>
 			<el-table-column label="类型">

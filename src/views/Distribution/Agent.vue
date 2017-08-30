@@ -1,9 +1,12 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="24" style="padding-bottom: 0px;background: #fff">
-			<h3>我的分销商（{{FxsList.length}}）</h3>
+		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
+			我的分销商（{{FxsList.length}}）
 		</el-col>
+		<!--<el-col :span="24" style="padding-bottom: 0px;background: #fff">-->
+			<!--<h3></h3>-->
+		<!--</el-col>-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;background: #fff">
 			<el-form :inline="true">
 				<el-form-item label="条件">

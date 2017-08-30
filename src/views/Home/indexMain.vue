@@ -185,15 +185,11 @@
 				      ]
             	},
             	sfinfo:{},
-<<<<<<< HEAD
-            	editFormVisible:true,//上传材料
-=======
                 total:7,
                 page: 1,
                 totals:10,
                 pages: 1,
             	editFormVisible:false,//上传材料
->>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
             	dashVisible:false,//待审核
             	remarkInfo:'',//未通过信息
             	sfinfoId:'',//修改身份信息ID
@@ -584,21 +580,12 @@
         		this.dashVisible = true
         	}else if(state.storeStatus === 2){//审核未通过
         		this.addTitle = '修改身份信息'
-<<<<<<< HEAD
-            }
-        	this.getSHinfo()
-        	this.getlist()
-        	this.getline()
-        	this.getGroup()
-        	this.getDDWL()
-=======
         		this.getSHinfo()
         	}
         	this.getlist();
         	this.getline();
         	this.getGroup();
         	this.getDDWL();
->>>>>>> 59147f8a5bc4b7873b2eb5952ef62d2c330ba735
         },
         // updated: function () {
         //     this.drawCharts()

@@ -5,17 +5,18 @@
 		</el-col>
 		<el-button type="primary" v-on:click="addIDCard(1)" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
-		  <el-col :xs="2" :sm="2" :md="2" :lg="2">店铺身份</el-col>
-		  <el-col :xs="15" :sm="15" :md="15" :lg="15">
+		  <el-col :xs="2" :sm="2" :md="2" :lg="2" style="font-size: 16px;color:#cab78c;height:32px;line-height: 32px; ">店铺身份</el-col>
+		  <el-col :xs="15" :sm="15" :md="15" :lg="15" style="height:32px;line-height: 32px;">
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" style="margin-bottom: 40px" v-if="item.level !== -100">
 		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
 		  				<img style="width: 100px;border:1px solid #eee;border-radius: 10px;" :src="item.icon">
 		 			</el-col>
-		 			<el-col style="margin-top: 35px" :xs="4" :sm="4" :md="4" :lg="4">
+		 			<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-left: 20px;height:32px;line-height: 32px;">
 		  				{{item.name}}
 		 			</el-col>
 		 		</el-col>
 		  </el-col>
+			<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
 		</el-row>
 		<el-button v-if="commissionLine === 5" :disabled="addBtn" type="primary" v-on:click="addIDCard(2)" style="margin-top: 20px;margin-bottom: 20px">新增大区身份</el-button>
 		<el-col :span="24"  v-if="commissionLine === 5" >
@@ -32,7 +33,7 @@
 			  </el-col>
 		</el-col>
 		<!--列表-->
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">购买身份价格</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="font-size: 16px;color:#616161;margin-bottom: 20px; ">购买身份价格</el-col>
 		<el-table v-if="commissionLine !== 3 && commissionLine !== 5" :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
 			<el-table-column type="index">
 			</el-table-column>
@@ -63,29 +64,35 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">身份介绍</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">商品照片</el-col>
+		<el-col :xs="24" :md="24">
+			<!-- 上传图片 -->
+			<form style="position: relative;height:234px;">
+				<input type="file" style="position:absolute;opacity:0;width:100px;height:30px;margin-right:10px;z-index: 1;"  @change="upload" id="fileInput">
+				<el-button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; " v-if="this.imgArry.length <3">
+					<span >点击上传</span>
+				</el-button>
+				<span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+				<!-- <el-button type="button" class="el-button el-button--primary el-button--small" :disabled="this.imgArry.length===3" id="btnClear" @click="clear">清空上传</el-button> -->
+				<!-- <span style="display: block;font-size: 12px">{{ imageChange }}</span> -->
+				<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:0;left:0;z-index: 0;width:160px;height:160px;">
+				<div>
+					<el-col :xs="6" :md="6" v-for="item in imgArry"  style="margin-top: 42px;position: relative;">
+						<img style="position: absolute;right: 54px;top:-17px;" @click="deldetImg(item)" src="../../assets/delet.png">
+						<img :src="item" style="width:160px;height: 160px;border: 1px solid #f0f0f0;">
+					</el-col>
+				</div>
+
+			</form>
+
+		</el-col>
+
+
+
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px;font-size: 16px;">身份介绍</el-col>
 		<el-col :span="24">
 			<div id = 'editor-trigger' style="height: 500px;"></div>
 		</el-col>
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">商品照片</el-col>
-		<el-col :xs="24" :md="24">
-				<!-- 上传图片 -->
-				<form style="position:relative;">
-				    <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
-				    <el-button type="button" class="el-button el-button--primary el-button--small" v-if="this.imgArry.length <3">
-				    	<span >点击上传</span>
-				    </el-button>
-				    <!-- <el-button type="button" class="el-button el-button--primary el-button--small" :disabled="this.imgArry.length===3" id="btnClear" @click="clear">清空上传</el-button> -->
-				    <!-- <span style="display: block;font-size: 12px">{{ imageChange }}</span> -->
-				</form>
-		</el-col>
-		<el-col :xs="24" :md="24"  style="margin-top: 20px">
-			<el-col :xs="6" :md="6" v-for="item in imgArry">
-				<img style="position: relative;left: 220px;top:-170px;" @click="deldetImg(item)" src="../../assets/delet.png">
-				<img :src="item" style="width:200px;height: 200px;border: 1px solid #f0f0f0;">
-			</el-col>
-		</el-col>
-
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">
 		<el-button type="primary" v-on:click="shopRoleAdd">发布</el-button>
 		</el-col>

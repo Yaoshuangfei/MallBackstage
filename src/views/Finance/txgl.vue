@@ -268,6 +268,6 @@
 
 <style>
 	#txgl .el-input__icon+.el-input__inner {padding-right: inherit;}
-	#table thead tr th {background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;}
+	#table thead tr th {background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;font-weight: inherit;}
 	#table thead tr th div {background: #cab78c;color: #fff;}
 </style>s

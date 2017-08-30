@@ -4,76 +4,110 @@
       店铺样式管理
     </el-col>
     <el-col :soan="24" style="margin-top: 20px;font-size: 18px;">
-      <el-col :span="2">混批设置</el-col>
+      <el-col :span="3" :offset="1" style="font-size: 20px;color: #cab78c;">混批设置</el-col>
+      <span style="font-size: 12px;color: #ababab;">注：混批方式只能二选一；获取前面可分佣的身份ABC</span>
     </el-col>
-    <el-col :span="24" style="margin-top: 20px;margin-bottom: 20px">
+    <el-col id="hunpi" :span="23" :offset="1" style="margin-top: 20px;margin-bottom: 20px">
       <template>
         <el-radio-group v-model="radio" @change="radiochange">
             <el-radio :label="2">总数量</el-radio>
-            <el-radio :label="3">总价格</el-radio>
+            <el-radio :label="3" style="margin-left: 100px;">总价格</el-radio>
         </el-radio-group>
       </template>
     </el-col>
-    <el-table :data="table" border highlight-current-row v-loading="listLoading">
-      <el-table-column type="index" label="序号" width="239px">
+    <el-table class="hunpiTable" :data="table" border highlight-current-row v-loading="listLoading" style="text-align: center;">
+      <el-table-column type="index" label="序号" width="151">
       </el-table-column>
-      <el-table-column prop="name" label="身份" width="350px">
+      <el-table-column prop="name" label="身份" width="513">
       </el-table-column>
-      <el-table-column prop="addPrice" :label="tableName" width="350px">
+      <el-table-column prop="addPrice" :label="tableName" width="275px">
         <template scope="scope">
             <el-input type="text" class="noneborder" v-model="scope.row.addPrice"></el-input>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-col :span="24" :offset="10" style="margin-top: 40px">
+    <el-col :span="14" :offset="10" style="margin-top: 40px;">
       <!-- <el-col :span="4"><el-button type="primary">修改</el-button></el-col> -->
-      <el-button type="primary"  @click="Preservation">保存</el-button>
+      <el-button type="primary"  @click="Preservation" style="width:100px;height:40px;background: #cab78c;border: 1px solid #cab78c;">保存</el-button>
     </el-col>
-
+    <el-col style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
     <!-- <el-col :span="2" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">删除</el-col> -->
     <el-col :span="24">
       <el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 20px;color: #cab78c;">补货的商品</el-col>
-      <el-col :span="2" :offset="8"  style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
-        <el-button type="text" @click.native="shopAdd">添加</el-button>
+      <el-col :span="4"  :offset="10" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
+        <el-button type="text"  style="color: #9f3333;">从已上架的商品中获取</el-button>
+      </el-col>
+      <el-col :span="2"  style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
+        <el-button type="text" @click.native="shopAdd" style="color: #9f3333;">添加</el-button>
+      </el-col>
+      <el-col :span="2"   style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
+        <el-button type="text"  style="color: #9f3333;">删除</el-button>
       </el-col>
     </el-col>
-    <el-table :data="shopTable" highlight-current-row v-loading="listLoading">
-      <el-table-column type="index" label="序号" width="239px">
+    <el-table class="hunpiTable" border :data="shopTable" highlight-current-row v-loading="listLoading" style="text-align: center;">
+      <el-table-column type="index" label="序号" width="151">
       </el-table-column>
-      <el-table-column prop="name" label="商品名称" width="350px">
+      <el-table-column prop="name" label="商品名称" width="513">
       </el-table-column>
-      <el-table-column prop="price" label="售价" width="350px">
+      <el-table-column prop="price" label="售价" width="275px">
         <template scope="scope">
           <el-input type="text" class="noneborder" v-model="scope.row.price"></el-input>
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="20" :offset="10" style="margin-top: 40px">
+    <el-col :span="10" :offset="10" style="margin-top: 40px">
       <!-- <el-col :span="4"><el-button type="primary">修改</el-button></el-col> -->
-      <el-button type="primary" @click="Preservation">保存</el-button>
+      <el-button type="primary" @click="Preservation" style="width:100px;height:40px;background: #cab78c;border: 1px solid #cab78c;">保存</el-button>
     </el-col>
     <el-col :span="24" style="margin-top: 40px;border-bottom: 1px dashed #cab78c;"></el-col>
-    <el-col :span="24" style="padding-top: 20px;font-size: 18px;margin-bottom: 20px;">商品图片</el-col>
-    <el-form :model="filters" label-width="180px" style="margin-left: 40px;margin-top: 40px">
+    <!--<el-col :span="24" style="padding-top: 20px;font-size: 18px;margin-bottom: 20px;">商品图片</el-col>-->
+    <el-form :model="filters"  style="margin-left: 40px;margin-top: 40px;">
       
-      <el-col :span="24">
+      <el-col :span="24" style="margin-top: 20px;">
             <el-col :span="24" >
-            <input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">
-            <el-button v-show="CommodityPictures.length !== 3" type="button" class="el-button el-button--primary el-button--small" style="margin-left: -83px">
-              <span>本地上传</span>
-            </el-button><!-- :disabled="uploadBtn" -->
-            <span>图片格式：jpg,jpeg,png,gif,推荐大小800*800.</span>
-            <!-- <el-button :disabled="uploadBtn" type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</el-button> -->
-            <span style="display: block;font-size: 12px;margin-bottom: 10px"></span>
-            <el-col :span="8" v-for="item in CommodityPictures">
-              <img style="position: relative;left: 220px;top: -177px;" @click="deldetImg(item)" src="../../assets/delet.png">
-              <img :src="item" style="width:200px;height: 200px;border: 1px solid #f0f0f0;">
-            </el-col>
+              <el-form-item label="商品图片:" style="position: relative;height:234px;">
+                <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px;z-index: 1;"  @change="upload" id="fileInput" >
+                <button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+                  <span >点击上传</span>
+                </button>
+                <span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+                <!--<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:15px;left:0;z-index: 0;width:160px;height:160px;">-->
+                <!--<el-col :span="24" v-if="bankImgurl !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="bankImgurl"></el-col>-->
+                <div style="margin: 20px 0;">
+                  <el-col :span="8" v-for="item in CommodityPictures" style="margin-top: 42px;position: relative;">
+                    <img style="position: absolute;right: 118px;top:-17px;" @click="deldetImg(item)" src="../../assets/delet.png">
+                    <img :src="item" style="width:160px;height: 160px;border: 1px solid #f0f0f0;">
+                  </el-col>
+                </div>
+
+              </el-form-item>
+
+
+            <!--<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">-->
+            <!--<el-button v-show="CommodityPictures.length !== 3" type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" style="margin-left: -83px">-->
+              <!--<span>本地上传</span>-->
+            <!--</el-button>&lt;!&ndash; :disabled="uploadBtn" &ndash;&gt;-->
+            <!--<span>图片格式：jpg,jpeg,png,gif,推荐大小800*800.</span>-->
+            <!--&lt;!&ndash; <el-button :disabled="uploadBtn" type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</el-button> &ndash;&gt;-->
+            <!--<span style="display: block;font-size: 12px;margin-bottom: 10px"></span>-->
+            <!--<el-col :span="8" v-for="item in CommodityPictures">-->
+              <!--<img style="position: relative;left: 220px;top: -177px;" @click="deldetImg(item)" src="../../assets/delet.png">-->
+              <!--<img :src="item" style="width:200px;height: 200px;border: 1px solid #f0f0f0;">-->
+            <!--</el-col>-->
             <!-- /*<img style="position: relative;left: 220px;top:-170px;" @click="deldetImg(item)" src="../../assets/delet.png">*/ -->
             <!-- /*<img style="width:150px;margin-top: 20px;margin-right: 20px" v-for="item in CommodityPictures" :src="item">*/ -->
             </el-col>
           </el-col>
+      <el-col :span="24">
+
+      </el-col>
+
+
+
+
+
+
           <el-col :span="24">商品详情描述</el-col>
         <el-col style="margin-top: 40px;">
           <div id = 'editor-trigger' style="height: 500px"></div>
@@ -422,4 +456,7 @@
   .el-form-item__label{
     text-align: left;
   }
+  #hunpi .el-radio__input.is-checked .el-radio__inner {background: #9f3333;border-color: #9f3333;}
+  .hunpiTable tbody .cell {height:58px;line-height: 58px;}
+  .hunpiTable tbody .noneborder input {text-align: center;}
 </style>
