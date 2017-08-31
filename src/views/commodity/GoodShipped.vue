@@ -684,6 +684,7 @@
                     saleState:'1',
                     goodsData:[],
                     catId:this.sels[0].id,
+                    catName:this.commodity,
                     storeId:localStorage.getItem("storeId"),
                     ftId:this.value,
                     pricingModel:this.PricingModel,

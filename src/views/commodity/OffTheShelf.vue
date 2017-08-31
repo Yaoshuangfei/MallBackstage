@@ -41,7 +41,10 @@
 				<el-col :span="2" :offset="1" class="describe">{{item.storage}}</el-col>
 				<el-col :span="5" :offset="1" class="describe" >
 					<el-button type="text" @click="seeBtn(item.id)">查看</el-button>
-					<el-button type="text" @click="editBtn(item.id)">编辑</el-button>
+					<router-link :to="{ name: '修改商品', params: { id: item.id}}">
+						<el-button style="margin-top:-5px;margin:0 5px"  type="text">编辑</el-button>
+					</router-link>
+					<!-- <el-button type="text" @click="editBtn(item.id)">编辑</el-button> -->
 					<el-button type="text" @click="topBtn(item.id)">上架</el-button>
 					<el-button type="text" @click="deleteBtn(item.id)">删除</el-button>
 				</el-col>
@@ -199,6 +202,7 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
                     	const info = data.data
                     	_this.orderDetails = info
                     	_this.orderDetails.goodsData = JSON.parse(_this.orderDetails.goodsData)
