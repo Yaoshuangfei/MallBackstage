@@ -42,6 +42,7 @@ import OnSale from './views/commodity/OnSale.vue'
 import OffTheShelf from './views/commodity/OffTheShelf.vue'
 import Illegal from './views/commodity/Illegal.vue'
 import ReturnGoods from './views/commodity/ReturnGoods.vue'
+import GoodEdit from './views/commodity/GoodEdit.vue'
 
 // 身份管理 Identity
 // import Identity from './views/Identity/Identitys.vue'
@@ -163,6 +164,7 @@ let routes = [
         iconCls: 'fa fa-id-card-o',
         children: [
             { path: '/GoodShipped', component: GoodShipped, name: '发布商品' },
+            { path: '/GoodEdit/:id', component: GoodEdit, name: '修改商品' ,hidden: true },
             { path: '/OnSale', component: OnSale, name: '出售中的商品' },
             { path: '/OffTheShelf', component: OffTheShelf, name: '下架商品' },
             { path: '/Illegal', component: Illegal, name: '违规商品' },
