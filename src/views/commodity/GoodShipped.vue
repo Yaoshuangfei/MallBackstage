@@ -29,193 +29,344 @@
 		<!--商品基本信息-->
 		<el-col :span="24" v-show="details">
 			<el-col :span="24" class="Commodity_information">
-				<el-col :span="24" class="head_text">商品基本信息</el-col>
-				<el-col :span="24" class="head_text">
-					<el-col :span="2" class="leftg_text">商品类目：</el-col>当前分类:     {{commodity}}
-				</el-col>
-				<el-col :span="24" class="head_text">
-					<el-col :span="2" class="leftg_text">商品品牌：</el-col></el-col>
-				<el-col :span="24"  style="margin-top: 10px;padding-left: 20px;">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>
-				<el-col :span="18" :offset="3" class="body_text">
-					<el-col :span="19" :offset="2" style="margin-top: 10px">
-						<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
-							<el-form-item :label="item.name" v-for="item in paramsData" style="margin-right:  200px;">
-								<el-input type="text" v-model="item.value"></el-input>
-							</el-form-item>
+				<el-col :span="22" :offset="1" class="head_text" style="height:56px;line-height: 56px;border-bottom: 1px dashed #cab78c;font-size: 20px;color: #cab78c;">商品类目>{{commodity}}</el-col>
+				<el-col :span="22" :offset="1" class="head_text" style="height:700px;margin-top: 20px;">
+					<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
+						<el-form-item label='商品名称' style="width:100%;">
+							<el-input type="text" v-model="DescriptionGoods" style="width:550px;"></el-input>
+							<span style="font-size: 12px;color: #ababab;">商品名称至少3个字符，最多50个汉字</span>
+						</el-form-item>
+						<el-form-item label='商品货号' style="width:100%;">
+							<el-input type="text" v-model="productCode" style="width:550px;"></el-input>
+							<span style="font-size: 12px;color: #ababab;">最多20个字符</span>
+						</el-form-item>
+						<el-form-item :label="item.name" v-for="item in paramsData" style="margin-right:  200px;">
+							<el-input type="text" v-model="item.value"></el-input>
+						</el-form-item>
+						<el-form-item label='商品描述' style="width:100%;">
+							<el-input type="textarea" :rows="3" v-model="DescriptionGoods" style="width:550px;"></el-input>
+						</el-form-item>
+
+						<el-form-item label="商品图片:" style="position: relative;height:234px;width:100%;">
+							<input type="file" style="position:absolute;opacity:0;width:80px;height:30px;margin-right:10px;z-index: 1;"  @change="upload" id="fileInput" >
+							<button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+								<span >点击上传</span>
+							</button>
+							<span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
+							<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;">
+							<!--<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:15px;left:0;z-index: 0;width:160px;height:160px;">-->
+							<!--<el-col :span="24" v-if="bankImgurl !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="bankImgurl"></el-col>-->
+							<div style="margin: 20px 0;width:600px;">
+								<el-col :span="8" v-for="item in CommodityPictures" style="margin-top: 10px;position: relative;">
+									<img style="position: absolute;right: 20px;top:-17px;" @click="deldetImg(item)" src="../../assets/delet.png">
+									<img :src="item" style="width:160px;height: 160px;border: 1px solid #f0f0f0;">
+								</el-col>
+							</div>
+
+						</el-form-item>
+
+
 						<el-col :span='24'></el-col>
 					</el-form>
-					</el-col>
 				</el-col>
-				<el-col :span="24" class="shangp">
-					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="border-right: 1px solid #ddd;height: 70px;text-align: right;line-height: 60px;">商品名称：</el-col>
-						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="CommodityName"></el-input></el-col>
-							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>
-						</el-col>
-					</el-col>
-					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="border-right: 1px solid #ddd;height: 110px;text-align: right;line-height: 60px;">商品描述：</el-col>
-						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="textarea" :rows="3" v-model="DescriptionGoods"></el-input></el-col>
-							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品描述必须是0.01~10000000的、之间的数字</el-col>
-						</el-col>
-					</el-col>
-					<!-- <el-col :span="20" style="height: 60px;border-left: 1px solid #ddd;padding-left: 10px">
-								<el-col :span="24"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字
-								<el-input type="textarea" v-model="DescriptionGoods" :rows="3"></el-input>
-								</el-col>
-							</el-col> -->
-					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="border-right: 1px solid #ddd;height: 95px;text-align: right;line-height: 80px;">商品货号：</el-col>
-						<el-col :span="12" style="margin-left: 10px">
-							<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="productCode"></el-input></el-col>
-							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>
-							<el-col :span="13"  style="margin-top: 5px;color: #aaa;">做多可输入20个字符，支持输入中文、字母、数字、_、/、和小数点</el-col>
-						</el-col>
-					</el-col>
-					<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-						<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>
-						<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd;height: 200px">
-							<el-col :span="24" style="margin-top: 10px">
-								
-							<!-- <button type="button" class="el-button el-button--primary el-button--small" id="btnClear" @click="clear">清空上传</button> -->
-							<!-- <span style="display: block;font-size: 12px;margin-bottom: 10px">{{ imageChange }}</span> -->
-								<el-col :span="4" v-for="item in CommodityPictures">
-									<img style="position: relative;left: 80px;top:30px;" @click="deldetImg(item)" src="../../assets/delet.png">
-									<img style="width:100px;border:1px solid #aaa" :src="item">
-								</el-col>
-								<el-col v-if="CommodityPictures.length < 3" :span="4" style="margin-top: 10px">
-									<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">
-									<button type="button" class="el-button el-button--primary el-button--small" style="margin-left: -83px">
-										<span>点击上传</span>
-									</button>
-								</el-col>
-							</el-col>
-							<el-col :span="19"  style="margin-top: 5px;color: #aaa;">最多上传三张图片</el-col>
-						</el-col>
-					</el-col>
+				<div>
+					<!--<el-col :span="24" class="head_text">-->
+					<!--<el-col :span="2" class="leftg_text">商品类目：</el-col>当前分类:     {{commodity}}-->
+					<!--</el-col>-->
+					<!--<el-col :span="24" class="head_text">-->
+					<!--<el-col :span="2" class="leftg_text">商品品牌：</el-col></el-col>-->
+					<!--<el-col :span="24"  style="margin-top: 10px;padding-left: 20px;">宝贝属性 <span  style="color: #aaa"> 错误填写宝贝属性，可能会引起宝贝下架或搜索流量减少，影响您的正常销售，请确认准确填写！</span></el-col>-->
+					<!--<el-col :span="18" :offset="3" class="body_text">-->
+					<!--<el-col :span="19" :offset="2" style="margin-top: 10px">-->
+					<!--<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">-->
+					<!--<el-form-item :label="item.name" v-for="item in paramsData" style="margin-right:  200px;">-->
+					<!--<el-input type="text" v-model="item.value"></el-input>-->
+					<!--</el-form-item>-->
+					<!--<el-col :span='24'></el-col>-->
+					<!--</el-form>-->
+					<!--</el-col>-->
+					<!--</el-col>-->
+				</div>
+				<el-col :span="24"  class="shangp">
+					<div>
+						<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;">-->
+						<!--<el-col :span="2" style="border-right: 1px solid #ddd;height: 70px;text-align: right;line-height: 60px;">商品名称：</el-col>-->
+						<!--<el-col :span="12" style="margin-left: 10px">-->
+						<!--<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="CommodityName"></el-input></el-col>-->
+						<!--<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品标题名称长度至少3个字符，最长50个汉字</el-col>-->
+						<!--</el-col>-->
+						<!--</el-col>-->
+						<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;">-->
+						<!--<el-col :span="2" style="border-right: 1px solid #ddd;height: 110px;text-align: right;line-height: 60px;">商品描述：</el-col>-->
+						<!--<el-col :span="12" style="margin-left: 10px">-->
+						<!--<el-col :span="12" style="margin-top: 10px"><el-input type="textarea" :rows="3" v-model="DescriptionGoods"></el-input></el-col>-->
+						<!--<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品描述必须是0.01~10000000的、之间的数字</el-col>-->
+						<!--</el-col>-->
+						<!--</el-col>-->
+						<!--&lt;!&ndash; <el-col :span="20" style="height: 60px;border-left: 1px solid #ddd;padding-left: 10px">-->
+						<!--<el-col :span="24"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字-->
+						<!--<el-input type="textarea" v-model="DescriptionGoods" :rows="3"></el-input>-->
+						<!--</el-col>-->
+						<!--</el-col> &ndash;&gt;-->
+						<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;">-->
+						<!--<el-col :span="2" style="border-right: 1px solid #ddd;height: 95px;text-align: right;line-height: 80px;">商品货号：</el-col>-->
+						<!--<el-col :span="12" style="margin-left: 10px">-->
+						<!--<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="productCode"></el-input></el-col>-->
+						<!--<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品货号是指卖家个人管理商品的编号，买家不可见</el-col>-->
+						<!--<el-col :span="13"  style="margin-top: 5px;color: #aaa;">做多可输入20个字符，支持输入中文、字母、数字、_、/、和小数点</el-col>-->
+						<!--</el-col>-->
+						<!--</el-col>-->
+						<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;">-->
+						<!--<el-col :span="2" style="text-align: right;line-height: 80px;">商品图片：</el-col>-->
+						<!--<el-col :span="12" style="margin-left: -1px;padding-left:10px;border-left: 1px solid #ddd;height: 200px">-->
+						<!--<el-col :span="24" style="margin-top: 10px">-->
+						<!---->
+						<!--&lt;!&ndash; <button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button> &ndash;&gt;-->
+						<!--&lt;!&ndash; <span style="display: block;font-size: 12px;margin-bottom: 10px">{{ imageChange }}</span> &ndash;&gt;-->
+						<!--<el-col :span="4" v-for="item in CommodityPictures">-->
+						<!--<img style="position: relative;left: 80px;top:30px;" @click="deldetImg(item)" src="../../assets/delet.png">-->
+						<!--<img style="width:100px;border:1px solid #aaa" :src="item">-->
+						<!--</el-col>-->
+						<!--<el-col v-if="CommodityPictures.length < 3" :span="4" style="margin-top: 10px">-->
+						<!--<input type="file" style="position: relative;opacity:0;width:70px;height:40px;margin-right:10px;"  @change="upload" id="fileInput">-->
+						<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" style="margin-left: -83px">-->
+						<!--<span>点击上传</span>-->
+						<!--</button>-->
+						<!--</el-col>-->
+						<!--</el-col>-->
+						<!--<el-col :span="19"  style="margin-top: 5px;color: #aaa;">最多上传三张图片</el-col>-->
+						<!--</el-col>-->
+						<!--</el-col>-->
+					</div>
 					<el-col :span="24">
-						<el-col :span="24" style="height: 40px;line-height: 30px;">商品交易信息</el-col>
-						<el-col :span="24" style="height: 40px;line-height: 30px;border: 1px solid #ddd;">
-							<el-col :span="2"  style="height: 30px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">计量单位：</el-col>
-							<el-col :span="2"  style=""><el-input type="text" v-model="MeasurementUnit"></el-input></el-col>
+						<el-col :span="22" :offset="1" class="head_text" style="height:56px;line-height: 56px;border-bottom: 1px dashed #cab78c;font-size: 20px;color: #cab78c;">商品交易信息</el-col>
+						<el-col :span="22" :offset="1" style="margin-top: 20px;">
+							<el-form  label-width="100px" >
+								<el-form-item label='计量单位' style="width:100%;">
+									<el-input type="text" v-model="DescriptionGoods" style="width:150px;"></el-input>
+								</el-form-item>
+									<el-col :span="24" style="height: 50px;line-height: 30px;" v-for="item in Specifications">
+										<el-col :span="2" >{{item.name}}</el-col>
+										<el-col :span="20"  style="margin-left: 50px">
+											<el-checkbox-group v-model="item.checrArry" @change="handleCheckedCitiesChange(item)">
+												<el-col :span="5" v-for="city in item.values">
+													<el-checkbox :label="city" :key="city">{{city}}</el-checkbox>
+												</el-col>
+											</el-checkbox-group>
+										</el-col>
+									</el-col>
+								<el-form-item label='报价规格' style="width:100%;">
+									<el-table border :data="tableData" style="width: 100%">
+										<el-table-column prop="specData" label="规格" width="180">
+											<template scope="scope">
+												{{scope.row.specData}}
+											</template>
+										</el-table-column>
+										<!-- <el-table-column prop="goodsId" label="商品id" width="190">
+                                            <template scope="scope">
+                                                    <el-input v-model="scope.row.goodsId" type="text"></el-input>
+                                              </template>
+                                        </el-table-column> -->
+										<el-table-column prop="costPrice" label="成本价(元)" width="180">
+											<template scope="scope">
+												<el-input v-model="scope.row.costPrice" type="text"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="specPrice" label="建议零售价(元)" width="180">
+											<template scope="scope">
+												<el-input v-model="scope.row.specPrice" type="text"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="storage" label="商品库存" width="180">
+											<template scope="scope">
+												<el-input v-model="scope.row.storage" type="text"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="deductibleImazamox" label="金豆抵扣" width="200">
+											<template scope="scope">
+												<el-input v-model="scope.row.deductibleImazamox" type="text"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="specNo" label="规格商家编码" width="200">
+											<template scope="scope">
+												<el-input v-model="scope.row.specNo" type="text"></el-input>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-form-item>
+								<el-form-item label='建议零售价' style="width:100%;">
+									<el-input type="text" v-model="SuggestedRetailRrice" style="width:150px;"></el-input>
+									<span style="font-size: 12px;color: #ababab;">商品价格必须是0.01~10000000的、之间的数字</span>
+								</el-form-item>
+								<el-form-item label='定价模式' style="width:100%;">
+									<el-col :span="20">
+										<el-col :span="20">
+											<el-radio class="radio" v-model="PricingModel" label="1">模式一</el-radio>
+											<el-radio class="radio" v-model="PricingModel" label="2">模式二</el-radio>
+										</el-col>
+										<el-col :span="20">
+											模式一：分销金额 = （定价-成本（人民币））*吸引力平台分佣方式
+										</el-col>
+										<el-col :span="20">
+											模式二：分销金额 = （定价-成本（金豆））
+										</el-col>
+									</el-col>
+								</el-form-item>
+								<el-form-item label='基础服务' style="width:100%;">
+									<el-checkbox-group v-model="checkedCities" :min="0" :max="6" @change="clicka">
+										<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+									</el-checkbox-group>
+								</el-form-item>
+							</el-form>
 						</el-col>
-						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;" v-for="item in Specifications">
-							<el-col :span="2" style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">{{item.name}}</el-col>
-							<el-col :span="20"  style="margin-left: 50px">
-								<el-checkbox-group v-model="item.checrArry" @change="handleCheckedCitiesChange(item)">
-								    <el-col :span="5" v-for="city in item.values">
-								    	<el-checkbox :label="city" :key="city">{{city}}</el-checkbox>
-								    </el-col>
-								</el-checkbox-group>
-							</el-col>
+<div>
+	<!--<el-col :span="24" style="height: 40px;line-height: 30px;">商品交易信息</el-col>-->
+	<!--<el-col :span="24" style="height: 40px;line-height: 30px;border: 1px solid #ddd;">-->
+	<!--<el-col :span="2"  style="height: 30px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">计量单位：</el-col>-->
+	<!--<el-col :span="2"  style=""><el-input type="text" v-model="MeasurementUnit"></el-input></el-col>-->
+	<!--</el-col>-->
+	<!--<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;" v-for="item in Specifications">-->
+	<!--<el-col :span="2" style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">{{item.name}}</el-col>-->
+	<!--<el-col :span="20"  style="margin-left: 50px">-->
+	<!--<el-checkbox-group v-model="item.checrArry" @change="handleCheckedCitiesChange(item)">-->
+	<!--<el-col :span="5" v-for="city in item.values">-->
+	<!--<el-checkbox :label="city" :key="city">{{city}}</el-checkbox>-->
+	<!--</el-col>-->
+	<!--</el-checkbox-group>-->
+	<!--</el-col>-->
+	<!--</el-col>-->
+	<!--<el-col :span="24" style="line-height: 30px;border: 1px solid #ddd;">-->
+	<!--<el-col :span="2"  style="height: 150px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">规格报价：</el-col>-->
+	<!--<el-col :span="20"  style="">-->
+	<!--<el-table :data="tableData" style="width: 100%">-->
+	<!--<el-table-column prop="specData" label="规格" width="180">-->
+	<!--<template scope="scope">-->
+	<!--{{scope.row.specData}}-->
+	<!--</template>-->
+	<!--</el-table-column>-->
+	<!--&lt;!&ndash; <el-table-column prop="goodsId" label="商品id" width="190">-->
+	<!--<template scope="scope">-->
+	<!--<el-input v-model="scope.row.goodsId" type="text"></el-input>-->
+	<!--</template>-->
+	<!--</el-table-column> &ndash;&gt;-->
+	<!--<el-table-column prop="costPrice" label="成本价(元)" width="180">-->
+	<!--<template scope="scope">-->
+	<!--<el-input v-model="scope.row.costPrice" type="text"></el-input>-->
+	<!--</template>-->
+	<!--</el-table-column>-->
+	<!--<el-table-column prop="specPrice" label="建议零售价(元)" width="180">-->
+	<!--<template scope="scope">-->
+	<!--<el-input v-model="scope.row.specPrice" type="text"></el-input>-->
+	<!--</template>-->
+	<!--</el-table-column>-->
+	<!--<el-table-column prop="storage" label="商品库存" width="180">-->
+	<!--<template scope="scope">-->
+	<!--<el-input v-model="scope.row.storage" type="text"></el-input>-->
+	<!--</template>-->
+	<!--</el-table-column>-->
+	<!--<el-table-column prop="deductibleImazamox" label="金豆抵扣" width="200">-->
+	<!--<template scope="scope">-->
+	<!--<el-input v-model="scope.row.deductibleImazamox" type="text"></el-input>-->
+	<!--</template>-->
+	<!--</el-table-column>-->
+	<!--<el-table-column prop="specNo" label="规格商家编码" width="200">-->
+	<!--<template scope="scope">-->
+	<!--<el-input v-model="scope.row.specNo" type="text"></el-input>-->
+	<!--</template>-->
+	<!--</el-table-column>-->
+	<!--</el-table>-->
+	<!--</el-col>-->
+	<!--</el-col>-->
+	<!--<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;">-->
+	<!--<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: center">定价模式 </el-col>-->
+	<!--<el-col :span="20">-->
+	<!--<el-col :span="20">-->
+	<!--<el-radio class="radio" v-model="PricingModel" label="1">模式一</el-radio>-->
+	<!--<el-radio class="radio" v-model="PricingModel" label="2">模式二</el-radio>-->
+	<!--</el-col>-->
+	<!--<el-col :span="20">-->
+	<!--模式一：分销金额 = （定价-成本（人民币））*吸引力平台分佣方式-->
+	<!--</el-col>-->
+	<!--<el-col :span="20">-->
+	<!--模式二：分销金额 = （定价-成本（金豆））-->
+	<!--</el-col>-->
+	<!--</el-col>-->
+	<!--</el-col>-->
+	<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;">-->
+	<!--<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">建议零售价(原价)：</el-col>-->
+	<!--<el-col :span="12" style="margin-left: 10px">-->
+	<!--<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="SuggestedRetailRrice"></el-input></el-col>-->
+	<!--<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>-->
+	<!--</el-col>-->
+	<!--</el-col>-->
+	<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;">-->
+	<!--<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">基础服务：</el-col>-->
+	<!--<el-col :span="12" style="margin-left: 10px;margin-top: 20px">-->
+	<!--<el-checkbox-group v-model="checkedCities" :min="0" :max="6" @change="clicka">-->
+	<!--<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>-->
+	<!--</el-checkbox-group>-->
+	<!--</el-col>-->
+</div>
 						</el-col>
-						<el-col :span="24" style="line-height: 30px;border: 1px solid #ddd;">
-							<el-col :span="2"  style="height: 150px;line-height: 30px;border-right: 1px solid #ddd;text-align: right">规格报价：</el-col>
-							<el-col :span="20"  style="">
-								 <el-table :data="tableData" style="width: 100%">
-							      <el-table-column prop="specData" label="规格" width="180">
-							      	<template scope="scope">
-							      		{{scope.row.specData}}
-									</template>
-							      </el-table-column>
-							      <!-- <el-table-column prop="goodsId" label="商品id" width="190">
-								      <template scope="scope">
-								      		<el-input v-model="scope.row.goodsId" type="text"></el-input>
-										</template>
-							      </el-table-column> -->
-							      <el-table-column prop="costPrice" label="成本价(元)" width="180">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.costPrice" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							      <el-table-column prop="specPrice" label="建议零售价(元)" width="180">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.specPrice" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							      <el-table-column prop="storage" label="商品库存" width="180">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.storage" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							      <el-table-column prop="deductibleImazamox" label="金豆抵扣" width="200">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.deductibleImazamox" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							      <el-table-column prop="specNo" label="规格商家编码" width="200">
-							      	<template scope="scope">
-							      		<el-input v-model="scope.row.specNo" type="text"></el-input>
-									</template>
-							      </el-table-column>
-							    </el-table>
-							</el-col>
-						</el-col>
-						<el-col :span="24" style="height: 100px;line-height: 30px;border: 1px solid #ddd;">
-							<el-col :span="2"  style="height: 100px;line-height: 30px;border-right: 1px solid #ddd;text-align: center">定价模式 </el-col>
-							<el-col :span="20">
-								<el-col :span="20">
-									 <el-radio class="radio" v-model="PricingModel" label="1">模式一</el-radio>
- 									 <el-radio class="radio" v-model="PricingModel" label="2">模式二</el-radio>
-								</el-col>
-								<el-col :span="20">
-									 模式一：分销金额 = （定价-成本（人民币））*吸引力平台分佣方式
-								</el-col>
-								<el-col :span="20">
-									 模式二：分销金额 = （定价-成本（金豆））
-								</el-col>
-							</el-col>
-						</el-col>
-						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-							<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">建议零售价(原价)：</el-col>
-							<el-col :span="12" style="margin-left: 10px">
-								<el-col :span="12" style="margin-top: 10px"><el-input type="text" v-model="SuggestedRetailRrice"></el-input></el-col>
-								<el-col :span="13"  style="margin-top: 5px;color: #aaa;">商品价格必须是0.01~10000000的、之间的数字</el-col>
-							</el-col>
-						</el-col>
-						<el-col :span="24" style=" border-bottom: 1px solid #ddd;">
-							<el-col :span="2" style="border-right: 1px solid #ddd;height: 80px;text-align: left;line-height: 80px;">基础服务：</el-col>
-							<el-col :span="12" style="margin-left: 10px;margin-top: 20px">
-								<el-checkbox-group v-model="checkedCities" :min="0" :max="6" @change="clicka">
-								    <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-								</el-checkbox-group>
-							</el-col>
-						</el-col>
-						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述：</el-col>
-						<el-col :span="24" style=" border-bottom: 1px solid #ddd;height: 517px">
-						</el-col>
-						<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>
-						<el-col :span="24">
-							物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。
-							<el-col :span="24" style="min-height: 100px;margin-top: 40px">
-								<el-col :span="2" style="line-height: 40px">运费模板：</el-col>
-								<el-col :span="12">
-									<el-select v-model="value" placeholder="请选择">
-										<el-option v-for="item in options" :label="item.label" :value="item.value" :key="item.value"></el-option>
-									</el-select>
-								</el-col>
-							</el-col>
-							<el-col :span="24">
-								<el-col :span="2" style="line-height: 40px">重量：</el-col>
-								<el-col :span="3">
-									<el-input  v-model="weight" ></el-input>
-								</el-col>
-								<el-col style="margin-top:10px" :span="3">公斤</el-col>
-								<!-- <span style="margin-top: 20px">公斤</span> -->
-							</el-col>
-						</el-col>
+
+						<!--<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品详情描述：</el-col>-->
+						<!--<el-col :span="24" style=" border-bottom: 1px solid #ddd;height: 517px"></el-col>-->
+						<!--<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>-->
+						<!--<el-col :span="24">-->
+							<!--物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。-->
+							<!--<el-col :span="24" style="min-height: 100px;margin-top: 40px">-->
+								<!--<el-col :span="2" style="line-height: 40px">运费模板：</el-col>-->
+								<!--<el-col :span="12">-->
+									<!--<el-select v-model="value" placeholder="请选择">-->
+										<!--<el-option v-for="item in options" :label="item.label" :value="item.value" :key="item.value"></el-option>-->
+									<!--</el-select>-->
+								<!--</el-col>-->
+							<!--</el-col>-->
+							<!--<el-col :span="24">-->
+								<!--<el-col :span="2" style="line-height: 40px">重量：</el-col>-->
+								<!--<el-col :span="3">-->
+									<!--<el-input  v-model="weight" ></el-input>-->
+								<!--</el-col>-->
+								<!--<el-col style="margin-top:10px" :span="3">公斤</el-col>-->
+								<!--&lt;!&ndash; <span style="margin-top: 20px">公斤</span> &ndash;&gt;-->
+							<!--</el-col>-->
+						<!--</el-col>-->
 					</el-col>
 				</el-col>
 			<!-- <el-col :span='24' >11111111111111</el-col>	 -->
-			<el-col :span='24' style="margin-top: 1070px">
-				<div id = 'editor-trigger' style="height: 480px"></div>
+			<el-col :span="24" >
+				<el-col :span="22" :offset="1" class="head_text" style="height:56px;line-height: 56px;border-bottom: 1px dashed #cab78c;font-size: 20px;color: #cab78c;">商品详情描述</el-col>
+			</el-col>
+			<el-col :span='24' style="margin-top: 20px;">
+				<div id='editor-trigger' style="height: 480px;border: 1px solid #e6eef9;"></div>
+			</el-col>
+			<el-col :span='24' style="border: 1px solid #e6eef9;margin-top: 20px;padding-bottom: 50px;">
+				<el-col :span="22" :offset="1" class="head_text" style="height:56px;line-height: 56px;border-bottom: 1px dashed #cab78c;font-size: 20px;color: #cab78c;">商品物流信息</el-col>
+				<!--<el-col :span="24" style="height: 40px;line-height: 30px;border-bottom: 1px solid #ddd;">商品物流信息</el-col>-->
+				<el-col :span="24">
+					<!--物流设置 为了提升消费者购物体验，要求客户全网商品设置运费模板。-->
+					<el-col :span="24" style="min-height: 100px;margin-top: 40px;margin-left: 45px;">
+						<el-col :span="2" style="line-height: 40px">运费模板：</el-col>
+						<el-col :span="12">
+							<el-select v-model="value" placeholder="请选择">
+								<el-option v-for="item in options" :label="item.label" :value="item.value" :key="item.value"></el-option>
+							</el-select>
+						</el-col>
+					</el-col>
+					<el-col :span="24" style="margin-left: 45px;">
+						<el-col :span="2" style="line-height: 40px">重量：</el-col>
+						<el-col :span="3">
+							<el-input  v-model="weight" ></el-input>
+						</el-col>
+						<el-col style="margin-top:10px" :span="3">公斤</el-col>
+						<!-- <span style="margin-top: 20px">公斤</span> -->
+					</el-col>
+				</el-col>
 			</el-col>
 			</el-col>
-			<el-button type="primary" @click="release" style="margin: 20px;">发布</el-button>
-			
-		</el-col>
+			<el-button type="primary" @click="release" style="width:100px;height:40px;background:#cab78c;color: #fff;font-size: 16px;border:#cab78c;margin:20px auto 0;  ">发布</el-button>
+
+		<!--</el-col>-->
 	</section>
 </template>
 
@@ -333,7 +484,7 @@
 								objs.value = row.checrArry[x]
 								this.Specifications1.push(objs)
 							}
-							
+
 						}else if(i ===1){
 							this.Specifications2 = []
 							for(var x = 0;x<row.checrArry.length;x++){
@@ -342,13 +493,13 @@
 								objs.value = row.checrArry[x]
 								this.Specifications2.push(objs)
 							}
-							
+
 						}else if(i === 2){
 							this.Specifications3 = row.checrArry
 						}
-						
+
 					}
-					
+
 				}
 				if(this.Specifications.length === 1){
 					console.log(this.Specifications1)
@@ -372,7 +523,7 @@
 					for(var i = 0;i<this.Specifications1.length;i++){
 						for(var x = 0;x<this.Specifications2.length;x++){
 							this.specificatwo.push(this.Specifications1[i].value+'/'+this.Specifications2[x].value)
-							
+
 							const arry = []
 							arry.push(this.Specifications1[i],this.Specifications2[x])
 							this.specificatwo1.push(arry)
@@ -397,7 +548,7 @@
 					// console.log(this.Specifications1)
 					// console.log(this.Specifications2)
 				}
-				
+
 			},
 			clickIndex(index){
 				console.log(index)
@@ -552,7 +703,7 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	console.log(data)
-                    	
+
                         if(!data.success){
                             alert(data.msg)
                         }else{
@@ -703,7 +854,7 @@
                 		}
                 	}
                 }
-               
+
                 // console.log(bqarry.toString())
                 params.goodsServiceStr = bqarry.toString()
                 //商品图片
@@ -720,11 +871,11 @@
                 }
                 params.goodsData = arrysp
                 params.goodsData = JSON.stringify(params.goodsData)
-                
+
                  // console.log(params)
                  params.goodsSpecs
                 // 商品规格
-                
+
                 if(this.Specifications.length === 1){
                 	 params.goodsSpecs = this.tableData
                 	 console.log(this.Specifications1)
@@ -763,7 +914,7 @@
                     	}else{
                     		alert(data.msg)
                     	}
-                    	
+
                     }
                 });
 			},
@@ -907,19 +1058,19 @@
 	}
 	.footer_choice{
 		height: 40px;
-		border: 1px solid #ddd;
+		border: 1px solid #e6eef9;
 		margin-top: 20px;
 		line-height: 40px;
 		padding-left: 20px;
 	}
 	.Commodity_information{
-		height: 2400px;
-		border: 1px solid #ddd;
+		/*height: 2400px;*/
+		border: 1px solid #e6eef9;
 		margin-top: 20px;
 	}
 	.head_text{
 		height: 40px;
-		border-bottom: 1px solid #ddd;
+		/*border-bottom: 1px solid #e6eef9;*/
 		line-height: 40px;
 	}
 	.leftg_text{
@@ -933,8 +1084,8 @@
 		margin-top: 20px;
 	}
 	.shangp{
-		height:140px;
-		border-top: 1px solid #ddd;
+		/*height:140px;*/
+		border-top: 1px solid #e6eef9;
 		margin-top: 10px;
 	}
 </style>
