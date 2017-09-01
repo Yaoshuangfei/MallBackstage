@@ -990,11 +990,11 @@
                     'table',
                     // 'emotion',
                     '|',
-                    'img',
-                    '|',
-                    'undo',
-                    'redo',
-                    'fullscreen'
+                    'img'
+                    // '|',
+                    // 'undo',
+                    // 'redo',
+                    // 'fullscreen'
                 ]
                 editor.onchange = function () {
                     // 编辑区域内容变化时，实时打印出当前内容

@@ -313,7 +313,7 @@
                 const params = {
                     pageNum :this.page,
                     size:7,
-                    notifyTypes:'1,3,6,8,10,11'
+                    notifyTypes:'1,5,6,10'
                 }
         		$.ajax({
                     type:'POST',

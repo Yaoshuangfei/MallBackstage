@@ -28,10 +28,10 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;" id="table">
+		<el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center" id="table">
 			<el-table-column prop="goodsId" label="商品编号">
 			</el-table-column>
-			<el-table-column prop="coreUser.realName" label="买家">
+			<el-table-column prop="coreUser.nickName" label="买家">
 			</el-table-column>
 			<el-table-column prop="coreUser.mobile" label="电话">
 			</el-table-column>
@@ -60,18 +60,18 @@
 				<el-form-item label="商品编号">
 					<div>{{orderDetails.goodsId }}</div>
 				</el-form-item>
-				<!-- <el-form-item label="买家">
-					<div>{{orderDetails.coreUser.realName}}</div>
+				<el-form-item label="买家">
+					<div>{{orderDetails.coreUser.nickName}}</div>
 				</el-form-item>
 				<el-form-item label="电话">
 					<div>{{orderDetails.coreUser.mobile}}</div>
 				</el-form-item>
 				<el-form-item label="商品名称">
 					<div>{{orderDetails.goods.name }}</div>
-				</el-form-item> -->
-				<el-form-item label="数量：">
-					<div>{{orderDetails.orderTotal }}</div>
 				</el-form-item>
+				<!-- <el-form-item label="数量：">
+					<div>{{orderDetails.orderGoods.quantity }}</div>
+				</el-form-item> -->
 				<el-form-item label="评价：">
 					<div>{{orderDetails.content }}</div>
 				</el-form-item>
@@ -87,26 +87,25 @@
 				<el-form-item label="商品编号">
 					<div>{{editForm.goodsId }}</div>
 				</el-form-item>
-				<<!-- el-form-item label="买家">
-					<div>{{editForm.coreUser.realName}}</div>
+				<el-form-item label="买家">
+					<div>{{editForm.coreUser.nickName}}</div>
 				</el-form-item>
 				<el-form-item label="电话">
 					<div>{{editForm.coreUser.mobile}}</div>
 				</el-form-item>
 				<el-form-item label="商品名称">
 					<div>{{editForm.goods.name }}</div>
-				</el-form-item> -->
-				<el-form-item label="数量：">
-					<div>{{editForm.orderTotal }}</div>
 				</el-form-item>
+				<!-- <el-form-item label="数量：">
+					<div>{{editForm.orderTotal }}</div>
+				</el-form-item> -->
 				<el-form-item label="评价：">
-					<div>好评</div>
 					<div v-if="editForm.crate === 1">好评</div>
 					<div v-if="editForm.crate === 2">中评</div>
 					<div v-if="editForm.crate === 3">差评</div>
+					<div>{{editForm.content}}</div>
 				</el-form-item>
 				<el-form-item>
-					<div>editForm.content</div>
 					<img width="100px" :src="editForm.picImgs">
 				</el-form-item>
 				<el-form-item label="回复内容：">
@@ -124,7 +123,7 @@
 	            </el-col> -->
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">回复</el-button>
 				<el-button type="primary" @click.native="hfInfo = false">关闭</el-button>
 			</div>
 		</el-dialog>
@@ -177,13 +176,22 @@
 				editLoading: false,
 				//编辑界面数据
 				editForm: {
+					coreUser:{
+						nickName:'',
+						mobile:''
+					},
+					goods:{
+						name:''
+					}
 				},
 				deco:'',
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				//新增界面数据
 				orderDetails: {
-					coreUser:{},
+					coreUser:{
+						nickName:''
+					},
 					goods:{}
 				},
 				orderInformation:[]
@@ -204,8 +212,10 @@
 					goodsId:'',
 					mobile:'',
 					nickName:'',
-					realName:'',
-					crate:this.filters.status
+					realName:''
+				}
+				if(this.filters.status !== ''){
+					params.crate = this.filters.status
 				}
 				if(this.filters.type === '1'){
 					params.goodsId = this.filters.name
@@ -227,7 +237,7 @@
                     success:function(data){
                     	console.log(data)
                     	const info = data.data
-                    	// _this.orderInformation = info.list
+                    	_this.orderInformation = info.list
                     	_this.total = info.total
                     }
                 });
@@ -242,8 +252,10 @@
 			handleEdit(row){
 				this.hfInfo = true
 				this.editForm = row
+				console.log(row)
 			},
 			editSubmit(){
+				const _this = this
 				console.log(this.deco)
 				const params = {
 					evaluateId:this.editForm.id,
@@ -258,7 +270,15 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	console.log(data)
-                    	_this.getlist()
+                    	if(data.code == 1){
+                    		_this.getlist()
+                    		_this.hfInfo = false
+                    	}else{
+                    		_this.$message({
+	                          message: data.msg,
+	                          type: 'error'
+	                        });
+                    	}
                     }
                 });
 			},
