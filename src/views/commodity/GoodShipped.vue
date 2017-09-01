@@ -338,7 +338,7 @@
 				<el-col :span="22" :offset="1" class="head_text" style="height:56px;line-height: 56px;border-bottom: 1px dashed #cab78c;font-size: 20px;color: #cab78c;">商品详情描述</el-col>
 			</el-col>
 			<el-col :span='24' style="margin-top: 20px;">
-				<div id='editor-trigger' style="height: 480px;border: 1px solid #e6eef9;"></div>
+				<div id='editor-trigger' style="height: 480px;border-left: 1px solid #e6eef9;border-right: 1px solid #e6eef9;border-bottom: 1px solid #e6eef9;"></div>
 			</el-col>
 			<el-col :span='24' style="border: 1px solid #e6eef9;margin-top: 20px;padding-bottom: 50px;">
 				<el-col :span="22" :offset="1" class="head_text" style="height:56px;line-height: 56px;border-bottom: 1px dashed #cab78c;font-size: 20px;color: #cab78c;">商品物流信息</el-col>
@@ -363,8 +363,9 @@
 					</el-col>
 				</el-col>
 			</el-col>
-			</el-col>
 			<el-button type="primary" @click="release" style="width:100px;height:40px;background:#cab78c;color: #fff;font-size: 16px;border:#cab78c;margin:20px auto 0;  ">发布</el-button>
+			</el-col>
+
 
 		<!--</el-col>-->
 	</section>
@@ -1065,7 +1066,7 @@
 		padding-left: 20px;
 	}
 	.Commodity_information{
-		/*height: 2400px;*/
+		height: 1450px;
 		border: 1px solid #e6eef9;
 		margin-top: 20px;
 	}

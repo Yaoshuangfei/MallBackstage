@@ -25,7 +25,7 @@
 						{{item.name}}
 					</el-col>
 					<el-col :span="15"  style="float:right;text-align: right;padding-right: 20px;font-size: 12px;color: #616161;">
-						最后编辑时间：2017-09-09 09:09:09 <span class="btncolor" style="font-size: 14px;margin-left: 50px; ">设为默认的运费模板 | </span>  <span style="font-size: 14px;" class="btncolor">修改 | </span>  <span style="font-size: 14px;" class="btncolor" @click="deldetBtn(item)">删除</span>
+						最后编辑时间：2017-09-09 09:09:09   <span style="font-size: 14px;margin-left: 100px;" class="btncolor" @click="deldetBtn(item)">删除</span>
 					</el-col>
 				</el-col>
 				<el-table id="yfmb" border :data="item.fareCarries" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">

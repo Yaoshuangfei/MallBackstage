@@ -18,7 +18,7 @@
     <!--</el-col>-->
 
     <!--列表-->
-    <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;">
+    <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">
       <el-table-column prop="indexStyleId" :formatter='formatter' label="位置">
       </el-table-column>
       <el-table-column prop="goodsName" label="商品名称">
