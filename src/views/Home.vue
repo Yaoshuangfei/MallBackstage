@@ -149,6 +149,7 @@
 <script>
 	import { state } from '../vuex/state';
     import {baseUrl } from '../api/api';
+    import {iconfont } from '../assets/iconfont/iconfont.css';
 	export default {
 		data() {
 			return {
@@ -450,7 +451,7 @@
 	#main_conter .menu-expanded .el-submenu .el-submenu__title {font-size: 24px;color: #616161;}
 	#main_conter .menu-expanded .el-submenu.is-opened .el-submenu__title {color: #cab78c;}
 	#main_conter .menu-expanded>.el-menu>.el-menu-item {font-size: 24px;color: #616161;}
-	#bottom {width:100%;height:340px;background: #181f29;position: relative;margin: auto;color: #fff;}
+	#bottom {width:100%;height:360px;background: #181f29;position: relative;margin: auto;color: #fff;}
 	#bottom #bottomConter ,#bottom #bottomLink {width:850px;position: relative;margin:60px auto;text-align: center;}
 	#bottomConter>.bottomConterText {display: inline-block;}
 	#bottomConter>.bottomConterText:nth-child(1) {text-align: left;width:250px;}
@@ -460,4 +461,13 @@
 	#bottom #bottomLink a {color: #fff;text-decoration: none;}
 	#bottom #bottomLink li {list-style-type: none;display: inline-block;width:86px;text-align: center;border-right: 2px solid #fff;}
 	#bottom #bottomLink li:last-child {border-right:none;}
+	[class^="el-icon-my"], [class*=" el-icon-my"] {
+		font-family:"your-font-family" !important;
+
+		/* 以下内容参照第三方图标库本身的规则 */
+		font-size: inherit;
+		font-style:normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
 </style>

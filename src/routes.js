@@ -90,7 +90,8 @@ let routes = [
         path: '/',
         component: Home,
         name: '',
-        iconCls: 'fa fa-address-card',
+        // iconCls: 'fa fa-address-card',
+        iconCls: 'iconfont icon-dianpu',
         leaf: true,//只有一个节点
         children: [
             { path: '/StoreInformation', component: StoreInformation, name: '店铺信息' ,  }
@@ -99,8 +100,8 @@ let routes = [
     {
         path: '/Subject',
         component: Home,
-        name: ' 系统设置',
-        iconCls: 'el-icon-message',//图标样式class
+        name: '系统设置',
+        iconCls: 'iconfont icon-peizhi',//图标样式class
         children: [
             { path: '/main', component: Main, name: '主页', hidden: true },
             { path: '/Jurisdiction', component: Jurisdiction, name: '权限管理' },
@@ -114,7 +115,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '配置管理',
-        iconCls: 'fa el-icon-picture',
+        iconCls: 'iconfont icon-peizhi1',
         children: [
             { path: '/banner', component: banner, name: '首页banner管理' },
             { path: '/system', component: system, name: '首页商品配置' },
@@ -125,7 +126,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '分销管理',
-        iconCls: 'fa el-icon-picture',
+        iconCls: 'iconfont icon-fenxiao',
         children: [
             { path: '/Identity', component: Identity, name: '身份管理' },
             { path: '/MyDistribution', component: MyDistribution, name: '我的分销' },
@@ -140,7 +141,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '订单管理',
-        iconCls: 'fa el-icon-picture',
+        iconCls: 'iconfont icon-dingdan',
         children: [
             { path: '/OrderInformation/:id', component: OrderInformation, name: '订单信息管理' },
              { path: '/details/:id/:index', component: details, name: '订单详情' ,hidden: true }
@@ -150,7 +151,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '物流管理',
-        iconCls: 'fa el-icon-picture',
+        iconCls: 'iconfont icon-wuliu',
         children: [
             { path: '/DeliverGoods', component: DeliverGoods, name: '发货' },
             { path: '/Freight', component: Freight, name: '运费模板' }
@@ -161,7 +162,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '商品管理',
-        iconCls: 'fa fa-id-card-o',
+        iconCls: 'iconfont icon-shangpin',
         children: [
             { path: '/GoodShipped', component: GoodShipped, name: '发布商品' },
             { path: '/GoodEdit/:id', component: GoodEdit, name: '修改商品' ,hidden: true },
@@ -175,7 +176,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '店铺管理',
-        iconCls: 'fa el-icon-menu',
+        iconCls: 'iconfont icon-dianpuguanli',
         children: [
             { path: '/see', component: see, name: '查看店铺' },
             { path: '/style', component: style, name: '店铺样式管理' },
@@ -186,7 +187,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '财务管理',
-        iconCls: 'fa el-icon-date',
+        iconCls: 'iconfont icon-caiwu',
         children: [
             { path: '/FlowingWater', component: FlowingWater, name: '流水记录' },
             { path: '/txgl', component: txgl, name: '提现管理' }
@@ -196,7 +197,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '',
-        iconCls: 'fa fa-address-card',
+        iconCls: 'iconfont icon-dingdan',
         leaf: true,//只有一个节点
         children: [
             // { path: '/Replenishment', component: Replenishment, name: '补货专区' ,hidden: true},
@@ -207,7 +208,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '增值管理',
-        iconCls: 'el-icon-message',
+        iconCls: 'iconfont icon-cloud-appreciation',
         children: [
             { path: '/ValueAddedServices', component: ValueAddedServices, name: '增值服务管理' },
             { path: '/video', component: video, name: '视频管理' },

@@ -975,7 +975,7 @@
 		padding-left: 20px;
 	}
 	.Commodity_information{
-		height: 2400px;
+		height: 1450px;
 		border: 1px solid #ddd;
 		margin-top: 20px;
 	}
