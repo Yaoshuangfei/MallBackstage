@@ -9,12 +9,13 @@
 			<el-col :span="8" >下单时间：{{table.payTime}}</el-col>
 			<el-col :span="6" :offset="2" >收货人：{{table.consignee}}</el-col>
 			<el-col :span="8" >电话：{{table.mobile}}</el-col>
+			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
 			<el-col :span="22" :offset="2">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
 		</el-col>
 		<!--<el-col :span="24" style="margin-top: 20px">-->
 			<!--<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>-->
 			<!--<el-col :span="4"style="margin-top: 20px;margin-left: 40px">-->
-			<!--<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>-->
+			
 			<!--</el-col>-->
 			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">收货人：{{table.consignee}}</el-col>-->
 			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>-->

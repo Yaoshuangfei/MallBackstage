@@ -6,7 +6,7 @@
 		<el-button type="primary" v-on:click="addIDCard(1)" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
 		  <el-col :xs="2" :sm="2" :md="2" :lg="2" style="font-size: 16px;color:#cab78c;height:32px;line-height: 32px; ">店铺身份</el-col>
-		  <el-col :xs="15" :sm="15" :md="15" :lg="15" style="height:32px;line-height: 32px;">
+		  <el-col :xs="15" :sm="15" :md="15" :lg="15" style="line-height: 32px;">
 		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" style="margin-bottom: 40px" v-if="item.level !== -100">
 		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
 		  				<img style="width: 100px;border:1px solid #eee;border-radius: 10px;" :src="item.icon">
@@ -34,7 +34,7 @@
 		</el-col>
 		<!--列表-->
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="font-size: 16px;color:#616161;margin-bottom: 20px; ">购买身份价格</el-col>
-		<el-table v-if="commissionLine !== 3 && commissionLine !== 5" :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
+		<el-table v-if="commissionLine !== 3 && commissionLine !== 5" :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;text-align: center;">
 			<el-table-column type="index">
 			</el-table-column>
 			<el-table-column prop="name" label="身份">
@@ -47,7 +47,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;">
+		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;text-align: center;">
 			<el-table-column type="index">
 			</el-table-column>
 			<el-table-column prop="name" label="身份">
@@ -132,6 +132,13 @@
 			<el-form :model="editForm" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="角色名称：">
 					<el-input v-model="editForm.name" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="图标">
+					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload3" id="fileInput">
+					<button type="button" class="el-button el-button--primary el-button--small">
+						<span>点击上传</span>
+					</button>
+					<img width="100px" :src="editForm.icon">
 				</el-form-item>
 				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5">
 					<el-input v-model="editForm.goodsNum" type="text"></el-input>
@@ -296,6 +303,26 @@
                 	this.formData = new FormData()
                 }
             },
+            upload3 (event) {
+				this.formData = new FormData()
+                let file = event.target.files[0]
+                console.log(this.formData)
+                console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                	console.log('存在file', file)
+                	this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file)
+                    console.log(this.formData)
+                    this.Uploadimg3()
+                } else {
+                	this.fileImg = ''
+                	console.log('不存在file', file)
+                	this.formData = new FormData()
+                }
+            },
             Uploadimg1(){
                 // this.$confirm('确认上传此图片吗？', '提示', {}).then(() => {
                     const _this= this;
@@ -331,6 +358,29 @@
 							if(_this.imgArry.length <3){
 								_this.imgArry.push(arry[0].baseUri+arry[0].uri)
 							}
+							
+							console.log(_this.imgArry)
+							_this.clear()
+                        }, error => _this.$emit('complete', 500, error.message))
+                // });
+            },
+            Uploadimg3(){
+                // this.$confirm('确认上传此图片吗？', '提示', {}).then(() => {
+                    const _this= this;
+                    _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            // const info = response.body eval('(' + data + ')');
+                            const arry = info.data
+                            
+                            
+							_this.editForm.icon = arry[0].baseUri+arry[0].uri;
+							// if(_this.imgArry.length <3){
+							// 	_this.imgArry.push(arry[0].baseUri+arry[0].uri)
+							// }
 							
 							console.log(_this.imgArry)
 							_this.clear()
@@ -427,6 +477,7 @@
 					id:this.editForm.id,
 					name:this.editForm.name,
 					price:this.editForm.price,
+					icon:this.editForm.icon
 				}
 				if(this.commissionLine === 3 || this.commissionLine === 5){
 					params.goodsNum = this.editForm.goodsNum

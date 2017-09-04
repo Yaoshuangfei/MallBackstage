@@ -5,7 +5,7 @@
     </el-col>
     <el-col :soan="24" style="margin-top: 20px;font-size: 18px;">
       <el-col :span="3" :offset="1" style="font-size: 20px;color: #cab78c;">混批设置</el-col>
-      <span style="font-size: 12px;color: #ababab;">注：混批方式只能二选一；获取前面可分佣的身份ABC</span>
+      <!-- <span style="font-size: 12px;color: #ababab;">注：混批方式只能二选一；获取前面可分佣的身份ABC</span> -->
     </el-col>
     <el-col id="hunpi" :span="23" :offset="1" style="margin-top: 20px;margin-bottom: 20px">
       <template>
@@ -36,7 +36,7 @@
     <el-col :span="24">
       <el-col :span="4" style="padding-bottom: 20px;margin-top: 20px;font-size: 20px;color: #cab78c;">补货的商品</el-col>
       <el-col :span="4"  :offset="10" style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
-        <el-button type="text"  style="color: #9f3333;">从已上架的商品中获取</el-button>
+        <!-- <el-button type="text"  style="color: #9f3333;">从已上架的商品中获取</el-button> -->
       </el-col>
       <el-col :span="2"  style="padding-bottom: 20px;margin-top: 20px;font-size: 18px;">
         <el-button type="text" @click.native="shopAdd" style="color: #9f3333;">添加</el-button>

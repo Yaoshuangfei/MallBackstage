@@ -431,7 +431,7 @@
 	}
 </style>
 <style>
-	body {padding-right: inherit;}
+	body {padding-right: inherit;overflow-y: scroll;padding-right: 17px;}
 	#main_top {  height:48px;line-height: 48px;background: #fff;  }
 	#main_top_name {width:1280px;position: relative;margin: auto;text-align: center;color: #616161;font-size: 14px;}
 	#main_top_name>span {color: #9f3333;}

@@ -307,7 +307,7 @@
 						<el-button type="primary" @click.native="clerbtn">关闭</el-button>
 					</div>
 				</el-dialog>
-				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">三级分销</el-col>
+				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">普通三级分销</el-col>
 					<el-table class="fenyong" border :data="cltSan" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 						<el-table-column prop="level" label="等级">
 						</el-table-column>
@@ -318,6 +318,17 @@
 						</el-table-column>
 					</el-table>
 				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
+				<el-col v-if="bduan" :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">B端三级分销</el-col>
+					<el-table v-if="bduan" class="fenyong" border :data="bSan" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
+						<el-table-column prop="level" label="等级">
+						</el-table-column>
+						<el-table-column prop="fybi" label="分佣比">
+							<template scope="scope">
+								<el-input style="width: 100%;text-align: center;" v-model="scope.row.fybi"></el-input>
+							</template>
+						</el-table-column>
+					</el-table>
+				<el-col v-if="bduan" :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
 				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">平级奖</el-col>
 				<el-table :data="cltPingji" class="fenyong" border highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 					<el-table-column prop="level" label="等级">
@@ -388,6 +399,7 @@
 	export default {
 		data() {
 			return {
+				bduan:false,
                 baonian:true,
 				url_5:'',
 				url_51:'',
@@ -459,6 +471,16 @@
 				cltShow:false,
 				cltSf:[],
 				cltSan:[{
+					level:'一代',
+					fybi:''
+				},{
+					level:'二代',
+					fybi:''
+				},{
+					level:'三代',
+					fybi:''
+				}],
+				bSan:[{
 					level:'一代',
 					fybi:''
 				},{
@@ -1053,6 +1075,10 @@
                         _this.cltSan[0].fybi = info.one
                         _this.cltSan[1].fybi = info.two
                         _this.cltSan[2].fybi = info.three
+                        // B端三级分销
+                        _this.bSan[0].fybi = info.bOne
+                        _this.bSan[1].fybi = info.bTwo
+                        _this.bSan[2].fybi = info.bThree
                         // 平级奖
                         _this.cltPingji[0].fybi = info.peersOne
                         _this.cltPingji[1].fybi = info.peersTwo
@@ -1091,6 +1117,10 @@
 					params.specialOne = this.qyPingji[0].fybi
 					params.specialTwo = this.qyPingji[1].fybi
 					params.specialThree = this.qyPingji[2].fybi
+
+					params.bOne = this.bSan[0].fybi
+					params.bTwo = this.bSan[1].fybi
+					params.bThree = this.bSan[2].fybi
 				}
 				console.log(url)
 				console.log(params)
@@ -1119,6 +1149,9 @@
 			}
 		},
 		mounted() {
+			if(state.commissionLine === 5){
+				this.bduan = true
+			}
 			if(state.commissionLine === 3 || state.commissionLine === 5){
 				this.allshow = false
 				this.cltShow = true
