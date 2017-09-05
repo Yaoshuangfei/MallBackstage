@@ -521,7 +521,7 @@
 			getlist(){
 				const _this = this
 				const params = {
-					id:state.storeId
+					id:localStorage.getItem("storeId")
 				}
 				// console.log(params)
 				$.ajax({

@@ -144,7 +144,8 @@ let routes = [
         iconCls: 'iconfont icon-dingdan',
         children: [
             { path: '/OrderInformation/:id', component: OrderInformation, name: '订单信息管理' },
-             { path: '/details/:id/:index', component: details, name: '订单详情' ,hidden: true }
+            { path: '/pjadmin', component: pjadmin, name: '评价管理' },
+            { path: '/details/:id/:index', component: details, name: '订单详情' ,hidden: true }
         ]
     },
     {
@@ -212,7 +213,6 @@ let routes = [
         children: [
             { path: '/ValueAddedServices', component: ValueAddedServices, name: '增值服务管理' },
             { path: '/video', component: video, name: '视频管理' },
-            { path: '/pjadmin', component: pjadmin, name: '评价管理' },
             { path: '/PublicWelfare', component: PublicWelfare, name: '公益广告' },
             { path: '/Marketing', component: Marketing, name: '营销管理' }
         ]
