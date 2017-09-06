@@ -47,7 +47,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;text-align: center;">
+		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 650px;text-align: center;">
 			<el-table-column type="index">
 			</el-table-column>
 			<el-table-column prop="name" label="身份">
@@ -57,6 +57,8 @@
 			<el-table-column prop="costPrice" label="成品单价">
 			</el-table-column>
 			<el-table-column prop="price" label="价格">
+			</el-table-column>
+			<el-table-column v-if="commissionLine === 5" prop="commissionPrice" label="分佣金额">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
@@ -112,6 +114,9 @@
 				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5">
 					<el-input v-model="orderDetails.costPrice" type="text" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="分佣金额：" v-if="commissionLine === 5">
+					<el-input v-model="commissionPrice" type="text" auto-complete="off"></el-input>
+				</el-form-item>
 				<el-form-item label="角色图标：">
 					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
 				    <el-button type="button" class="el-button el-button--primary el-button--small">
@@ -149,6 +154,9 @@
 				<el-form-item label="价格：">
 					<el-input v-model="editForm.price" type="text"></el-input>
 				</el-form-item>
+				<el-form-item label="成品单价：" v-if="commissionLine === 5">
+					<el-input v-model="editForm.commissionPrice" type="text"></el-input>
+				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
@@ -172,6 +180,7 @@
         },
 		data() {
 			return {
+				commissionPrice:'',
 				commissionLine:state.commissionLine,
 				addID:'',
 				addBtn:false,
@@ -442,6 +451,9 @@
 					params.costPrice = this.orderDetails.costPrice
 					params.goodsNum = this.orderDetails.goodsNum
 				}
+				if(this.commissionLine === 5){
+					params.commissionPrice = this.commissionPrice
+				}
 				console.log(params)
 				this.$confirm('确认提交吗？', '提示', {}).then(() => {
 					$.ajax({
@@ -477,7 +489,8 @@
 					id:this.editForm.id,
 					name:this.editForm.name,
 					price:this.editForm.price,
-					icon:this.editForm.icon
+					icon:this.editForm.icon,
+					commissionPrice:this.editForm.commissionPrice
 				}
 				if(this.commissionLine === 3 || this.commissionLine === 5){
 					params.goodsNum = this.editForm.goodsNum

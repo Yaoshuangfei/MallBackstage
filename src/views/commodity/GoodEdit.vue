@@ -826,7 +826,8 @@
                     success:function(data){
                     	console.log(data)
                     	if(data.code === 1){
-                    		_this.$router.push({ path: '/OffTheShelf' });
+                    		window.history.go(-1)
+                    		// _this.$router.push({ path: '/OffTheShelf' });
                     		_this.details = false
                     		_this.next = true
                     		_this.selectListName()

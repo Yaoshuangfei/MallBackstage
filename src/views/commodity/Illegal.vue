@@ -18,7 +18,7 @@
 			<el-col :span="8">商品名称</el-col>
 			<el-col :span="2" :offset="2">价格</el-col>
 			<el-col :span="2" :offset="2">违规原因</el-col>
-			<!-- <el-col :span="7" :offset="3" style="margin-left: 20px">状态</el-col> -->
+			<el-col :span="7" :offset="3" style="margin-left: 20px">操作</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head" style="background: #fff;">
@@ -39,7 +39,14 @@
 				</el-col>
 				<el-col style="margin-left: 20px;" :span="3" class="describe">{{item.goods.price}}</el-col>
 				<el-col :span="2" :offset="1" class="describe">{{item.content}}</el-col>
-				<!-- <el-col :span="1" :offset="5" class="describe">{{item.goods.saleStatus}}</el-col> -->
+				<el-col :span="5" :offset="1" class="describe" >
+					<router-link :to="{ name: '修改商品', params: { id: item.goodsId}}">
+						<el-button style="margin-top:-5px;margin:0 5px"  type="text">编辑</el-button>
+					</router-link>
+					<!-- <el-button type="text" @click="editBtn(item.id)">编辑</el-button> -->
+					<el-button type="text" @click="topBtn(item.goodsId)">上架</el-button>
+					<el-button type="text" @click="deleteBtn(item.goodsId)">删除</el-button>
+				</el-col>
 			</el-col>
 		</el-col>
 
@@ -144,6 +151,63 @@
 			}
 		},
 		methods: {
+			// 上架
+			topBtn(id) {
+				const _this = this
+				const params = {
+					id:id,
+					saleStatus:1
+				}
+				this.$confirm('确认上架该商品吗?', '提示', {
+					type: 'warning'
+				}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/goods/updateStatus",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	const info = data.data
+	                    	_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+							_this.getlist()
+	                    }
+	                });
+				}).catch(() => {
+
+				});
+			},
+			deleteBtn(id) {
+				const _this = this
+				const params = {
+					id:id,
+				}
+				this.$confirm('确认删除该商品吗?', '提示', {
+					type: 'warning'
+				}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/goods/delete",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+							_this.getlist()
+	                    }
+	                	});
+				}).catch(() => {
+
+				});
+			},
 			getlist(){
 				const _this = this
 				_this.selectSubjectStatus = []

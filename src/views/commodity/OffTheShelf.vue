@@ -245,7 +245,7 @@
                     }
                 });
 			},
-			// 下架
+			// 上架
 			topBtn(id) {
 				const _this = this
 				const params = {
