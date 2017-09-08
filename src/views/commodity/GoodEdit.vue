@@ -358,6 +358,11 @@
 						<el-col style="margin-top:10px" :span="3">公斤</el-col>
 						<!-- <span style="margin-top: 20px">公斤</span> -->
 					</el-col>
+					<el-col :span="24" style="margin-left: 45px;margin-top: 20px;">
+						<el-col :span="2" style="line-height: 40px">是否上架</el-col>
+						<el-radio style="margin-top: 10px;" class="radio" v-model="saleStatus" label="1">是</el-radio>
+						<el-radio class="radio" v-model="saleStatus" label="2">否</el-radio>
+					</el-col>
 				</el-col>
 			</el-col>
 			</el-col>
@@ -374,6 +379,7 @@
 	export default {
 		data() {
 			return {
+				saleStatus:'2',
 				fenleiId:'',//分类id
 				see_html:'',
 				biaoqanList:[],
@@ -753,7 +759,7 @@
                     saleState:'1',
                     goodsData:[],
                     catId:this.fenleiId,
-                    catName:this.commodity,
+                    // catName:this.commodity,
                     storeId:localStorage.getItem("storeId"),
                     ftId:this.value,
                     pricingModel:this.PricingModel,
@@ -761,20 +767,23 @@
                     weight:this.weight,
                     goodsNo:this.productCode,
                     goodsSpecs:[],
-                    goodsServiceStr:''
+                    goodsServiceStr:'',
+                    saleStatus:parseInt(this.saleStatus)
                 };
                 const bqarry = []
-                console.log(this.onbiaoqList)
+                // this.onbiaoqList = this.biaoqanList
+                console.log(this.checkedCities)
                 console.log(this.listBiaoq)
-                for (var i = 0; i < this.onbiaoqList.length; i++) {
+                for (var i = 0; i < this.checkedCities.length; i++) {
                 	for (var x = 0; x < this.listBiaoq.length; x++) {
-                		if(this.onbiaoqList[i] === this.listBiaoq[x].name){
+                		if(this.checkedCities[i] === this.listBiaoq[x].name){
                 			bqarry.push(this.listBiaoq[x].id)
                 		}
                 	}
                 }
-               
-                // console.log(bqarry.toString())
+                console.log(bqarry)
+               	
+                console.log(bqarry.toString())
                 params.goodsServiceStr = bqarry.toString()
                 //商品图片
                 // this.CommodityPictures = this.CommodityPictures
@@ -1001,6 +1010,7 @@
                     	_this.SuggestedRetailRrice = info.price
                     	//富文本
                     	_this.see_html = info.veiw
+                    	_this.test_html = info.veiw
                     	_this.initEditor()
                     	// 重量
                     	_this.weight = info.weight
@@ -1095,11 +1105,10 @@
 			}
 		},
 		mounted() {
-			
-			this.selectListName();//分类
-			this.gettemplet();//运费模板
 			this.getlist()//商品详情
+			this.selectListName();//分类
 			this.getPList()//标签
+			this.gettemplet();//运费模板
 		}
 	}
 

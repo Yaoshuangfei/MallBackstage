@@ -88,16 +88,16 @@
 				</el-form-item>
 				<el-form-item label="banner">
 					<!-- <el-input v-model="editForm.picture" type="text" auto-complete="off"></el-input> -->
-					<img style='width: 100px' :src="editForm.picture">
-					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="modifyload" id="fileInputs">
-					<button type="button" class="el-button el-button--primary el-button--small">
-						<span>点击上传</span>
-					</button>
-					<!-- <button type="button" class="el-button el-button--primary el-button--small" id="btnClears" @click="modifyclear">清空上传</button> -->
-					<!-- <span style="display: block;font-size: 12px">{{ imageChange }}</span> -->
-					<!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
-					<!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
-				</el-form-item>
+                    <input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="modifyload" id="fileInputs">
+                    <button type="button" class="el-button el-button--primary el-button--small">
+                        <span>点击上传</span>
+                    </button>
+                    <!-- <button type="button" class="el-button el-button--primary el-button--small" id="btnClears" @click="modifyclear">清空上传</button> -->
+                    <!-- <span style="display: block;font-size: 12px">{{ imageChange }}</span> -->
+                    <!--<button type="button" class="el-button el-button&#45;&#45;primary el-button&#45;&#45;small" id="btnClear" @click="clear">清空上传</button>-->
+                    <!--<span style="display: block;font-size: 12px">{{ imageChange }}</span>-->
+                </el-form-item>
+				<img style='width: 100px;margin-left: 100px;' :src="editForm.picture">
 				<el-form-item label="序号" >
 					<el-input v-model="editForm.orderSort" type="text" auto-complete="off"></el-input>
 				</el-form-item>
@@ -107,7 +107,7 @@
 				<el-col :span='24'></el-col>
 			</el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="modifyUpload" :loading="editLoading">修改</el-button>
+				<el-button type="primary" @click.native="modifyUploads" :loading="editLoading">修改</el-button>
 				<el-button type="primary" @click.native="modifybannerdiv = false">取消</el-button>
 			</div>
 		</el-dialog>
@@ -434,31 +434,32 @@
     },
     //图片上传后修改
             modifyload (event) {
-        this.formData = new FormData()
-        let file = event.target.files[0]
-        const self = this
-        if (file) {
-            this.fileImg = file.name
-            this.formData.append('file', file);
-        } else {
-            this.fileImg = ''
-            this.formData = new FormData()
-        }
-    },
+                this.formData = new FormData()
+                let file = event.target.files[0]
+                const self = this
+                if (file) {
+                    this.fileImg = file.name
+                    this.formData.append('file', file);
+                    this.modifyUpload()
+                } else {
+                    this.fileImg = ''
+                    this.formData = new FormData()
+                }
+            },
     //修改
             modifyUpload(){
-        this.$confirm('确认修改吗？', '提示', {}).then(() => {
-            const _this= this;
-            _this.$http.post('http://121.43.178.109:8080/ser/api/attachment/upload', _this.formData, {
-                progress(event) {
-                }
-            })
-                .then(response => {
-                    const info = JSON.parse(response.bodyText);
-                    _this.urls = info.data[0].baseUri+info.data[0].uri;
-                    _this.modifyUploads();
-                }, error => _this.$emit('complete', 500, error.message))
-        });
+                this.$confirm('确认修改吗？', '提示', {}).then(() => {
+                    const _this= this;
+                    _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                        progress(event) {
+                        }
+                    })
+                        .then(response => {
+                            const info = JSON.parse(response.bodyText);
+                            _this.editForm.picture = info.data[0].baseUri+info.data[0].uri;
+                            // _this.modifyUploads();
+                        }, error => _this.$emit('complete', 500, error.message))
+                });
     },
     //			图片上传ajax
             modifyUploads(){
@@ -466,7 +467,7 @@
         const params = {
             id:this.editForm.id,
             link:this.editForm.link,
-            picture:this.urls,
+            picture:this.editForm.picture,
             orderSort:this.editForm.orderSort,
             desc:this.editForm.desc,
         };
