@@ -18,6 +18,8 @@ import releaseLook from './views/systemSettings/releaseLook.vue'
 import banner from './views/configuration/banner.vue' 
 import system from './views/configuration/system.vue' 
 import Authentication from './views/configuration/Authentication.vue'
+import activity from './views/configuration/activity.vue'
+import newActivity from './views/configuration/newActivity.vue'
 
 // 分销管理 Distribution
 import Identity from './views/Distribution/Identity.vue'
@@ -118,8 +120,10 @@ let routes = [
         iconCls: 'iconfont icon-peizhi1',
         children: [
             { path: '/banner', component: banner, name: '首页banner管理' },
+            { path: '/activity', component: activity, name: '活动管理' },
             { path: '/system', component: system, name: '首页商品配置' },
-            { path: '/Authentication', component: Authentication, name: '身份认证' }
+            { path: '/Authentication', component: Authentication, name: '身份认证' },
+            { path: '/newActivity', component: newActivity, name: '新建活动' ,hidden: true}
         ]
     },
     {

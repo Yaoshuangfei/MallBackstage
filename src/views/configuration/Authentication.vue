@@ -4,6 +4,9 @@
       身份认证
     </el-col>
       <el-form id="sfrz" :model="sfinfo" label-width="135px"  :rules="rules" ref="sfinfo">
+        <el-form-item label="公司名称:" prop="companyName">
+          <el-input v-model="sfinfo.companyName" style="width:200px;"></el-input>
+        </el-form-item>
         <el-form-item label="法人姓名:">
           <el-input v-model="sfinfo.realName" style="width:200px;"></el-input>
         </el-form-item>
@@ -105,7 +108,9 @@
                     legalCardCode: [
                         { required: true, message: '请输入身份证号', trigger: 'blur' },
                         { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/, message: '证件号码格式有误！', trigger: 'blur' }
-                    ]
+                    ],
+                    companyName:[{ required: true, message: '请输入公司名称', trigger: 'blur' },
+            { min: 3, max: 20, message: '长度在 3 到 100 个字符', trigger: 'blur' }]
                 },
                 sfinfo:{
                     realName:'',
@@ -113,7 +118,8 @@
                     storeMobile:'',
                     bankName:'',
                     bankCode:'',
-                    theAddress:''
+                    theAddress:'',
+                    companyName:''
                 },
                 total:7,
                 page: 1,
@@ -212,7 +218,8 @@
                     cardImgF:this.frImgurl,
                     cardImgW:this.frImgurlPointer,
                     businessLicense:this.businessImgurl,
-                    bankImgW:this.bankImgurl
+                    bankImgW:this.bankImgurl,
+                    companyName:this.sfingo.companyName
                 }
                 let url = ''
                 console.log(this.sfinfoId)
@@ -257,6 +264,7 @@
                     }else{
                         _this.remarkInfo = info.remark
                         _this.sfinfoId = info.id
+                        _this.sfinfo.companyName = info.companyName
                         _this.sfinfo.realName = info.realName
                         _this.sfinfo.legalCardCode = info.legalCardCode
                         _this.sfinfo.storeMobile = info.storeMobile
