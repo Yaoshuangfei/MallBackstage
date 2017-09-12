@@ -17,11 +17,11 @@
 		<el-table id="bannersss" :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">
 			<el-table-column prop="activityId" label="活动ID">
 			</el-table-column>
-			<el-table-column prop="picture" label="活动图">
+			<!-- <el-table-column prop="picture" label="活动图">
 				<template scope="scope">
 					<img class="img" :src="scope.row.activityLogo" alt="">
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 			<el-table-column prop="activityName" label="活动名称">
 			</el-table-column>
 			<el-table-column prop="activityDetails" label="活动描述">
@@ -49,11 +49,11 @@
 			</el-table-column> -->
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" size="small" @click="handEnabled(scope.$index, scope.row)">修改活动</el-button>
-					<el-button type="text" size="small" @click="handDisabled(scope.$index, scope.row)">设置优惠</el-button>
-					<el-button type="text" size="small" @click="handmodify(scope.$index, scope.row)">添加商品</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button>
+					<el-button type="text" size="small" @click="handEnabled(scope.row)">修改活动</el-button>
+					<el-button type="text" size="small" @click="handDisabled(scope.row)">设置优惠</el-button>
+					<el-button type="text" size="small" @click="handmodify(scope.row)">添加商品</el-button>
+					<el-button type="text" size="small" @click="deldetBtn(scope.row)">删除</el-button>
+					<el-button type="text" size="small" @click="stopBtn(scope.row)">暂停</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -266,9 +266,10 @@
                     pageNum:this.page,
                     size:10,
                     storeId:localStorage.getItem("storeId"),
+                    status:'',
                     activityId:'',
                     activityName:''
-				};
+				}
                 $.ajax({
                     type:'POST',
                     dataType:'json',
@@ -281,7 +282,46 @@
                         _this.total = info.total
                         _this.orderInformation  = info.list
                     }
-                });
+                })
+			},
+			// 删除
+			deldetBtn(row){
+				console.log(row)
+				const _this = this
+				const params = {
+					activityId:row.activityId,
+					activityStatus:2
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+'/api/activity/updateStatus',
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        _this.getlist()
+                    }
+                })
+			},
+			// 暂停
+			stopBtn(row){
+				const _this = this
+				const params = {
+					activityId:row.activityId,
+					activityStatus:1
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+'/api/activity/updateStatus',
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        _this.getlist()
+                    }
+                })
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -640,8 +680,8 @@
 		margin-left: 0 ! important ;
 	}
 	.img {
-		width:100px;
-		height:100px;
+		width:80px;
+		height:80px;
 	}
 	#addBanner .el-dialog__title {font-size: 16px;font-weight: inherit;color: #cab78c;}
 	#addBanner .el-dialog__header {color: #cab78c;text-align: center;border-bottom: 1px dashed #cab78c;padding-bottom: 10px;}

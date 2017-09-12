@@ -77,7 +77,7 @@
                             localStorage.setItem('storeId', data.data.storeId);
                             state.id = data.data.id
                             state.storeStatus = data.data.storeStatus
-                            document.cookie="token="+data.data.token;
+                            document.cookie="JSESSIONID="+data.data.token+';';
                             sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             localStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
                             _this.$router.push({ path: '/main' });
