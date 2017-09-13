@@ -60,23 +60,23 @@
             <el-col :span="24" class="booton_margin">
                <el-col :span="2" style="margin-top: 6px;">是否分佣：</el-col>
                <el-col :span="10" class="radio_b">
-                    <el-radio class="radio" v-model="isCommission" label="1">是</el-radio>
-                    <el-radio class="radio" v-model="isCommission" label="0">否</el-radio>
+                    <el-radio class="radio" disabled v-model="isCommission" label="1">是</el-radio>
+                    <el-radio class="radio" disabled v-model="isCommission" label="0">否</el-radio>
                </el-col>
             </el-col>
             <el-col :span="24" class="booton_margin">
                <el-col :span="2" style="margin-top: 6px;">优惠方式：</el-col>
                <el-col :span="10" class="radio_b">
-                   <el-radio class="radio" v-model="activityRulesType" label="1">满就送</el-radio>
-                   <el-radio class="radio" v-model="activityRulesType" label="2">满就减</el-radio>
-                   <el-radio class="radio" v-model="activityRulesType" label="3">限时打折</el-radio>
+                   <el-radio class="radio" disabled  v-model="activityRulesType" label="1">满就送</el-radio>
+                   <el-radio class="radio" disabled  v-model="activityRulesType" label="2">满就减</el-radio>
+                   <el-radio class="radio" disabled  v-model="activityRulesType" label="3">限时打折</el-radio>
                </el-col>
             </el-col>
             <el-col :span="24" class="booton_margin">
                <el-col :span="3" style="margin-top: 6px;">优惠满足方式：</el-col>
                <el-col :span="10" class="radio_b">
-                   <el-radio class="radio" v-model="valuationType" label="0">按数量</el-radio>
-                   <el-radio class="radio" v-model="valuationType" label="1">按金额</el-radio>
+                   <el-radio class="radio" disabled  v-model="valuationType" label="0">按数量</el-radio>
+                   <el-radio class="radio" disabled  v-model="valuationType" label="1">按金额</el-radio>
                </el-col>
             </el-col>
             <el-col :span="24" class="booton_margin">
@@ -124,7 +124,12 @@
         </el-col>
         <el-col :span="24" v-show="treeShow">
             <el-col :span="24" style="margin-bottom: 20px;">
-                 <el-button type="primary" @click="upGoods">保存</el-button>
+                <el-col :span="23">
+                    <el-button type="primary" @click="showGoods">添加商品</el-button>
+                </el-col>
+                <el-col :span="1">
+                    <el-button type="primary" @click="upGoods">保存</el-button>
+                </el-col>
             </el-col><!-- @selection-change="selsChange" -->
             <el-table :data="tabletest"  border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;text-align: center;">
                 <!-- <el-table-column type="selection">
@@ -176,7 +181,8 @@
                 </el-table-column> -->
                 <el-table-column v-if="isCommissions" prop="fyNum" label="分佣配置">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="addgz(scope.row)">添加规则</el-button>
+                        <el-button type="text" v-if="scope.row.show === '1' " size="small" @click="addgz(scope.row)">添加规则</el-button>
+                        <el-button type="text" v-else size="small" @click="addgztwo(scope.row)">添加规则</el-button>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column label="操作">
@@ -214,15 +220,10 @@
 	export default {
 		data() {
 			return {
-                fyObjList:[
-                    {
-                        id:1,
-                        value:''
-                    }
-                ],
+                fyObjList:[],
                 tabletest:[],
                 value:'0',
-                initObj:'',
+                initObj:[],
                 goostable:[],
                 id:'',
                 goodList:false,
@@ -230,8 +231,8 @@
                 oneShow:true,
                 twoShow:false,
                 treeShow:false,
-                activityName:'1',//活动名称
-                name:'',
+                activityName:'1',
+                name:'',//活动名称
                 activityDetails:'',//描述
                 begtime:'',//开始时间
                 endtime:'',//结束时间
@@ -239,8 +240,8 @@
                 valuationType:'',//优惠满足方式
                 isMail:'',//是否包邮
                 isCommission:'',//是否分佣
-                formData: new FormData(),
                 activityLogo:'',//活动图
+                formData: new FormData(),
                 table:[],
                 listLoading:false,
                 treetable:[],
@@ -260,45 +261,102 @@
 			}
 		},
 		methods: {
+            // 获取活动详情
+            getActivity(){
+                const _this = this
+                const params = {
+                    activityId:this.$route.params.id
+                }
+                console.log(params)
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/activity/selectOne",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        _this.name = data.data.activityName
+                        _this.activityDetails = data.data.activityDetails
+                        _this.begtime= data.data.beginTime//开始时间
+                        _this.endtime= data.data.endTime//结束时间
+                        _this.activityRulesType = data.data.activityRulesType.toString()//优惠方式
+                        _this.valuationType = data.data.valuationType.toString()//优惠满足方式
+                        _this.isMail = data.data.isMail.toString()
+                        _this.isCommission = data.data.isCommission.toString()
+                        _this.activityLogo = data.data.activityLogo
+                        if(_this.activityRulesType === '1'){
+                            _this.manfangs = '赠送数量'// 送商品 填写ID
+                            _this.song = true
+                        }else if(_this.activityRulesType === '2'){
+                            _this.manfangs = '满就减'
+                        }else if(_this.activityRulesType === '3'){
+                            _this.manfangs = '限时打折'
+                        }
+                        // 0 按数量 1 金额 data.data.valuationType 
+                        if(_this.valuationType === '0'){
+                            _this.numberMan = '最低购买数量'
+                        }else if(_this.valuationType === '1'){
+                            _this.numberMan = '最低消费金额'
+                        }
+                        //data.data.isCommission 0 no 1 yes      isMail  1 yes 2 no  
+                        if(_this.isCommission === '0'){
+                            _this.isCommissions = false
+                        }else if(_this.isCommission === '1'){
+                            _this.isCommissions = true
+                        }
+                    }
+                })
+            },
+            // 活动配置
 			updata(){
                 const _this= this
                 if(this.begtime === '' || this.endtime === ''){
                     alert('请填写开始时间或结束时间')
                     return
                 }
+                console.log(_this.activityRulesType)
                 const params = {
+                    activityId:this.$route.params.id,
                     activityName:this.name,
                     activityLogo:this.activityLogo,
                     activityDetails:this.activityDetails,
-                    isCommission:this.isCommission,
-                    getBeginTime:this.begtime.getTime(),
-                    getEndTime:this.endtime.getTime(),
-                    activityRulesType:this.activityRulesType,
                     valuationType:this.valuationType,
-                    isMail:this.isMail
+                    isMail:this.isMail,
+                    activityRulesType:this.activityRulesType
+                }
+                var re = /^[0-9]+.?[0-9]*$/
+            　　if (!re.test(this.begtime)) {
+                    params.getBeginTime = this.begtime.getTime()
+            　　}else{
+                    params.getBeginTime = this.begtime
+                }
+                if (!re.test(this.endtime)) {
+                    params.getEndTime = this.endtime.getTime()
+            　　}else{
+                    params.getEndTime = this.endtime
                 }
                 console.log(params)
-                console.log(this.begtime.getTime())
                 $.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"/api/activity/add",
+                    url:baseUrl+"/api/activity/update",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                         console.log(data)
                         if(data.code === 1){
                             _this.oneShow = false
-                            _this.twoShow = true
+                            _this.treeShow = true
                             _this.id = data.data.activityId
-                            _this.getList()
+                            _this.getGoods()
                             // 1 满就送 2 满就减 3 限时打折 data.data.activityRulesType
-                            if(data.data.activityRulesType === 1){
+                            if(_this.activityRulesType === '1'){
                                 _this.manfangs = '赠送数量'// 送商品 填写ID
                                 _this.song = true
-                            }else if(data.data.activityRulesType === 2){
+                            }else if(_this.activityRulesType === '2'){
                                 _this.manfangs = '满就减'
-                            }else if(data.data.activityRulesType === 3){
+                            }else if(_this.activityRulesType === '3'){
                                 _this.manfangs = '限时打折'
                             }
                             // 0 按数量 1 金额 data.data.valuationType 
@@ -322,18 +380,45 @@
                     }
                 })
 			},
+            // 获取活动内的商品
+            getGoods(){
+                const _this = this
+                const params = {
+                    activityId:this.$route.params.id 
+                }
+                console.log(params)
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/activity/selectListOfGoods",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        const list = data.data
+                        for (var i = 0; i < list.length; i++) {
+                            const obj = {}
+                            obj.goodsId = list[i].goodsId
+                            obj.fyNum = []
+                            obj.comData = list[i].comData
+                            obj.statusType = list[i].activityValue
+                            obj.value = list[i].activityObj
+                            obj.manNub = list[i].minNum
+                            obj.maxNum = list[i].maxNum
+                            obj.show = '1'
+                            _this.initObj.push(obj)
+                        }
+                        console.log(_this.initObj)
+                        _this.getList()
+                    }
+                })
+            },
             getList(){
                 const _this= this
-
-                // _this.manfangs = '满就送'// 送商品 填写ID
-                // _this.song = true
-                // _this.numberMan = '最低购买数量'  
-                // _this.isCommissions = true
-
+                _this.options = []
                 const params = {
                     storeId:localStorage.getItem("storeId"),
-                    // activityId:30,
-                    activityId:_this.id,
+                    activityId:this.$route.params.id ,
                     name:''
                 }
                 console.log(params)
@@ -344,12 +429,13 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                        console.log(data)
                         const info = data.data
                         _this.table = info
-                        const arry = []
                         for (var i = 0; i < _this.table.length; i++) {
-                            _this.table[i].value = '0'
+                            const optionObj = {}
+                            optionObj.value = _this.table[i].id.toString()
+                            optionObj.label = _this.table[i].name
+                            _this.options.push(optionObj)
                             _this.table[i].carouselPicture = _this.table[i].carouselPicture.split(',')
                             let num = 0
                             for (var x = 0; x < _this.table[i].goodsSpecs.length; x++) {
@@ -357,7 +443,16 @@
                                  _this.table[i].kcNum = num
                             }
                         }
-                        console.log(_this.table)
+                        for (var i = 0; i < _this.initObj.length; i++) {
+                            for (var x = 0; x < _this.table.length; x++) {
+                                if(_this.initObj[i].goodsId === _this.table[x].id){
+                                    _this.initObj[i].name = _this.table[x].name
+                                    _this.initObj[i].price = _this.table[x].price
+                                    _this.initObj[i].kcNum = _this.table[x].kcNum
+                                }
+                            }
+                        }
+                        _this.tabletest = _this.initObj
                         
                     }
                 })
@@ -367,13 +462,11 @@
                 this.treetable = sels
             },
             onGoods(){
-                this.tabletest = []
-                this.options = []
                 for (var i = 0; i < this.treetable.length; i++) {
                     const obj = {}
                     obj.value = ''
                     obj.name = this.treetable[i].name
-                    obj.id = this.treetable[i].id
+                    obj.goodsId = this.treetable[i].id
                     obj.price = this.treetable[i].price
                     obj.kcNum = this.treetable[i].kcNum
                     obj.statusType = '1'
@@ -384,15 +477,6 @@
                     }]
                     this.tabletest.push(obj)
                 }
-                console.log(this.table)
-                for (var i = 0; i < this.table.length; i++) {
-                    const optionObj = {}
-                    optionObj.value = this.table[i].id
-                    optionObj.label = this.table[i].name
-                    this.options.push(optionObj)
-                }
-                console.log(this.options)
-                console.log(this.tabletest)
                 this.twoShow = false
                 this.treeShow = true
             },
@@ -401,8 +485,11 @@
                 const _this = this
                 const arry = []
                 for (var i = 0; i < this.tabletest.length; i++) {
+                    if(this.tabletest[i].show === 1){
+                        this.tabletest[i].fyNum = eval('(' + this.tabletest[i].fyNum + ')')
+                    }
                     const obj = {}
-                    obj.goodsId = this.tabletest[i].id
+                    obj.goodsId = this.tabletest[i].goodsId
                     obj.comData = JSON.stringify(this.tabletest[i].fyNum)
                     obj.minNum = this.tabletest[i].manNub
                     obj.maxNum = '0'
@@ -411,7 +498,7 @@
                     arry.push(obj)
                 }
                 const params = {
-                    activityId:_this.id,
+                    activityId:this.$route.params.id ,
                     // activityId:30,
                     activityGoodsList:arry
                 }
@@ -424,7 +511,7 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                         console.log(data)
-                        if(data.code === 1){
+                        if(data.code === 1){ 
                             _this.$router.push({ path: '/activity' });
                         }else{
                             _this.$message({
@@ -436,6 +523,20 @@
                 })
             },
             addgz(row){
+                console.log(row)
+                this.goodList = true
+                // this.fyObjList = row.fyNum
+                if(row.comData){
+                    const comData = eval('(' + row.comData + ')')
+                    row.fyNum = comData
+                    this.fyObjList =eval('(' + row.comData + ')')
+                }else{
+                    this.fyObjList = row.fyNum
+                }
+                row.show = '0'
+                console.log(row)
+            },
+            addgztwo(row){
                 this.goodList = true
                 this.fyObjList = row.fyNum
             },
@@ -445,7 +546,10 @@
                 obj.value = ''
                 this.fyObjList.push(obj)
             },
-
+            showGoods(){
+                this.twoShow = true
+                this.treeShow = false
+            },
 
 
 
@@ -479,7 +583,12 @@
             },
 		},
 		mounted() {
-            // this.getList()
+            this.getActivity()
+            if(this.$route.params.index === 0){
+                this.oneShow = false
+                this.treeShow = true
+                this.getGoods()
+            }
 		}
 	}
 </script>

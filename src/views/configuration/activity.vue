@@ -49,9 +49,9 @@
 			</el-table-column> -->
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" size="small" @click="handEnabled(scope.row)">修改活动</el-button>
-					<el-button type="text" size="small" @click="handDisabled(scope.row)">设置优惠</el-button>
-					<el-button type="text" size="small" @click="handmodify(scope.row)">添加商品</el-button>
+					<el-button type="text" size="small" @click="editSubmit(scope.row)">修改活动</el-button>
+					<el-button type="text" size="small" @click="selection(scope.row)">设置优惠</el-button>
+					<el-button type="text" size="small" @click="addSubmit(scope.row)">添加商品</el-button>
 					<el-button type="text" size="small" @click="deldetBtn(scope.row)">删除</el-button>
 					<el-button type="text" size="small" @click="stopBtn(scope.row)">暂停</el-button>
 				</template>
@@ -266,7 +266,7 @@
                     pageNum:this.page,
                     size:10,
                     storeId:localStorage.getItem("storeId"),
-                    status:'',
+                    status:'0',
                     activityId:'',
                     activityName:''
 				}
@@ -323,6 +323,16 @@
                     }
                 })
 			},
+			editSubmit: function (row) {
+                console.log(row)
+                this.$router.push({ name: '修改活动' , params: {id : row.activityId ,index :1}});
+            },
+            selection: function (row) {
+            	this.$router.push({ name: '修改活动' , params: {id : row.activityId ,index :0}});
+            },
+            addSubmit: function (row) {
+            	this.$router.push({ name: '修改活动' , params: {id : row.activityId ,index :0}});
+            },
 			handleCurrentChange(val) {
 				this.page = val;
 				this.getlist();
@@ -442,104 +452,7 @@
 
 				});
 			},
-            //启用
-            handEnabled: function (index, row) {
-                this.$confirm('确认启用该广告位吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    const _this= this;
-                    const params = {
-                        id:row.id
-                    };
-                    var url = baseUrl+"/api/indexAdvert/enable";
-                    var data =JSON.stringify(params);
-                    $.ajax({
-                        type:'POST',
-                        dataType:'json',
-                        url:url,
-                        data:data,
-                        contentType:'application/json;charset=utf-8',
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
-                        success:function(data){
-                            if(!data.success){
-                                alert(data.msg)
-                            }else{
-                                _this.$message({
-                                    message: '启用成功',
-                                    type: 'success'
-                                });
-                                _this.getlist();
-                            }
-                        }
-                    });
-//					this.listLoading = true;
-                    //NProgress.start();
-//					let para = { id: row.id };
-//					removeUser(para).then((res) => {
-//						this.listLoading = false;
-//						//NProgress.done();
-//						this.$message({
-//							message: '删除成功',
-//							type: 'success'
-//						});
-//						this.getUsers();
-//					});
-                }).catch(() => {
-
-                });
-            },
-            //禁用
-            handDisabled: function (index, row) {
-                this.$confirm('确认禁用该广告位吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    const _this= this;
-                    const params = {
-                        id:row.id
-                    };
-                    var url = baseUrl+"/api/indexAdvert/disable";
-                    var data =JSON.stringify(params);
-                    $.ajax({
-                        type:'POST',
-                        dataType:'json',
-                        url:url,
-                        data:data,
-                        contentType:'application/json;charset=utf-8',
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
-                        success:function(data){
-                            if(!data.success){
-                                alert(data.msg)
-                            }else{
-                                _this.$message({
-                                    message: '禁用成功',
-                                    type: 'success'
-                                });
-                                _this.getlist();
-                            }
-                        }
-                    });
-//					this.listLoading = true;
-                    //NProgress.start();
-//					let para = { id: row.id };
-//					removeUser(para).then((res) => {
-//						this.listLoading = false;
-//						//NProgress.done();
-//						this.$message({
-//							message: '删除成功',
-//							type: 'success'
-//						});
-//						this.getUsers();
-//					});
-                }).catch(() => {
-
-                });
-            },
-
-//			修改
-            handmodify: function (index, row) {
-			    this.modifybannerdiv = true;
-			    this.editForm = row;
-            },
+           
 
 
 //            清空上传

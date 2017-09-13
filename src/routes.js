@@ -20,6 +20,7 @@ import system from './views/configuration/system.vue'
 import Authentication from './views/configuration/Authentication.vue'
 import activity from './views/configuration/activity.vue'
 import newActivity from './views/configuration/newActivity.vue'
+import editActivity from './views/configuration/editActivity.vue'
 
 // 分销管理 Distribution
 import Identity from './views/Distribution/Identity.vue'
@@ -111,6 +112,7 @@ let routes = [
             {path: '/SystemPush', component: SystemPush, name: '系统推送'},
             { path: '/releaseAdd', component: releaseAdd, name: '编辑消息', hidden: true },
             { path: '/releaseLook/:id', component: releaseLook, name: '查看系统推送', hidden: true }
+            
         ]
     },
     {
@@ -123,7 +125,8 @@ let routes = [
             { path: '/activity', component: activity, name: '活动管理' },
             { path: '/system', component: system, name: '首页商品配置' },
             { path: '/Authentication', component: Authentication, name: '身份认证' },
-            { path: '/newActivity', component: newActivity, name: '新建活动' ,hidden: true}
+            { path: '/newActivity', component: newActivity, name: '新建活动' ,hidden: true},
+            { path: '/editActivity/:id/:index', component: editActivity, name: '修改活动', hidden: true }
         ]
     },
     {
