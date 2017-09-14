@@ -17,21 +17,21 @@ export const state = {
     id:'',
     storeId:''
 }
-   $.ajaxSetup({ 
-        xhrFields: {
-            withCredentials: true
-        }
-    });
-    $.ajaxSettings.beforeSend = function(xhr,request){
-        var arrstr = document.cookie.split("; ");
-        var token = null;
-        for(var i = 0; i < arrstr.length; i++) {
-            var temp = arrstr[i].split("=");
-            if(temp[0] == 'token') {
-                token = unescape(temp[1]);
-            }
-        }
-        xhr.setRequestHeader('token', token);
-    }
+   // $.ajaxSetup({ 
+   //      xhrFields: {
+   //          withCredentials: true
+   //      }
+   //  });
+   //  $.ajaxSettings.beforeSend = function(xhr,request){
+   //      var arrstr = document.cookie.split("; ");
+   //      var token = null;
+   //      for(var i = 0; i < arrstr.length; i++) {
+   //          var temp = arrstr[i].split("=");
+   //          if(temp[0] == 'token') {
+   //              token = unescape(temp[1]);
+   //          }
+   //      }
+   //      xhr.setRequestHeader('token', token);
+   //  }
     
 
