@@ -9,6 +9,12 @@
 				      </el-option>
 				    </el-select>
 				</el-form-item> -->
+				<el-form-item label="记录来源">
+				    <el-select v-model="filters.source" clearable>
+				      <el-option v-for="item in source" :label="item.label" :value="item.value">
+				      </el-option>
+				    </el-select>
+				</el-form-item>
 				<el-form-item label="搜索类型">
 				    <el-select v-model="filters.type" clearable>
 				      <el-option v-for="item in options" :label="item.label" :value="item.value">
@@ -58,7 +64,7 @@
 				<el-col :span="1" class="center">{{item.serviceFee}}</el-col>
 				<el-col :span="3" class="center">{{new Date(item.createTime).toLocaleString()}}</el-col>
 				<el-col :span="3" class="center">{{item.mallProfits}}</el-col>
-				<el-col :span="3" class="center">{{item.storeIncome+item.freezeIncome}}</el-col>
+				<el-col :span="3" class="center">{{(item.storeIncome).toFixed(2)}}</el-col>
 			</el-col>
 			<el-col :span="24" style="border-top:1px dashed #f4f2e8;" v-if="item.maps.length !== 0" v-for="items in item.maps">
 				<el-col :span="3" style="margin-left: 20px;margin-top: 20px;margin-bottom: 20px">分佣明细</el-col>
@@ -189,10 +195,18 @@
 		          value: '3',
 		          label: '电话'
 		        }],
+		        source: [{
+                    value: '0',
+                    label: 'app'
+                }, {
+                    value: '1',
+                    label: '微信'
+                }],
 				filters: {
 					name: '',
 					status:'',
-					type:''
+					type:'',
+					source:''
 				},
 				users: [],
 				total: 1,
@@ -231,6 +245,7 @@
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
 			},
 			getlist(){
+				
 				const _this = this
 				_this.listLoading = true
 				_this.table = []
@@ -241,7 +256,8 @@
 					tradeNo:'',
 					userName:'',
 					mobile:'',
-					sort:'4'
+					sort:'4',
+					source:this.filters.source
 				}
 				if(this.filters.type === '1'){
 					params.tradeNo = this.filters.name
@@ -250,6 +266,13 @@
 				}else if(this.filters.type === '3'){
 					params.mobile = this.filters.name
 				}
+				if(this.filters.num !== ''){
+                    if(this.filters.num === '0'){
+                        params.orderId = this.filters.name
+                    }else if(this.filters.num === '1'){
+                        params.expno = this.filters.name
+                    }
+                }
 				$.ajax({
                     type:'POST',
                     dataType:'json',

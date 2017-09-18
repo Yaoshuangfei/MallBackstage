@@ -130,7 +130,7 @@
     methods: {
             formatter(row,column){
               let curTime = row.indexStyleId;
-              if(curTime === 8){
+              if(curTime === 8 || curTime === 9){
                   curTime = '模块一'
               }else{
                   curTime = '模块二'
@@ -147,7 +147,6 @@
                   url:url,
                   data:{},
                   contentType:'application/json;charset=utf-8',
-                  error: function (XMLHttpRequest, textStatus, errorThrown) {},
                   success:function(data){
                     console.log(data)
                     if(data.code === 1){
