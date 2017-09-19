@@ -92,7 +92,7 @@
 							待评价（{{dpjnum}}）
 						</el-col>
 					</router-link>
-					<router-link :to="{ name: '订单信息管理',params:{id:4}}" style="color: #333;">
+					<router-link :to="{ name: '退货的商品'}" style="color: #333;">
 						<el-col :xs="8" :sm="8" :md="8" :lg="6">
 							退货（{{thnum}}）
 						</el-col>
@@ -188,7 +188,7 @@
 	                  			_this.dfhnum = info.orderMalls[i].countGroup
 	                  		}else  if(info.orderMalls[i].orderStatus === 6){
 	                  			_this.dpjnum = info.orderMalls[i].countGroup
-	                  		}else if(info.orderMalls[i].orderStatus === 4){
+	                  		}else if(info.orderMalls[i].orderStatus === 0){
 	                  			_this.thnum = info.orderMalls[i].countGroup
 	                  		}
 	                  	}

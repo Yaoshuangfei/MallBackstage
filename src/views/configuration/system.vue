@@ -19,7 +19,7 @@
 
     <!--列表-->
     <el-table :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">
-      <el-table-column prop="indexStyleId" :formatter='formatter' label="位置">
+      <el-table-column prop="stylePosition" :formatter='formatter' label="位置">
       </el-table-column>
       <el-table-column prop="goodsName" label="商品名称">
       </el-table-column>
@@ -129,8 +129,8 @@
     },
     methods: {
             formatter(row,column){
-              let curTime = row.indexStyleId;
-              if(curTime === 8 || curTime === 9){
+              let curTime = row.stylePosition
+              if(curTime === 1){
                   curTime = '模块一'
               }else{
                   curTime = '模块二'

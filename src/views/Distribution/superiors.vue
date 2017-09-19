@@ -15,10 +15,10 @@
 			</el-form>
 		</el-col>
 		<el-col :span="24" style="position: relative;">
-			<el-col :span="20" style="position: absolute;z-index: 0;border-top:2px solid #cab78c;left:25px;top:80px;"></el-col>
-			<el-col style="position: absolute;z-index: 0;border-left:2px solid #cab78c;left:225px;top:80px;width:1px;height:66%;"></el-col>
+			<!-- <el-col :span="20" style="position: absolute;z-index: 0;border-top:2px solid #cab78c;left:25px;top:80px;"></el-col> -->
+			<!-- <el-col style="position: absolute;z-index: 0;border-left:2px solid #cab78c;left:225px;top:80px;width:1px;height:66%;"></el-col> -->
 			<el-col :span="4" style="margin-top: 10px;" class='bor_div_left'>
-
+				<el-col v-if="list.length !== 0" style="position: absolute;width:100%;border-top: 2px solid #cab78c;left:70px;bottom:87px;"></el-col>
 				<img :src="headImg" style="width:160px;height:160px;border-radius: 50%;position: absolute;top:0;left:0;">
 				<el-col :span="24" style="background: rgba(255,255,255,.8);width:160px;height:60px;position: absolute;z-index:1;bottom:-2px;left:0;">{{name}}</el-col>
 				<!--<img style="width:160px;height:160px;border-radius: 50%;position: absolute;top:0;left:0;"-->
@@ -33,9 +33,12 @@
 
 			</el-col>
 			<el-col :span="15" style="margin-left: 160px;margin-bottom: 10px;">
-				<el-col :span="24" style="margin-top: 10px; position: relative;" v-for="item in list">
+				<el-col :span="24" style="margin-top: 10px; position: relative;" v-for="(item,index) in list">
 					<el-col :span="4" class='bor_div'>
 						<el-col style="position: absolute;width:100%;border-top: 2px solid #cab78c;left:-95px;bottom:87px;"></el-col>
+						<el-col v-if="list.length-1 !== index" style="position: absolute;width:100%;border-left: 2px solid #cab78c;left:-95px;bottom:87px;height: 108%;top: 45%"></el-col>
+						<el-col v-if="item.list.length !== 0" style="position: absolute;width:100%;border-top: 2px solid #cab78c;left:95px;bottom:87px;"></el-col>
+
 						<div @click="onDown(item.id)" style="cursor: pointer;">
 							<img style="width:160px;height:160px;border-radius: 50%;position: absolute;top:0;left:0;" :src="item.coreUser.headImg" v-if="item.coreUser.headImg !== null">
 							<img v-else style="width:160px;height:160px;border-radius: 50%;position: absolute;top:0;left:0;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
@@ -48,8 +51,10 @@
 					</el-col>
 					<!--<el-col v-if="item.list.length > 0" :span="1" style="border:1px solid #ddd;margin-top: 20px;margin-left: 10px;"></el-col>-->
 					<el-col :span="10" style="margin-left: 180px">
-						<el-col :span="24" v-for="items in item.list" >
+						<el-col :span="24" v-for="(items,indexs) in item.list">
 							<el-col :span="24" class='bor_div'>
+								<el-col style="position: absolute;width:100%;border-top: 2px solid #cab78c;left:-95px;bottom:87px;"></el-col>
+								<el-col v-if="item.list.length-1 !== indexs" style="position: absolute;width:100%;border-left: 2px solid #cab78c;left:-95px;bottom:87px;height: 100%;top: 45%"></el-col>
 								<div @click="onDown(items.id)" style="cursor: pointer;">
 									<img style="width:160px;height:160px;border-radius: 50%;position: absolute;top:0;left:0;" :src="item.coreUser.headImg" v-if="item.coreUser.headImg !== null">
 									<img v-else style="width:160px;height:160px;border-radius: 50%;position: absolute;top:0;left:0;" src="http://resources.51att.cn/ATTACHMENT/ATTACHMENT/1bccc3cf-8d44-4482-84e1-82d84d56e25c.png">
@@ -130,7 +135,7 @@
                                 _this.list.push(info[i])
                             }
                         }
-//                        console.log(_this.list)
+                       console.log(_this.list)
                     }
                 })
             }
@@ -150,7 +155,7 @@
 		/*line-height: 60px;*/
 		text-align: center;
 		position: relative;
-		overflow: hidden;
+		/*overflow: hidden;*/
 	}
 	.bor_div{
 		border: 1px solid #aaa;

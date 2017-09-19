@@ -154,7 +154,7 @@
 				<el-form-item label="价格：">
 					<el-input v-model="editForm.price" type="text"></el-input>
 				</el-form-item>
-				<el-form-item label="成品单价：" v-if="commissionLine === 5">
+				<el-form-item label="分佣金额：" v-if="commissionLine === 5">
 					<el-input v-model="editForm.commissionPrice" type="text"></el-input>
 				</el-form-item>
 				<el-col :span='24'></el-col>
