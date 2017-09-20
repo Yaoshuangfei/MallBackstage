@@ -130,11 +130,7 @@
 		          value: '2',
 		          label: '快递单号'
 		        }],
-<<<<<<< HEAD
 		        source: [{
-=======
-                source: [{
->>>>>>> c6b886bfee3ef824882a255986faff5c12b8bbc1
                     value: '0',
                     label: 'app'
                 }, {
@@ -189,11 +185,7 @@
 					orderStatus:this.filters.status,
 					orderId:'',
 					expno:'',
-<<<<<<< HEAD
 					source:this.filters.source
-=======
-                    source:this.filters.source
->>>>>>> c6b886bfee3ef824882a255986faff5c12b8bbc1
 				}
 				if(this.filters.type !== ''){
 					if(this.filters.type === '1'){
@@ -202,11 +194,7 @@
 						params.expno = this.filters.name
 					}
 				}
-<<<<<<< HEAD
 				if(this.filters.num !== ''){
-=======
-                if(this.filters.num !== ''){
->>>>>>> c6b886bfee3ef824882a255986faff5c12b8bbc1
                     if(this.filters.num === '0'){
                         params.orderId = this.filters.name
                     }else if(this.filters.num === '1'){
