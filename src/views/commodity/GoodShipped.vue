@@ -33,7 +33,7 @@
 				<el-col :span="22" :offset="1" class="head_text" style="height:600px;margin-top: 20px;">
 					<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
 						<el-form-item label='商品名称' style="width:100%;">
-							<el-input type="text" v-model="CommodityName" style="width:550px;"></el-input>
+							<el-input type="text" v-model="DescriptionGoods" style="width:550px;"></el-input>
 							<span style="font-size: 12px;color: #ababab;">商品名称至少3个字符，最多50个汉字</span>
 						</el-form-item>
 						<el-form-item label='商品货号' style="width:100%;">
@@ -44,16 +44,15 @@
 							<el-input type="text" v-model="item.value"></el-input>
 						</el-form-item>
 						<el-form-item label='商品描述' style="width:100%;">
-							<el-input type="text"  v-model="DescriptionGoods" style="width:550px;"></el-input>
+							<el-input id="dddd" type="textarea" :rows="3" v-model="DescriptionGoods" style="width:550px;resize: none;height:80px;"></el-input>
 						</el-form-item>
 
 						<el-form-item label="商品图片:" style="position: relative;height:234px;width:100%;">
-							<input v-if="CommodityPictures.length < 3" type="file" style="position:absolute;opacity:0;width:80px;height:30px;margin-right:10px;z-index: 1;"  @change="upload" id="fileInput" >
-							<button type="button" v-if="CommodityPictures.length < 3" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
+							<input type="file" style="position:absolute;opacity:0;width:80px;height:30px;margin-right:10px;z-index: 1;"  @change="upload" id="fileInput" >
+							<button type="button" class="el-button el-button--primary el-button--small" style="width:92px;height:30px;background:#9f3333;font-size: 16px;color: #fff;border:1px solid #9f3333; ">
 								<span >点击上传</span>
 							</button>
 							<span style="font-size: 12px;color: #ababab;margin-left: 10px;">图片格式：jpg,jpeg,png,gif，推荐大小800*800.</span>
-							<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-189px;left:0;z-index: 0;width:160px;height:160px;">
 							<!--<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:15px;left:0;z-index: 0;width:160px;height:160px;">-->
 							<!--<el-col :span="24" v-if="bankImgurl !== '' " style="position: absolute;bottom:-180px;left:0;z-index: 0;width:160px;height:160px;" ><img style="width: 160px;height:160px;" :src="bankImgurl"></el-col>-->
 							<div style="margin: 20px 0;width:600px;position: absolute;z-index: 1;">
@@ -62,7 +61,7 @@
 									<img :src="item" style="width:160px;height: 160px;border: 1px solid #f0f0f0;">
 								</el-col>
 							</div>
-
+							<img src="../../assets/upload.png" alt="" style="position: absolute;bottom:-189px;left:0;z-index: 0;width:160px;height:160px;">
 						</el-form-item>
 
 
@@ -143,7 +142,7 @@
 						<el-col :span="22" :offset="1" style="margin-top: 20px;">
 							<el-form  label-width="100px" >
 								<el-form-item label='计量单位' style="width:100%;">
-									<el-input type="text" v-model="MeasurementUnit" style="width:150px;"></el-input>
+									<el-input type="text" v-model="DescriptionGoods" style="width:150px;"></el-input>
 								</el-form-item>
 									<el-col :span="24" style="height: 50px;line-height: 30px;" v-for="item in Specifications">
 										<el-col :span="2" >{{item.name}}</el-col>
@@ -990,11 +989,11 @@
                     'table',
                     // 'emotion',
                     '|',
-                    'img'
-                    // '|',
-                    // 'undo',
-                    // 'redo',
-                    // 'fullscreen'
+                    'img',
+                    '|',
+                    'undo',
+                    'redo',
+                    'fullscreen'
                 ]
                 editor.onchange = function () {
                     // 编辑区域内容变化时，实时打印出当前内容
@@ -1089,4 +1088,5 @@
 		border-top: 1px solid #e6eef9;
 		margin-top: 10px;
 	}
+	#dddd textarea {resize: none;}
 </style>
