@@ -91,7 +91,7 @@
 			</el-col>
 			<el-col :span="15" style="float:right;margin-top: 0;overflow-y: auto;">
 				<div class="grid-content bg-purple">
-					<div class="statistics_bottom_left_top">订单物流</div>
+					<div class="statistics_bottom_left_top">待发货订单</div>
 					<div class="statistics_bottom_main">
 						<ul>
 							<li style="cursor: pointer;" v-for="item in dingdanList"><a :title="item.notifyContent">{{item.notifyContent}} ---{{item.notifyTitle}}</a></li>

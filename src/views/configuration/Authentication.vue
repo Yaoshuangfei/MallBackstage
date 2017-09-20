@@ -182,6 +182,7 @@
                     this.fileImg = file.name
                     this.formData.append('file', file);
                     this.submitUpload(index)
+                    console.log(file);
                 } else {
                     this.fileImg = ''
                     this.formData = new FormData()
