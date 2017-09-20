@@ -12,7 +12,7 @@
         <el-input v-model="filters.pertainType" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item label="主营商品">
-        <el-input v-model="filters.marketingGoods"  type="textarea" style="width:784px;height:64px;resize: none;"></el-input>
+        <el-input v-model="filters.marketingGoods"  type="text" style="width:784px;height:64px;resize: none;"></el-input>
         <div class="text" style="margin-left: 10px;">主营商品关键字（Tag）有助于搜索店铺时找到您的店铺；关键字最多可输入50字，请用“，”进行分隔，例如“男装，女装，童装”</div>
       </el-form-item>
       <!-- <img :src="filters.logo"> -->

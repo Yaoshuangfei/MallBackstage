@@ -39,7 +39,7 @@
 				{{item.name}}
 				</el-col>
 				<el-col style="margin-left: 20px;" :span="3"  class="describe">{{item.price}}</el-col>
-				<el-col :offset="1" :span="2" class="describe">{{item.storage}}</el-col>
+				<el-col :offset="1" :span="2" class="describe">{{item.goodsStock}}</el-col>
 				<el-col :offset="1" :span="5" class="describe" style="text-align: center;margin-top: 50px;">
 					<el-button type="text" @click="seeBtn(item.id)">查看</el-button>
 					<el-button type="text" @click="downBtn(item.id)">下架</el-button>

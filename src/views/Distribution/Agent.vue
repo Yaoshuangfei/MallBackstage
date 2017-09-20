@@ -87,7 +87,7 @@
 				const params = {
 					pageNum:this.page,
 					size:8,
-					storeId:state.storeId
+					storeId:localStorage.getItem("storeId")
 				}
 				if(this.condition === '1'){
 					params.nickName = this.value

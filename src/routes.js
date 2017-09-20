@@ -18,6 +18,9 @@ import releaseLook from './views/systemSettings/releaseLook.vue'
 import banner from './views/configuration/banner.vue' 
 import system from './views/configuration/system.vue' 
 import Authentication from './views/configuration/Authentication.vue'
+import activity from './views/configuration/activity.vue'
+import newActivity from './views/configuration/newActivity.vue'
+import editActivity from './views/configuration/editActivity.vue'
 
 // 分销管理 Distribution
 import Identity from './views/Distribution/Identity.vue'
@@ -109,6 +112,7 @@ let routes = [
             {path: '/SystemPush', component: SystemPush, name: '系统推送'},
             { path: '/releaseAdd', component: releaseAdd, name: '编辑消息', hidden: true },
             { path: '/releaseLook/:id', component: releaseLook, name: '查看系统推送', hidden: true }
+            
         ]
     },
     {
@@ -118,8 +122,11 @@ let routes = [
         iconCls: 'iconfont icon-peizhi1',
         children: [
             { path: '/banner', component: banner, name: '首页banner管理' },
+            { path: '/activity', component: activity, name: '活动管理' },
             { path: '/system', component: system, name: '首页商品配置' },
-            { path: '/Authentication', component: Authentication, name: '身份认证' }
+            { path: '/Authentication', component: Authentication, name: '身份认证' },
+            { path: '/newActivity', component: newActivity, name: '新建活动' ,hidden: true},
+            { path: '/editActivity/:id/:index', component: editActivity, name: '修改活动', hidden: true }
         ]
     },
     {
@@ -144,7 +151,8 @@ let routes = [
         iconCls: 'iconfont icon-dingdan',
         children: [
             { path: '/OrderInformation/:id', component: OrderInformation, name: '订单信息管理' },
-             { path: '/details/:id/:index', component: details, name: '订单详情' ,hidden: true }
+            { path: '/pjadmin', component: pjadmin, name: '评价管理' },
+            { path: '/details/:id/:index', component: details, name: '订单详情' ,hidden: true }
         ]
     },
     {
@@ -212,7 +220,6 @@ let routes = [
         children: [
             { path: '/ValueAddedServices', component: ValueAddedServices, name: '增值服务管理' },
             { path: '/video', component: video, name: '视频管理' },
-            { path: '/pjadmin', component: pjadmin, name: '评价管理' },
             { path: '/PublicWelfare', component: PublicWelfare, name: '公益广告' },
             { path: '/Marketing', component: Marketing, name: '营销管理' }
         ]

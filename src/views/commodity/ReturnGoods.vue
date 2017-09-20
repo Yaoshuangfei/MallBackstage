@@ -7,8 +7,7 @@
 				     <el-input v-model="filters.name"></el-input>     
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-					<el-button type="primary" v-on:click="getUsers">发布新品</el-button>
+					<el-button type="primary" v-on:click="getlist">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -21,8 +20,9 @@
 			<el-col :span="2">买家</el-col>
 			<el-col :span="2" style="margin-left: 20px">订单总价</el-col>
 			<el-col :span="2">状态</el-col>
+			<el-col :span="2">操作</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
-		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
+		<el-col :span="24" class="table_div" v-for="item in table">
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：111111111111111111</el-col>
 				<el-col :span="4">下单时间：2017-08-09 12:20</el-col>
@@ -40,30 +40,6 @@
 				<el-col :span="1" class="describe">321</el-col>
 			</el-col>
 		</el-col>
-		<!-- <el-table :data="orderInformation" border highlight-current-row v-loading="listLoading" style="width: 100%;min-width: 1080px;">
-			<el-table-column prop="orderNumber" label="商品名称">
-			</el-table-column>
-			<el-table-column prop="courierNumber" label="订单编号">
-			</el-table-column>
-			<el-table-column prop="userName" label="下单时间">
-			</el-table-column>
-			<el-table-column prop="amountPaid" label="价格">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="库存">
-			</el-table-column>
-			<el-table-column prop="orderTotal" label="退货原因">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<el-button v-if='scope.row.index === 1' type='text' size="small" @click="handleEdit(scope.$index, scope.row)">暂停</el-button>
-					<el-button v-else-if='scope.row.index === 0' :disabled="true" type='text' size="small" @click="handleEdit(scope.$index, scope.row)">已处理</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">查看</el-button>
-					<el-button type="text" size="small" @click="seeBtn(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">下架</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
- -->
 		<!--工具条-->
 		<el-col :span="18" class="toolbar" style="background:#fff;">
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
@@ -148,6 +124,7 @@
 					value:'6',
 					label:'退货'
 				}],
+				table:[],
 				options: [{
 		          value: '1',
 		          label: '订单编号'
@@ -161,7 +138,7 @@
 					type:''
 				},
 				users: [],
-				total: 100,
+				total: 0,
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -188,18 +165,7 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				orderInformation:[]
 			}
 		},
 		methods: {
@@ -211,66 +177,26 @@
 				const _this = this
 				_this.table = []
 				const params = {
-					accountId:'1',
-					accessToken:'',
-					resourceType:'',
-					page:{
-						pageNum:_this.page,
-						pageSize:'10'
-					}
+					pageNum:this.page,
+					size:10,
+					storeId:localStorage.getItem("storeId")
 				}
-				$.post(baseUrl+"/admin/banner/getBannerByPage",
-	             { param: JSON.stringify(params) },
-	             function(data){
-	             	const info = eval('(' + data + ')');
-	                const response = JSON.parse(info);
-	                const list = response.obj.results
-	                _this.total = response.obj.totalRecord
-	                for(var i = 0;i<list.length;i++){
-	                	_this.table.push(list[i])
+				$.ajax({
+	                type:'POST',
+	                dataType:'json',
+	                url:baseUrl+"/api/refundOrder/selectAllList",
+	                data:JSON.stringify(params),
+	                contentType:'application/json;charset=utf-8',
+	                success:function(data){
+	                  	console.log(data)
+	                  	// _this.total = data.data.total
+	                  	// _this.table = data.data.list
 	                }
-	              }
-	         	)
+	            });
 			},
 			handleCurrentChange(val) {
 				this.page = val;
-				this.getUsers();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
-			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
+				this.getlist();
 			},
 			//显示编辑界面
 			seeBtn: function (index, row) {
@@ -288,82 +214,14 @@
 					addr: ''
 				};
 			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			}
 		},
 		mounted() {
-			// this.getlist();
+			this.getlist();
+			// api/refundOrder/selectAllList
+			// api/refundOrder/update
 		}
 	}
 

@@ -9,12 +9,13 @@
 			<el-col :span="8" >下单时间：{{table.payTime}}</el-col>
 			<el-col :span="6" :offset="2" >收货人：{{table.consignee}}</el-col>
 			<el-col :span="8" >电话：{{table.mobile}}</el-col>
+			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
 			<el-col :span="22" :offset="2">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
 		</el-col>
 		<!--<el-col :span="24" style="margin-top: 20px">-->
 			<!--<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>-->
 			<!--<el-col :span="4"style="margin-top: 20px;margin-left: 40px">-->
-			<!--<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>-->
+			
 			<!--</el-col>-->
 			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">收货人：{{table.consignee}}</el-col>-->
 			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>-->
@@ -76,11 +77,16 @@
 			</el-table-column>
 			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间">
 			</el-table-column>
+			<el-table-column label="发货时间">
+				<template scope="scope">
+					<div>{{deliveryTime}}</div>
+				</template>
+			</el-table-column>
 			<el-table-column prop="thawingTime" :formatter='formatterjdTime' label="解冻时间">
 			</el-table-column>
 		</el-table>
 		</el-col>
-		<!-- <el-col :span="24" class="order_information" style="margin-top: 20px">发票信息</el-col>
+		<!-- <el-col :span="24" class="order_information" style="margin-top: 20px">发票信息</el-col>    deliveryTime
 		<el-col :span="24" class="order_information" style="margin-top: 20px">操作历史</el-col>
 		<el-col :span="24" class="footerr_text"><span style="color:red">1245454541</span> 于2014-02-09 11:09:18 订单当前状态：提交订单 下一状态：等待收货</el-col>
 		<el-col :span="24" class="footerr_text"><span style="color:red">admin</span> 于2014-02-09 11:09:18 订单当前状态：提交订单 下一状态：等待收货</el-col> -->
@@ -118,6 +124,7 @@
 	export default {
 		data() {
 			return {
+				deliveryTime:'',
 				table:{},
 				wuliuinfo:[],
 				fenytable:[],
@@ -248,6 +255,12 @@
                     	_this.addfrom.areaId = arryDZ
                     	// console.log(arryDZ)
                     	_this.table.payTime = new Date(_this.table.payTime).toLocaleString()
+                    	if(_this.table.orderGoods[0].deliveryTime === null){
+                    		_this.deliveryTime = '卖家未发货'
+                    	}else{
+                    		_this.deliveryTime = new Date(_this.table.orderGoods[0].deliveryTime).toLocaleString()
+                    	}
+                    	console.log(_this.deliveryTime)
                     	for(var i = 0;i<_this.table.orderGoods.length;i++){
                     		_this.table.orderGoods[i].attrName = JSON.parse(_this.table.orderGoods[i].attrName)
                     		// console.log(_this.table.orderGoods[i].attrName)

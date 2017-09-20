@@ -143,6 +143,12 @@
 				<p style="margin-top: 40px;">Copyright 2017杭州边缘网络科技有限公司  浙CP备45678945</p>
 			</div>
 		</el-col>
+		<el-col v-if="shenfen" style="position: absolute;top: 0px;height: 48px;background: #000;line-height: 48px;text-align: center;" :span="24">
+			<router-link :to="{ name: '身份认证'}">
+				<el-button style="margin-top:-5px;color: red;"  type="text">请还没有填写身份认证的店家尽快完善，长时间未认证将被下架！马上去完善</el-button>
+			</router-link>
+			<el-button type="text" style="margin-left: 40px;" @click="shenfen = false">如已完成，请忽略</el-button>
+		</el-col>
 	</el-row>
 </template>
 
@@ -153,6 +159,7 @@
 	export default {
 		data() {
 			return {
+				shenfen:true,
                 imgUrl:'',
 				sysName:'商家后台管理',
 				arry:[],
@@ -268,6 +275,10 @@
 		},
 		mounted() {
 		    this.getName();
+		    // console.log(state.storeStatus)
+		    // if(state.storeStatus === 1){
+		    // 	this.shenfen = false
+		    // }
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				user = JSON.parse(user);
@@ -431,7 +442,7 @@
 	}
 </style>
 <style>
-	body {padding-right: inherit;}
+	body {padding-right: inherit;overflow-y: scroll;padding-right: 17px;}
 	#main_top {  height:48px;line-height: 48px;background: #fff;  }
 	#main_top_name {width:1280px;position: relative;margin: auto;text-align: center;color: #616161;font-size: 14px;}
 	#main_top_name>span {color: #9f3333;}

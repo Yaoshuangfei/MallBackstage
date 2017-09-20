@@ -6,6 +6,12 @@
 				<!-- <el-form-item>
 					<el-input v-model="filters.name" placeholder="支付银行"></el-input>
 				</el-form-item> -->
+				<el-form-item label="订单来源">
+					<el-select v-model="filters.source" clearable style="width:150px;">
+						<el-option v-for="item in source" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="状态">
 					<el-select v-model="filters.status" clearable style="width:150px;">
 				      <el-option v-for="item in states" :label="item.label" :value="item.value">
@@ -124,10 +130,18 @@
 		          value: '2',
 		          label: '快递单号'
 		        }],
+                source: [{
+                    value: '0',
+                    label: 'app'
+                }, {
+                    value: '1',
+                    label: '微信'
+                }],
 				filters: {
 					name: '',
 					status:'',
-					type:''
+					type:'',
+                    source:''
 				},
 				users: [],
 				total: 100,
@@ -170,7 +184,8 @@
 					storeId:localStorage.getItem("storeId"),
 					orderStatus:this.filters.status,
 					orderId:'',
-					expno:''
+					expno:'',
+                    source:this.filters.source
 				}
 				if(this.filters.type !== ''){
 					if(this.filters.type === '1'){
@@ -179,6 +194,13 @@
 						params.expno = this.filters.name
 					}
 				}
+                if(this.filters.num !== ''){
+                    if(this.filters.num === '0'){
+                        params.orderId = this.filters.name
+                    }else if(this.filters.num === '1'){
+                        params.expno = this.filters.name
+                    }
+                }
 				// console.log(params)
 				$.ajax({
                     type:'POST',
@@ -189,7 +211,7 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	const info = data.data
-                    	// console.log(info)
+                    	 console.log(info)
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	// console.log(_this.selectSubjectStatus)

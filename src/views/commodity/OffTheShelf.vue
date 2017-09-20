@@ -32,13 +32,13 @@
 			</el-col>
 			<el-col :span="24">
 				<el-col :span="3" >
-					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture">
+					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture[0]">
 				</el-col>
 				<el-col :span="6" :offset="1" class="describe">
 				{{item.name}}
 				</el-col>
 				<el-col style="margin-left: 20px;" :span="3" class="describe">{{item.price}}</el-col>
-				<el-col :span="2" :offset="1" class="describe">{{item.storage}}</el-col>
+				<el-col :span="2" :offset="1" class="describe">{{item.goodsStock}}</el-col>
 				<el-col :span="5" :offset="1" class="describe" >
 					<el-button type="text" @click="seeBtn(item.id)">查看</el-button>
 					<router-link :to="{ name: '修改商品', params: { id: item.id}}">
@@ -171,6 +171,7 @@
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+                    		_this.selectSubjectStatus[i].carouselPicture = _this.selectSubjectStatus[i].carouselPicture.split(',')
 		                	_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
 		                	if(_this.selectSubjectStatus[i].saleStatus === 1) {
 		                		_this.selectSubjectStatus[i].saleStatus = '销售中'
@@ -244,7 +245,7 @@
                     }
                 });
 			},
-			// 下架
+			// 上架
 			topBtn(id) {
 				const _this = this
 				const params = {

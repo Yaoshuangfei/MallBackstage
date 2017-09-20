@@ -4,6 +4,9 @@
       身份认证
     </el-col>
       <el-form id="sfrz" :model="sfinfo" label-width="135px"  :rules="rules" ref="sfinfo">
+        <el-form-item label="公司名称:" prop="companyName">
+          <el-input v-model="sfinfo.companyName" style="width:200px;"></el-input>
+        </el-form-item>
         <el-form-item label="法人姓名:">
           <el-input v-model="sfinfo.realName" style="width:200px;"></el-input>
         </el-form-item>
@@ -83,7 +86,6 @@
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button type="primary" @click.native="clupLoad">保存</el-button>
-        <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
       </div>
   </section>
 </template>
@@ -106,9 +108,19 @@
                     legalCardCode: [
                         { required: true, message: '请输入身份证号', trigger: 'blur' },
                         { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/, message: '证件号码格式有误！', trigger: 'blur' }
-                    ]
+                    ],
+                    companyName:[{ required: true, message: '请输入公司名称', trigger: 'blur' },
+            { min: 3, max: 20, message: '长度在 3 到 100 个字符', trigger: 'blur' }]
                 },
-                sfinfo:{},
+                sfinfo:{
+                    realName:'',
+                    legalCardCode:'',
+                    storeMobile:'',
+                    bankName:'',
+                    bankCode:'',
+                    theAddress:'',
+                    companyName:''
+                },
                 total:7,
                 page: 1,
                 totals:10,
@@ -206,7 +218,8 @@
                     cardImgF:this.frImgurl,
                     cardImgW:this.frImgurlPointer,
                     businessLicense:this.businessImgurl,
-                    bankImgW:this.bankImgurl
+                    bankImgW:this.bankImgurl,
+                    companyName:this.sfingo.companyName
                 }
                 let url = ''
                 console.log(this.sfinfoId)
@@ -225,61 +238,51 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                         if(data.code === 1){
-                            _this.editFormVisible = false
+                            _this.$message({
+                                message: data.msg,
+                                type: 'success'
+                            });
                         }else{
                             _this.$message.error(data.msg);
                         }
                     }
                 });
             },
-            getGroup(){
-                const _this = this;
-                const params = {
-                    pageNum :this.page,
-                    size:7,
-                    notifyTypes:'1,3,6,8,10,11'
-                }
+            getSHinfo(){
+                const _this = this
                 $.ajax({
-                    type:'POST',
-                    dataType:'json',
-                    url:baseUrl+"/api/notify/selectListGroup",
-                    data:JSON.stringify(params),
-                    contentType:'application/json;charset=utf-8',
-                    success:function(data){
-                        const info = data.data
-                        _this.daibanList = info.records;
-                        _this.total = info.total
-                    }
-                });
-            },
-            getDDWL(){
-                const _this = this;
-                const params = {
-                    pageNum :this.pages,
-                    size:7,
-                    notifyTypes:'2'
-                }
-                $.ajax({
-                    type:'POST',
-                    dataType:'json',
-                    url:baseUrl+"/api/notify/selectListGroup",
-                    data:JSON.stringify(params),
-                    contentType:'application/json;charset=utf-8',
-                    success:function(data){
-                        console.log(data)
-                        const info = data.data
-                        if(info.records.length===0){
-                            $('#toolbarasd').hide();
-                        }else {
-                            _this.dingdanList = info.records;
-                            _this.totals = info.total
-                        }
+                  type:'POST',
+                  dataType:'json',
+                  url:baseUrl+"/api/coreUspAuthentication/checkDetails",
+                  data:JSON.stringify({}),
+                  contentType:'application/json;charset=utf-8',
+                  success:function(data){
+                    console.log(data)
+                    const info = data.data
+                    if(info === null){
 
+                    }else{
+                        _this.remarkInfo = info.remark
+                        _this.sfinfoId = info.id
+                        _this.sfinfo.companyName = info.companyName
+                        _this.sfinfo.realName = info.realName
+                        _this.sfinfo.legalCardCode = info.legalCardCode
+                        _this.sfinfo.storeMobile = info.storeMobile
+                        _this.sfinfo.bankName = info.bankName
+                        _this.sfinfo.bankCode = info.bankCode
+                        _this.sfinfo.theAddress  = info.theAddress
+                        _this.frImgurl   = info.cardImgF
+                        _this.frImgurlPointer  = info.cardImgW
+                        _this.businessImgurl   = info.businessLicense
+                        _this.bankImgurl = info.bankImgW
+                        console.log(_this.sfinfo)
                     }
-                });
+                  }
+              });
             },
         },
         mounted: function () {
+            this.getSHinfo()
         },
         // updated: function () {
         //     this.drawCharts()

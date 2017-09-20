@@ -17,12 +17,12 @@
 		<el-col :span="24" style="background: #cab78c;color: #fff;font-size: 16px;height:48px;line-height: 48px;text-align: center;">
 			<el-col :span="8">商品名称</el-col>
 			<el-col :span="2" :offset="2">价格</el-col>
-			<el-col :span="2" :offset="2">库存</el-col>
-			<el-col :span="7" :offset="3" style="margin-left: 20px">状态</el-col>
+			<el-col :span="2" :offset="2">违规原因</el-col>
+			<el-col :span="7" :offset="3" style="margin-left: 20px">操作</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head" style="background: #fff;">
-				<el-col :span="6">订单编号：{{item.goodsNo}}</el-col>
+				<!-- <el-col :span="6">订单编号：{{item.goodsNo}}</el-col> -->
 				<el-col :span="10">下单时间：{{item.createTime}}</el-col>
 				<!-- <el-col :span="3" :offset="10">
 					<router-link :to="{ name: '订单详情', params: { id: 0 }}">
@@ -32,14 +32,21 @@
 			</el-col>
 			<el-col :span="24">
 				<el-col :span="3" >
-					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.carouselPicture">
+					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="item.goods.carouselPicture[0]">
 				</el-col>
 				<el-col :span="6" :offset="1" class="describe_fiast">
-				{{item.name}}
+				{{item.goods.name}}
 				</el-col>
-				<el-col style="margin-left: 20px;" :span="3" class="describe">{{item.price}}</el-col>
-				<el-col :span="2" :offset="1" class="describe">{{item.storage}}</el-col>
-				<el-col :span="1" :offset="5" class="describe">{{item.saleStatus}}</el-col>
+				<el-col style="margin-left: 20px;" :span="3" class="describe">{{item.goods.price}}</el-col>
+				<el-col :span="2" :offset="1" class="describe">{{item.content}}</el-col>
+				<el-col :span="5" :offset="1" class="describe" >
+					<router-link :to="{ name: '修改商品', params: { id: item.goodsId}}">
+						<el-button style="margin-top:-5px;margin:0 5px"  type="text">编辑</el-button>
+					</router-link>
+					<!-- <el-button type="text" @click="editBtn(item.id)">编辑</el-button> -->
+					<el-button type="text" @click="topBtn(item.goodsId)">上架</el-button>
+					<el-button type="text" @click="deleteBtn(item.goodsId)">删除</el-button>
+				</el-col>
 			</el-col>
 		</el-col>
 
@@ -144,15 +151,72 @@
 			}
 		},
 		methods: {
+			// 上架
+			topBtn(id) {
+				const _this = this
+				const params = {
+					id:id,
+					saleStatus:1
+				}
+				this.$confirm('确认上架该商品吗?', '提示', {
+					type: 'warning'
+				}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/goods/updateStatus",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	const info = data.data
+	                    	_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+							_this.getlist()
+	                    }
+	                });
+				}).catch(() => {
+
+				});
+			},
+			deleteBtn(id) {
+				const _this = this
+				const params = {
+					id:id,
+				}
+				this.$confirm('确认删除该商品吗?', '提示', {
+					type: 'warning'
+				}).then(() => {
+					$.ajax({
+	                    type:'POST',
+	                    dataType:'json',
+	                    url:baseUrl+"/api/goods/delete",
+	                    data:JSON.stringify(params),
+	                    contentType:'application/json;charset=utf-8',
+	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+	                    success:function(data){
+	                    	_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+							_this.getlist()
+	                    }
+	                	});
+				}).catch(() => {
+
+				});
+			},
 			getlist(){
 				const _this = this
 				_this.selectSubjectStatus = []
 				const params = {
 					pageNum:this.page,
 					size:10,
-                    storeId:localStorage.getItem("storeId"),
-					name:this.name
+                    storeId:localStorage.getItem("storeId")
 				}
+				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
@@ -161,10 +225,12 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                    	console.log(data)
                     	const info = data.data
                     	_this.total = info.total
                     	_this.selectSubjectStatus = info.list
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
+                    		_this.selectSubjectStatus[i].goods.carouselPicture = _this.selectSubjectStatus[i].goods.carouselPicture.split(',')
 		                	_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
 		                	if(_this.selectSubjectStatus[i].saleStatus === 1) {
 		                		_this.selectSubjectStatus[i].saleStatus = '销售中'
@@ -174,6 +240,7 @@
 		                		_this.selectSubjectStatus[i].saleStatus = '已删除'
 		                	}
 		                }
+		                console.log(_this.selectSubjectStatus)
                     }
                 });
 			},

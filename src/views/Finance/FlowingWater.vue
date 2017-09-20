@@ -338,6 +338,7 @@
                     contentType:'application/json;charset=utf-8',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
+                        console.log(data)
                     	_this.amount = data.data.amount
                     	_this.availableIncome = data.data.availableIncome
                     	_this.totalMoney = data.data.totalMoney

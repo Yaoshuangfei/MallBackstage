@@ -1,10 +1,13 @@
 <template>
 	<section>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
-			Banner
+			活动管理
 			<el-form :inline="true" style="position: absolute;top:6px;right:0;">
 				<el-form-item>
-					<el-button type="primary" v-on:click="addbanner" style="background: transparent;border: transparent;">+  添加</el-button>
+					<!-- <el-button type="primary" v-on:click="addbanner" style="background: transparent;border: transparent;">+  新建活动</el-button> -->
+					<router-link :to="{ name: '新建活动'}">
+						<el-button style="background: transparent;border: transparent;color: #fff"  type="text">+  新建活动</el-button>
+					</router-link>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -12,25 +15,45 @@
 
 		<!--列表-->
 		<el-table id="bannersss" :data="orderInformation" highlight-current-row v-loading="listLoading" style="width: 100%;text-align: center;">
-			<el-table-column type="index" label="序号" width="80px;">
+			<el-table-column prop="activityId" label="活动ID">
 			</el-table-column>
-			<el-table-column prop="picture" label="图片">
+			<!-- <el-table-column prop="picture" label="活动图">
+				<template scope="scope">
+					<img class="img" :src="scope.row.activityLogo" alt="">
+				</template>
+			</el-table-column> -->
+			<el-table-column prop="activityName" label="活动名称">
+			</el-table-column>
+			<el-table-column prop="activityDetails" label="活动描述">
+			</el-table-column>
+			<el-table-column prop="activityRulesType" :formatter='isRulesType' label="优惠方式">
+			</el-table-column>
+			<el-table-column prop="valuationType" :formatter='isaluationType' label="优惠满足方式">
+			</el-table-column>
+			<el-table-column prop="beginTime" :formatter='beginTimeType' label="活动开始时间">
+			</el-table-column>
+			<el-table-column prop="endTime" :formatter='endTimeType' label="活动结束时间">
+			</el-table-column>
+			<el-table-column prop="createTime" :formatter='createTimeType' label="创建时间">
+			</el-table-column>
+		<!-- 	<el-table-column prop="picture" label="图片">
 				<template scope="scope">
 					<img class="img" :src="scope.row.picture" alt="">
 				</template>
-			</el-table-column>
-			<el-table-column prop="status"  :formatter='formatterType' label="状态">
+			</el-table-column> -->
+			<!-- <el-table-column prop="status"  :formatter='formatterType' label="状态">
 			</el-table-column>
 			<el-table-column prop="poType"  :formatter='formatterpoType' label="位置">
-			</el-table-column>
-			<el-table-column prop="createTime" :formatter='formatterTime' label="创建时间" width="300px">
-			</el-table-column>
+			</el-table-column> -->
+			<!-- <el-table-column prop="createTime" :formatter='formatterTime' label="创建时间" width="300px">
+			</el-table-column> -->
 			<el-table-column label="操作">
 				<template scope="scope">
-					<el-button type="text" v-if='scope.row.status ===0' size="small" @click="handEnabled(scope.$index, scope.row)">启用</el-button>
-					<el-button type="text" v-if='scope.row.status ===1' size="small" @click="handDisabled(scope.$index, scope.row)">禁用</el-button>
-					<el-button type="text" v-if='scope.row.status ===0' size="small" @click="handmodify(scope.$index, scope.row)">修改</el-button>
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+					<el-button type="text" size="small" @click="editSubmit(scope.row)">修改活动</el-button>
+					<el-button type="text" size="small" @click="selection(scope.row)">设置优惠</el-button>
+					<el-button type="text" size="small" @click="addSubmit(scope.row)">添加商品</el-button>
+					<el-button type="text" size="small" @click="deldetBtn(scope.row)">删除</el-button>
+					<el-button type="text" size="small" @click="stopBtn(scope.row)">暂停</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -153,18 +176,7 @@
 				//新增界面数据
                 modifyDetails: {
 				},
-				orderInformation:[{
-					uploadImg :'145877458784524c',
-					courierNumber :'145877458784524c22',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}],
+				orderInformation:[],
                 formData: new FormData(),
                 fileImg: ''
 			}
@@ -245,37 +257,155 @@
 
 
 			},
+
+
+
 			getlist(){
-				const _this = this;
-                _this.orderInformation = [];
+				const _this = this
 				const params = {
-                    poType:''
-				};
-                var url = baseUrl+"/api/indexAdvert/find/page?pageNum="+_this.page+"&pageSize=10";
-                var data =JSON.stringify(params);
+                    pageNum:this.page,
+                    size:10,
+                    storeId:localStorage.getItem("storeId"),
+                    status:'0',
+                    activityId:'',
+                    activityName:''
+				}
                 $.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:url,
-                    data:data,
+                    url:baseUrl+'/api/activity/selectList',
+                    data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                        if(!data.success){
-                            alert(data.msg)
-                        }else{
-                            var _length 	= data.data.list;
-                            _this.total 	= data.data.total;
-                            for (var i = 0; i < _length.length; i++) {
-                                _this.orderInformation.push(_length[i]);
-                            }
-                        }
+                        console.log(data)
+                        const info = data.data
+                        _this.total = info.total
+                        _this.orderInformation  = info.list
                     }
-                });
+                })
 			},
+			// 删除
+			deldetBtn(row){
+				console.log(row)
+				const _this = this
+				const params = {
+					activityId:row.activityId,
+					activityStatus:2
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+'/api/activity/updateStatus',
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        _this.getlist()
+                    }
+                })
+			},
+			// 暂停
+			stopBtn(row){
+				const _this = this
+				const params = {
+					activityId:row.activityId,
+					activityStatus:1
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+'/api/activity/updateStatus',
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                        console.log(data)
+                        _this.getlist()
+                    }
+                })
+			},
+			editSubmit: function (row) {
+                console.log(row)
+                this.$router.push({ name: '修改活动' , params: {id : row.activityId ,index :1}});
+            },
+            selection: function (row) {
+            	this.$router.push({ name: '修改活动' , params: {id : row.activityId ,index :0}});
+            },
+            addSubmit: function (row) {
+            	this.$router.push({ name: '修改活动' , params: {id : row.activityId ,index :0}});
+            },
 			handleCurrentChange(val) {
 				this.page = val;
 				this.getlist();
 			},
+			isRulesType (row,column){
+                let curTime = row.activityRulesType
+                if(curTime === 1){
+                	return "满就送"
+                }else if(curTime === 2){
+                	return "满就减"
+                }else if(curTime === 3){
+                	return "限时打折"
+                }
+            },
+            isaluationType (row,column){
+                let curTime = row.valuationType
+                if(curTime === 0){
+                	return "按数量"
+                }else if(curTime === 1){
+                	return "按金额"
+                }
+            },
+            beginTimeType (row,column){
+                let curTime = row.beginTime
+                if(curTime !== '' || curTime !== null){
+	                curTime = new Date(curTime).toLocaleString()
+	                return curTime
+                }
+            },
+            endTimeType (row,column){
+                let curTime = row.endTime
+                if(curTime !== '' || curTime !== null){
+	                curTime = new Date(curTime).toLocaleString()
+	                return curTime
+                }
+            },
+            createTimeType(row,column){
+                let curTime = row.createTime
+                if(curTime !== '' || curTime !== null){
+	                curTime = new Date(curTime).toLocaleString()
+	                return curTime
+                }
+            },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			//删除
             handleEdit: function (index, row) {
 				this.$confirm('确认删除该记录吗?', '提示', {
@@ -322,104 +452,7 @@
 
 				});
 			},
-            //启用
-            handEnabled: function (index, row) {
-                this.$confirm('确认启用该广告位吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    const _this= this;
-                    const params = {
-                        id:row.id
-                    };
-                    var url = baseUrl+"/api/indexAdvert/enable";
-                    var data =JSON.stringify(params);
-                    $.ajax({
-                        type:'POST',
-                        dataType:'json',
-                        url:url,
-                        data:data,
-                        contentType:'application/json;charset=utf-8',
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
-                        success:function(data){
-                            if(!data.success){
-                                alert(data.msg)
-                            }else{
-                                _this.$message({
-                                    message: '启用成功',
-                                    type: 'success'
-                                });
-                                _this.getlist();
-                            }
-                        }
-                    });
-//					this.listLoading = true;
-                    //NProgress.start();
-//					let para = { id: row.id };
-//					removeUser(para).then((res) => {
-//						this.listLoading = false;
-//						//NProgress.done();
-//						this.$message({
-//							message: '删除成功',
-//							type: 'success'
-//						});
-//						this.getUsers();
-//					});
-                }).catch(() => {
-
-                });
-            },
-            //禁用
-            handDisabled: function (index, row) {
-                this.$confirm('确认禁用该广告位吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    const _this= this;
-                    const params = {
-                        id:row.id
-                    };
-                    var url = baseUrl+"/api/indexAdvert/disable";
-                    var data =JSON.stringify(params);
-                    $.ajax({
-                        type:'POST',
-                        dataType:'json',
-                        url:url,
-                        data:data,
-                        contentType:'application/json;charset=utf-8',
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {},
-                        success:function(data){
-                            if(!data.success){
-                                alert(data.msg)
-                            }else{
-                                _this.$message({
-                                    message: '禁用成功',
-                                    type: 'success'
-                                });
-                                _this.getlist();
-                            }
-                        }
-                    });
-//					this.listLoading = true;
-                    //NProgress.start();
-//					let para = { id: row.id };
-//					removeUser(para).then((res) => {
-//						this.listLoading = false;
-//						//NProgress.done();
-//						this.$message({
-//							message: '删除成功',
-//							type: 'success'
-//						});
-//						this.getUsers();
-//					});
-                }).catch(() => {
-
-                });
-            },
-
-//			修改
-            handmodify: function (index, row) {
-			    this.modifybannerdiv = true;
-			    this.editForm = row;
-            },
+           
 
 
 //            清空上传
@@ -492,11 +525,6 @@
 
 
     },
-
-
-
-
-			
 			//显示添加banner页面
 			addbanner: function (index, row) {
 				this.addbannerdiv = true;
@@ -565,8 +593,8 @@
 		margin-left: 0 ! important ;
 	}
 	.img {
-		width:100px;
-		height:100px;
+		width:80px;
+		height:80px;
 	}
 	#addBanner .el-dialog__title {font-size: 16px;font-weight: inherit;color: #cab78c;}
 	#addBanner .el-dialog__header {color: #cab78c;text-align: center;border-bottom: 1px dashed #cab78c;padding-bottom: 10px;}

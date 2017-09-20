@@ -57,7 +57,7 @@
 				{{items.productName}}
 				</el-col>
 				<el-col style="text-align: center;width:98px;" class="describe">{{items.productPrice}}</el-col>
-				<el-col style="text-align: center;width:90px;"  class="describe">{{items.payTime}}</el-col>
+				<el-col style="text-align: center;width:90px;"  class="describe">{{items.quantity}}</el-col>
 				<el-col style="text-align: right;width:137px;margin-left: 240px;" class="describe">
 					<el-button type="text" v-on:click="fahuoBtn(items)" style="color: #9f3333;">发货</el-button>
 				</el-col>
