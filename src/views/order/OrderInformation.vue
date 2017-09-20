@@ -44,7 +44,7 @@
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：{{item.id}}</el-col>
-				<el-col :span="7">下单时间：{{item.payTime}}</el-col>
+				<el-col :span="7">下单时间：{{item.createTime}}</el-col>
 				<el-col :span="1" :offset="6">{{item.totalMoney}}</el-col>
 				<el-col :span="2" :offset="2">
 					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 0}}">
@@ -130,7 +130,9 @@
 		          value: '2',
 		          label: '快递单号'
 		        }],
-                source: [{
+
+		        source: [{
+
                     value: '0',
                     label: 'app'
                 }, {
@@ -185,7 +187,7 @@
 					orderStatus:this.filters.status,
 					orderId:'',
 					expno:'',
-                    source:this.filters.source
+					source:this.filters.source
 				}
 				if(this.filters.type !== ''){
 					if(this.filters.type === '1'){
@@ -216,8 +218,8 @@
                     	_this.selectSubjectStatus = info.list
                     	// console.log(_this.selectSubjectStatus)
                     	for(var i = 0;i<_this.selectSubjectStatus.length;i++){
-                    		if(_this.selectSubjectStatus[i].payTime !== null){
-		                		_this.selectSubjectStatus[i].payTime = new Date(_this.selectSubjectStatus[i].payTime).toLocaleString()
+                    		if(_this.selectSubjectStatus[i].createTime !== null){
+		                		_this.selectSubjectStatus[i].createTime = new Date(_this.selectSubjectStatus[i].createTime).toLocaleString()
                     		}
 		                	for(var x = 0;x<_this.selectSubjectStatus[i].orderGoods.length;x++){
 		                		if(_this.selectSubjectStatus[i].orderGoods[x].orderStatus === 1) {

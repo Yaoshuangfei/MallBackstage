@@ -57,11 +57,12 @@
 			return {
 				oneImg:'',
 				twoImg:'',
+				addOrup:true,
 				selectOne:[],
 				selectTwo:[],
 				oneId:'',
 				twoId:'',
-				value2:'',
+				id:'',
 				selectSubjectStatus: [
 				{
 					value:'0',
@@ -165,6 +166,23 @@
 	                  	_this.selectTwo = data.data
 	                }
 	            })
+	            $.ajax({
+	                type:'POST',
+	                dataType:'json',
+	                url:baseUrl+'/api/indexShop/selectOne',
+	                data:{},
+	                contentType:'application/json;charset=utf-8',
+	                success:function(data){
+	                  	console.log(data)
+	                  	if(data.data !== null){
+	                  		_this.oneImg = data.data.StyleOne.picture
+	                  		_this.twoImg = data.data.StyleTwo.picture
+	                  		_this.id = data.data.indexShop.id
+	                  	}else{
+	                  		_this.addOrup = false
+	                  	}
+	                }
+	            })
 			},
 			oneBtn(row){
 				this.oneId = row.id
@@ -176,17 +194,36 @@
 			},
 			uploadBtn(){
 				const _this = this
+				let url = ''
 				const params = {
 					styleOneId:this.oneId,
 					styleTwoId:this.twoId
 				}
+				if(this.addOrup){
+					url = baseUrl+'/api/indexShop/update'
+					params.id  = this.id
+				}else{
+					url = baseUrl+'/api/indexShop/add'
+				}
+				
 				$.ajax({
 	                type:'POST',
 	                dataType:'json',
-	                url:baseUrl+'/api/indexShop/add',
+	                url:url,
 	                data:JSON.stringify(params),
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
+	                	if(data.code === -1){
+	                		_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+	                	}else{
+	                		_this.$message({
+								message: data.msg,
+								type: 'error'
+							})
+	                	}
 	                }
 	            })
 			},

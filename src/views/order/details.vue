@@ -6,7 +6,7 @@
 		<el-col :span="24" style="font-size: 16px;border-bottom: 1px dashed #cab78c;color: #616161;line-height: 55px;"><!-- :offset="4" -->
 			<el-col :span="6" :offset="2">支付状态：{{table.status}}</el-col>
 			<el-col :span="8" >订单编号：{{table.id}}</el-col>
-			<el-col :span="8" >下单时间：{{table.payTime}}</el-col>
+			<el-col :span="8" >下单时间：{{table.createTime}}</el-col>
 			<el-col :span="6" :offset="2" >收货人：{{table.consignee}}</el-col>
 			<el-col :span="8" >电话：{{table.mobile}}</el-col>
 			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
@@ -47,7 +47,7 @@
 			<el-col :span="8" class="">金豆抵扣金额：￥{{table.goldPrice}}</el-col>
 			<el-col :span="6" class="">运费价格：￥{{table.expressValue}}</el-col>
 			<el-col :span="8" :offset="1">支付方式：{{table.payMethod}}</el-col>
-			<el-col :span="8" class="">下单时间：{{table.payTime}}</el-col>
+			<el-col :span="8" class="">付款时间：{{table.payTime}}</el-col>
 			<el-col :span="7" style="margin-top: 20px;">支付金额：<span style="color:red;font-size: 24px;">￥{{table.totalMoney}}</span></el-col>
 		</el-col>
 		<el-col :span="24" style="border-bottom: 1px dashed #cab78c;color: #616161;margin-top: 10px;"><!-- :offset="4" --></el-col>
@@ -64,6 +64,7 @@
 			<el-col :span="24">{{item.AcceptTime}}</el-col>
 		</el-col>
 		<el-col :span="24" v-show="fyShow" style="margin-left: 40px;color: #aaa;margin-top: 10px">
+			<el-col style="color: red;font-size: 18px;">提醒：确认收货之后分佣金额不会立即解冻！！！</el-col>
 			<el-table :data="fenytable" border highlight-current-row style="width: 90%;">
 			<el-table-column prop="nickName" label="用户名">
 			</el-table-column>
@@ -253,8 +254,13 @@
                     	// console.log(_this.table.city)
                     	// console.log(_this.table.county)
                     	_this.addfrom.areaId = arryDZ
-                    	// console.log(arryDZ)
-                    	_this.table.payTime = new Date(_this.table.payTime).toLocaleString()
+                    	// console.log(arryDZ) createTime
+                    	if(_this.table.createTime !== null){
+                    		_this.table.createTime = new Date(_this.table.createTime).toLocaleString()
+                    	}
+                    	if(_this.table.payTime !== null){
+                    		_this.table.payTime = new Date(_this.table.payTime).toLocaleString()
+                    	}
                     	if(_this.table.orderGoods[0].deliveryTime === null){
                     		_this.deliveryTime = '卖家未发货'
                     	}else{
