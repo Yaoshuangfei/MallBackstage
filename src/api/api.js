@@ -20,11 +20,8 @@ export const addUser = params => { return axios.get(`${base}/user/add`, { params
 // export const  baseUrl = 'http://123.206.115.18:8083';// 正式服务器
 export const  baseUrl = '/apis';// 正式服务器
 //export const  baseUrl = 'http://192.168.2.150:8080';// 正式服务器
-<<<<<<< HEAD
-=======
 //export const  baseUrl = '/apis';// 正式服务器
 //export const  baseUrl = 'http://192.168.2.246:8080';// 正式服务器
->>>>>>> bb80f6cd484a374d48eaad968889a3b820cacf46
 export const  cityData3 = [{
 	value: '110000',
 	label: '北京市',
