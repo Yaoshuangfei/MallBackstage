@@ -27,11 +27,11 @@
 		<el-col :span="12" id="adddd" style="margin-top: 80px;background: #eee;margin-left: 25%;" v-show="goodList">
 			<el-col :span="24" style="text-align: center;margin: 20px 0 ;">分佣级数</el-col>
 			<el-col v-for="item in fyObjList" :span="24"  style="text-align: center;">
-				<el-col :span="2" style="margin-top: 8px;">{{item.id+1}}级</el-col>
-				<el-col :span="19">
-					<el-col :span="10">
-						<el-input v-model="item.name" type="text" ></el-input>
-					</el-col>
+				<el-col :span="2" style="margin-top: 8px;" :offset="5">{{item.id+1}}级</el-col>
+				<el-col :span="15">
+					<!--<el-col :span="10">-->
+						<!--<el-input v-model="item.name" type="text" ></el-input>-->
+					<!--</el-col>-->
 					<el-col :span="10">
 						<el-input v-model="item.value" type="text"></el-input>
 					</el-col>
@@ -47,6 +47,8 @@
 				<el-button type="primary" @click.native="baochun">确定</el-button>
 			</el-col>
 		</el-col>
+		<el-col :span="24" style="text-align: justify;font-size: 18px;color: red;margin-top: 20px;">备注：分佣的比例为单价的百分之几，假设：商品为100元，设置分佣级数为一级且分佣比为5%，那么代理商获得5元的分享佣金！</el-col>
+
 	</section>
 </template>
 
