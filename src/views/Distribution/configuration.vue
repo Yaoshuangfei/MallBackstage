@@ -205,7 +205,7 @@
 	                contentType:'application/json;charset=utf-8',
 	                success:function(data){
 	                    console.log(data)
-                        if (data.data.agentComData == '') {
+                        if (data.data.agentComData == '' || data.data.agentComData == null) {
                             if (data.data.agentIsGold == 0) {
                                 _this.radio = '0'
                             } else {
