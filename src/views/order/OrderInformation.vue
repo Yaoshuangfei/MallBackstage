@@ -130,7 +130,13 @@
 		          value: '2',
 		          label: '快递单号'
 		        }],
+<<<<<<< HEAD
 		        source: [{
+=======
+
+		        source: [{
+
+>>>>>>> bb80f6cd484a374d48eaad968889a3b820cacf46
                     value: '0',
                     label: 'app'
                 }, {
@@ -194,7 +200,11 @@
 						params.expno = this.filters.name
 					}
 				}
+<<<<<<< HEAD
 				if(this.filters.num !== ''){
+=======
+                if(this.filters.num !== ''){
+>>>>>>> bb80f6cd484a374d48eaad968889a3b820cacf46
                     if(this.filters.num === '0'){
                         params.orderId = this.filters.name
                     }else if(this.filters.num === '1'){
