@@ -33,7 +33,7 @@
 				<el-col :span="22" :offset="1" class="head_text" style="height:600px;margin-top: 20px;">
 					<el-form :model="orderDetails" label-width="80px" :rules="editFormRules" :inline="true" ref="editForm">
 						<el-form-item label='商品名称' style="width:100%;">
-							<el-input type="text" v-model="DescriptionGoods" style="width:550px;"></el-input>
+							<el-input type="text" v-model="CommodityName" style="width:550px;"></el-input>
 							<span style="font-size: 12px;color: #ababab;">商品名称至少3个字符，最多50个汉字</span>
 						</el-form-item>
 						<el-form-item label='商品货号' style="width:100%;">
@@ -142,7 +142,7 @@
 						<el-col :span="22" :offset="1" style="margin-top: 20px;">
 							<el-form  label-width="100px" >
 								<el-form-item label='计量单位' style="width:100%;">
-									<el-input type="text" v-model="DescriptionGoods" style="width:150px;"></el-input>
+									<el-input type="text" v-model="MeasurementUnit" style="width:150px;"></el-input>
 								</el-form-item>
 									<el-col :span="24" style="height: 50px;line-height: 30px;" v-for="item in Specifications">
 										<el-col :span="2" >{{item.name}}</el-col>
