@@ -24,30 +24,34 @@
 				</el-radio-group>
 			</el-col>
 		</el-col>
-		<el-col :span="12" id="adddd" style="margin-top: 80px;background: #eee;margin-left: 25%;" v-show="goodList">
-			<el-col :span="24" style="text-align: center;margin: 20px 0 ;">分佣级数</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="font-size: 16px;color:#616161;margin-bottom: 20px; margin-top: 80px;">购买身份价格</el-col>
+		<el-col :span="24">
+			<el-col :span="6" :offset="5"><el-button type="text" @click="addfyBtn">添加+</el-button><el-button type="text" @click="delfyBtn">删除-</el-button></el-col>
+		</el-col>
+		<el-col :span="24" id="adddd" style="" v-show="goodList">
+			<el-table  :data="identity"  style="width: 30%;min-width: 300px;text-align: center;">
+				<el-table-column type="index">
+				</el-table-column>
+				<el-table-column prop="name" label="分佣比">
+				</el-table-column>
+			</el-table>
+			<!--<el-col :span="24" style="text-align: center;margin: 20px 0 ;">分佣21级数</el-col>-->
 			<el-col v-for="item in fyObjList" :span="24"  style="text-align: center;">
-				<el-col :span="2" style="margin-top: 8px;" :offset="5">{{item.id+1}}级</el-col>
+				<el-col :span="2" style="height:40px;line-height: 40px;border-bottom: 1px solid #dfe6ec;border-left:1px solid #dfe6ec;border-right:1px solid #dfe6ec; " >{{item.id+1}}级</el-col>
 				<el-col :span="15">
 					<!--<el-col :span="10">-->
 						<!--<el-input v-model="item.name" type="text" ></el-input>-->
 					<!--</el-col>-->
-					<el-col :span="10">
-						<el-input v-model="item.value" type="text"></el-input>
-					</el-col>
-					<el-col :span="1" style="line-height: 35px;margin-left: 10px;">
-						%
+					<el-col :span="9">
+						<el-input v-model="item.value" type="text" style="border-bottom: 1px solid #dfe6ec;border-right:1px solid #dfe6ec;height:39px;"></el-input>
 					</el-col>
 				</el-col>
 			</el-col>
-			<el-col :span="24">
-				<el-col :span="6" :offset="19"><el-button type="text" @click="addfyBtn">添加+</el-button><el-button type="text" @click="delfyBtn">删除-</el-button></el-col>
-			</el-col>
-			<el-col :span="24" style="text-align: center;">
+			<el-col :span="8" style="text-align: center;margin-top: 30px;">
 				<el-button type="primary" @click.native="baochun">确定</el-button>
 			</el-col>
 		</el-col>
-		<el-col :span="24" style="text-align: justify;font-size: 18px;color: red;margin-top: 20px;">备注：分佣的比例为单价的百分之几，假设：商品为100元，设置分佣级数为一级且分佣比为5%，那么代理商获得5元的分享佣金！</el-col>
+		<el-col :span="24" style="text-align: justify;font-size: 12px;color: red;margin-top: 20px;">备注：分佣的比例为单价的百分之几，假设：商品为100元，设置分佣级数为一级且分佣比为5%，那么代理商获得5元的分享佣金！</el-col>
 
 	</section>
 </template>
@@ -60,6 +64,7 @@
 	export default {
 		data() {
 			return {
+                identity:[],
                 fyObjList:[
 					{value:'',id:0}
 				],
@@ -237,7 +242,8 @@
 </script>
 
 <style>
-	#adddd .el-input .el-input__inner {text-align: center;}
+	#adddd .el-input .el-input__inner {text-align: center;border: transparent;width:90%;}
+	#adddd .el-table__empty-block  {display: none;}
 	/*.agen_div{*/
 		/*border: 1px solid #aaa;*/
 		/*width:200px;*/
