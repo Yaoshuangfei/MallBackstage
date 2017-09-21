@@ -171,9 +171,14 @@
 												<el-input v-model="scope.row.costPrice" type="text"></el-input>
 											</template>
 										</el-table-column>
-										<el-table-column prop="specPrice" label="建议零售价(元)" width="180">
+										<el-table-column prop="specPrice" label="售价(元)" width="180">
 											<template scope="scope">
 												<el-input v-model="scope.row.specPrice" type="text"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="restPrice" label="建议零售价(元)" width="180">
+											<template scope="scope">
+												<el-input v-model="scope.row.restPrice" type="text"></el-input>
 											</template>
 										</el-table-column>
 										<el-table-column prop="storage" label="商品库存" width="180">
@@ -193,7 +198,7 @@
 										</el-table-column>
 									</el-table>
 								</el-form-item>
-								<el-form-item label='建议零售价' style="width:100%;">
+								<el-form-item label='售价' style="width:100%;">
 									<el-input type="text" v-model="SuggestedRetailRrice" style="width:150px;"></el-input>
 									<span style="font-size: 12px;color: #ababab;">商品价格必须是0.01~10000000的、之间的数字</span>
 								</el-form-item>
@@ -514,7 +519,8 @@
 						obj.deductibleImazamox = '',
 						obj.specNo = '',
 						obj.specPicture = this.CommodityPictures.toString(),
-						obj.id = ''
+						obj.id = '',
+						obj.restPrice = ''
 						this.tableData.push(obj)
 					}
 				}else if(this.Specifications.length === 2){//specificatwo specificatwo1
@@ -541,6 +547,7 @@
 						obj.specNo = '',
 						obj.specPicture = this.CommodityPictures.toString(),
 						obj.id = ''
+						obj.restPrice = ''
 						this.tableData.push(obj)
 					}
 						console.log(this.specificatwo)
@@ -844,7 +851,7 @@
                     goodsNo:this.productCode,
                     goodsSpecs:[],
                     goodsServiceStr:''
-                };
+                }
                 const bqarry = []
                 console.log(this.onbiaoqList)
                 console.log(this.listBiaoq)
@@ -896,6 +903,10 @@
 	                }
                 }
                 console.log(params)
+                console.log(this.CommodityPictures)
+                for (var i = 0; i < params.goodsSpecs.length; i++) {
+                	params.goodsSpecs[i].specPicture = this.CommodityPictures[0].toString()
+                }
                 console.log(this.value)
                 $.ajax({
                     type:'POST',

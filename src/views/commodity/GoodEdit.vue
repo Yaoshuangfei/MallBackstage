@@ -169,9 +169,14 @@
 												<el-input v-model="scope.row.costPrice" type="text"></el-input>
 											</template>
 										</el-table-column>
-										<el-table-column prop="specPrice" label="建议零售价(元)" width="180">
+										<el-table-column prop="specPrice" label="售价(元)" width="180">
 											<template scope="scope">
 												<el-input v-model="scope.row.specPrice" type="text"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="restPrice" label="建议零售价(元)" width="180">
+											<template scope="scope">
+												<el-input v-model="scope.row.restPrice" type="text"></el-input>
 											</template>
 										</el-table-column>
 										<el-table-column prop="storage" label="商品库存" width="180">
@@ -512,11 +517,12 @@
 						obj.specData = this.Specifications1[i].value
 						// obj.goodsId = ''
 						obj.specPrice = ''
+						obj.restPrice = ''
 						obj.costPrice = ''
 						obj.storage = '',
 						obj.deductibleImazamox = '',
 						obj.specNo = '',
-						obj.specPicture = this.url,
+						obj.specPicture = this.CommodityPictures.toString(),
 						obj.id = ''
 						this.tableData.push(obj)
 					}
@@ -538,11 +544,12 @@
 						obj.specData = this.specificatwo[i]
 						// obj.goodsId = ''
 						obj.specPrice = ''
+						obj.restPrice = ''
 						obj.costPrice = ''
 						obj.storage = '',
 						obj.deductibleImazamox = '',
 						obj.specNo = '',
-						obj.specPicture = this.url,
+						obj.specPicture = this.CommodityPictures.toString(),
 						obj.id = ''
 						this.tableData.push(obj)
 					}
@@ -825,6 +832,9 @@
                 }
                 console.log(params)
                 console.log(this.value)
+                for (var i = 0; i < params.goodsSpecs.length; i++) {
+                	params.goodsSpecs[i].specPicture = this.CommodityPictures[0].toString()
+                }
                 $.ajax({
                     type:'POST',
                     dataType:'json',
