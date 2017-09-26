@@ -42,24 +42,34 @@
 				<el-col :span="7">下单时间：{{item.createTime}}</el-col>
 				<el-col :span="3" :offset="1" v-if="item.coreUser === null">/</el-col>
 				<el-col :span="3" :offset="1" v-if="item.coreUser !== null">{{item.coreUser.nickName}}</el-col>
-				<el-col :span="1"  style="margin-left:70px">{{item.totalMoney}}</el-col>
-				<el-col :span="2"  style="margin-left:75px">
+				<el-col :span="1"  style="margin-left:50px">{{item.totalMoney}}</el-col>
+				<el-col :span="2"  style="margin-left:	10px">
 					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 1 }}">
 						<el-button style="margin-top:-5px;color: #9f3333;"  type="text">查看订单</el-button>
 					</router-link>
+					
+				</el-col>
+				<el-col :span="1" style="margin-top: -5px;">
+					<el-button type="text" v-on:click="fahuoBtn(item.orderGoods)" style="color: #9f3333;">发货</el-button>
+					<!-- <el-button v-if="item.orderGoods.orderStatus === 2" type="text" v-on:click="fahuoBtn(item.orderGoods)" style="color: #9f3333;" disabled>发货</el-button> -->
 				</el-col>
 			</el-col>
 			<el-col :span="24" v-for="items in item.orderGoods">
 				<el-col :span="3" >
 					<img style="width: 100px;margin-left:40px;margin-top: 20px " :src="items.picture">
 				</el-col>
-				<el-col  style="width:180px;" :offset="1" class="describe">
+				<el-col  style="width:180px;margin-top: 40px;" :offset="1">
 				{{items.productName}}
 				</el-col>
-				<el-col style="text-align: center;width:98px;" class="describe">{{items.productPrice}}</el-col>
-				<el-col style="text-align: center;width:90px;"  class="describe">{{items.quantity}}</el-col>
-				<el-col style="text-align: right;width:137px;margin-left: 240px;" class="describe">
-					<el-button type="text" v-on:click="fahuoBtn(items)" style="color: #9f3333;">发货</el-button>
+				<el-col style="text-align: center;width:98px;margin-top: 40px;">{{items.productPrice}}</el-col>
+				<el-col style="text-align: center;width:90px;margin-top: 40px;" >{{items.quantity}}</el-col>
+				<el-col style="text-align: right;width:137px;margin-left: 240px;margin-top: 40px;">
+					<!-- <el-button type="text" v-on:click="fahuoBtn(items)" style="color: #9f3333;">发货</el-button> -->
+					<el-col v-if="items.refundStatus === 1">
+						<el-col v-if="items.orderStatus === 2">待发货</el-col>
+						<el-col v-else>已发货</el-col>
+					</el-col>
+					<el-col v-else>退款中</el-col>
 				</el-col>
 			</el-col>
 			<el-col :span="24" style="border-top: 1px solid #e6eef9;height: 30px;line-height: 50px;padding-left: 20px;">地址：{{item.provinceName}}{{item.cityName}}{{item.countyName}}{{item.address}}</el-col>
@@ -74,6 +84,37 @@
 		<!--编辑界面-->
 		<el-dialog title="发货" v-model="editFormVisible" :close-on-click-modal="false" >
 			<el-col :span="24">
+				<el-col :span="24" style="margin-bottom: 20px;">
+					<el-col :span="24" v-show="goodsList.length > 0">
+						<el-col :span="2" style="margin-right: 20px;">待发货</el-col>
+						<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+							<el-checkbox v-for="city in goodsList" :label="city.id" :key="city.id">{{city.productName}}</el-checkbox>
+						</el-checkbox-group>
+					</el-col>
+					<el-col :span="24" v-show="goodsList1.length > 0">
+						<el-col :span="2" style="margin-right: 20px;">已发货</el-col>
+						<el-checkbox-group v-model="checkedCities1" @change="handleCheckedCitiesChange">
+							<el-checkbox v-for="city in goodsList1" :label="city.id" :key="city.id" disabled>{{city.productName}}</el-checkbox>
+						</el-checkbox-group>
+					</el-col>
+					<el-col :span="24" v-show="goodsList2.length > 0">
+						<el-col :span="2" style="margin-right: 20px;">退款中</el-col>
+						<el-checkbox-group v-model="checkedCities2" @change="handleCheckedCitiesChange">
+							<el-checkbox v-for="city in goodsList2" :label="city.id" :key="city.id" disabled>{{city.productName}}</el-checkbox>
+						</el-checkbox-group>
+					</el-col>
+				</el-col>
+				<!-- <el-col :span="24" style="margin-bottom: 20px">
+					<ci-col :span="4">
+						发货方式：
+					</ci-col>
+					<ci-col :span="4">
+						<el-select v-model="huovalue" clearable>
+					      <el-option v-for="item in option" :label="item.label" :value="item.value">
+					      </el-option>
+					    </el-select>
+					</ci-col>
+				</el-col> -->
 				<el-col :span="24" style="margin-bottom: 20px">
 					<el-select v-model="keyvalue" clearable>
 				      <el-option v-for="item in optionKey" :label="item.label" :value="item.value">
@@ -99,6 +140,7 @@
 	export default {
 		data() {
 			return {
+				huovalue:1,
 				keyvalue: '',
 				expno:'',
 				ddId:'',
@@ -118,6 +160,10 @@
 		          value: '2',
 		          label: '快递单号'
 		        }],
+		        option:[
+		        	{value:1,label:'在线下单'},
+		        	{value:1,label:'送货上门'}
+		        ],
 		        optionKey:[],
 				filters: {
 					name: '',
@@ -152,22 +198,42 @@
 				//新增界面数据
 				orderDetails: {
 				},
-				orderInformation:[{
-					orderNumber :'145877458784524c',
-					courierNumber :'145877458784524c',
-					userName:'吸引力量',
-					amountPaid :'300',
-					orderTotal :'900',
-					orderStatus :'待付款',
-					paymentMethod :'微信支付',
-					creationTime:'2017-09-08 17:09',
-					deliveryTime:'2017-09-08 17:09',
-					commodityName:'雨花说'
-				}]
+				orderInformation:[],
+				goodsList:[],
+				cities:[],
+				checkedCities:[],
+				goodsList1:[],
+				checkedCities1:[],
+				goodsList2:[],
+				checkedCities2:[]
 			}
 		},
 		methods: {
+			handleCheckedCitiesChange(){
+
+			},
 			fahuoBtn(row){
+				console.log(row)
+				this.goodsList = []
+				this.checkedCities = []
+				this.goodsList1 = []
+				this.checkedCities1 = []
+				this.goodsList2 = []
+				this.checkedCities2 = []
+				for (var i = 0; i < row.length; i++) {
+					if(row[i].refundStatus === 2){
+						this.checkedCities2.push(row[i].id)
+						this.goodsList2.push(row[i])
+					}else{
+						if(row[i].orderStatus === 2){
+							this.checkedCities.push(row[i].id)
+							this.goodsList.push(row[i])
+						}else{
+							this.checkedCities1.push(row[i].id)
+							this.goodsList1.push(row[i])
+						}
+					}
+				}
 				this.optionKey = []
 				this.keyvalue =''
 				this.expno = ''
@@ -208,21 +274,27 @@
 						express = this.optionKey[i].label
 					}
 				}
+				console.log(this.huovalue)
+				console.log(this.checkedCities)
 				const _this = this
-				const params = {
-					id:this.ddId,
-					storeId:this.dpId,
-					expno:this.expno,
-					expressName:express,
-					expressCode:this.keyvalue,
+				const params = []
+				for (var i = 0; i < this.checkedCities.length; i++) {
+					const obj = {
+						id:this.checkedCities[i],
+						deliveryType:1,
+						expno:this.expno,
+						expressName:express,
+						expressCode:this.keyvalue
+					}
+					params.push(obj)
 				}
+				console.log(JSON.stringify(params))
 				$.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"/api/orderMall/delivery",
+                    url:baseUrl+"/api/orderMall/deliveryAll",
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                     	_this.editFormVisible = false
                     	_this.getlist()

@@ -453,9 +453,6 @@
   .noneborder input{
     border: none
   }
-  .el-form-item__label{
-    text-align: left;
-  }
   #hunpi .el-radio__input.is-checked .el-radio__inner {background: #9f3333;border-color: #9f3333;}
   .hunpiTable tbody .cell {height:58px;line-height: 58px;}
   .hunpiTable tbody .noneborder input {text-align: center;}

@@ -1149,6 +1149,7 @@
 			}
 		},
 		mounted() {
+			console.log(state.commissionLine)
 			if(state.commissionLine === 5){
 				this.bduan = true
 			}

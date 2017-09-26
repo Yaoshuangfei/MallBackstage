@@ -107,6 +107,9 @@
 		<el-dialog :title="addTitle" v-model="editFormVisible" :close-on-click-modal="false" :show-close='false'>
 			<el-col :span="24" :offset='10' v-if="remarkInfo !== '' ">未通过信息：{{remarkInfo}}</el-col>
 			<el-form :model="sfinfo" label-width="180px" style="margin-left: 40px;margin-top: 40px" :rules="rules" ref="sfinfo">
+              <el-form-item label="公司名称">
+                <el-input v-model="sfinfo.companyName"></el-input>
+              </el-form-item>
 		      <el-form-item label="法人姓名">
 		        <el-input v-model="sfinfo.realName"></el-input>
 		      </el-form-item>
@@ -155,8 +158,7 @@
 		      </el-form-item>
 		  </el-form>
 			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="clupLoad">保存</el-button>
-                <!-- <el-button type="primary" @click.native="editFormVisible = false">关闭</el-button> -->
+				<el-button type="primary" @click.native="clupLoad">提交</el-button>
 			</div>
 		</el-dialog>
 		<el-dialog title="提示" v-model="dashVisible" :close-on-click-modal="false" :show-close='false'>
@@ -184,7 +186,7 @@
 				        { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/, message: '证件号码格式有误！', trigger: 'blur' }
 				      ]
             	},
-            	sfinfo:{},
+            	sfinfo:{companyName:''},
                 total:7,
                 page: 1,
                 totals:10,
@@ -272,6 +274,7 @@
             },
             clupLoad(){
             	const _this = this
+                console.log(this.sfinfo.companyName)
             	const params = {
             		realName:this.sfinfo.realName,
             		legalCardCode:this.sfinfo.legalCardCode,
@@ -282,7 +285,8 @@
             		cardImgF:this.frImgurl,
             		cardImgW:this.frImgurlPointer,
             		businessLicense:this.businessImgurl,
-            		bankImgW:this.bankImgurl
+            		bankImgW:this.bankImgurl,
+                    companyName:this.sfinfo.companyName
             	}
             	let url = ''
                 console.log(this.sfinfoId)
@@ -302,6 +306,7 @@
                     success:function(data){
                     	if(data.code === 1){
                     		_this.editFormVisible = false
+                            _this.$router.push({ path: '/login' });
                     	}else{
                     		_this.$message.error(data.msg);
                     	}
@@ -580,9 +585,9 @@
         mounted: function () {
             console.log(state.storeStatus)
         	if(state.storeStatus === 4){
-        		this.editFormVisible = true
+        		this.dashVisible = true 
         	}else if(state.storeStatus === 0){//待审核
-        		this.dashVisible = true
+        		this.editFormVisible = true
         	}else if(state.storeStatus === 2){//审核未通过
         		this.addTitle = '修改身份信息'
         		this.getSHinfo()

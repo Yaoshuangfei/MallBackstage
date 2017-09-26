@@ -302,10 +302,6 @@
 </script>
 
 <style>
-  
-  .el-form-item__label{
-    text-align: left;
-  }
     #close {position: absolute;top:10px;right:0;color: #bfcbd9;cursor: pointer;}
     #close:hover {color: rgb(202, 183, 140);}
 </style>

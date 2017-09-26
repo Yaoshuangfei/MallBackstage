@@ -292,9 +292,5 @@
 </script>
 
 <style>
-  
-  .el-form-item__label{
-    text-align: left;
-  }
   #sfrz .el-form-item__label {margin-right: inherit;text-align: right;font-size: 16px;color: #616161;}
 </style>

@@ -431,10 +431,5 @@
 </script>
 
 <style>
-  
-  .el-form-item__label{
-    text-align: right;
-    margin-right: 10px;
-  }
   .text {color: #ababab;font-size: 12px;}
 </style>

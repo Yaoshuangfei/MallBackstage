@@ -558,9 +558,6 @@
     	width: 600px;
     	border-radius: 10px
 	}
-	.el-form-item__label{
-		text-align: left;
-	}
 	.el-dialog__body{
 		margin-left: 0 ! important ;
 	}
