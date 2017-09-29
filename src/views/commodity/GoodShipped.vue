@@ -198,7 +198,7 @@
 										</el-table-column>
 									</el-table>
 								</el-form-item>
-								<el-form-item label='售价' style="width:100%;">
+								<el-form-item label='一口价' style="width:100%;">
 									<el-input type="text" v-model="SuggestedRetailRrice" style="width:150px;"></el-input>
 									<span style="font-size: 12px;color: #ababab;">商品价格必须是0.01~10000000的、之间的数字</span>
 								</el-form-item>

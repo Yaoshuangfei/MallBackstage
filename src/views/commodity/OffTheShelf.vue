@@ -22,7 +22,7 @@
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head" style="background: #fff;">
-				<el-col :span="6">订单编号：{{item.goodsNo}}</el-col>
+				<el-col :span="6">商品编号：{{item.goodsNo}}</el-col>
 				<el-col :span="10">下单时间：{{item.createTime}}</el-col>
 				<!-- <el-col :span="3" :offset="10">
 					<router-link :to="{ name: '订单详情', params: { id: 0 }}">

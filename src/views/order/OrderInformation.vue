@@ -37,16 +37,18 @@
 			<el-col style="width:340px;">商品详情</el-col>
 			<el-col style="width:98px;">单价</el-col>
 			<el-col style="width:90px;">数量</el-col>
-			<el-col style="width:137px;">买家</el-col>
-			<el-col style="width:180px;">订单总价</el-col>
+			<el-col style="width:90px;">买家</el-col>
+			<el-col style="width:100px;">订单总价</el-col>
+			<el-col style="width:100px;">发货人</el-col>
 			<el-col style="width:84px;">状态</el-col>
 		</el-col> <!-- v-for="item in selectSubjectStatus" -->
 		<el-col :span="24" class="table_div" v-for="item in selectSubjectStatus">
 			<el-col :span="24"  class="table_div_head">
 				<el-col :span="6">订单编号：{{item.id}}</el-col>
 				<el-col :span="7">下单时间：{{item.createTime}}</el-col>
-				<el-col :span="1" :offset="6">{{item.totalMoney}}</el-col>
-				<el-col :span="2" :offset="2">
+				<el-col :span="1" :offset="3">{{item.totalMoney}}</el-col>
+				<el-col :span="3" :offset="1">{{item.consign.nickName}}</el-col>
+				<el-col :span="2">
 					<router-link :to="{ name: '订单详情', params: { id: item.id ,index: 0}}">
 						<el-button style="margin-top:-5px;color: #9f3333;"  type="text">查看订单</el-button>
 					</router-link>

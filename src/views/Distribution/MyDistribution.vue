@@ -30,7 +30,6 @@
 			<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">
 				<el-switch
 					@change='clickrule'
-					:disabled='upgradebtn'
 				  	v-model="ruleIsUpgrade"
 				  	on-color="#13ce66"
 				  	off-color="#ff4949">
@@ -235,7 +234,6 @@
 					<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">
 						<el-switch
 							@change='clickrule'
-							:disabled='upgradebtn'
 						  	v-model="ruleIsUpgrade"
 						  	on-color="#13ce66"
 						  	off-color="#ff4949">
@@ -281,29 +279,48 @@
 							<el-input v-model="upgrade.invitedMinNum" type="text" auto-complete="off"></el-input>
 						</el-form-item>
 						<el-col :span='16' :offset="6">被邀请人身份必须同级或高于才有效</el-col>
-						<el-form-item label="身份名称">
-							<el-input v-model="upgrade.name" type="text" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="角色图标">
-							<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
-							<button type="button" class="el-button el-button--primary el-button--small">
-								<span>点击上传</span>
-							</button>
-						</el-form-item>
-						<img v-if="url_5 !== '' " style="width: 100px;" :src="url_5">
-						<el-form-item label="身份名称">
-							<el-input v-model="upgrade.name1" type="text" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="角色图标">
-							<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
-							<button type="button" class="el-button el-button--primary el-button--small">
-								<span>点击上传</span>
-							</button>
-						</el-form-item>
-						<img v-if="url_51 !== '' " style="width: 100px;" :src="url_51">
+						<el-col v-if="uploadList.length === 0 ">
+							<el-form-item label="身份名称">
+								<el-input v-model="upgrade.name" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="角色图标">
+								<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload" id="fileInput">
+								<button type="button" class="el-button el-button--primary el-button--small">
+									<span>点击上传</span>
+								</button>
+							</el-form-item>
+							<img v-if="url_5 !== '' " style="width: 100px;" :src="url_5">
+							<el-form-item label="身份名称">
+								<el-input v-model="upgrade.name1" type="text" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="角色图标">
+								<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
+								<button type="button" class="el-button el-button--primary el-button--small">
+									<span>点击上传</span>
+								</button>
+							</el-form-item>
+							<img v-if="url_51 !== '' " style="width: 100px;" :src="url_51">
+						</el-col>
+						<el-col v-else>
+							<el-col v-for="(item,index) in uploadList">
+								<el-form-item label="身份名称">
+									<el-input v-model="item.name" type="text" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="角色图标">
+									<img style="width: 100px;" :src="item.icon">
+								</el-form-item>
+								<el-form-item>
+									<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="uploadedit(index)" id="fileInput">
+									<button type="button" class="el-button el-button--primary el-button--small">
+									<span>点击上传</span>
+								</button>
+								</el-form-item>
+							</el-col>
+						</el-col>
 					</el-form>
 					<div slot="footer" class="dialog-footer" style="text-align: center;">
-						<el-button type="primary" @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
+						<el-button type="primary" v-if="uploadList.length === 0 " @click.native="upgradetSubmit" :loading="editLoading">确定</el-button>
+						<el-button type="primary" v-else @click.native="editupSubmit" :loading="editLoading">修改</el-button>
 						<el-button type="primary" @click.native="clerbtn">关闭</el-button>
 					</div>
 				</el-dialog>
@@ -513,7 +530,8 @@
 				cltJqfred:'',
 				cltuanduired:'',
 				cltFyBtn:false,
-				cltId:''
+				cltId:'',
+				uploadList:[]
 			}
 		},
 		methods: {
@@ -622,6 +640,7 @@
 			},
 			getlist(){
 				const _this = this
+				this.uploadList = []
 				const params = {
 					id:localStorage.getItem("storeId")
 				}
@@ -637,13 +656,18 @@
                     	if(data.data === null){
                     		return
                     	}
-                    	console.log(data.data)
+                    	console.log(data)
                     	const info = data.data.shopRoles
                     	_this.ruleAll = info
+
                     	console.log(_this.ruleAll)
                     	for(var i = 0;i<info.length;i++){
                     		_this.arryname.push(info[i].name)
+                    		if(info[i].level !== -100 && info[i].level < 1){
+                    			_this.uploadList.push(info[i])
+                    		}
                     	}
+                    	console.log(_this.uploadList.length === 0)
                     	_this.upgrade.invitedMinNum = data.data.invitedMinNum
                     	if(data.data.ruleIsUpgrade === null){
                     		_this.ruleIsUpgrade = false
@@ -715,7 +739,6 @@
 	                    url:baseUrl+"/api/shopRole/updateRuleAll",
 	                    data:JSON.stringify(params),
 	                    contentType:'application/json;charset=utf-8',
-	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
 	                    	console.log(data)
 	                    	if(data.code === 1){
@@ -723,7 +746,8 @@
 									message: '提交成功',
 									type: 'success'
 								});
-								_this.clerbtn = false
+								_this.ruleIsUpgradeVisible_5 = false
+								_this.getlist()
 	                    	}else{
 	                    		_this.$message({
 									message: data.msg,
@@ -1054,6 +1078,80 @@
 						// _this.getUrl()
                     }, error => _this.$emit('complete', 500, error.message))
 			},
+			uploadedit(index){
+				this.formData = new FormData()
+                let file = event.target.files[0]
+                // console.log(file)
+                const self = this
+                // const flag = this.flag
+                if (file) {
+                    console.log('存在file', file)
+                    this.fileImg = file.name
+                    // console.log(this.formData)
+                    this.formData.append('file', file);
+                    console.log(this.formData);
+                    this.getImgedit(index)
+                } else {
+                    this.fileImg = ''
+                    console.log('不存在file', file)
+                    this.formData = new FormData()
+                }
+			},
+			getImgedit(index){
+                const _this= this;
+                _this.$http.post(baseUrl+'/api/attachment/upload', _this.formData, {
+                    progress(event) {
+                    }
+                })
+                    .then(response => {
+                    	console.log(response)
+                        const info = JSON.parse(response.bodyText);
+						console.log(index)
+						this.uploadList[index].icon = info.data[0].baseUri+info.data[0].uri;
+						console.log(index)
+                    }, error => _this.$emit('complete', 500, error.message))
+			},
+			editupSubmit(){
+				const _this = this
+				console.log(this.uploadList)
+				const params = {
+					id: localStorage.getItem("storeId"),
+					shopRoles:[]
+				}
+				for (var i = 0; i < this.uploadList.length; i++) {
+					const obj = {}
+					obj.id = this.uploadList[i].id
+					obj.level = this.uploadList[i].level
+					obj.name = this.uploadList[i].name
+					obj.icon = this.uploadList[i].icon
+					obj.roleInvitedMinNum = this.upgrade.invitedMinNum
+					params.shopRoles.push(obj)
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/updateRuleUpgrade",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.$message({
+								message: '修改成功',
+								type: 'success'
+							});
+							_this.getlist()
+							_this.ruleIsUpgradeVisible_5 = false
+                    	}else{
+                    		_this.$message({
+								message: data.msg,
+								type: 'error'
+							});
+                    	}
+                    }
+                });
+			},
 			getcltList(){
 				const _this = this
 				$.ajax({
@@ -1067,30 +1165,30 @@
                         if(info === null){
                         	_this.cltFyBtn = true
                         }else{
-                        	
-                        _this.cltId = info.id
+                        	_this.cltId = info.id
+                        
+	                        console.log(info)
+	                        // 三级分销
+	                        _this.cltSan[0].fybi = info.one
+	                        _this.cltSan[1].fybi = info.two
+	                        _this.cltSan[2].fybi = info.three
+	                        // B端三级分销
+	                        _this.bSan[0].fybi = info.bOne
+	                        _this.bSan[1].fybi = info.bTwo
+	                        _this.bSan[2].fybi = info.bThree
+	                        // 平级奖
+	                        _this.cltPingji[0].fybi = info.peersOne
+	                        _this.cltPingji[1].fybi = info.peersTwo
+	                        _this.cltPingji[2].fybi = info.peersThree
+	                        // 与花说区域奖
+	                        _this.qyPingji[0].fybi = info.specialOne
+	                        _this.qyPingji[1].fybi = info.specialTwo
+	                        _this.qyPingji[2].fybi = info.specialThree
+
+	                        _this.cltJqfred = info.codePayScale
+
+	                        _this.cltuanduired = info.teamOne
                         }
-                        console.log(info)
-                        // 三级分销
-                        _this.cltSan[0].fybi = info.one
-                        _this.cltSan[1].fybi = info.two
-                        _this.cltSan[2].fybi = info.three
-                        // B端三级分销
-                        _this.bSan[0].fybi = info.bOne
-                        _this.bSan[1].fybi = info.bTwo
-                        _this.bSan[2].fybi = info.bThree
-                        // 平级奖
-                        _this.cltPingji[0].fybi = info.peersOne
-                        _this.cltPingji[1].fybi = info.peersTwo
-                        _this.cltPingji[2].fybi = info.peersThree
-                        // 与花说区域奖
-                        _this.qyPingji[0].fybi = info.specialOne
-                        _this.qyPingji[1].fybi = info.specialTwo
-                        _this.qyPingji[2].fybi = info.specialThree
-
-                        _this.cltJqfred = info.codePayScale
-
-                        _this.cltuanduired = info.teamOne
                     }
                 });
 			},

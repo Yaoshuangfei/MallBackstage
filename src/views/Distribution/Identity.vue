@@ -14,6 +14,9 @@
 		 			<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-left: 20px;height:32px;line-height: 32px;">
 		  				{{item.name}}
 		 			</el-col>
+		 			<!-- <el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-left: 20px;height:32px;line-height: 32px;">
+						<el-button type="text">删除</el-button>
+		 			</el-col> -->
 		 		</el-col>
 		  </el-col>
 			<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
@@ -443,7 +446,12 @@
 					level:this.identity.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
-					icon:this.orderDetails.icon
+					icon:this.orderDetails.icon,
+					
+					costPrice:this.orderDetails.costPrice,
+					commissionType:0,
+					goodsNum:this.orderDetails.goodsNum
+
 				}
 				if(this.addID === 2){
 					params.level = -100
@@ -465,12 +473,20 @@
 	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
 	                    success:function(data){
 	                    	console.log(data)
-	                    	_this.$message({
-								message: '提交成功',
-								type: 'success'
-							});
-							_this.addFormVisible = false
-							_this.getlist()
+	                    	if(data.code === 1){
+	                    		_this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								_this.addFormVisible = false
+								_this.getlist()
+	                    	}else{
+	                    		_this.$message({
+									message: data.msg,
+									type: 'error'
+								});
+	                    	}
+	                    	
 	                    }
 	                });
 						

@@ -41,6 +41,15 @@
 					<el-form-item label="冻结金额：" style="margin-right: 40px">
 						{{frozenIncome}}元
 					</el-form-item>
+					<el-form-item label="手续费：" style="margin-right: 40px">
+						{{serviceFee}}元
+					</el-form-item>
+					<el-form-item label="总利润" style="margin-right: 40px">
+						{{commodityIncome}}元
+					</el-form-item>
+					<el-form-item label="分佣总合" style="margin-right: 40px">
+						{{commission}}元
+					</el-form-item>
 				</div>
 
 			</el-form>
@@ -162,6 +171,9 @@
 				availableIncome:'',
 				totalMoney:'',
 				frozenIncome:'',
+				serviceFee:'',
+				commodityIncome:'',
+				commission:'',
 				selectSubjectStatus: [
 				{
 					value:'',
@@ -245,7 +257,6 @@
 				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
 			},
 			getlist(){
-				
 				const _this = this
 				_this.listLoading = true
 				_this.table = []
@@ -366,6 +377,9 @@
                     	_this.availableIncome = data.data.availableIncome
                     	_this.totalMoney = data.data.totalMoney
                     	_this.frozenIncome = data.data.frozenIncome
+                    	_this.serviceFee = data.data.serviceFee
+                    	_this.commodityIncome = data.data.commodityIncome
+                    	_this.commission = data.data.commission
                     }
                 });
 			}
