@@ -215,7 +215,7 @@
 					</div>
 				</el-dialog>
 				<!--<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 20px;margin-bottom: 20px">店铺等级</el-col>-->
-				<el-col :xs="2" :sm="2" :md="2" :lg="2"  v-if="commissionLine === 5" style="text-align: right;font-size: 16px;color: #616161;height:32px;line-height: 32px;">小区</el-col>
+				<el-col :xs="2" :sm="2" :md="2" :lg="2"  v-if="commissionLine === 5 " style="text-align: right;font-size: 16px;color: #616161;height:32px;line-height: 32px;">小区</el-col>
 				<el-col :xs="22" :sm="22" :md="22" :lg="22" style="height:32px;line-height: 32px;margin-bottom: 20px;" >
 					<ul class="Grade">
 						<li v-for="item in ruleAll" v-if="item.level !== -100">{{item.name}}</li>
@@ -324,9 +324,12 @@
 						<el-button type="primary" @click.native="clerbtn">关闭</el-button>
 					</div>
 				</el-dialog>
-				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">普通三级分销</el-col>
+				<el-col v-if='commissionLine === 6' :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">角色最高分佣配置</el-col>
+				<el-col v-else :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">普通三级分销</el-col>
 					<el-table class="fenyong" border :data="cltSan" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
-						<el-table-column prop="level" label="等级">
+						<el-table-column v-if="commissionLine === 6" prop="level" label="身份">
+						</el-table-column>
+						<el-table-column v-else prop="level" label="等级">
 						</el-table-column>
 						<el-table-column prop="fybi" label="分佣比">
 							<template scope="scope">
@@ -346,7 +349,8 @@
 						</el-table-column>
 					</el-table>
 				<el-col v-if="bduan" :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
-				<el-col :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">平级奖</el-col>
+				<el-col v-if='commissionLine === 6' :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">最高级平级分佣配置</el-col>
+				<el-col v-else :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">平级奖</el-col>
 				<el-table :data="cltPingji" class="fenyong" border highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 					<el-table-column prop="level" label="等级">
 					</el-table-column>
@@ -357,8 +361,9 @@
 					</el-table-column>
 				</el-table>
 				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
+				<el-col v-if='commissionLine === 6' :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">商品三级分销</el-col>
 				<el-col v-if='commissionLine === 5' :xs="4" :sm="4" :md="4" :lg="4" style="margin-bottom: 20px">区域分红</el-col>
-				<el-table v-if='commissionLine === 5' class="fenyong" border :data="qyPingji" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
+				<el-table v-if='commissionLine === 5 || commissionLine === 6' class="fenyong" border :data="qyPingji" highlight-current-row style="width: 50%;min-width: 580px;margin-left: 40px;text-align: center;">
 					<el-table-column prop="level" label="等级">
 					</el-table-column>
 					<el-table-column prop="fybi" label="分佣比">
@@ -367,19 +372,20 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
-				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-top: 20px;">团队奖
+				<el-col v-if="commissionLine !== 6" :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
+				<el-col v-if="commissionLine !== 6" :xs="20" :sm="20" :md="20" :lg="20" style="margin-top: 20px;">团队奖
 					<el-input style="width: 200px" v-model="cltuanduired"></el-input>
 				</el-col>
 				<!-- <el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-top: 20px;" v-if='commissionLine === 3'>区域分红
 					<el-input style="width: 200px" v-model="quyufred"></el-input>
 				</el-col> -->
-				<el-col :xs="10" :sm="10" :md="10" :lg="10" style="margin-top: 20px;">加权分红
+				<el-col v-if="commissionLine !== 6" :xs="10" :sm="10" :md="10" :lg="10" style="margin-top: 20px;">加权分红
 					<el-input style="width: 200px" v-model="cltJqfred"></el-input>
 				</el-col>
 				<el-col :span="24" style="border-bottom: 1px dashed #cab78c;margin: 20px 0;"></el-col>
 				<el-col :xs="20" :sm="20" :md="20" :lg="20" style="margin-bottom: 120px;">
-					<el-button type="primary" v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
+					<el-button type="primary" v-if="commissionLine === 6" v-on:click="hsmupSubmit" style="margin-top: 20px">提交</el-button>
+					<el-button type="primary" v-else v-on:click="cltUpfy" style="margin-top: 20px">提交</el-button>
 				</el-col>
 		</el-col>
 		<el-col v-if="mimayanz" :span="24" style="width: 100%;height:100%;position: fixed;top:0;left:0;z-index:9;background: rgba(0,0,0,.5);text-align:center;">
@@ -488,43 +494,43 @@
 				cltShow:false,
 				cltSf:[],
 				cltSan:[{
-					level:'一代',
+					level:'一级',
 					fybi:''
 				},{
-					level:'二代',
+					level:'二级',
 					fybi:''
 				},{
-					level:'三代',
+					level:'三级',
 					fybi:''
 				}],
 				bSan:[{
-					level:'一代',
+					level:'一级',
 					fybi:''
 				},{
-					level:'二代',
+					level:'二级',
 					fybi:''
 				},{
-					level:'三代',
+					level:'三级',
 					fybi:''
 				}],
 				cltPingji:[{
-					level:'一代',
+					level:'一级',
 					fybi:''
 				},{
-					level:'二代',
+					level:'二级',
 					fybi:''
 				},{
-					level:'三代',
+					level:'三级',
 					fybi:''
 				}],
 				qyPingji:[{
-					level:'一代',
+					level:'一级',
 					fybi:''
 				},{
-					level:'二代',
+					level:'二级',
 					fybi:''
 				},{
-					level:'三代',
+					level:'三级',
 					fybi:''
 				}],
 				cltJqfred:'',
@@ -1162,33 +1168,132 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                         const info = data.data
-                        if(info === null){
+                        if(info === null &&_this.commissionLine === 6){
+                        	_this.cltSan  = [{
+										level:'金牌合伙人',
+										fybi:''
+									},{
+										level:'金牌代理商',
+										fybi:''
+									},{
+										level:'金牌vip',
+										fybi:''
+									},{
+										level:'vip',
+										fybi:''
+									}]
+                        		_this.cltPingji = [{
+										level:'一级',
+										fybi:''
+									},{
+										level:'二级',
+										fybi:''
+									}]
+                        		_this.qyPingji = [{
+										level:'一级',
+										fybi:''
+									},{
+										level:'二级',
+										fybi:''
+									},{
+										level:'三级',
+										fybi:''
+									}]
+                        }else if(info === null){
                         	_this.cltFyBtn = true
                         }else{
-                        	_this.cltId = info.id
-                        
-	                        console.log(info)
-	                        // 三级分销
-	                        _this.cltSan[0].fybi = info.one
-	                        _this.cltSan[1].fybi = info.two
-	                        _this.cltSan[2].fybi = info.three
-	                        // B端三级分销
-	                        _this.bSan[0].fybi = info.bOne
-	                        _this.bSan[1].fybi = info.bTwo
-	                        _this.bSan[2].fybi = info.bThree
-	                        // 平级奖
-	                        _this.cltPingji[0].fybi = info.peersOne
-	                        _this.cltPingji[1].fybi = info.peersTwo
-	                        _this.cltPingji[2].fybi = info.peersThree
-	                        // 与花说区域奖
-	                        _this.qyPingji[0].fybi = info.specialOne
-	                        _this.qyPingji[1].fybi = info.specialTwo
-	                        _this.qyPingji[2].fybi = info.specialThree
+                        	if(_this.commissionLine === 6){
+                        		_this.cltSan  = [{
+										level:'金牌合伙人',
+										fybi:info.teamOne
+									},{
+										level:'金牌代理商',
+										fybi:info.teamTwo
+									},{
+										level:'金牌vip',
+										fybi:info.teamThree
+									},{
+										level:'vip',
+										fybi:info.teamFour
+									}]
+                        		_this.cltPingji = [{
+										level:'一级',
+										fybi:info.bOne
+									},{
+										level:'二级',
+										fybi:info.bTwo
+									}]
+                        		_this.qyPingji = [{
+										level:'一级',
+										fybi:info.specialOne
+									},{
+										level:'二级',
+										fybi:info.specialTwo
+									},{
+										level:'三级',
+										fybi:info.specialThree
+									}]
+                        	}else{
+	                        	_this.cltId = info.id
+		                        console.log(info)
+		                        // 三级分销
+		                        _this.cltSan[0].fybi = info.one
+		                        _this.cltSan[1].fybi = info.two
+		                        _this.cltSan[2].fybi = info.three
+		                        // B端三级分销
+		                        _this.bSan[0].fybi = info.bOne
+		                        _this.bSan[1].fybi = info.bTwo
+		                        _this.bSan[2].fybi = info.bThree
+		                        // 平级奖
+		                        _this.cltPingji[0].fybi = info.peersOne
+		                        _this.cltPingji[1].fybi = info.peersTwo
+		                        _this.cltPingji[2].fybi = info.peersThree
+		                        // 与花说区域奖
+		                        _this.qyPingji[0].fybi = info.specialOne
+		                        _this.qyPingji[1].fybi = info.specialTwo
+		                        _this.qyPingji[2].fybi = info.specialThree
 
-	                        _this.cltJqfred = info.codePayScale
-
-	                        _this.cltuanduired = info.teamOne
+		                        _this.cltJqfred = info.codePayScale
+		                        _this.cltuanduired = info.teamOne
+                        	}
                         }
+                    }
+                });
+			},
+			hsmupSubmit(){
+				const _this = this
+				const params = {
+					teamOne:_this.cltSan[0].fybi,
+					teamTwo:_this.cltSan[1].fybi,
+					teamThree:_this.cltSan[2].fybi,
+					teamFour:_this.cltSan[3].fybi,
+					bOne:_this.cltPingji[0].fybi,
+					bTwo:_this.cltPingji[1].fybi,
+					specialOne:_this.qyPingji[0].fybi,
+					specialTwo:_this.qyPingji[1].fybi,
+					specialThree:_this.qyPingji[2].fybi
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+'/api/corePlaConfig/add/role/proportion',
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.code === 1){
+                    		_this.getcltList()
+                    		_this.$message({
+								message: data.msg,
+								type: 'success'
+							});
+                    	}else{
+                    		_this.$message({
+								message: data.msg,
+								type: 'error'
+							});
+                    	}
                     }
                 });
 			},
@@ -1248,10 +1353,10 @@
 		},
 		mounted() {
 			console.log(state.commissionLine)
-			if(state.commissionLine === 5){
+			if(state.commissionLine === 5 ){
 				this.bduan = true
 			}
-			if(state.commissionLine === 3 || state.commissionLine === 5){
+			if(state.commissionLine === 3 || state.commissionLine === 5 || state.commissionLine === 6){
 				this.allshow = false
 				this.cltShow = true
 				this.getlist();

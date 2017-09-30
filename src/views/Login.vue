@@ -93,12 +93,15 @@
                     url:baseUrl+'/api/store/selectStore',
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
+                        console.log(data)
                         state.commissionLine = data.data.store.commissionLine
+                        console.log(state.commissionLine)
                     }
                 });
             }
         },
         mounted() {
+            this.getcommissionLine()
         },
     }
 

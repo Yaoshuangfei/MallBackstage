@@ -2,12 +2,12 @@
 	<section>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
 			身份管理
-		</el-col>
-		<el-button type="primary" v-on:click="addIDCard(1)" style="margin-top: 20px" :disabled="this.identity.length===5">新增店铺身份</el-button>
+		</el-col><!-- :disabled="this.xqsfList.length >= 4" -->
+		<el-button type="primary" v-on:click="addIDCard(1)" style="margin-top: 20px" >新增店铺身份</el-button>
 		<el-row :gutter="10" style="margin-top: 40px">
 		  <el-col :xs="2" :sm="2" :md="2" :lg="2" style="font-size: 16px;color:#cab78c;height:32px;line-height: 32px; ">店铺身份</el-col>
 		  <el-col :xs="15" :sm="15" :md="15" :lg="15" style="line-height: 32px;">
-		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in identity" style="margin-bottom: 40px" v-if="item.level !== -100">
+		  		<el-col :xs="24" :sm="24" :md="24" :lg="24" v-for="item in xqsfList" style="margin-bottom: 40px" v-if="item.level !== -100">
 		  			<el-col :xs="4" :sm="4" :md="4" :lg="4">
 		  				<img style="width: 100px;border:1px solid #eee;border-radius: 10px;" :src="item.icon">
 		 			</el-col>
@@ -37,7 +37,7 @@
 		</el-col>
 		<!--列表-->
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="font-size: 16px;color:#616161;margin-bottom: 20px; ">购买身份价格</el-col>
-		<el-table v-if="commissionLine !== 3 && commissionLine !== 5" :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;text-align: center;">
+		<el-table v-if="commissionLine !== 3 && commissionLine !== 5 && commissionLine !== 6" :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 580px;text-align: center;">
 			<el-table-column type="index">
 			</el-table-column>
 			<el-table-column prop="name" label="身份">
@@ -50,8 +50,8 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 650px;text-align: center;">
-			<el-table-column type="index">
+		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 850px;text-align: center;">
+			<el-table-column prop="level" label="等级">
 			</el-table-column>
 			<el-table-column prop="name" label="身份">
 			</el-table-column>
@@ -61,7 +61,11 @@
 			</el-table-column>
 			<el-table-column prop="price" label="价格">
 			</el-table-column>
-			<el-table-column v-if="commissionLine === 5" prop="commissionPrice" label="分佣金额">
+			<el-table-column v-if="commissionLine === 5 || commissionLine === 6" prop="commissionPrice" label="分佣金额">
+			</el-table-column>
+			<el-table-column v-if="commissionLine === 6" prop="isBuy" :formatter='formaisBuy' label="购买">
+			</el-table-column>
+			<el-table-column v-if="commissionLine === 6" prop="roleInvitedMinNum" :formatter='formaroleInvitedMinNum' label="升级">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template scope="scope">
@@ -111,14 +115,34 @@
 				<el-form-item label="价格：">
 					<el-input v-model="orderDetails.price" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5">
+				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="orderDetails.goodsNum" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5">
+				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="orderDetails.costPrice" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="分佣金额：" v-if="commissionLine === 5">
+				<el-form-item label="分佣金额：" v-if="commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="commissionPrice" type="text" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="是否可购买：" v-if="commissionLine === 6">
+					<el-select v-model="isBuy" placeholder="请选择">
+					    <el-option
+					      v-for="item in optionsB"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="是否可升级：" v-if="commissionLine === 6">
+					<el-select v-model="roleInvitedMinNum" placeholder="请选择">
+					    <el-option
+					      v-for="item in options"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="角色图标：">
 					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload1" id="fileInput">
@@ -148,17 +172,37 @@
 					</button>
 					<img width="100px" :src="editForm.icon">
 				</el-form-item>
-				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5">
+				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="editForm.goodsNum" type="text"></el-input>
 				</el-form-item>
-				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5">
+				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="editForm.costPrice" type="text"></el-input>
 				</el-form-item>
 				<el-form-item label="价格：">
 					<el-input v-model="editForm.price" type="text"></el-input>
 				</el-form-item>
-				<el-form-item label="分佣金额：" v-if="commissionLine === 5">
+				<el-form-item label="分佣金额：" v-if="commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="editForm.commissionPrice" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="是否可购买：" v-if="commissionLine === 6">
+					<el-select v-model="editForm.isBuy" placeholder="请选择">
+					    <el-option
+					      v-for="item in optionsB"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="是否可升级：" v-if="commissionLine === 6">
+					<el-select v-model="editForm.roleInvitedMinNum" placeholder="请选择">
+					    <el-option
+					      v-for="item in options"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					</el-select>
 				</el-form-item>
 				<el-col :span='24'></el-col>
 			</el-form>
@@ -183,6 +227,9 @@
         },
 		data() {
 			return {
+				sjrenum:'',
+				isBuy:0,
+				roleInvitedMinNum:'',
 				commissionPrice:'',
 				commissionLine:state.commissionLine,
 				addID:'',
@@ -192,6 +239,7 @@
 				radio: '0',
 				checked: true,
 				identity:[],
+				xqsfList:[],
 				imgArry:[],
 				value:'',
 				value1:'',
@@ -216,18 +264,49 @@
 					value:'5',
 					label:'退货'
 				}],
+				optionsB:[
+					{
+						value: 0,
+		          		label: '可购买'
+					},
+					{
+						value: 1,
+		          		label: '不可购买'
+					}
+				],
 				options: [{
-		          value: '0',
-		          label: '全部'
+		          value: 0,
+		          label: '不升级'
 		        }, {
-		          value: '1',
-		          label: '订单编号'
+		          value: 1,
+		          label: '邀请1人升级'
 		        }, {
-		          value: '2',
-		          label: '快递单号'
+		          value: 2,
+		          label: '邀请2人升级'
 		        }, {
-		          value: '3',
-		          label: '用户名'
+		          value: 3,
+		          label: '邀请3人升级'
+		        }, {
+		          value: 4,
+		          label: '邀请4人升级'
+		        }, {
+		          value: 5,
+		          label: '邀请5人升级'
+		        }, {
+		          value: 6,
+		          label: '邀请6人升级'
+		        }, {
+		          value: 7,
+		          label: '邀请7人升级'
+		        }, {
+		          value: 8,
+		          label: '邀请8人升级'
+		        }, {
+		          value: 9,
+		          label: '邀请9人升级'
+		        }, {
+		          value: 10,
+		          label: '邀请10人升级'
 		        }],
 				total: 100,
 				page: 1,
@@ -399,10 +478,54 @@
                         }, error => _this.$emit('complete', 500, error.message))
                 // });
             },
+            getSixlist(){
+            	const _this = this
+				this.uploadList = []
+                const datas = {
+					storeId:localStorage.getItem("storeId"),
+					introType:0
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/selectOne",
+                    data:JSON.stringify(datas),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.data.shopRoles !== null){
+	                    	_this.see_html = data.data.introData
+	                    	if(data.data.pictureUrl !== null){
+	                    		_this.imgArry = data.data.pictureUrl.split(',')
+	                    	}
+                    	}
+                    	_this.initEditor()
+                    }
+                })
+                const params = {
+					id:localStorage.getItem("storeId")
+				}
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/shopRole/selectRuleAll",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	if(data.data === null){
+                    		return
+                    	}else{
+                    		console.log(data)
+                    		_this.xqsfList = data.data.shopRoles
+                    		_this.identity = data.data.shopRoles
+                    	}
+                    }
+                })
+			},
 			getlist(){
 				const _this = this
+				_this.xqsfList = []
 				const params = {
-//					storeId:state.storeId,
 					storeId:localStorage.getItem("storeId"),
 					introType:0
 				}
@@ -424,6 +547,12 @@
 	                    	}
 	                    	_this.identity= info
 	                    	for (var i = 0; i < info.length; i++) {
+	                    		if(info[i].level > 0){
+	                    			_this.xqsfList.push(info[i])
+	                    		}
+	                    	}
+	                    	console.log(_this.xqsfList)
+	                    	for (var i = 0; i < info.length; i++) {
 	                    		if(info[i].level === -100){
 	                    			_this.addBtn = true
 	                    		}
@@ -443,7 +572,7 @@
 				const _this = this
 				const params = {
                     storeId:localStorage.getItem("storeId"),
-					level:this.identity.length+1,
+					level:this.xqsfList.length+1,
 					name:this.orderDetails.name,
 					price:this.orderDetails.price,
 					icon:this.orderDetails.icon,
@@ -461,6 +590,19 @@
 				}
 				if(this.commissionLine === 5){
 					params.commissionPrice = this.commissionPrice
+				}
+				if(this.commissionLine === 6){
+					params.commissionPrice = this.commissionPrice
+					if(this.isBuy === true){
+						params.isBuy = 0
+					}else{
+						params.isBuy = 1
+					}
+					if(this.roleInvitedMinNum === true){
+						params.roleInvitedMinNum = this.sjrenum
+					}else{
+						params.roleInvitedMinNum = 0
+					}
 				}
 				console.log(params)
 				this.$confirm('确认提交吗？', '提示', {}).then(() => {
@@ -494,6 +636,7 @@
 			},
 			// 修改页面显示
 			handleEdit(index, row) {
+				console.log(row)
 				this.editForm = row
 				this.editFormVisible = true
 			},
@@ -511,6 +654,12 @@
 				if(this.commissionLine === 3 || this.commissionLine === 5){
 					params.goodsNum = this.editForm.goodsNum
 					params.costPrice = this.editForm.costPrice
+				}
+				if(this.commissionLine === 6){
+					params.goodsNum = this.editForm.goodsNum
+					params.costPrice = this.editForm.costPrice
+					params.isBuy = this.editForm.isBuy
+					params.roleInvitedMinNum = this.editForm.roleInvitedMinNum
 				}
 				console.log(params)
 				this.$confirm('确认提交吗？', '提示', {}).then(() => {
@@ -575,6 +724,20 @@
 						
 				});
 			},
+			formaisBuy(row,column){
+				if(row.isBuy === 0){
+					return '可购买'
+				}else{
+					return '不可购买'
+				}
+			},
+			formaroleInvitedMinNum(row,column){
+				if(row.roleInvitedMinNum === 0){
+					return '不升级'
+				}else{
+					return '邀请'+row.roleInvitedMinNum+'人'
+				}
+			},
 			initEditor(data) {
                 const _this = this
                 const editor = new wangEditor('editor-trigger')
@@ -625,8 +788,12 @@
             }
 		},
 		mounted() {
-			this.getlist();
-			// console.log(state.id)
+			if(state.commissionLine === 6){
+				console.log(1)
+				this.getSixlist()
+			}else{
+				this.getlist()
+			}
 		}
 	}
 

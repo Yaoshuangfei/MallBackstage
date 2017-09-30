@@ -852,6 +852,9 @@
                     goodsSpecs:[],
                     goodsServiceStr:''
                 }
+                // if(this.CommodityPictures !== []){
+                	// params.carouselPicture = 
+                // }
                 const bqarry = []
                 console.log(this.onbiaoqList)
                 console.log(this.listBiaoq)
@@ -882,7 +885,7 @@
 
                  // console.log(params)
                 // 商品规格
-
+                console.log(this.tableData)
                 if(this.Specifications.length === 1){
                 	 params.goodsSpecs = this.tableData
                 	 console.log(this.Specifications1)
@@ -905,7 +908,9 @@
                 console.log(params)
                 console.log(this.CommodityPictures)
                 for (var i = 0; i < params.goodsSpecs.length; i++) {
-                	params.goodsSpecs[i].specPicture = this.CommodityPictures[0].toString()
+                	if(this.CommodityPictures.length > 0){
+                		params.goodsSpecs[i].specPicture = this.CommodityPictures[0].toString()
+                	}
                 }
                 console.log(this.value)
                 $.ajax({
@@ -924,6 +929,12 @@
                     		_this.tableData = []
                     	}else{
                     		alert(data.msg)
+                    		console.log(_this.tableData)
+                    		for (var i = 0; i < _this.tableData.length; i++) {
+                    			console.log(JSON.parse(_this.tableData[i].specData))
+                    			_this.tableData[i].specData = JSON.parse(_this.tableData[i].specData)
+                    			_this.tableData[i].specData = _this.tableData[i].specData[0].value
+                    		}
                     	}
 
                     }
