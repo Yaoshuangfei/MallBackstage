@@ -933,7 +933,7 @@
                     		for (var i = 0; i < _this.tableData.length; i++) {
                     			console.log(JSON.parse(_this.tableData[i].specData))
                     			_this.tableData[i].specData = JSON.parse(_this.tableData[i].specData)
-                    			_this.tableData[i].specData = _this.tableData[i].specData[0].value
+                    			_this.tableData[i].specData = _this.tableData[i].specData[0].valueyarn 
                     		}
                     	}
 

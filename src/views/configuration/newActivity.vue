@@ -58,7 +58,7 @@
                </el-col>
             </el-col>
             <el-col :span="24" class="booton_margin">
-               <el-col :span="2" style="margin-top: 6px;">是否分佣：</el-col>
+               <el-col :span="3" style="margin-top: 6px;">是否专属分佣：</el-col>
                <el-col :span="10" class="radio_b">
                     <el-radio class="radio" v-model="isCommission" label="1">是</el-radio>
                     <el-radio class="radio" v-model="isCommission" label="0">否</el-radio>
