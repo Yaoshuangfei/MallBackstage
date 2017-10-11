@@ -71,20 +71,20 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {},
                     success:function(data){
                         if(!data.success){
-                            alert(data.msg);
+                            alert(data.msg)
                         }else{
-                            state.storeId = data.data.storeId;
-                            localStorage.setItem('storeId', data.data.storeId);
+                            state.storeId = data.data.storeId
+                            localStorage.setItem('storeId', data.data.storeId)
                             state.id = data.data.id
                             state.storeStatus = data.data.storeStatus
-                            document.cookie="JSESSIONID="+data.data.token+';';
-                            sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
-                            localStorage.setItem('user', JSON.stringify(_this.ruleForm2.username));
-                            _this.$router.push({ path: '/main' });
+                            document.cookie="JSESSIONID="+data.data.token+';'
+                            sessionStorage.setItem('user', JSON.stringify(_this.ruleForm2.username))
+                            localStorage.setItem('user', JSON.stringify(_this.ruleForm2.username))
+                            _this.$router.push({ path: '/main' })
                             _this.getcommissionLine()
                         }
                     }
-                });
+                })
             },
             getcommissionLine(){
                 $.ajax({
@@ -95,6 +95,7 @@
                     success:function(data){
                         console.log(data)
                         state.commissionLine = data.data.store.commissionLine
+                        localStorage.setItem('commissionLine', data.data.store.commissionLine)
                         console.log(state.commissionLine)
                     }
                 });

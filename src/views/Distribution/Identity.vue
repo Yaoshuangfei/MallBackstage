@@ -240,7 +240,7 @@
 				roleInvitedMinNum:'',
 				commissionPrice:'',
 				memberDiscount:'',
-				commissionLine:state.commissionLine,
+				commissionLine:parseInt(localStorage.getItem("commissionLine")),
 				addID:'',
 				addBtn:false,
 				_html:'',
@@ -670,6 +670,7 @@
 					params.costPrice = this.editForm.costPrice
 					params.isBuy = this.editForm.isBuy
 					params.roleInvitedMinNum = this.editForm.roleInvitedMinNum
+					params.memberDiscount = this.editForm.memberDiscount
 				}
 				console.log(params)
 				this.$confirm('确认提交吗？', '提示', {}).then(() => {
@@ -798,7 +799,9 @@
             }
 		},
 		mounted() {
-			if(state.commissionLine === 6){
+			console.log(state.commissionLine)
+			console.log(parseInt(localStorage.getItem("commissionLine")))
+			if(parseInt(localStorage.getItem("commissionLine")) === 6){
 				console.log(1)
 				this.getSixlist()
 			}else{
