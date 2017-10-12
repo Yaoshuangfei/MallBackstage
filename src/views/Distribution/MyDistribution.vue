@@ -427,7 +427,7 @@
 				url_5:'',
 				url_51:'',
 				ruleIsUpgradeVisible_5:false,
-				commissionLine:state.commissionLine,
+				commissionLine:parseInt(localStorage.getItem("commissionLine")),
 				quyufred:'',
 				mimayanz:true,
 				password:'',
@@ -1168,18 +1168,20 @@
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                         const info = data.data
+                        console.log(data)
+                    	console.log(_this.ruleAll)
                         if(info === null &&_this.commissionLine === 6){
                         	_this.cltSan  = [{
-										level:'金牌合伙人',
+										level:_this.ruleAll[3].name,
 										fybi:''
 									},{
-										level:'金牌代理商',
+										level:_this.ruleAll[2].name,
 										fybi:''
 									},{
-										level:'金牌vip',
+										level:_this.ruleAll[1].name,
 										fybi:''
 									},{
-										level:'vip',
+										level:_this.ruleAll[0].name,
 										fybi:''
 									}]
                         		_this.cltPingji = [{
@@ -1204,16 +1206,16 @@
                         }else{
                         	if(_this.commissionLine === 6){
                         		_this.cltSan  = [{
-										level:'金牌合伙人',
+										level:_this.ruleAll[3].name,
 										fybi:info.teamOne
 									},{
-										level:'金牌代理商',
+										level:_this.ruleAll[2].name,
 										fybi:info.teamTwo
 									},{
-										level:'金牌vip',
+										level:_this.ruleAll[1].name,
 										fybi:info.teamThree
 									},{
-										level:'vip',
+										level:_this.ruleAll[0].name,
 										fybi:info.teamFour
 									}]
                         		_this.cltPingji = [{
@@ -1353,10 +1355,11 @@
 		},
 		mounted() {
 			console.log(state.commissionLine)
-			if(state.commissionLine === 5 ){
+			console.log(parseInt(localStorage.getItem("commissionLine")))
+			if(parseInt(localStorage.getItem("commissionLine")) === 5 ){
 				this.bduan = true
 			}
-			if(state.commissionLine === 3 || state.commissionLine === 5 || state.commissionLine === 6){
+			if(parseInt(localStorage.getItem("commissionLine")) === 3 || parseInt(localStorage.getItem("commissionLine")) === 5 || parseInt(localStorage.getItem("commissionLine")) === 6){
 				this.allshow = false
 				this.cltShow = true
 				this.getlist();

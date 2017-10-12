@@ -24,6 +24,7 @@ import editActivity from './views/configuration/editActivity.vue'
 
 // 分销管理 Distribution
 import Identity from './views/Distribution/Identity.vue'
+import zone from './views/Distribution/zone.vue'
 import Agent from './views/Distribution/Agent.vue'
 import MyDistribution from './views/Distribution/MyDistribution.vue'
 import MyDistribution_5 from './views/Distribution/MyDistribution_5.vue'
@@ -137,8 +138,8 @@ let routes = [
         iconCls: 'iconfont icon-fenxiao',
         children: [
             { path: '/Identity', component: Identity, name: '身份管理' },
+            { path: '/zone', component: zone, name: '会员专享区' },
             { path: '/MyDistribution', component: MyDistribution, name: '我的分销' },
-            // { path: '/MyDistribution_5', component: MyDistribution_5, name: '我的分销' },
             { path: '/Agent', component: Agent, name: '代理商' },
             { path: '/rule', component: rule, name: '分销规则管理' },
             { path: '/configuration', component: configuration, name: '代理商配置' },

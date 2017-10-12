@@ -1,5 +1,6 @@
 <template>
 	<div class="detalis_order">
+		<el-button type="primary" @click.native="mimaSubmits" style="background: #cab78c;border: none;margin-bottom: 10px">返回</el-button>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;">
 			订单详情
 		</el-col>
@@ -8,7 +9,7 @@
 			<el-col :span="8" >订单编号：{{table.id}}</el-col>
 			<el-col :span="8" >下单时间：{{table.createTime}}</el-col>
 			<el-col :span="6" :offset="2" >收货人：{{table.consignee}}</el-col>
-			<el-col :span="8" >电话：{{table.mobile}}</el-col>
+			<el-col :span="8" >收货人电话：{{table.mobile}}</el-col>
 			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
 			<el-col :span="22" :offset="2">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
 		</el-col>
@@ -21,14 +22,23 @@
 			<!--<el-col :span="5"style="margin-top: 20px;margin-left: 40px">电话：{{table.mobile}}</el-col>-->
 			<!--<el-col :span="24"style="margin-top: 20px;margin-left: 40px">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>-->
 		<!--</el-col>-->
-		<el-col :span="24" class="order_information" style="margin-top: 10px">订单信息</el-col>
+		<el-col :span="24" style="position: relative;height:40px;line-height: 48px;color: #cab78c;font-size: 16px;padding-left: 20px;">
+			买家信息
+		</el-col>
+		<el-col :span="24" style="font-size: 16px;border-bottom: 1px dashed #cab78c;color: #616161;line-height: 55px;"><!-- :offset="4" -->
+			<el-col :span="6" :offset="2">账户名：{{table.coreUser.userName}}</el-col>
+			<el-col :span="8" >昵称：{{table.coreUser.nickName}}</el-col>
+			<el-col :span="8" >真实姓名：{{table.coreUser.realName}}</el-col>
+			<el-col :span="8" :offset="2">身份证号码：{{table.coreUser.identityCard}}</el-col>
+		</el-col>
+		<el-col :span="24" class="order_information" style="margin-top: 10px;font-size: 16px;">商品信息</el-col>
 		<el-col :span="24" class="commodity" style="background: #f4f2e8;height:36px;line-height: 36px;color: #616161;">
 			<el-col :span="4" :offset="8">商品名称</el-col>
 			<el-col :span="2" :offset="5">单价</el-col>
 			<el-col :span="2">数量</el-col>
 			<el-col :span="2">商品总价</el-col>
 		</el-col>
-		<el-col :span="24" class="commodity" v-for="item in table.orderGoods" style="border: 1px solid #e6eef9;margin-top: inherit;height:100px;padding-top: 20px;">
+		<el-col :span="24" class="commodity" v-for="item in table.orderGoods" style="margin-top: inherit;height:100px;padding-top: 20px;">
 			<el-col :span="6">
 					<img style="width: 80px;margin-left: 40px;" :src="item.picture">
 				</el-col>
@@ -241,7 +251,7 @@
                     data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
-                    	// console.log(data)
+                    	console.log(data)
                     	const info = data.data
                     	_this.table = info.list[0]
                     	const arryDZ = [
@@ -404,6 +414,9 @@
 					type = '花说分佣线奖'
 				}
 				return type
+			},
+			mimaSubmits(){
+                window.history.go(-1);
 			}
 		},
 		mounted() {
@@ -445,7 +458,6 @@
 	}
 	.commodity{
 		border-bottom: 1px solid #ddd;
-		margin-top: 20px;
 		padding-left: 20px;
 		padding-bottom: 10px;
 	}
