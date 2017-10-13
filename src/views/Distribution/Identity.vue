@@ -63,8 +63,8 @@
 			</el-table-column>
 			<el-table-column v-if="commissionLine === 5 || commissionLine === 6" prop="commissionPrice" label="分佣金额">
 			</el-table-column>
-			<el-table-column v-if="commissionLine === 6" prop="memberDiscount" label="购买商品折扣：">
-			</el-table-column>
+			<!-- <el-table-column v-if="commissionLine === 6" prop="memberDiscount" label="购买商品折扣：">
+			</el-table-column> -->
 			<el-table-column v-if="commissionLine === 6" prop="isBuy" :formatter='formaisBuy' label="购买">
 			</el-table-column>
 			<el-table-column v-if="commissionLine === 6" prop="roleInvitedMinNum" :formatter='formaroleInvitedMinNum' label="升级">
@@ -126,9 +126,9 @@
 				<el-form-item label="分佣金额：" v-if="commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="commissionPrice" type="text" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="购买商品折扣：" v-if="commissionLine === 6">
+				<!-- <el-form-item label="购买商品折扣：" v-if="commissionLine === 6">
 					<el-input v-model="memberDiscount" type="text" auto-complete="off"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="是否可购买：" v-if="commissionLine === 6">
 					<el-select v-model="isBuy" placeholder="请选择">
 					    <el-option
@@ -189,9 +189,9 @@
 				<el-form-item label="分佣金额：" v-if="commissionLine === 5 || commissionLine === 6">
 					<el-input v-model="editForm.commissionPrice" type="text"></el-input>
 				</el-form-item>
-				<el-form-item label="购买商品折扣：" v-if="commissionLine === 6">
+				<!-- <el-form-item label="购买商品折扣：" v-if="commissionLine === 6">
 					<el-input v-model="editForm.memberDiscount" type="text"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="是否可购买：" v-if="commissionLine === 6">
 					<el-select v-model="editForm.isBuy" placeholder="请选择">
 					    <el-option

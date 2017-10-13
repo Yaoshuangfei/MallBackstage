@@ -2,33 +2,7 @@
 	<section>
 		<el-col :span="24" style="position: relative;background: #cab78c;height:48px;line-height: 48px;color: #fff;font-size: 16px;padding-left: 20px;margin-bottom: 20px;">
 			身份管理</el-col>
-		<!--列表-->
-		<!-- <el-col :xs="14" :sm="14" :md="14" :lg="14" style="font-size: 16px;color:#616161;margin-bottom: 20px; ">购买身份价格</el-col>
-		<el-table v-else :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 850px;text-align: center;">
-			<el-table-column prop="level" label="等级">
-			</el-table-column>
-			<el-table-column prop="name" label="身份">
-			</el-table-column>
-			<el-table-column prop="goodsNum" label="商品数量">
-			</el-table-column>
-			<el-table-column prop="costPrice" label="成品单价">
-			</el-table-column>
-			<el-table-column prop="price" label="价格">
-			</el-table-column>
-			<el-table-column v-if="commissionLine === 5 || commissionLine === 6" prop="commissionPrice" label="分佣金额">
-			</el-table-column>
-			<el-table-column v-if="commissionLine === 6" prop="memberDiscount" label="购买商品折扣：">
-			</el-table-column>
-			<el-table-column v-if="commissionLine === 6" prop="isBuy" :formatter='formaisBuy' label="购买">
-			</el-table-column>
-			<el-table-column v-if="commissionLine === 6" prop="roleInvitedMinNum" :formatter='formaroleInvitedMinNum' label="升级">
-			</el-table-column>
-			<el-table-column label="操作">
-				<template scope="scope">
-					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-				</template>
-			</el-table-column>
-		</el-table> -->
+		
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">商品图片</el-col>
 		<el-col :xs="24" :md="24">
 			<!-- 上传图片 -->
@@ -53,15 +27,44 @@
 		</el-col>
 
 
+		<!--列表-->
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="font-size: 16px;color:#616161;margin-bottom: 20px;margin-top: 20px ">会员折扣</el-col>
+		<el-table :data="identity" highlight-current-row v-loading="listLoading" style="width: 50%;min-width: 850px;text-align: center;">
+			<el-table-column prop="level" label="等级">
+			</el-table-column>
+			<el-table-column prop="name" label="身份">
+			</el-table-column>
+			<el-table-column prop="memberDiscount" label="折扣">
+			</el-table-column>
+			<el-table-column label="操作">
+				<template scope="scope">
+					<el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
 
-		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px;font-size: 16px;">身份介绍</el-col>
+		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px;font-size: 16px;">会员折扣介绍</el-col>
 		<el-col :span="24">
 			<div id = 'editor-trigger' style="height: 500px;"></div>
 		</el-col>
 		<el-col :xs="14" :sm="14" :md="14" :lg="14" style="margin-top: 40px;margin-bottom: 20px">
-		<el-button type="primary" v-on:click="shopRoleAdd">发布</el-button>
+		<el-button type="primary" v-on:click="shopRoleAdd">保存</el-button>
 		</el-col>
-
+		<!--编辑界面-->
+		<el-dialog title="编辑购买折扣" v-model="editFormVisible" :close-on-click-modal="false" >
+			<el-form :model="editForm" label-width="160px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="角色名称：">
+					<el-input v-model="editForm.name" type="text"></el-input>
+				</el-form-item>
+				<el-form-item label="购买商品折扣：">
+					<el-input v-model="editForm.memberDiscount" type="text"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center;">
+				<el-button type="primary" @click.native="upedit" :loading="editLoading">确定</el-button>
+				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
+			</div>
+		</el-dialog>
 		<!--新增界面-->
 		<el-dialog title="新增店铺身份" v-model="addFormVisible" :close-on-click-modal="false" >
 			<el-form :model="orderDetails" label-width="160px" :rules="editFormRules" ref="editForm">
@@ -118,61 +121,7 @@
 				<el-button type="primary" @click.native="addFormVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
-		<!--编辑界面-->
-		<el-dialog title="编辑购买身份价格" v-model="editFormVisible" :close-on-click-modal="false" >
-			<el-form :model="editForm" label-width="160px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="角色名称：">
-					<el-input v-model="editForm.name" type="text"></el-input>
-				</el-form-item>
-				<el-form-item label="图标">
-					<input type="file" style="position:absolute;opacity:0;width:70px;height:30px;margin-right:10px"  @change="upload3" id="fileInput">
-					<button type="button" class="el-button el-button--primary el-button--small">
-						<span>点击上传</span>
-					</button>
-					<img width="100px" :src="editForm.icon">
-				</el-form-item>
-				<el-form-item label="商品数量：" v-if="commissionLine === 3 || commissionLine === 5 || commissionLine === 6">
-					<el-input v-model="editForm.goodsNum" type="text"></el-input>
-				</el-form-item>
-				<el-form-item label="成品单价：" v-if="commissionLine === 3 || commissionLine === 5 || commissionLine === 6">
-					<el-input v-model="editForm.costPrice" type="text"></el-input>
-				</el-form-item>
-				<el-form-item label="价格：">
-					<el-input v-model="editForm.price" type="text"></el-input>
-				</el-form-item>
-				<el-form-item label="分佣金额：" v-if="commissionLine === 5 || commissionLine === 6">
-					<el-input v-model="editForm.commissionPrice" type="text"></el-input>
-				</el-form-item>
-				<el-form-item label="购买商品折扣：" v-if="commissionLine === 6">
-					<el-input v-model="editForm.memberDiscount" type="text"></el-input>
-				</el-form-item>
-				<el-form-item label="是否可购买：" v-if="commissionLine === 6">
-					<el-select v-model="editForm.isBuy" placeholder="请选择">
-					    <el-option
-					      v-for="item in optionsB"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="是否可升级：" v-if="commissionLine === 6">
-					<el-select v-model="editForm.roleInvitedMinNum" placeholder="请选择">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					</el-select>
-				</el-form-item>
-				<el-col :span='24'></el-col>
-			</el-form>
-			<div slot="footer" class="dialog-footer" style="text-align: center;">
-				<el-button type="primary" @click.native="upedit" :loading="editLoading">确定</el-button>
-				<el-button type="primary" @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
+		
 	</section>
 </template>
 
@@ -441,89 +390,87 @@
                         }, error => _this.$emit('complete', 500, error.message))
                 // });
             },
-            getSixlist(){
-            	const _this = this
-				this.uploadList = []
-                const datas = {
-					storeId:localStorage.getItem("storeId"),
-					introType:0
+
+
+            shopRoleAdd() {
+				const _this = this
+				console.log(this._html)
+				console.log(this.see_html)
+				if(this._html === '' || this._html === undefined){
+					console.log(1)
+					this._html = this.see_html
+				}else{
+					console.log(2)
+					this._html = this._html
 				}
+				const params = {
+					pictureUrl:this.imgArry.toString(),
+					introData:this._html
+				}
+				console.log(params)
 				$.ajax({
                     type:'POST',
                     dataType:'json',
-                    url:baseUrl+"/api/shopRole/selectOne",
-                    data:JSON.stringify(datas),
+                    url:baseUrl+"/api/ruleIntroduce/addOrUpdate/member/zone",
+                    data:JSON.stringify(params),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	console.log(data)
-                    	if(data.data.shopRoles !== null){
-	                    	_this.see_html = data.data.introData
-	                    	if(data.data.pictureUrl !== null){
-	                    		_this.imgArry = data.data.pictureUrl.split(',')
-	                    	}
+                    	if(data.code === 1){
+                    		_this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+                    	}else{
+                    		_this.$message({
+								message: data.msg,
+								type: 'error'
+							});
                     	}
-                    	_this.initEditor()
                     }
-                })
-                const params = {
+                });
+			},
+			getlist(){
+				const _this = this
+				const params = {
+					storeId:localStorage.getItem("storeId")
+				}
+				console.log(params)
+				$.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    url:baseUrl+"/api/ruleIntroduce/find/member/zone",
+                    data:JSON.stringify(params),
+                    contentType:'application/json;charset=utf-8',
+                    success:function(data){
+                    	console.log(data)
+                    	if(data.data !== null){
+                    		_this.imgArry = data.data.pictureUrl.split(',')
+	                    	_this.see_html = data.data.introData
+	                    	_this.initEditor()
+                    	}else{
+	                    	_this.initEditor()
+                    	}
+                    }
+                });
+                const paramss = {
 					id:localStorage.getItem("storeId")
 				}
 				$.ajax({
                     type:'POST',
                     dataType:'json',
                     url:baseUrl+"/api/shopRole/selectRuleAll",
-                    data:JSON.stringify(params),
+                    data:JSON.stringify(paramss),
                     contentType:'application/json;charset=utf-8',
                     success:function(data){
                     	if(data.data === null){
                     		return
                     	}else{
                     		console.log(data)
-                    		_this.xqsfList = data.data.shopRoles
                     		_this.identity = data.data.shopRoles
                     	}
                     }
                 })
-			},
-			getlist(){
-				const _this = this
-				_this.xqsfList = []
-				const params = {
-					storeId:localStorage.getItem("storeId"),
-					introType:0
-				}
-				console.log(params)
-				$.ajax({
-                    type:'POST',
-                    dataType:'json',
-                    url:baseUrl+"/api/shopRole/selectOne",
-                    data:JSON.stringify(params),
-                    contentType:'application/json;charset=utf-8',
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
-                    success:function(data){
-                    	console.log(data)
-                    	if(data.data.shopRoles !== null){
-	                    	const info = data.data.shopRoles
-	                    	_this.see_html = data.data.introData
-	                    	if(data.data.pictureUrl !== null){
-	                    		_this.imgArry = data.data.pictureUrl.split(',')
-	                    	}
-	                    	_this.identity= info
-	                    	for (var i = 0; i < info.length; i++) {
-	                    		if(info[i].level > 0){
-	                    			_this.xqsfList.push(info[i])
-	                    		}
-	                    	}
-	                    	console.log(_this.xqsfList)
-	                    	for (var i = 0; i < info.length; i++) {
-	                    		if(info[i].level === -100){
-	                    			_this.addBtn = true
-	                    		}
-	                    	}
-                    	}
-                    	_this.initEditor()
-                    }
-                });
 			},
 			addIDCard(val) {
 				console.log(val)
@@ -650,45 +597,7 @@
 						
 				});
 			},
-			shopRoleAdd() {
-				const _this = this
-				const params = {
-                    storeId:localStorage.getItem("storeId"),
-					videoUrl:'',
-					pictureUrl:this.imgArry.toString(),
-					introType:0,
-					introData:this._html
-				}
-				console.log(params)
-				this.$confirm('确认发布吗？', '提示', {}).then(() => {
-					$.ajax({
-	                    type:'POST',
-	                    dataType:'json',
-	                    url:baseUrl+"/api/shopRole/insertOrUpdate",
-	                    data:JSON.stringify(params),
-	                    contentType:'application/json;charset=utf-8',
-	                    error: function (XMLHttpRequest, textStatus, errorThrown) {},
-	                    success:function(data){
-	                    	// const info = data.data.shopRoles
-	                    	console.log(data)
-	                    	if(data.code === 1){
-	                    		_this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-	                    	}else{
-	                    		_this.$message({
-									message: data.msg,
-									type: 'error'
-								});
-	                    	}
-	                    	
-							// _this.editFormVisible = false
-	                    }
-	                });
-						
-				});
-			},
+			
 			formaisBuy(row,column){
 				if(row.isBuy === 0){
 					return '可购买'
@@ -755,6 +664,8 @@
 		mounted() {
 			console.log(state.commissionLine)
 			console.log(parseInt(localStorage.getItem("commissionLine")))
+			// this.initEditor()
+			this.getlist()
 		}
 	}
 

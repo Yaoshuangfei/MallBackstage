@@ -24,7 +24,7 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getlist">查询</el-button>
-					<el-button type="primary" v-on:click="getUsers">导出订单</el-button>
+					<!-- <el-button type="primary" v-on:click="getUsers">导出订单</el-button> -->
 				</el-form-item>
 			</el-form>
 		</el-col>

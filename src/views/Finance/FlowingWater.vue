@@ -26,7 +26,7 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getlist">查询</el-button>
-					<el-button type="primary">导出</el-button>
+					<!-- <el-button type="primary">导出</el-button> -->
 				</el-form-item>
 				<div>
 					<el-form-item label="店铺营业额：" style="margin-right: 40px">
