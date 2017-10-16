@@ -8,10 +8,17 @@
 			<el-col :span="6" :offset="2">支付状态：{{table.status}}</el-col>
 			<el-col :span="8" >订单编号：{{table.id}}</el-col>
 			<el-col :span="8" >下单时间：{{table.createTime}}</el-col>
-			<el-col :span="6" :offset="2" >收货人：{{table.consignee}}</el-col>
+			<el-col :span="22" :offset="2" >交易号：{{table.tradeNo}}</el-col>
+		</el-col>
+		<el-col :span="24" style="position: relative;height:40px;line-height: 48px;color: #cab78c;font-size: 16px;padding-left: 20px;">
+			收货信息
+		</el-col>
+		<el-col :span="24" style="font-size: 16px;border-bottom: 1px dashed #cab78c;color: #616161;line-height: 55px;"><!-- :offset="4" -->
+			<el-col :span="6" :offset="2">收货人：{{table.consignee}}</el-col>
 			<el-col :span="8" >收货人电话：{{table.mobile}}</el-col>
+			<el-col :span="8" >邮编：{{table.zipCode}}</el-col>
 			<el-button v-show="$route.params.index === 1" type="primary" @click="editDzBtn">修改</el-button>
-			<el-col :span="22" :offset="2">收货地址：{{table.provinceName}}{{table.cityName}}{{table.countyName}}{{table.address}}</el-col>
+			<el-col :span="22" :offset="2">收货地址：{{table.provinceName}}- {{table.cityName}} -{{table.countyName}} -{{table.address}}</el-col>
 		</el-col>
 		<!--<el-col :span="24" style="margin-top: 20px">-->
 			<!--<el-col :span="13"style="margin-top: 20px;margin-left: 40px">收货信息</el-col>-->
@@ -56,9 +63,10 @@
 			<el-col :span="8" :offset="1">商品总价：￥{{table.productValue}}</el-col>
 			<el-col :span="8" class="">金豆抵扣金额：￥{{table.goldPrice}}</el-col>
 			<el-col :span="6" class="">运费价格：￥{{table.expressValue}}</el-col>
-			<el-col :span="8" :offset="1">支付方式：{{table.payMethod}}</el-col>
-			<el-col :span="8" class="">付款时间：{{table.payTime}}</el-col>
-			<el-col :span="7" style="margin-top: 20px;">支付金额：<span style="color:red;font-size: 24px;">￥{{table.totalMoney}}</span></el-col>
+			<el-col :span="8" :offset="1">优惠金额：￥{{table.discount}}</el-col>
+			<el-col :span="8">支付方式：{{table.payMethod}}</el-col>
+			<el-col :span="7">付款时间：{{table.payTime}}</el-col>
+			<el-col :span="5" :offset="19" style="margin-top: 20px;">支付金额：<span style="color:red;font-size: 24px;">￥{{table.totalMoney}}</span></el-col>
 		</el-col>
 		<el-col :span="24" style="border-bottom: 1px dashed #cab78c;color: #616161;margin-top: 10px;"><!-- :offset="4" --></el-col>
 		<!--<el-col :span="24" class="Payment_method">支付方式：{{table.payMethod}}</el-col> -->
